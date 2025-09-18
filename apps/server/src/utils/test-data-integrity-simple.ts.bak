@@ -1,0 +1,187 @@
+import { db } from "./db";
+
+async function testDataIntegritySimple() {
+  console.log("🔍 Testing data integrity and consistency...\n");
+  
+  try {
+    // Test 1: Compter tous les éléments
+    const counts = await Promise.all([
+      db.user.count(),
+      db.book.count(),
+      db.category.count(),
+      db.tag.count(),
+      db.bookCategory.count(),
+      db.bookTag.count()
+    ]);
+    
+    const [users, books, categories, tags, bookCategories, bookTags] = counts;
+    
+    console.log("📊 Database counts:");
+    console.log(`  👥 Users: ${users}`);
+    console.log(`  📚 Books: ${books}`);
+    console.log(`  🏷️ Categories: ${categories}`);
+    console.log(`  🏷️ Tags: ${tags}`);
+    console.log(`  🔗 Book-Category relations: ${bookCategories}`);
+    console.log(`  🔗 Book-Tag relations: ${bookTags}`);
+    
+    // Test 2: Vérifier que tous les livres ont des relations valides
+    const booksWithRelations = await db.book.findMany({
+      include: {
+        user: true,
+        categories: { include: { category: true } },
+        tags: { include: { tag: true } }
+      }
+    });
+    
+    let orphanBooks = 0;
+    let booksWithoutCategories = 0;
+    let booksWithoutTags = 0;
+    
+    for (const book of booksWithRelations) {
+      if (!book.user) orphanBooks++;
+      if (book.categories.length === 0) booksWithoutCategories++;
+      if (book.tags.length === 0) booksWithoutTags++;
+    }
+    
+    console.log("\n🔍 Relation integrity:");
+    console.log(`  ${orphanBooks === 0 ? "✅" : "❌"} Books without users: ${orphanBooks}`);
+    console.log(`  ${booksWithoutCategories === 0 ? "✅" : "ℹ️"} Books without categories: ${booksWithoutCategories}`);
+    console.log(`  ${booksWithoutTags === 0 ? "✅" : "ℹ️"} Books without tags: ${booksWithoutTags}`);
+    
+    // Test 3: Vérifier les valeurs des notes
+    const invalidRatings = await db.book.findMany({
+      where: {
+        OR: [
+          { note_generale: { lt: 1 } },
+          { note_generale: { gt: 10 } },
+          { niveau_spicy: { lt: 1 } },
+          { niveau_spicy: { gt: 10 } },
+          { niveau_dark: { lt: 1 } },
+          { niveau_dark: { gt: 10 } }
+        ]
+      }
+    });
+    
+    console.log(`  ${invalidRatings.length === 0 ? "✅" : "❌"} Books with invalid ratings (1-10): ${invalidRatings.length}`);
+    
+    // Test 4: Statistiques par statut
+    const statusStats = await db.book.groupBy({
+      by: ['statut'],
+      _count: { id: true }
+    });
+    
+    console.log("\n📊 Books by status:");
+    statusStats.forEach(stat => {
+      console.log(`  📖 ${stat.statut}: ${stat._count.id} books`);
+    });
+    
+    // Test 5: Top catégories
+    const topCategories = await db.category.findMany({
+      include: {
+        _count: { select: { books: true } }
+      },
+      orderBy: {
+        books: { _count: 'desc' }
+      },
+      take: 5
+    });
+    
+    console.log("\n🏷️ Top categories:");
+    topCategories.forEach(cat => {
+      console.log(`  ${cat.icone || "📁"} ${cat.nom}: ${cat._count.books} books`);
+    });
+    
+    // Test 6: Top tags
+    const topTags = await db.tag.findMany({
+      include: {
+        _count: { select: { books: true } }
+      },
+      orderBy: {
+        books: { _count: 'desc' }
+      },
+      take: 5
+    });
+    
+    console.log("\n🏷️ Top tags:");
+    topTags.forEach(tag => {
+      console.log(`  🏷️ ${tag.nom} (${tag.type}): ${tag._count.books} books`);
+    });
+    
+    // Test 7: Moyennes des notes
+    const avgRatings = await db.book.aggregate({
+      _avg: {
+        note_generale: true,
+        niveau_spicy: true,
+        niveau_dark: true,
+        niveau_romance: true,
+        intensite_emotionnelle: true
+      }
+    });
+    
+    console.log("\n⭐ Average ratings:");
+    console.log(`  General: ${avgRatings._avg.note_generale?.toFixed(1)}/10`);
+    console.log(`  Spicy: ${avgRatings._avg.niveau_spicy?.toFixed(1)}/10`);
+    console.log(`  Dark: ${avgRatings._avg.niveau_dark?.toFixed(1)}/10`);
+    console.log(`  Romance: ${avgRatings._avg.niveau_romance?.toFixed(1)}/10`);
+    console.log(`  Emotional: ${avgRatings._avg.intensite_emotionnelle?.toFixed(1)}/10`);
+    
+    // Test 8: Livres récents
+    const recentBooks = await db.book.findMany({
+      orderBy: { date_creation: 'desc' },
+      take: 3,
+      include: {
+        user: { select: { nom_complet: true } },
+        categories: { include: { category: { select: { nom: true, icone: true } } } }
+      }
+    });
+    
+    console.log("\n📚 Most recent books:");
+    recentBooks.forEach((book, index) => {
+      const categories = book.categories.map(c => `${c.category.icone} ${c.category.nom}`).join(", ");
+      console.log(`  ${index + 1}. ${book.titre} by ${book.auteur} (⭐${book.note_generale}/10)`);
+      console.log(`     Categories: ${categories || "None"}`);
+      console.log(`     Added by: ${book.user.nom_complet}`);
+    });
+    
+    console.log("\n✅ Data integrity check completed successfully!");
+    
+    return {
+      users,
+      books,
+      categories,
+      tags,
+      bookCategories,
+      bookTags,
+      orphanBooks,
+      invalidRatings: invalidRatings.length
+    };
+    
+  } catch (error) {
+    console.error("❌ Data integrity test failed:", error);
+    throw error;
+  }
+}
+
+async function runSimpleIntegrityTest() {
+  console.log("🧪 Starting simple data integrity test...\n");
+  
+  try {
+    const results = await testDataIntegritySimple();
+    
+    // Résumé final
+    console.log("\n🎯 Test Summary:");
+    console.log(`  📊 Total records: ${results.users + results.books + results.categories + results.tags + results.bookCategories + results.bookTags}`);
+    console.log(`  🔗 Total relations: ${results.bookCategories + results.bookTags}`);
+    console.log(`  ✅ Data integrity: ${results.orphanBooks === 0 && results.invalidRatings === 0 ? "GOOD" : "ISSUES DETECTED"}`);
+    
+    console.log("\n🎉 All integrity tests completed!");
+    
+  } catch (error) {
+    console.error("\n💥 Integrity tests failed:", error);
+    throw error;
+  } finally {
+    await db.$disconnect();
+  }
+}
+
+runSimpleIntegrityTest();

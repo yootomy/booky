@@ -1,0 +1,240 @@
+import { db } from "./db";
+
+async function testUniqueConstraints() {
+  console.log("🔒 Testing unique constraints in detail...\n");
+  
+  // Test Category unique constraint
+  try {
+    await db.category.create({
+      data: {
+        nom: "Dark Romance", // Should fail - duplicate
+        couleur: "#000000",
+      }
+    });
+    console.log("❌ Category unique constraint FAILED - duplicate was allowed");
+  } catch (error) {
+    console.log("✅ Category unique constraint WORKS - duplicate rejected");
+    console.log(`   Error: ${error.code} - ${error.meta?.target || error.message}`);
+  }
+  
+  // Test Tag unique constraint
+  try {
+    await db.tag.create({
+      data: {
+        nom: "Enemies to Lovers", // Should fail - duplicate
+        couleur: "#000000",
+        type: "TROPE"
+      }
+    });
+    console.log("❌ Tag unique constraint FAILED - duplicate was allowed");
+  } catch (error) {
+    console.log("✅ Tag unique constraint WORKS - duplicate rejected");
+    console.log(`   Error: ${error.code} - ${error.meta?.target || error.message}`);
+  }
+  
+  // Test User unique email constraint
+  try {
+    await db.user.create({
+      data: {
+        email: "bruna@booky.dev", // Should fail - duplicate
+        nom_complet: "Test User",
+        password: "test123",
+        role: "USER"
+      }
+    });
+    console.log("❌ User email unique constraint FAILED - duplicate was allowed");
+  } catch (error) {
+    console.log("✅ User email unique constraint WORKS - duplicate rejected");
+    console.log(`   Error: ${error.code} - ${error.meta?.target || error.message}`);
+  }
+  
+  // Test BookCategory unique constraint (same book-category pair)
+  try {
+    const book = await db.book.findFirst();
+    const category = await db.category.findFirst();
+    
+    if (book && category) {
+      // First try to create a valid relation
+      const relation1 = await db.bookCategory.create({
+        data: {
+          bookId: book.id,
+          categoryId: category.id
+        }
+      });
+      console.log("✅ First BookCategory relation created successfully");
+      
+      // Now try to create a duplicate
+      try {
+        await db.bookCategory.create({
+          data: {
+            bookId: book.id,
+            categoryId: category.id // Same pair - should fail
+          }
+        });
+        console.log("❌ BookCategory unique constraint FAILED - duplicate was allowed");
+      } catch (error) {
+        console.log("✅ BookCategory unique constraint WORKS - duplicate rejected");
+        console.log(`   Error: ${error.code} - ${error.meta?.target || error.message}`);
+      }
+      
+      // Clean up
+      await db.bookCategory.delete({ where: { id: relation1.id } });
+    }
+  } catch (error) {
+    console.log("⚠️ BookCategory constraint test skipped:", error.message);
+  }
+}
+
+async function testEnumConstraints() {
+  console.log("\n📝 Testing enum constraints...\n");
+  
+  try {
+    // Test invalid BookStatus
+    const admin = await db.user.findFirst({ where: { role: "ADMIN" } });
+    if (!admin) throw new Error("Admin not found");
+    
+    await db.book.create({
+      data: {
+        titre: "Test Enum Book",
+        auteur: "Test Author",
+        statut: "INVALID_STATUS", // Should fail
+        note_generale: 5,
+        niveau_spicy: 5,
+        niveau_dark: 5,
+        niveau_romance: 5,
+        intensite_emotionnelle: 5,
+        danger: 5,
+        violence: 5,
+        originalite: 5,
+        rythme: "MEDIUM_BURN",
+        createdBy: admin.id
+      }
+    });
+    console.log("❌ BookStatus enum constraint FAILED - invalid value was allowed");
+  } catch (error) {
+    console.log("✅ BookStatus enum constraint WORKS - invalid value rejected");
+    console.log(`   Error: ${error.code || 'VALIDATION'} - Invalid enum value`);
+  }
+  
+  try {
+    // Test invalid BookRhythm
+    await db.book.create({
+      data: {
+        titre: "Test Enum Book 2",
+        auteur: "Test Author",
+        statut: "LU",
+        note_generale: 5,
+        niveau_spicy: 5,
+        niveau_dark: 5,
+        niveau_romance: 5,
+        intensite_emotionnelle: 5,
+        danger: 5,
+        violence: 5,
+        originalite: 5,
+        rythme: "INVALID_RHYTHM", // Should fail
+        createdBy: admin.id
+      }
+    });
+    console.log("❌ BookRhythm enum constraint FAILED - invalid value was allowed");
+  } catch (error) {
+    console.log("✅ BookRhythm enum constraint WORKS - invalid value rejected");
+    console.log(`   Error: ${error.code || 'VALIDATION'} - Invalid enum value`);
+  }
+  
+  try {
+    // Test invalid TagType
+    await db.tag.create({
+      data: {
+        nom: "Test Invalid Tag",
+        couleur: "#000000",
+        type: "INVALID_TYPE" // Should fail
+      }
+    });
+    console.log("❌ TagType enum constraint FAILED - invalid value was allowed");
+  } catch (error) {
+    console.log("✅ TagType enum constraint WORKS - invalid value rejected");
+    console.log(`   Error: ${error.code || 'VALIDATION'} - Invalid enum value`);
+  }
+}
+
+async function testRequiredFields() {
+  console.log("\n📋 Testing required fields...\n");
+  
+  const tests = [
+    {
+      name: "Book without titre",
+      test: async () => {
+        const admin = await db.user.findFirst({ where: { role: "ADMIN" } });
+        return db.book.create({
+          data: {
+            // titre: missing
+            auteur: "Test Author",
+            statut: "LU",
+            note_generale: 5,
+            niveau_spicy: 5,
+            niveau_dark: 5,
+            niveau_romance: 5,
+            intensite_emotionnelle: 5,
+            danger: 5,
+            violence: 5,
+            originalite: 5,
+            rythme: "MEDIUM_BURN",
+            createdBy: admin.id
+          }
+        });
+      }
+    },
+    {
+      name: "Category without nom",
+      test: async () => {
+        return db.category.create({
+          data: {
+            // nom: missing
+            couleur: "#000000"
+          }
+        });
+      }
+    },
+    {
+      name: "User without email",
+      test: async () => {
+        return db.user.create({
+          data: {
+            // email: missing
+            nom_complet: "Test User",
+            password: "test123"
+          }
+        });
+      }
+    }
+  ];
+  
+  for (const test of tests) {
+    try {
+      await test.test();
+      console.log(`❌ ${test.name}: FAILED - missing required field was allowed`);
+    } catch (error) {
+      console.log(`✅ ${test.name}: WORKS - missing required field rejected`);
+    }
+  }
+}
+
+async function runConstraintTests() {
+  console.log("🧪 Starting constraint validation tests...\n");
+  
+  try {
+    await testUniqueConstraints();
+    await testEnumConstraints();
+    await testRequiredFields();
+    
+    console.log("\n🎉 All constraint tests completed!");
+    
+  } catch (error) {
+    console.error("\n💥 Constraint tests failed:", error);
+    throw error;
+  } finally {
+    await db.$disconnect();
+  }
+}
+
+runConstraintTests();

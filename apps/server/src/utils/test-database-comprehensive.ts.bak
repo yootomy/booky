@@ -1,0 +1,434 @@
+import { db } from "./db";
+
+async function testCompleteBookCreation() {
+  console.log("📚 Testing complete book creation with all relations...\n");
+  
+  try {
+    // Récupérer l'utilisateur admin et quelques catégories/tags
+    const admin = await db.user.findFirst({ where: { role: "ADMIN" } });
+    if (!admin) throw new Error("Admin user not found");
+    
+    const darkCategory = await db.category.findFirst({ where: { nom: "Dark Romance" } });
+    const spicyCategory = await db.category.findFirst({ where: { nom: "Spicy Romance" } });
+    const enemiesTag = await db.tag.findFirst({ where: { nom: "Enemies to Lovers" } });
+    const ageGapTag = await db.tag.findFirst({ where: { nom: "Age Gap" } });
+    
+    if (!darkCategory || !spicyCategory || !enemiesTag || !ageGapTag) {
+      throw new Error("Required categories/tags not found");
+    }
+    
+    // Créer un livre complet
+    const book = await db.book.create({
+      data: {
+        titre: "Twisted Love",
+        auteur: "Ana Huang",
+        isbn: "9781728286556",
+        image_couverture: "https://example.com/twisted-love-cover.jpg",
+        google_books_id: "test_google_id_123",
+        resume_officiel: "Un roman sombre et passionné entre deux âmes brisées...",
+        editeur: "Sourcebooks Casablanca",
+        date_publication: new Date("2021-04-13"),
+        nombre_pages: 320,
+        langue: "FR",
+        date_lecture: new Date("2024-01-15"),
+        statut: "LU",
+        note_generale: 9,
+        niveau_spicy: 8,
+        niveau_dark: 7,
+        niveau_romance: 9,
+        intensite_emotionnelle: 10,
+        danger: 6,
+        violence: 5,
+        originalite: 8,
+        rythme: "MEDIUM_BURN",
+        resume_personnel: "Une histoire captivante qui m'a tenue en haleine...",
+        critique_detaillee: "Ce livre excelle dans le développement des personnages...",
+        citations_favorites: "\"Tu es ma lumière dans les ténèbres.\"",
+        pourquoi_aimer: "Pour les fans de romance dark avec de l'émotion",
+        questions_sur_le_livre: "Que pensez-vous de la relation Alex/Ava ?",
+        recommandation_personnalisee: "Parfait si vous aimez les bad boys avec un cœur tendre",
+        ajout_manuel: false,
+        createdBy: admin.id,
+        // Relations many-to-many
+        categories: {
+          create: [
+            { categoryId: darkCategory.id },
+            { categoryId: spicyCategory.id }
+          ]
+        },
+        tags: {
+          create: [
+            { tagId: enemiesTag.id },
+            { tagId: ageGapTag.id }
+          ]
+        }
+      },
+      include: {
+        user: true,
+        categories: {
+          include: {
+            category: true
+          }
+        },
+        tags: {
+          include: {
+            tag: true
+          }
+        }
+      }
+    });
+    
+    console.log("✅ Book created successfully:");
+    console.log(`  📖 ${book.titre} by ${book.auteur}`);
+    console.log(`  ⭐ Rating: ${book.note_generale}/10 | Spicy: ${book.niveau_spicy}/10 | Dark: ${book.niveau_dark}/10`);
+    console.log(`  👤 Created by: ${book.user.nom_complet}`);
+    console.log(`  🏷️ Categories: ${book.categories.map(c => c.category.nom).join(", ")}`);
+    console.log(`  🏷️ Tags: ${book.tags.map(t => t.tag.nom).join(", ")}`);
+    
+    return book;
+    
+  } catch (error) {
+    console.error("❌ Book creation test failed:", error);
+    throw error;
+  }
+}
+
+async function testConstraintsAndValidations() {
+  console.log("\n🔒 Testing constraints and validations...\n");
+  
+  const tests = [
+    {
+      name: "Duplicate category name",
+      test: async () => {
+        try {
+          await db.category.create({
+            data: {
+              nom: "Dark Romance", // Should fail - duplicate
+              couleur: "#000000",
+            }
+          });
+          return false;
+        } catch (error) {
+          return error.message.includes("unique");
+        }
+      }
+    },
+    {
+      name: "Duplicate tag name", 
+      test: async () => {
+        try {
+          await db.tag.create({
+            data: {
+              nom: "Enemies to Lovers", // Should fail - duplicate
+              couleur: "#000000",
+            }
+          });
+          return false;
+        } catch (error) {
+          return error.message.includes("unique");
+        }
+      }
+    },
+    {
+      name: "Duplicate user email",
+      test: async () => {
+        try {
+          await db.user.create({
+            data: {
+              email: "bruna@booky.dev", // Should fail - duplicate
+              nom_complet: "Test User",
+              password: "test123",
+            }
+          });
+          return false;
+        } catch (error) {
+          return error.message.includes("unique");
+        }
+      }
+    }
+  ];
+  
+  for (const test of tests) {
+    const result = await test.test();
+    console.log(`${result ? "✅" : "❌"} ${test.name}: ${result ? "PASS" : "FAIL"}`);
+  }
+}
+
+async function testManyToManyRelations() {
+  console.log("\n🔗 Testing many-to-many relations...\n");
+  
+  try {
+    // Récupérer un livre existant
+    const book = await db.book.findFirst({
+      include: {
+        categories: { include: { category: true } },
+        tags: { include: { tag: true } }
+      }
+    });
+    
+    if (!book) {
+      console.log("ℹ️ No books found to test relations");
+      return;
+    }
+    
+    console.log(`📚 Testing relations for: ${book.titre}`);
+    console.log(`  Categories (${book.categories.length}): ${book.categories.map(c => c.category.nom).join(", ")}`);
+    console.log(`  Tags (${book.tags.length}): ${book.tags.map(t => t.tag.nom).join(", ")}`);
+    
+    // Test ajout d'une nouvelle catégorie
+    const fantasyCategory = await db.category.findFirst({ where: { nom: "Fantasy Romance" } });
+    if (fantasyCategory) {
+      await db.bookCategory.create({
+        data: {
+          bookId: book.id,
+          categoryId: fantasyCategory.id
+        }
+      });
+      console.log("✅ Successfully added new category to book");
+    }
+    
+    // Test suppression d'une relation
+    const firstCategory = book.categories[0];
+    if (firstCategory) {
+      await db.bookCategory.delete({
+        where: {
+          id: firstCategory.id
+        }
+      });
+      console.log("✅ Successfully removed category from book");
+    }
+    
+    // Vérifier l'état final
+    const updatedBook = await db.book.findFirst({
+      where: { id: book.id },
+      include: {
+        categories: { include: { category: true } },
+        tags: { include: { tag: true } }
+      }
+    });
+    
+    console.log(`  Updated Categories (${updatedBook?.categories.length}): ${updatedBook?.categories.map(c => c.category.nom).join(", ")}`);
+    
+  } catch (error) {
+    console.error("❌ Many-to-many relations test failed:", error);
+    throw error;
+  }
+}
+
+async function testComplexQueries() {
+  console.log("\n🔍 Testing complex queries with joins...\n");
+  
+  try {
+    // Query 1: Livres avec leurs catégories et tags
+    const booksWithRelations = await db.book.findMany({
+      include: {
+        user: { select: { nom_complet: true, email: true } },
+        categories: { 
+          include: { category: { select: { nom: true, couleur: true, icone: true } } }
+        },
+        tags: {
+          include: { tag: { select: { nom: true, type: true } } }
+        }
+      },
+      take: 5
+    });
+    
+    console.log(`✅ Found ${booksWithRelations.length} books with full relations`);
+    booksWithRelations.forEach(book => {
+      console.log(`  📖 ${book.titre} - Categories: ${book.categories.length}, Tags: ${book.tags.length}`);
+    });
+    
+    // Query 2: Statistiques par catégorie
+    const categoryStats = await db.category.findMany({
+      include: {
+        _count: {
+          select: { books: true }
+        }
+      },
+      orderBy: {
+        books: {
+          _count: 'desc'
+        }
+      }
+    });
+    
+    console.log("\n📊 Category statistics:");
+    categoryStats.forEach(cat => {
+      console.log(`  ${cat.icone} ${cat.nom}: ${cat._count.books} books`);
+    });
+    
+    // Query 3: Tags les plus utilisés
+    const tagStats = await db.tag.findMany({
+      include: {
+        _count: {
+          select: { books: true }
+        }
+      },
+      orderBy: {
+        books: {
+          _count: 'desc'
+        }
+      },
+      take: 10
+    });
+    
+    console.log("\n🏷️ Most used tags:");
+    tagStats.forEach(tag => {
+      console.log(`  ${tag.nom} (${tag.type}): ${tag._count.books} books`);
+    });
+    
+    // Query 4: Recherche avancée
+    const darkSpicyBooks = await db.book.findMany({
+      where: {
+        AND: [
+          { niveau_dark: { gte: 6 } },
+          { niveau_spicy: { gte: 7 } },
+          { statut: "LU" }
+        ]
+      },
+      include: {
+        categories: { include: { category: true } }
+      }
+    });
+    
+    console.log(`\n🔥 Found ${darkSpicyBooks.length} dark & spicy books (dark ≥6, spicy ≥7, read)`);
+    
+  } catch (error) {
+    console.error("❌ Complex queries test failed:", error);
+    throw error;
+  }
+}
+
+async function testIndexesAndPerformance() {
+  console.log("\n⚡ Testing indexes and performance...\n");
+  
+  try {
+    const start = Date.now();
+    
+    // Test index sur email
+    await db.user.findMany({ where: { email: { contains: "bruna" } } });
+    console.log("✅ Email index query completed");
+    
+    // Test index sur titre
+    await db.book.findMany({ where: { titre: { contains: "Twisted" } } });
+    console.log("✅ Title index query completed");
+    
+    // Test index sur statut
+    await db.book.findMany({ where: { statut: "LU" } });
+    console.log("✅ Status index query completed");
+    
+    // Test index sur note_generale
+    await db.book.findMany({ 
+      where: { note_generale: { gte: 8 } },
+      orderBy: { note_generale: 'desc' }
+    });
+    console.log("✅ Rating index query completed");
+    
+    const end = Date.now();
+    console.log(`⏱️ All index queries completed in ${end - start}ms`);
+    
+  } catch (error) {
+    console.error("❌ Index/performance test failed:", error);
+    throw error;
+  }
+}
+
+async function testCascadeDeletion() {
+  console.log("\n🗑️ Testing cascade deletion...\n");
+  
+  try {
+    // Créer un livre de test pour la suppression
+    const admin = await db.user.findFirst({ where: { role: "ADMIN" } });
+    if (!admin) throw new Error("Admin not found");
+    
+    const testBook = await db.book.create({
+      data: {
+        titre: "Test Book for Deletion",
+        auteur: "Test Author",
+        note_generale: 5,
+        niveau_spicy: 5,
+        niveau_dark: 5,
+        niveau_romance: 5,
+        intensite_emotionnelle: 5,
+        danger: 5,
+        violence: 5,
+        originalite: 5,
+        rythme: "MEDIUM_BURN",
+        statut: "A_LIRE",
+        createdBy: admin.id
+      }
+    });
+    
+    console.log(`📚 Created test book: ${testBook.titre}`);
+    
+    // Ajouter quelques relations
+    const category = await db.category.findFirst();
+    const tag = await db.tag.findFirst();
+    
+    if (category) {
+      await db.bookCategory.create({
+        data: { bookId: testBook.id, categoryId: category.id }
+      });
+    }
+    
+    if (tag) {
+      await db.bookTag.create({
+        data: { bookId: testBook.id, tagId: tag.id }
+      });
+    }
+    
+    // Vérifier que les relations existent
+    const relationsCount = await Promise.all([
+      db.bookCategory.count({ where: { bookId: testBook.id } }),
+      db.bookTag.count({ where: { bookId: testBook.id } })
+    ]);
+    
+    console.log(`  Relations before deletion - Categories: ${relationsCount[0]}, Tags: ${relationsCount[1]}`);
+    
+    // Supprimer le livre (doit supprimer les relations en cascade)
+    await db.book.delete({ where: { id: testBook.id } });
+    console.log("✅ Book deleted successfully");
+    
+    // Vérifier que les relations ont été supprimées
+    const relationsAfter = await Promise.all([
+      db.bookCategory.count({ where: { bookId: testBook.id } }),
+      db.bookTag.count({ where: { bookId: testBook.id } })
+    ]);
+    
+    console.log(`  Relations after deletion - Categories: ${relationsAfter[0]}, Tags: ${relationsAfter[1]}`);
+    
+    if (relationsAfter[0] === 0 && relationsAfter[1] === 0) {
+      console.log("✅ Cascade deletion working correctly");
+    } else {
+      console.log("❌ Cascade deletion failed");
+    }
+    
+  } catch (error) {
+    console.error("❌ Cascade deletion test failed:", error);
+    throw error;
+  }
+}
+
+async function runAllTests() {
+  console.log("🧪 Starting comprehensive database tests...\n");
+  
+  try {
+    await testCompleteBookCreation();
+    await testConstraintsAndValidations();
+    await testManyToManyRelations();
+    await testComplexQueries();
+    await testIndexesAndPerformance();
+    await testCascadeDeletion();
+    
+    console.log("\n🎉 All database tests completed successfully!");
+    
+  } catch (error) {
+    console.error("\n💥 Database tests failed:", error);
+    throw error;
+  } finally {
+    await db.$disconnect();
+  }
+}
+
+// Exécuter tous les tests
+runAllTests();

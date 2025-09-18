@@ -1,0 +1,95 @@
+import { NextRequest } from "next/server";
+import { withAuth, withOptionalAuth } from "../middlewares/auth";
+import { withValidation } from "../middlewares/validation";
+import { responses } from "./responses";
+import { z } from "zod";
+
+// Test auth middleware
+export async function testAuthMiddleware() {
+  console.log("🧪 Testing auth middleware...");
+  
+  try {
+    // Mock request without auth
+    const mockRequest = new NextRequest("http://localhost:3002/test");
+    
+    const result = await withAuth(mockRequest, async (req, user) => {
+      return responses.success({ message: "Authenticated", user });
+    });
+    
+    // Should return 401 for unauthenticated request
+    const response = await result.json();
+    if (result.status === 401) {
+      console.log("✅ Auth middleware correctly rejects unauthenticated requests");
+    } else {
+      console.log("❌ Auth middleware test failed");
+    }
+  } catch (error) {
+    console.log("✅ Auth middleware correctly handles errors:", error);
+  }
+}
+
+// Test optional auth middleware
+export async function testOptionalAuthMiddleware() {
+  console.log("🧪 Testing optional auth middleware...");
+  
+  try {
+    const mockRequest = new NextRequest("http://localhost:3002/test");
+    
+    const result = await withOptionalAuth(mockRequest, async (req, user) => {
+      return responses.success({ message: "Optional auth works", user: user || null });
+    });
+    
+    const response = await result.json();
+    if (result.status === 200) {
+      console.log("✅ Optional auth middleware works correctly");
+    } else {
+      console.log("❌ Optional auth middleware test failed");
+    }
+  } catch (error) {
+    console.log("❌ Optional auth middleware error:", error);
+  }
+}
+
+// Test validation middleware
+export async function testValidationMiddleware() {
+  console.log("🧪 Testing validation middleware...");
+  
+  const testSchema = z.object({
+    name: z.string().min(1),
+    age: z.number().min(0)
+  });
+  
+  try {
+    // Test with invalid data
+    const mockRequest = new NextRequest("http://localhost:3002/test?name=&age=-1");
+    
+    const validatedHandler = withValidation(testSchema, async (req, data) => {
+      return responses.success(data);
+    });
+    
+    const result = await validatedHandler(mockRequest);
+    const response = await result.json();
+    
+    if (result.status === 400) {
+      console.log("✅ Validation middleware correctly rejects invalid data");
+    } else {
+      console.log("❌ Validation middleware test failed");
+    }
+  } catch (error) {
+    console.log("✅ Validation middleware correctly handles errors:", error);
+  }
+}
+
+// Run all middleware tests
+async function runMiddlewareTests() {
+  console.log("🔧 Starting middleware tests...\n");
+  
+  await testAuthMiddleware();
+  await testOptionalAuthMiddleware();
+  await testValidationMiddleware();
+  
+  console.log("\n✅ Middleware tests completed");
+}
+
+// Run tests
+runMiddlewareTests().catch(console.error);

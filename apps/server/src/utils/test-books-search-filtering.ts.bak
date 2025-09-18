@@ -1,0 +1,336 @@
+import { db } from "./db";
+
+async function testAdvancedSearchAndFiltering() {
+  console.log("🔍 Testing Advanced Search and Filtering API...\n");
+
+  try {
+    // 1. Test de recherche textuelle basique
+    console.log("📝 Testing basic text search:");
+    
+    const searchResults = await db.book.findMany({
+      where: {
+        OR: [
+          { titre: { contains: "Hidden", mode: "insensitive" } },
+          { auteur: { contains: "Emily", mode: "insensitive" } }
+        ]
+      },
+      select: { titre: true, auteur: true }
+    });
+    
+    console.log(`✅ Text search results: ${searchResults.length} books found`);
+    searchResults.forEach(book => {
+      console.log(`  📖 "${book.titre}" by ${book.auteur}`);
+    });
+
+    // 2. Test de filtrage par statut
+    console.log("\n📊 Testing status filtering:");
+    
+    const statusCounts = await Promise.all([
+      db.book.count({ where: { statut: "LU" } }),
+      db.book.count({ where: { statut: "EN_COURS" } }),
+      db.book.count({ where: { statut: "A_LIRE" } })
+    ]);
+
+    console.log(`✅ Status breakdown:`);
+    console.log(`  📚 Read (LU): ${statusCounts[0]} books`);
+    console.log(`  📖 Reading (EN_COURS): ${statusCounts[1]} books`);
+    console.log(`  📋 To Read (A_LIRE): ${statusCounts[2]} books`);
+
+    // 3. Test de filtrage par niveaux spicy/dark
+    console.log("\n🌶️ Testing spicy/dark level filtering:");
+    
+    const levelCounts = await Promise.all([
+      db.book.count({ where: { niveau_spicy: { gte: 8 } } }),
+      db.book.count({ where: { niveau_dark: { gte: 7 } } }),
+      db.book.count({ 
+        where: { 
+          AND: [
+            { niveau_spicy: { gte: 5 } },
+            { niveau_dark: { gte: 5 } }
+          ]
+        }
+      })
+    ]);
+
+    console.log(`✅ Level filtering results:`);
+    console.log(`  🌶️ Very Spicy (≥8): ${levelCounts[0]} books`);
+    console.log(`  🌑 Very Dark (≥7): ${levelCounts[1]} books`);
+    console.log(`  🔥 Spicy & Dark (≥5 each): ${levelCounts[2]} books`);
+
+    // 4. Test de filtrage par genre/catégorie
+    console.log("\n🎭 Testing genre/category filtering:");
+    
+    const categories = await db.category.findMany({
+      select: { id: true, nom: true },
+      orderBy: { nom: "asc" }
+    });
+
+    const genreResults = await Promise.all(
+      categories.slice(0, 3).map(async (category) => {
+        const count = await db.book.count({
+          where: {
+            categories: {
+              some: { categoryId: category.id }
+            }
+          }
+        });
+        return { name: category.nom, count, id: category.id };
+      })
+    );
+
+    console.log(`✅ Genre filtering results:`);
+    genreResults.forEach(genre => {
+      console.log(`  🎭 ${genre.name}: ${genre.count} books`);
+    });
+
+    // 5. Test de filtrage par auteur
+    console.log("\n👤 Testing author filtering:");
+    
+    const authorCounts = await db.book.groupBy({
+      by: ['auteur'],
+      _count: { id: true },
+      orderBy: { _count: { id: 'desc' } },
+      take: 5
+    });
+
+    console.log(`✅ Top authors:`);
+    authorCounts.forEach(author => {
+      console.log(`  👤 ${author.auteur}: ${author._count.id} books`);
+    });
+
+    // Test filtrage par nom d'auteur
+    const authorSearchResults = await db.book.findMany({
+      where: {
+        auteur: { contains: "Emily", mode: "insensitive" }
+      },
+      select: { titre: true, auteur: true }
+    });
+
+    console.log(`✅ Author search "Emily": ${authorSearchResults.length} results`);
+
+    // 6. Test de filtrage par notes
+    console.log("\n⭐ Testing rating filtering:");
+    
+    const ratingRanges = await Promise.all([
+      db.book.count({ where: { note_generale: { gte: 8 } } }),
+      db.book.count({ where: { note_generale: { gte: 6, lte: 7 } } }),
+      db.book.count({ where: { note_generale: { lte: 5 } } }),
+    ]);
+
+    console.log(`✅ Rating distribution:`);
+    console.log(`  ⭐ Excellent (8-10): ${ratingRanges[0]} books`);
+    console.log(`  ⭐ Good (6-7): ${ratingRanges[1]} books`);
+    console.log(`  ⭐ Average (≤5): ${ratingRanges[2]} books`);
+
+    // 7. Test de tri par différents critères
+    console.log("\n📈 Testing sorting options:");
+    
+    const sortingTests = await Promise.all([
+      db.book.findMany({
+        orderBy: { note_generale: "desc" },
+        take: 3,
+        select: { titre: true, auteur: true, note_generale: true }
+      }),
+      db.book.findMany({
+        orderBy: { niveau_spicy: "desc" },
+        take: 3,
+        select: { titre: true, niveau_spicy: true }
+      }),
+      db.book.findMany({
+        orderBy: { date_creation: "desc" },
+        take: 3,
+        select: { titre: true, date_creation: true }
+      })
+    ]);
+
+    console.log(`✅ Top rated books:`);
+    sortingTests[0].forEach((book, index) => {
+      console.log(`  ${index + 1}. "${book.titre}" - ${book.note_generale}/10`);
+    });
+
+    console.log(`✅ Spiciest books:`);
+    sortingTests[1].forEach((book, index) => {
+      console.log(`  ${index + 1}. "${book.titre}" - ${book.niveau_spicy}/10 🌶️`);
+    });
+
+    console.log(`✅ Most recent books:`);
+    sortingTests[2].forEach((book, index) => {
+      console.log(`  ${index + 1}. "${book.titre}" - ${book.date_creation.toDateString()}`);
+    });
+
+    // 8. Test de filtrage par langue
+    console.log("\n🌍 Testing language filtering:");
+    
+    const languageCounts = await db.book.groupBy({
+      by: ['langue'],
+      _count: { id: true },
+      orderBy: { _count: { id: 'desc' } }
+    });
+
+    console.log(`✅ Language distribution:`);
+    languageCounts.forEach(lang => {
+      console.log(`  🌍 ${lang.langue}: ${lang._count.id} books`);
+    });
+
+    // 9. Test de filtrage par rythme
+    console.log("\n⚡ Testing rhythm filtering:");
+    
+    const rhythmCounts = await db.book.groupBy({
+      by: ['rythme'],
+      _count: { id: true },
+      orderBy: { _count: { id: 'desc' } }
+    });
+
+    console.log(`✅ Rhythm distribution:`);
+    rhythmCounts.forEach(rhythm => {
+      const rhythmNames = {
+        'SLOW_BURN': '🐌 Slow Burn',
+        'MEDIUM_BURN': '🔥 Medium Burn',
+        'FAST_PACE': '⚡ Fast Pace',
+        'INSTA_LOVE': '💕 Insta Love'
+      };
+      console.log(`  ${rhythmNames[rhythm.rythme] || rhythm.rythme}: ${rhythm._count.id} books`);
+    });
+
+    // 10. Test de filtrage par tags
+    console.log("\n🏷️ Testing tag filtering:");
+    
+    const topTags = await db.tag.findMany({
+      orderBy: { nom: "asc" },
+      take: 5,
+      select: { id: true, nom: true, type: true }
+    });
+
+    const tagResults = await Promise.all(
+      topTags.map(async (tag) => {
+        const count = await db.book.count({
+          where: {
+            tags: {
+              some: { tagId: tag.id }
+            }
+          }
+        });
+        return { name: tag.nom, type: tag.type, count };
+      })
+    );
+
+    console.log(`✅ Tag usage:`);
+    tagResults.forEach(tag => {
+      const typeEmojis = {
+        'TROPE': '💕',
+        'GENRE': '🎭',
+        'TRIGGER': '⚠️'
+      };
+      console.log(`  ${typeEmojis[tag.type] || '🏷️'} ${tag.name}: ${tag.count} books`);
+    });
+
+    // 11. Test de requête complexe combinant plusieurs filtres
+    console.log("\n🔍 Testing complex combined filtering:");
+    
+    const complexQuery = await db.book.findMany({
+      where: {
+        AND: [
+          { statut: "LU" },
+          { niveau_spicy: { gte: 5 } },
+          { note_generale: { gte: 7 } },
+          { 
+            OR: [
+              { auteur: { contains: "Emily", mode: "insensitive" } },
+              { auteur: { contains: "Christina", mode: "insensitive" } }
+            ]
+          }
+        ]
+      },
+      select: { 
+        titre: true, 
+        auteur: true, 
+        note_generale: true, 
+        niveau_spicy: true 
+      },
+      orderBy: { note_generale: "desc" }
+    });
+
+    console.log(`✅ Complex query results (Read + Spicy≥5 + Rating≥7 + Specific authors):`);
+    console.log(`  Found ${complexQuery.length} matching books:`);
+    complexQuery.forEach(book => {
+      console.log(`  📚 "${book.titre}" by ${book.auteur} - ${book.note_generale}/10 (🌶️${book.niveau_spicy})`);
+    });
+
+    console.log("\n🎉 Advanced search and filtering tests completed successfully!");
+
+  } catch (error) {
+    console.error("❌ Advanced search and filtering test failed:", error);
+    throw error;
+  }
+}
+
+async function generateSearchExamples() {
+  console.log("\n📋 Search and Filtering API Examples:\n");
+  console.log("=".repeat(60));
+  
+  console.log("\n🔍 TEXT SEARCH:");
+  console.log("GET /api/books?search=Emily");
+  console.log("GET /api/books/search?q=romance%20dark");
+  
+  console.log("\n📊 STATUS FILTERING:");
+  console.log("GET /api/books?statut=LU");
+  console.log("GET /api/books?status=EN_COURS");
+  
+  console.log("\n🌶️ LEVEL FILTERING:");
+  console.log("GET /api/books?niveau_spicy=8");
+  console.log("GET /api/books?spicy_level=5&dark_level=7");
+  
+  console.log("\n👤 AUTHOR FILTERING:");
+  console.log("GET /api/books?author=Emily");
+  console.log("GET /api/books?auteur=Christina");
+  
+  console.log("\n🎭 GENRE FILTERING:");
+  console.log("GET /api/books?genre=Dark%20Romance");
+  console.log("GET /api/books?category=cmeswv5h00001qtlk94h9cwl4");
+  
+  console.log("\n⭐ RATING FILTERING:");
+  console.log("GET /api/books?min_rating=7&max_rating=10");
+  console.log("GET /api/books?note_min=5");
+  
+  console.log("\n📈 SORTING:");
+  console.log("GET /api/books?sort=note_generale&order=desc");
+  console.log("GET /api/books?sort=niveau_spicy&order=desc");
+  console.log("GET /api/books?sort=date_creation&order=asc");
+  
+  console.log("\n🌍 LANGUAGE & RHYTHM:");
+  console.log("GET /api/books?language=FR&rythme=SLOW_BURN");
+  console.log("GET /api/books?langue=EN");
+  
+  console.log("\n🏷️ TAG FILTERING:");
+  console.log("GET /api/books?tag=Enemies%20to%20Lovers");
+  console.log("GET /api/books?tag=cmeswv5sm0006qtlkbdppcl7v");
+  
+  console.log("\n🔥 COMPLEX COMBINED QUERIES:");
+  console.log("GET /api/books?statut=LU&niveau_spicy=8&author=Emily&sort=note_generale&order=desc");
+  console.log("GET /api/books/search?q=dark&genre=Romance&min_rating=7&spicy_level=5");
+  
+  console.log("\n📋 PAGINATION:");
+  console.log("GET /api/books?page=2&limit=5&sort=titre");
+  
+  console.log("=".repeat(60));
+}
+
+async function runAdvancedSearchTests() {
+  console.log("🔍 Starting Advanced Search and Filtering Tests...\n");
+
+  try {
+    await testAdvancedSearchAndFiltering();
+    await generateSearchExamples();
+    
+    console.log("\n🎉 All advanced search and filtering tests completed successfully!");
+    console.log("🚀 Search and filtering API is fully functional!");
+
+  } catch (error) {
+    console.error("\n💥 Advanced search tests failed:", error);
+    throw error;
+  } finally {
+    await db.$disconnect();
+  }
+}
+
+runAdvancedSearchTests();

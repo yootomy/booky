@@ -1,0 +1,271 @@
+import { db } from "./db";
+
+async function createTestData() {
+  console.log("📊 Creating performance test data...\n");
+  
+  const admin = await db.user.findFirst({ where: { role: "ADMIN" } });
+  if (!admin) throw new Error("Admin not found");
+  
+  const categories = await db.category.findMany();
+  const tags = await db.tag.findMany();
+  
+  const bookTitles = [
+    "Dark Desires", "Spicy Secrets", "Forbidden Love", "Twisted Hearts",
+    "Burning Passion", "Shadow Romance", "Wild Temptation", "Dangerous Games",
+    "Sweet Revenge", "Broken Dreams", "Perfect Storm", "Hidden Truth",
+    "Lost Angels", "Fire and Ice", "Blood Moon", "Silver Nights"
+  ];
+  
+  const authors = [
+    "Ana Huang", "Penelope Douglas", "L.J. Shen", "Meghan March",
+    "K. Bromberg", "Vi Keeland", "Colleen Hoover", "Tarryn Fisher",
+    "Kennedy Ryan", "Brittainy Cherry", "Christina Lauren", "Emily Henry"
+  ];
+  
+  console.log(`Creating ${bookTitles.length} test books...`);
+  
+  for (let i = 0; i < bookTitles.length; i++) {
+    const book = await db.book.create({
+      data: {
+        titre: `${bookTitles[i]} ${i + 1}`,
+        auteur: authors[i % authors.length],
+        isbn: `978${Math.floor(Math.random() * 1000000000).toString().padStart(9, '0')}`,
+        image_couverture: `https://example.com/cover-${i + 1}.jpg`,
+        resume_officiel: `Un roman captivant de ${authors[i % authors.length]} qui explore les thèmes de l'amour, de la passion et de la rédemption dans un univers sombre et sensuel.`,
+        editeur: "Test Publisher",
+        date_publication: new Date(2020 + (i % 4), (i % 12), 15),
+        nombre_pages: 250 + (i * 10),
+        langue: i % 2 === 0 ? "FR" : "EN",
+        date_lecture: i % 3 === 0 ? new Date(2024, i % 12, 1) : null,
+        statut: i % 3 === 0 ? "LU" : (i % 3 === 1 ? "EN_COURS" : "A_LIRE"),
+        note_generale: 5 + (i % 6),
+        niveau_spicy: 3 + (i % 8),
+        niveau_dark: 2 + (i % 9),
+        niveau_romance: 4 + (i % 7),
+        intensite_emotionnelle: 3 + (i % 8),
+        danger: 1 + (i % 10),
+        violence: 1 + (i % 8),
+        originalite: 4 + (i % 7),
+        rythme: ["SLOW_BURN", "MEDIUM_BURN", "FAST_PACE", "INSTA_LOVE"][i % 4],
+        resume_personnel: `Mon avis personnel sur ce livre incroyable de ${authors[i % authors.length]}...`,
+        critique_detaillee: `Une critique détaillée de ce roman qui m'a marquée par ses personnages complexes et son intrigue captivante.`,
+        citations_favorites: `"Une citation mémorable du livre ${i + 1}"`,
+        pourquoi_aimer: `Les raisons d'aimer ce livre incluent...`,
+        recommandation_personnalisee: `Je recommande ce livre si vous aimez...`,
+        ajout_manuel: i % 4 === 0,
+        createdBy: admin.id
+      }
+    });
+    
+    // Ajouter quelques catégories aléatoires
+    const randomCategories = categories.sort(() => 0.5 - Math.random()).slice(0, 1 + (i % 3));
+    for (const category of randomCategories) {
+      await db.bookCategory.create({
+        data: { bookId: book.id, categoryId: category.id }
+      });
+    }
+    
+    // Ajouter quelques tags aléatoires
+    const randomTags = tags.sort(() => 0.5 - Math.random()).slice(0, 2 + (i % 4));
+    for (const tag of randomTags) {
+      await db.bookTag.create({
+        data: { bookId: book.id, tagId: tag.id }
+      });
+    }
+    
+    if (i % 5 === 0) {
+      console.log(`  Created ${i + 1}/${bookTitles.length} books...`);
+    }
+  }
+  
+  console.log(`✅ Created ${bookTitles.length} test books with relations`);
+}
+
+async function testQueryPerformance() {
+  console.log("\n⚡ Testing query performance...\n");
+  
+  const tests = [
+    {
+      name: "Find all books with relations",
+      query: () => db.book.findMany({
+        include: {
+          user: { select: { nom_complet: true } },
+          categories: { include: { category: true } },
+          tags: { include: { tag: true } }
+        }
+      })
+    },
+    {
+      name: "Search books by title (indexed)",
+      query: () => db.book.findMany({
+        where: { titre: { contains: "Dark" } }
+      })
+    },
+    {
+      name: "Search books by author (indexed)",
+      query: () => db.book.findMany({
+        where: { auteur: { contains: "Ana" } }
+      })
+    },
+    {
+      name: "Filter by status (indexed)",
+      query: () => db.book.findMany({
+        where: { statut: "LU" }
+      })
+    },
+    {
+      name: "Filter by rating range (indexed)",
+      query: () => db.book.findMany({
+        where: { 
+          note_generale: { gte: 8 } 
+        },
+        orderBy: { note_generale: 'desc' }
+      })
+    },
+    {
+      name: "Complex search with multiple filters",
+      query: () => db.book.findMany({
+        where: {
+          AND: [
+            { niveau_spicy: { gte: 7 } },
+            { niveau_dark: { gte: 5 } },
+            { statut: "LU" },
+            { note_generale: { gte: 7 } }
+          ]
+        },
+        include: {
+          categories: { include: { category: true } },
+          tags: { include: { tag: true } }
+        },
+        orderBy: { note_generale: 'desc' }
+      })
+    },
+    {
+      name: "Aggregate statistics",
+      query: () => db.book.aggregate({
+        _avg: { note_generale: true, niveau_spicy: true, niveau_dark: true },
+        _count: { id: true },
+        _max: { note_generale: true },
+        _min: { note_generale: true }
+      })
+    },
+    {
+      name: "Group by status with counts",
+      query: () => db.book.groupBy({
+        by: ['statut'],
+        _count: { id: true },
+        _avg: { note_generale: true }
+      })
+    },
+    {
+      name: "Books with category counts",
+      query: () => db.book.findMany({
+        include: {
+          _count: { select: { categories: true, tags: true } }
+        },
+        take: 10
+      })
+    },
+    {
+      name: "Most used tags",
+      query: () => db.tag.findMany({
+        include: {
+          _count: { select: { books: true } }
+        },
+        orderBy: {
+          books: { _count: 'desc' }
+        },
+        take: 10
+      })
+    }
+  ];
+  
+  for (const test of tests) {
+    const start = Date.now();
+    const result = await test.query();
+    const duration = Date.now() - start;
+    
+    const count = Array.isArray(result) ? result.length : 1;
+    console.log(`✅ ${test.name}: ${duration}ms (${count} results)`);
+    
+    if (duration > 1000) {
+      console.log(`⚠️  Slow query detected: ${test.name} took ${duration}ms`);
+    }
+  }
+}
+
+async function testPagination() {
+  console.log("\n📖 Testing pagination performance...\n");
+  
+  const pageSize = 5;
+  const totalBooks = await db.book.count();
+  const totalPages = Math.ceil(totalBooks / pageSize);
+  
+  console.log(`Total books: ${totalBooks}, Pages: ${totalPages}, Page size: ${pageSize}`);
+  
+  // Test différentes pages
+  for (let page = 1; page <= Math.min(totalPages, 3); page++) {
+    const start = Date.now();
+    
+    const books = await db.book.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: {
+        categories: { include: { category: true } },
+        tags: { include: { tag: true } }
+      },
+      orderBy: { date_creation: 'desc' }
+    });
+    
+    const duration = Date.now() - start;
+    console.log(`✅ Page ${page}: ${duration}ms (${books.length} books)`);
+  }
+}
+
+async function runPerformanceTests() {
+  console.log("🚀 Starting performance tests...\n");
+  
+  try {
+    // Vérifier s'il y a déjà des données de test
+    const bookCount = await db.book.count();
+    
+    if (bookCount < 10) {
+      await createTestData();
+    } else {
+      console.log(`📊 Using existing ${bookCount} books for performance tests\n`);
+    }
+    
+    await testQueryPerformance();
+    await testPagination();
+    
+    console.log("\n🎉 All performance tests completed!");
+    
+    // Statistiques finales
+    const stats = await db.book.aggregate({
+      _count: { id: true },
+      _avg: { note_generale: true }
+    });
+    
+    const categoryStats = await db.category.findMany({
+      include: { _count: { select: { books: true } } }
+    });
+    
+    const tagStats = await db.tag.findMany({
+      include: { _count: { select: { books: true } } }
+    });
+    
+    console.log("\n📊 Final Statistics:");
+    console.log(`  📚 Total books: ${stats._count.id}`);
+    console.log(`  ⭐ Average rating: ${stats._avg.note_generale?.toFixed(1)}`);
+    console.log(`  🏷️ Categories with books: ${categoryStats.filter(c => c._count.books > 0).length}/${categoryStats.length}`);
+    console.log(`  🏷️ Tags with books: ${tagStats.filter(t => t._count.books > 0).length}/${tagStats.length}`);
+    
+  } catch (error) {
+    console.error("\n💥 Performance tests failed:", error);
+    throw error;
+  } finally {
+    await db.$disconnect();
+  }
+}
+
+runPerformanceTests();

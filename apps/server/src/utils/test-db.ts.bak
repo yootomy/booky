@@ -1,0 +1,24 @@
+import { db } from "./db";
+
+async function testDatabaseConnection() {
+  try {
+    await db.$connect();
+    console.log("✅ Database connection successful");
+
+    // Test a simple query
+    const result = await db.$queryRaw`SELECT 1 as test`;
+    console.log("✅ Database query test:", result);
+
+    await db.$disconnect();
+    return true;
+  } catch (error) {
+    console.error("❌ Database connection failed:", error);
+    await db.$disconnect();
+    return false;
+  }
+}
+
+// Run the test
+testDatabaseConnection().then(success => {
+  process.exit(success ? 0 : 1);
+});

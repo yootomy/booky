@@ -1,0 +1,169 @@
+import { db } from "./db";
+
+async function testDataIntegrity() {
+  console.log("🔍 Testing data integrity and consistency...\n");
+  
+  // Test 1: Vérifier que tous les livres ont un utilisateur valide
+  const orphanBooks = await db.book.findMany({
+    where: {
+      createdBy: null
+    }
+  });
+  
+  if (orphanBooks.length === 0) {
+    console.log("✅ All books have valid user associations");
+  } else {
+    console.log(`❌ Found ${orphanBooks.length} books without valid users`);
+  }
+  
+  // Test 2: Vérifier les relations BookCategory
+  const invalidBookCategories = await db.bookCategory.findMany({
+    where: {
+      OR: [
+        { bookId: null },
+        { categoryId: null }
+      ]
+    }
+  });
+  
+  if (invalidBookCategories.length === 0) {
+    console.log("✅ All book-category relations are valid");
+  } else {
+    console.log(`❌ Found ${invalidBookCategories.length} invalid book-category relations`);
+  }
+  
+  // Test 3: Vérifier les relations BookTag
+  const invalidBookTags = await db.bookTag.findMany({
+    where: {
+      OR: [
+        { bookId: null },
+        { tagId: null }
+      ]
+    }
+  });
+  
+  if (invalidBookTags.length === 0) {
+    console.log("✅ All book-tag relations are valid");
+  } else {
+    console.log(`❌ Found ${invalidBookTags.length} invalid book-tag relations`);
+  }
+  
+  // Test 4: Vérifier la cohérence des notes (doivent être entre 1 et 10)
+  const invalidRatings = await db.book.findMany({
+    where: {
+      OR: [
+        { note_generale: { lt: 1 } },
+        { note_generale: { gt: 10 } },
+        { niveau_spicy: { lt: 1 } },
+        { niveau_spicy: { gt: 10 } },
+        { niveau_dark: { lt: 1 } },
+        { niveau_dark: { gt: 10 } },
+        { niveau_romance: { lt: 1 } },
+        { niveau_romance: { gt: 10 } }
+      ]
+    },
+    select: {
+      id: true,
+      titre: true,
+      note_generale: true,
+      niveau_spicy: true,
+      niveau_dark: true,
+      niveau_romance: true
+    }
+  });
+  
+  if (invalidRatings.length === 0) {
+    console.log("✅ All ratings are within valid range (1-10)");
+  } else {
+    console.log(`❌ Found ${invalidRatings.length} books with invalid ratings`);
+    invalidRatings.forEach(book => {
+      console.log(`  - ${book.titre}: general=${book.note_generale}, spicy=${book.niveau_spicy}, dark=${book.niveau_dark}, romance=${book.niveau_romance}`);
+    });
+  }
+  
+  // Test 5: Vérifier les enums
+  const validStatuses = ["LU", "EN_COURS", "A_LIRE"];
+  const validRhythms = ["SLOW_BURN", "MEDIUM_BURN", "FAST_PACE", "INSTA_LOVE"];
+  
+  // On ne peut pas vraiment tester les enums directement avec Prisma car ils sont validés au niveau du schema
+  // Mais on peut vérifier que tous les livres ont des valeurs valides
+  const books = await db.book.findMany({
+    select: { id: true, titre: true, statut: true, rythme: true }
+  });
+  
+  const invalidEnums = books.filter(book => 
+    !validStatuses.includes(book.statut) || !validRhythms.includes(book.rythme)
+  );
+  
+  if (invalidEnums.length === 0) {
+    console.log("✅ All enum values are valid");
+  } else {
+    console.log(`❌ Found ${invalidEnums.length} books with invalid enum values`);
+  }
+  
+  // Test 6: Statistiques de cohérence
+  const totalBooks = await db.book.count();
+  const totalCategories = await db.category.count();
+  const totalTags = await db.tag.count();
+  const totalBookCategories = await db.bookCategory.count();
+  const totalBookTags = await db.bookTag.count();
+  
+  console.log("\n📊 Data consistency stats:");
+  console.log(`  📚 Books: ${totalBooks}`);
+  console.log(`  🏷️ Categories: ${totalCategories}`);
+  console.log(`  🏷️ Tags: ${totalTags}`);
+  console.log(`  🔗 Book-Category relations: ${totalBookCategories}`);
+  console.log(`  🔗 Book-Tag relations: ${totalBookTags}`);
+  console.log(`  📈 Avg categories per book: ${(totalBookCategories / totalBooks).toFixed(1)}`);
+  console.log(`  📈 Avg tags per book: ${(totalBookTags / totalBooks).toFixed(1)}`);
+  
+  // Test 7: Vérifier les utilisateurs
+  const users = await db.user.findMany();
+  const adminUsers = users.filter(u => u.role === "ADMIN");
+  
+  console.log(`\n👥 Users: ${users.length} total, ${adminUsers.length} admins`);
+  if (adminUsers.length === 0) {
+    console.log("⚠️  No admin users found!");
+  } else {
+    console.log("✅ Admin users present");
+  }
+  
+  // Test 8: Vérifier les index avec une requête EXPLAIN (PostgreSQL)
+  console.log("\n🔍 Testing query execution plans...");
+  
+  try {
+    // Test sur l'index email
+    const emailQuery = await db.$queryRaw`
+      EXPLAIN (FORMAT JSON) 
+      SELECT * FROM "user" WHERE email = 'bruna@booky.dev'
+    `;
+    console.log("✅ Email index query plan generated");
+    
+    // Test sur l'index titre
+    const titleQuery = await db.$queryRaw`
+      EXPLAIN (FORMAT JSON)
+      SELECT * FROM "book" WHERE titre LIKE '%Dark%'
+    `;
+    console.log("✅ Title index query plan generated");
+    
+  } catch (error) {
+    console.log("ℹ️  Query plan analysis skipped (requires PostgreSQL EXPLAIN)");
+  }
+}
+
+async function runIntegrityTests() {
+  console.log("🧪 Starting data integrity tests...\n");
+  
+  try {
+    await testDataIntegrity();
+    console.log("\n🎉 Data integrity tests completed!");
+    
+  } catch (error) {
+    console.error("\n💥 Data integrity tests failed:", error);
+    throw error;
+  } finally {
+    await db.$disconnect();
+  }
+}
+
+runIntegrityTests();

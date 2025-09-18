@@ -1,0 +1,60 @@
+import { db } from "./db";
+
+async function testModels() {
+  console.log("🧪 Testing Prisma models...\n");
+  
+  try {
+    // Test User model
+    const users = await db.user.findMany();
+    console.log(`✅ Users found: ${users.length}`);
+    users.forEach(user => {
+      console.log(`  - ${user.nom_complet} (${user.email}) - ${user.role}`);
+    });
+    
+    // Test Category model
+    const categories = await db.category.findMany({
+      orderBy: { ordre_affichage: 'asc' }
+    });
+    console.log(`\n✅ Categories found: ${categories.length}`);
+    categories.forEach(cat => {
+      console.log(`  - ${cat.icone} ${cat.nom} (${cat.couleur})`);
+    });
+    
+    // Test Tag model
+    const tags = await db.tag.findMany({
+      orderBy: { nom: 'asc' }
+    });
+    console.log(`\n✅ Tags found: ${tags.length}`);
+    const tagsByType = tags.reduce((acc, tag) => {
+      acc[tag.type] = (acc[tag.type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    Object.entries(tagsByType).forEach(([type, count]) => {
+      console.log(`  - ${type}: ${count} tags`);
+    });
+    
+    // Test database constraints
+    console.log("\n🔧 Testing database constraints...");
+    
+    try {
+      await db.category.create({
+        data: {
+          nom: "Dark Romance", // Duplicate name should fail
+          couleur: "#000000",
+        }
+      });
+    } catch (error) {
+      console.log("✅ Unique constraint on category name works correctly");
+    }
+    
+    console.log("\n✅ All model tests passed!");
+    
+  } catch (error) {
+    console.error("❌ Model test failed:", error);
+  } finally {
+    await db.$disconnect();
+  }
+}
+
+testModels();

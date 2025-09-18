@@ -1,13 +1,11 @@
 import type { NextRequest } from "next/server";
-import { auth } from "./auth";
+import { getUserFromRequest } from "./auth";
 
 export async function createContext(req: NextRequest) {
-	const session = await auth.api.getSession({
-		headers: req.headers,
-	});
-	return {
-		session,
-	};
+  const user = await getUserFromRequest(req);
+  return {
+    user,
+  };
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;

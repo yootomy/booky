@@ -1,0 +1,356 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model book {
+  id                           String           @id
+  titre                        String
+  auteur                       String
+  isbn                         String?
+  image_couverture             String?
+  google_books_id              String?
+  open_library_id              String?
+  resume_officiel              String?
+  editeur                      String?
+  date_publication             DateTime?
+  nombre_pages                 Int?
+  langue                       String?
+  date_lecture                 DateTime?
+  statut                       BookStatus       @default(A_LIRE)
+  note_generale                Int
+  niveau_spicy                 Int
+  niveau_dark                  Int
+  niveau_romance               Int
+  intensite_emotionnelle       Int
+  danger                       Int
+  violence                     Int
+  originalite                  Int
+  rythme                       BookRhythm
+  resume_personnel             String?
+  critique_detaillee           String?
+  citations_favorites          String?
+  pourquoi_aimer               String?
+  questions_sur_le_livre       String?
+  recommandation_personnalisee String?
+  ajout_manuel                 Boolean          @default(false)
+  date_creation                DateTime         @default(now())
+  date_modification            DateTime
+  createdBy                    String
+  sagaId                       String?
+  sagaOrder                    Int?
+  user                         user             @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  saga                         saga?            @relation(fields: [sagaId], references: [id], onDelete: SetNull)
+  book_category                book_category[]
+  book_favorite                book_favorite[]
+  book_question                book_question[]
+  book_tag                     book_tag[]
+  upload_records               upload_records[]
+  list_book                    list_book[]
+
+  @@unique([sagaId, sagaOrder], map: "uniq_saga_order")
+  @@index([auteur])
+  @@index([createdBy])
+  @@index([date_lecture])
+  @@index([note_generale])
+  @@index([statut])
+  @@index([titre])
+  @@index([sagaId, sagaOrder])
+}
+
+model saga {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  description String?
+  status      SagaStatus @default(ONGOING)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  books       book[]
+
+  @@index([name])
+  @@index([slug])
+}
+
+model book_category {
+  id         String   @id
+  bookId     String
+  categoryId String
+  book       book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  category   category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([bookId, categoryId])
+}
+
+model book_question {
+  id                                    String               @id
+  question                              String
+  reponse                               String?
+  date_question                         DateTime             @default(now())
+  date_reponse                          DateTime?
+  status                                BookQuestionStatus   @default(PENDING)
+  is_public                             Boolean              @default(true)
+  likes_count                           Int                  @default(0)
+  bookId                                String
+  authorId                              String
+  answeredById                          String?
+  user_book_question_answeredByIdTouser user?                @relation("book_question_answeredByIdTouser", fields: [answeredById], references: [id])
+  user_book_question_authorIdTouser     user                 @relation("book_question_authorIdTouser", fields: [authorId], references: [id], onDelete: Cascade)
+  book                                  book                 @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  book_question_like                    book_question_like[]
+
+  @@index([authorId])
+  @@index([bookId])
+  @@index([date_question])
+  @@index([status])
+}
+
+model book_question_like {
+  id            String        @id
+  questionId    String
+  userId        String
+  createdAt     DateTime      @default(now())
+  book_question book_question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user          user          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, userId])
+}
+
+model book_tag {
+  id     String @id
+  bookId String
+  tagId  String
+  book   book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  tag    tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([bookId, tagId])
+}
+
+model book_favorite {
+  id        String   @id
+  bookId    String
+  userId    String
+  createdAt DateTime @default(now())
+  book      book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([bookId, userId])
+  @@index([userId])
+  @@index([bookId])
+}
+
+model category {
+  id                String          @id
+  nom               String          @unique
+  couleur           String
+  icone             String?
+  description       String?
+  ordre_affichage   Int             @default(0)
+  est_actif         Boolean         @default(true)
+  date_creation     DateTime        @default(now())
+  date_modification DateTime
+  book_category     book_category[]
+
+  @@index([nom])
+  @@index([ordre_affichage])
+}
+
+model export_configs {
+  id              String        @id
+  name            String
+  description     String?
+  format          export_format
+  default_options Json
+  filters         Json          @default("{}")
+  is_default      Boolean       @default(false)
+  is_active       Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime
+  createdBy       String
+  user            user          @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+
+  @@index([createdBy])
+  @@index([createdBy, is_active])
+  @@index([createdBy, is_default])
+}
+
+model tag {
+  id                String     @id
+  nom               String     @unique
+  couleur           String
+  type              TagType    @default(PERSONNALISE)
+  utilisation_count Int        @default(0)
+  est_favori        Boolean    @default(false)
+  date_creation     DateTime   @default(now())
+  date_modification DateTime
+  book_tag          book_tag[]
+
+  @@index([nom])
+  @@index([type])
+  @@index([utilisation_count])
+}
+
+model upload_records {
+  id               String   @id
+  originalName     String
+  fileName         String   @unique
+  fileSize         Int
+  mimeType         String
+  imageUrl         String
+  thumbnailUrl     String?
+  width            Int?
+  height           Int?
+  compressionRatio Int?     @default(0)
+  uploadedBy       String
+  bookId           String?
+  metadata         Json?    @default("{}")
+  uploadedAt       DateTime @default(now())
+  book             book?    @relation(fields: [bookId], references: [id])
+  user             user     @relation(fields: [uploadedBy], references: [id], onDelete: Cascade)
+
+  @@index([bookId])
+  @@index([uploadedAt])
+  @@index([uploadedBy])
+  @@index([uploadedBy, uploadedAt])
+}
+
+model user {
+  id                                             String               @id @map("_id")
+  email                                          String               @unique
+  password                                       String
+  nom_complet                                    String?
+  avatar                                         String?
+  role                                           UserRole             @default(USER)
+  emailVerified                                  Boolean              @default(false)
+  derniere_connexion                             DateTime?
+  date_creation                                  DateTime             @default(now())
+  date_modification                              DateTime
+  username                                       String?
+  book                                           book[]
+  book_favorite                                  book_favorite[]
+  book_question_book_question_answeredByIdTouser book_question[]      @relation("book_question_answeredByIdTouser")
+  book_question_book_question_authorIdTouser     book_question[]      @relation("book_question_authorIdTouser")
+  book_question_like                             book_question_like[]
+  export_configs                                 export_configs[]
+  upload_records                                 upload_records[]
+  conseil_requests                               conseil_request[]
+  custom_lists                                   custom_list[]
+
+  @@index([email])
+  @@index([role])
+}
+
+enum BookQuestionStatus {
+  PENDING
+  ANSWERED
+  REJECTED
+}
+
+enum BookRhythm {
+  SLOW_BURN
+  MEDIUM_BURN
+  FAST_PACE
+  INSTA_LOVE
+}
+
+enum BookStatus {
+  LU
+  EN_COURS
+  A_LIRE
+}
+
+enum TagType {
+  GENRE
+  TROPE
+  TRIGGER
+  PERSONNALISE
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum export_format {
+  JSON
+  CSV
+  PDF
+}
+
+enum SagaStatus {
+  ONGOING
+  COMPLETED
+  HIATUS
+  UNKNOWN
+}
+
+enum ConseilRequestStatus {
+  EN_ATTENTE
+  TRAITE
+  REJETE
+}
+
+model conseil_request {
+  id                String               @id @default(cuid())
+  nom_utilisateur   String
+  categories        String[]             // Array of category IDs
+  tags              String[]             // Array of tag IDs
+  commentaires      String?              // Optional free text
+  status            ConseilRequestStatus @default(EN_ATTENTE)
+  date_creation     DateTime             @default(now())
+  date_reponse      DateTime?
+  reponse_bruna     String?              // Bruna's response message
+  livres_recommandes String[]            // Array of recommended book IDs
+  userId            String?              // Optional if user is logged in
+  user              user?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([date_creation])
+  @@index([userId])
+}
+
+model custom_list {
+  id                String   @id @default(cuid())
+  nom               String
+  description       String?
+  couleur           String   @default("#DC143C")
+  icone             String?
+  ordre_affichage   Int      @default(0)
+  est_publique      Boolean  @default(true)
+  date_creation     DateTime @default(now())
+  date_modification DateTime @updatedAt
+  createdBy         String
+
+  // Relations
+  user              user       @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  list_books        list_book[]
+
+  @@index([createdBy])
+  @@index([ordre_affichage])
+  @@index([est_publique])
+  @@index([nom])
+}
+
+model list_book {
+  id         String   @id @default(cuid())
+  listId     String
+  bookId     String
+  ordre      Int      @default(0)
+  date_ajout DateTime @default(now())
+
+  // Relations
+  list       custom_list @relation(fields: [listId], references: [id], onDelete: Cascade)
+  book       book        @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, bookId])
+  @@index([listId, ordre])
+  @@index([listId])
+  @@index([bookId])
+}

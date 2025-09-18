@@ -6,12 +6,12 @@ import { NextRequest } from "next/server";
 const handler = new RPCHandler(appRouter);
 
 async function handleRequest(req: NextRequest) {
-	const { response } = await handler.handle(req, {
-		prefix: "/rpc",
-		context: await createContext(req),
-	});
+  const { response } = await handler.handle(req, {
+    prefix: "/rpc",
+    context: await createContext(req),
+  });
 
-	return response ?? new Response("Not found", { status: 404 });
+  return response ?? new Response("Not found", { status: 404 });
 }
 
 export const GET = handleRequest;

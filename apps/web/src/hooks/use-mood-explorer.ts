@@ -1,0 +1,48 @@
+import { useState, useEffect } from 'react';
+
+export interface MoodTag {
+  id: string;
+  nom: string;
+  couleur?: string;
+  icon?: string;
+  books_count: number;
+}
+
+export function useMoodExplorer() {
+  const [data, setData] = useState<MoodTag[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        setIsLoading(true);
+        
+        const response = await fetch('/api/proxy/categories'); // Utiliser categories comme tags
+        if (!response.ok) throw new Error('Failed to fetch tags');
+        
+        const tags = await response.json();
+        
+        const processedTags = tags.map((tag: any) => ({
+          id: tag.id,
+          nom: tag.nom,
+          couleur: tag.couleur,
+          icon: tag.icon,
+          books_count: tag._count?.books || tag.books_count || 0
+        }));
+
+        setData(processedTags);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Unknown error');
+        setData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTags();
+  }, []);
+
+  return { data, isLoading, error };
+}
