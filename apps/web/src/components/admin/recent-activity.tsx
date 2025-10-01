@@ -58,7 +58,7 @@ export function RecentActivity({ stats }: RecentActivityProps) {
         activities.push({
           id: question.id,
           type: 'question',
-          title: 'Nouvelle question posée',
+          title: 'Nouvelle question posée`,
           description: `"${question.question.substring(0, 50)}..." sur ${question.book_title}`,
           user: question.user_name,
           time: new Date(question.date_question).toLocaleString('fr-FR'),
@@ -73,7 +73,7 @@ export function RecentActivity({ stats }: RecentActivityProps) {
         activities.push({
           id: book.id,
           type: 'book',
-          title: 'Livre ajouté',
+          title: 'Livre ajouté`,
           description: `"${book.titre}" par ${book.auteur}`,
           user: 'Admin',
           time: new Date(book.date_creation).toLocaleString('fr-FR'),

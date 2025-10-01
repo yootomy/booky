@@ -173,7 +173,7 @@ export function RhythmSelector({
           optionClassName
         )}
         onClick={() => handleOptionClick(option.value)}
-        aria-label={`Rythme ${option.label}: ${option.description}`}
+        aria-label={'Rythme ${option.label}: ${option.description}'}
         aria-pressed={isSelected}
       >
         <Icon

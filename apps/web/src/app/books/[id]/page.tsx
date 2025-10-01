@@ -2,10 +2,9 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import { apiClient } from '@/lib/api-client';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -29,9 +28,8 @@ import {
   BarChart3,
   FileText,
   Users,
-  Feather,
-  Sparkles,
-  Crown
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -40,9 +38,10 @@ import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
-import { booksApi } from '@/utils/orpc';
 import { useAuth } from '@/contexts/AuthContext';
+import { useMobileContext } from '@/contexts/MobileContext';
 import { SagaInfo } from '@/components/ui/saga-info';
+import { FloatingActionButtons } from '@/components/ui/floating-action-buttons';
 
 interface Book {
   id: string;
@@ -146,195 +145,207 @@ export default function BookDetailPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const bookId = params.id as string;
-
-  // Ajout de styles CSS pour masquer les scrollbars et assurer le scroll
-  useEffect(() => {
-    const styleId = 'book-detail-styles';
-
-    // Éviter les duplications
-    if (document.getElementById(styleId)) {
-      return;
-    }
-
-    const style = document.createElement('style');
-    style.id = styleId;
-    style.textContent = `
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
-      html, body {
-        overflow-x: hidden;
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      const existingStyle = document.getElementById(styleId);
-      if (existingStyle) {
-        document.head.removeChild(existingStyle);
-      }
-    };
-  }, []);
+  const { isMobile } = useMobileContext();
 
   const [newQuestion, setNewQuestion] = useState('');
   const [isSubmittingQuestion, setIsSubmittingQuestion] = useState(false);
   const [activeTab, setActiveTab] = useState('resume');
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['resume_officiel']));
 
-  // Cleanup sur unmount pour éviter les fuites mémoire
-  useEffect(() => {
-    return () => {
-      // Nettoyage des timers et animations
-      if (typeof window !== 'undefined') {
-        window.cancelAnimationFrame = window.cancelAnimationFrame || function(id) { clearTimeout(id); };
-      }
-    };
-  }, []);
+  // Ref pour observer la section sticky et afficher les boutons flottants
+  const stickyHeaderRef = useRef<HTMLDivElement>(null);
 
   const { user: currentUser, isAuthenticated } = useAuth();
 
+  const toggleSection = (sectionId: string) => {
+    setExpandedSections(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(sectionId)) {
+        newSet.delete(sectionId);
+      } else {
+        newSet.add(sectionId);
+      }
+      return newSet;
+    });
+  };
+
+  // API Calls
   const bookQuery = useQuery({
     queryKey: ['book', bookId],
     queryFn: async () => {
-      const response = await booksApi.getById(bookId);
-      return response.data;
-    },
-    enabled: !!bookId,
-    staleTime: 1000,
-    refetchOnWindowFocus: true,
-  });
-
-  const questionsQuery = useQuery({
-    queryKey: ['book-questions', bookId],
-    queryFn: async (): Promise<BookQuestion[]> => {
-      const response = await booksApi.getQuestions(bookId);
-      return (response.data || []) as BookQuestion[];
+      const response = await apiClient.get('/api/books/${bookId}');
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      const data = await response.json();
+      return data.data as Book;
     },
     enabled: !!bookId
   });
 
-  const addQuestionMutation = useMutation({
+  const questionsQuery = useQuery({
+    queryKey: ['questions', bookId],
+    queryFn: async () => {
+      const response = await apiClient.get('/api/books/${bookId}/questions');
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      const data = await response.json();
+      return (data.data || []) as BookQuestion[];
+    },
+    enabled: !!bookId
+  });
+
+  const submitQuestionMutation = useMutation({
     mutationFn: async (question: string) => {
-      const response = await booksApi.createQuestion(bookId, question);
-      return response.data;
+      const response = await apiClient.get('/api/books/${bookId}/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: question }),
+      });
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      const data = await response.json();
+      if (!data.data) throw new Error('Erreur lors de l\'envoi');
+      return data.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['book-questions', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['questions', bookId] });
       setNewQuestion('');
-      toast.success('Votre question a été soumise ! Bruna y répondra bientôt.');
+      toast.success('Question envoyée !');
     },
-    onError: (error: any) => {
-      toast.error(error?.error || 'Erreur lors de l\'envoi de votre question. Veuillez réessayer.');
+    onError: () => {
+      toast.error('Erreur lors de l\'envoi de la question');
+    },
+    onSettled: () => {
+      setIsSubmittingQuestion(false);
     }
   });
 
-  const toggleLikeMutation = useMutation({
+  const likeQuestionMutation = useMutation({
     mutationFn: async (questionId: string) => {
-      const response = await booksApi.toggleQuestionLike(bookId, questionId);
-      return response.data;
+      const response = await apiClient.get('/api/books/${bookId}/questions/${questionId}/like', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['book-questions', bookId] });
+    onMutate: async (questionId: string) => {
+      // Annuler les requêtes en cours pour éviter les conflits
+      await queryClient.cancelQueries({ queryKey: ['questions', bookId] });
+
+      // Sauvegarder les données actuelles pour le rollback
+      const previousQuestions = queryClient.getQueryData(['questions', bookId]);
+
+      // Mise à jour optimiste
+      queryClient.setQueryData(['questions', bookId], (old: any) => {
+        if (!old) return old;
+
+        return old.map((question: any) => {
+          if (question.id === questionId) {
+            const isCurrentlyLiked = question.is_liked;
+            return {
+              ...question,
+              is_liked: !isCurrentlyLiked,
+              likes_count: isCurrentlyLiked
+                ? question.likes_count - 1
+                : question.likes_count + 1
+            };
+          }
+          return question;
+        });
+      });
+
+      // Retourner le contexte pour le rollback
+      return { previousQuestions };
     },
-    onError: (error: any) => {
-      toast.error(error?.error || 'Erreur lors du like. Veuillez réessayer.');
+    onError: (err, questionId, context) => {
+      // Rollback en cas d'erreur
+      if (context?.previousQuestions) {
+        queryClient.setQueryData(['questions', bookId], context.previousQuestions);
+      }
+      toast.error('Erreur lors du like');
+    },
+    onSettled: () => {
+      // Synchroniser avec le serveur après l'opération
+      queryClient.invalidateQueries({ queryKey: ['questions', bookId] });
     }
   });
+
+  const handleSubmitQuestion = async () => {
+    if (!newQuestion.trim() || isSubmittingQuestion) return;
+    setIsSubmittingQuestion(true);
+    submitQuestionMutation.mutate(newQuestion.trim());
+  };
+
+  const handleLikeQuestion = (questionId: string) => {
+    likeQuestionMutation.mutate(questionId);
+  };
 
   const book = bookQuery.data;
   const questions = questionsQuery.data || [];
 
-  const handleSubmitQuestion = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newQuestion.trim()) {
-      toast.error('Veuillez saisir votre question');
-      return;
-    }
-    if (newQuestion.trim().length < 10) {
-      toast.error('Votre question doit contenir au moins 10 caractères');
-      return;
-    }
-    if (newQuestion.trim().length > 1000) {
-      toast.error('Votre question ne peut pas dépasser 1000 caractères');
-      return;
-    }
-    if (!currentUser) {
-      toast.error('Vous devez être connecté pour poser une question');
-      return;
-    }
-
-    setIsSubmittingQuestion(true);
-    try {
-      await addQuestionMutation.mutateAsync(newQuestion.trim());
-    } finally {
-      setIsSubmittingQuestion(false);
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getStatusBadge = (statut: string) => {
+  // Helper functions
+  const getStatusConfig = (statut: string) => {
     const statusConfig = {
-      LU: { bg: 'rgba(16, 185, 129, 0.1)', color: '#059669', text: '📖 Lu' },
-      EN_COURS: { bg: 'rgba(245, 158, 11, 0.1)', color: '#D97706', text: '📚 En cours' },
-      A_LIRE: { bg: 'rgba(139, 21, 56, 0.1)', color: '#8B1538', text: '📋 À lire' }
+      'LU': { bg: '#10B981', color: 'white', text: '📖 Lu' },
+      'EN_COURS': { bg: '#F59E0B', color: 'white', text: '📚 En cours' },
+      'A_LIRE': { bg: '#8B1538', color: 'white', text: '📋 À lire' }
     };
-    const config = statusConfig[statut as keyof typeof statusConfig] || { bg: '#f3f4f6', color: '#6B7280', text: statut };
+    const config = statusConfig[statut as keyof typeof statusConfig] || { bg: 'hsl(var(--muted))', color: 'hsl(var(--muted-foreground))', text: statut };
     return (
       <span
         style={{
           backgroundColor: config.bg,
           color: config.color,
-          border: `1px solid ${config.color}40`
+          padding: '0.375rem 0.75rem',
+          borderRadius: '9999px',
+          fontSize: '0.75rem',
+          fontWeight: 600
         }}
-        className="px-3 py-1 rounded-full text-sm font-medium"
       >
         {config.text}
       </span>
     );
   };
 
-  const getRythmeBadge = (rythme: string) => {
+  const getRythmeConfig = (rythme: string) => {
     const rhythmConfig = {
-      SLOW_BURN: { emoji: '🐌', text: 'Slow Burn' },
-      MEDIUM_BURN: { emoji: '🔥', text: 'Medium Burn' },
-      FAST_PACE: { emoji: '⚡', text: 'Fast Pace' },
-      INSTA_LOVE: { emoji: '💕', text: 'Insta Love' }
+      'SLOW_BURN': { emoji: '🐌', text: 'Slow Burn' },
+      'MEDIUM_BURN': { emoji: '🔥', text: 'Medium Burn' },
+      'FAST_PACE': { emoji: '⚡', text: 'Fast Pace' },
+      'INSTA_LOVE': { emoji: '💕', text: 'Insta Love' }
     };
     const config = rhythmConfig[rythme as keyof typeof rhythmConfig] || { emoji: '', text: rythme };
     return (
-      <span className="inline-flex items-center gap-1 px-3 py-1 bg-white rounded-full text-sm font-medium border border-gray-200">
+      <span className="inline-flex items-center gap-1 px-3 py-1 bg-background rounded-full text-sm font-medium border border-border">
         <span>{config.emoji}</span>
         {config.text}
       </span>
     );
   };
 
+  // Loading state
   if (bookQuery.isLoading) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: '#FAF8F5' }}>
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 md:py-8 min-h-screen">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-32 mb-6"></div>
-            <div className="grid lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-1">
-                <div className="h-96 bg-gray-200 rounded-lg"></div>
-              </div>
-              <div className="lg:col-span-2 space-y-4">
-                <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                <div className="h-32 bg-gray-200 rounded"></div>
+            <div className="h-8 bg-muted rounded w-32 mb-6"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="aspect-square bg-muted rounded-lg" style={{ aspectRatio: '3/4' }}></div>
+              <div className="md:col-span-2 space-y-4">
+                <div className="h-8 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-1/2"></div>
+                <div className="h-32 bg-muted rounded"></div>
               </div>
             </div>
           </div>
@@ -343,15 +354,15 @@ export default function BookDetailPage() {
     );
   }
 
+  // Error state
   if (bookQuery.isError || !book) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: '#FAF8F5' }}>
-        <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 md:py-8 min-h-screen">
           <div className="text-center py-12">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Livre non trouvé</h1>
-            <p className="text-gray-600 mb-6">Ce livre n'existe pas ou n'est plus disponible.</p>
-            <Button onClick={() => router.push('/books')}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
+            <h1 className="text-2xl font-bold text-foreground mb-4">Livre non trouvé</h1>
+            <p className="text-foreground/70 mb-6">Ce livre n'existe pas ou n'est plus disponible.</p>
+            <Button onClick={() => router.push('/books')} variant="default">
               Retour au catalogue
             </Button>
           </div>
@@ -360,1728 +371,856 @@ export default function BookDetailPage() {
     );
   }
 
+  // Tabs configuration
   const tabs = [
-    { id: 'resume', label: 'Résumé & Critique', icon: FileText, count: null },
-    { id: 'stats', label: 'Évaluations', icon: BarChart3, count: null },
-    { id: 'tags', label: 'Genres & Tags', icon: Tag, count: (book?.categories?.length || 0) + (book?.tags?.length || 0) },
-    { id: 'faq', label: 'Questions', icon: MessageCircle, count: questions.length },
-    { id: 'reco', label: 'Similaires', icon: Users, count: null }
+    { id: 'resume', label: 'Résumé', icon: BookOpen, count: null },
+    { id: 'stats', label: 'Notes', icon: BarChart3, count: null },
+    { id: 'genres', label: 'Genres & Tropes', icon: Tag, count: null },
+    { id: 'info', label: 'Infos', icon: FileText, count: null },
+    { id: 'faq', label: 'Questions', icon: MessageCircle, count: questions.length }
   ];
 
   return (
-    <div className="min-h-screen relative" style={{ backgroundColor: '#FAF8F5' }}>
-      {/* Background avec texture romantique */}
-      <div
-        className="fixed inset-0 opacity-30 pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
-        }}
-      />
-
-      {/* Floating romantic elements - optimized */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <motion.div
-          animate={{
-            y: [0, -15, 0],
-            opacity: [0.2, 0.4, 0.2]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            repeatDelay: 0.5
-          }}
-          className="absolute top-20 left-10"
-        >
-          <Heart className="w-5 h-5" style={{color: '#8B1538', strokeWidth: 1.5}} />
-        </motion.div>
-
-        <motion.div
-          animate={{
-            rotate: [0, 360],
-            opacity: [0.15, 0.3, 0.15]
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "linear",
-            repeatDelay: 1
-          }}
-          className="absolute top-40 right-16"
-        >
-          <Sparkles className="w-4 h-4" style={{color: '#B8860B'}} />
-        </motion.div>
-
-        <motion.div
-          animate={{
-            x: [0, 8, 0],
-            opacity: [0.2, 0.35, 0.2]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            repeatDelay: 0.8
-          }}
-          className="absolute bottom-40 left-20"
-        >
-          <Feather className="w-6 h-6" style={{color: '#6B4C7B', strokeWidth: 1.5}} />
-        </motion.div>
-
-        <motion.div
-          animate={{
-            y: [0, -12, 0],
-            opacity: [0.25, 0.4, 0.25]
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-            repeatDelay: 1.2
-          }}
-          className="absolute top-60 right-40"
-        >
-          <Crown className="w-5 h-5" style={{color: '#8B1538'}} />
-        </motion.div>
-      </div>
-
-      {/* Navigation header élégante */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-50 backdrop-blur-md border-b shadow-sm"
-        style={{
-          backgroundColor: 'rgba(250, 248, 245, 0.95)',
-          borderColor: 'rgba(107, 76, 123, 0.1)'
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-6 py-4">
+    <>
+      {/* Sticky Navigation header - Completely outside page structure */}
+      <div ref={stickyHeaderRef} className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <button
               onClick={() => router.push('/books')}
-              className="group flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-card hover:bg-muted text-foreground border border-border shadow-sm transition-colors"
               style={{
-                color: '#6B4C7B',
-                backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                border: '1px solid rgba(107, 76, 123, 0.2)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.2)';
+                fontFamily: 'Inter, sans-serif'
               }}
             >
-              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-              <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}>
-                Retour au catalogue
-              </span>
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Retour au catalogue</span>
+              <span className="sm:hidden">Retour</span>
             </button>
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
-                  toast.success('Lien copié !');
-                }}
-                className="group flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105"
-                style={{
-                  color: '#8B1538',
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid rgba(139, 21, 56, 0.2)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(139, 21, 56, 0.05)';
-                  e.currentTarget.style.borderColor = 'rgba(139, 21, 56, 0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                  e.currentTarget.style.borderColor = 'rgba(139, 21, 56, 0.2)';
-                }}
-              >
-                <Share2 className="w-4 h-4" />
-                <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', fontWeight: 500 }}>
-                  Partager
-                </span>
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                toast.success('Lien copié !');
+              }}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-card hover:bg-muted text-foreground border border-border shadow-sm transition-colors"
+              style={{
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              <Share2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Partager</span>
+            </button>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 py-8 pb-24">
-        {/* Hero Section avec layout asymétrique */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="mb-12"
-        >
-          <div className="relative">
-            {/* Background card avec effet de profondeur */}
-            <div
-              className="relative rounded-3xl overflow-hidden shadow-2xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 100%)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(107, 76, 123, 0.1)'
-              }}
-            >
-              {/* Gradient d'accentuation */}
-              <div
-                className="absolute top-0 left-0 w-full h-2"
-                style={{
-                  background: 'linear-gradient(90deg, #8B1538 0%, #6B4C7B 50%, #B8860B 100%)'
-                }}
-              />
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 md:py-8">
 
-              <div className="p-8 lg:p-12">
-                <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          {/* Hero Section */}
+          <div className="mb-4 sm:mb-6 md:mb-8 rounded-3xl overflow-hidden shadow-xl bg-card/95 backdrop-blur-xl border border-border"
+          >
+            <div className="p-3 sm:p-4 md:p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
 
-                  {/* Couverture avec effet 3D */}
-                  <div className="lg:col-span-4">
-                    <motion.div
-                      whileHover={{
-                        scale: 1.05,
-                        rotateY: -5,
-                        rotateX: 5
-                      }}
-                      transition={{ duration: 0.3 }}
-                      className="relative group"
-                      style={{ perspective: '1000px' }}
-                    >
-                      <div
-                        className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl"
-                        style={{ transformStyle: 'preserve-3d' }}
-                      >
-                        {book.image_couverture ? (
-                          <Image
-                            src={book.image_couverture}
-                            alt={book.titre}
-                            fill
-                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                            priority
-                          />
-                        ) : (
-                          <div
-                            className="w-full h-full flex items-center justify-center"
-                            style={{
-                              background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'
-                            }}
-                          >
-                            <BookOpen className="w-16 h-16 text-white opacity-70" />
-                          </div>
-                        )}
-
-                        {/* Overlay gradient au hover */}
-                        <div
-                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          style={{
-                            background: 'linear-gradient(45deg, rgba(139, 21, 56, 0.2) 0%, rgba(107, 76, 123, 0.2) 100%)'
-                          }}
+                {/* Couverture */}
+                <div className="lg:col-span-1 flex justify-center lg:justify-start">
+                  <div className="relative inline-block">
+                    {book.image_couverture ? (
+                      <div className="relative">
+                        <img
+                          src={book.image_couverture}
+                          alt={book.titre}
+                          className="w-48 sm:w-56 md:w-64 lg:w-full h-auto object-contain rounded-2xl shadow-2xl"
                         />
 
-                        {/* Status badge flottant */}
-                        <div className="absolute -top-2 -right-2 z-10">
-                          <motion.div
-                            initial={{ scale: 0, rotate: -180 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-                          >
-                            {getStatusBadge(book.statut)}
-                          </motion.div>
+                        {/* Status badge */}
+                        <div className="absolute top-2 right-2 z-10">
+                          {getStatusConfig(book.statut)}
                         </div>
 
-                        {/* Note flottante */}
+                        {/* Note */}
                         {book.note_generale > 0 && (
-                          <div className="absolute -bottom-3 -left-3">
-                            <motion.div
-                              initial={{ scale: 0, y: 20 }}
-                              animate={{ scale: 1, y: 0 }}
-                              transition={{ delay: 0.5, type: 'spring', stiffness: 200 }}
-                              className="flex items-center gap-2 px-4 py-2 rounded-full shadow-lg"
-                              style={{
-                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                                backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(184, 134, 11, 0.3)'
-                              }}
+                          <div className="absolute bottom-2 left-2 z-10">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-full shadow-lg bg-card/95 backdrop-blur-lg border border-yellow-300"
                             >
-                              <Star className="w-4 h-4 fill-current" style={{ color: '#B8860B' }} />
-                              <span
-                                style={{
-                                  fontSize: '1.1rem',
-                                  fontWeight: 700,
-                                  color: '#2C1810',
-                                  fontFamily: 'Inter, sans-serif'
-                                }}
-                              >
+                              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                              <span className="font-bold text-sm text-yellow-700 dark:text-yellow-300">
                                 {book.note_generale}/10
                               </span>
-                            </motion.div>
+                            </div>
                           </div>
                         )}
-                      </div>
-
-                      {/* Ombre portée dramatique */}
-                      <div
-                        className="absolute inset-0 -z-10 rounded-2xl"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.3) 0%, rgba(107, 76, 123, 0.3) 100%)',
-                          filter: 'blur(20px)',
-                          transform: 'translateY(10px) scale(0.95)'
-                        }}
-                      />
-                    </motion.div>
-                  </div>
-
-                  {/* Informations principales */}
-                  <div className="lg:col-span-8 space-y-8">
-                    <div>
-                      <motion.h1
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2, duration: 0.6 }}
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          fontSize: 'clamp(2rem, 4vw, 3rem)',
-                          lineHeight: '1.1',
-                          fontWeight: 700,
-                          color: '#2C1810',
-                          marginBottom: '1rem'
-                        }}
-                      >
-                        {book.titre}
-                      </motion.h1>
-
-                      <motion.p
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3, duration: 0.6 }}
-                        className="flex items-center gap-3 text-xl mb-6"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#6B4C7B',
-                          fontWeight: 500
-                        }}
-                      >
-                        <User className="w-5 h-5" />
-                        par {book.auteur}
-                      </motion.p>
-                    </div>
-
-                    {/* Metrics romantiques en grille asymétrique */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4, duration: 0.6 }}
-                      className="grid grid-cols-2 md:grid-cols-4 gap-4"
-                    >
-                      {[
-                        { label: '🌶️ Spicy', value: book.niveau_spicy, color: '#F59E0B' },
-                        { label: '🖤 Dark', value: book.niveau_dark, color: '#374151' },
-                        { label: '💕 Romance', value: book.niveau_romance, color: '#8B1538' },
-                        { label: '✨ Émotions', value: book.intensite_emotionnelle, color: '#6B4C7B' }
-                      ].map((metric, index) => (
-                        <motion.div
-                          key={metric.label}
-                          whileHover={{ scale: 1.05, y: -5 }}
-                          className="text-center p-4 rounded-2xl shadow-lg"
-                          style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                            backdropFilter: 'blur(10px)',
-                            border: '1px solid rgba(255, 255, 255, 0.3)'
-                          }}
-                        >
-                          <div
-                            className="text-2xl font-bold mb-1"
-                            style={{ color: metric.color, fontFamily: 'Inter, sans-serif' }}
-                          >
-                            {metric.value}/10
-                          </div>
-                          <div
-                            className="text-xs opacity-80"
-                            style={{ color: '#2C1810', fontFamily: 'Inter, sans-serif' }}
-                          >
-                            {metric.label}
-                          </div>
-                        </motion.div>
-                      ))}
-                    </motion.div>
-
-                    {/* Informations complémentaires en ligne fluide */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5, duration: 0.6 }}
-                      className="flex flex-wrap items-center gap-4"
-                    >
-                      {book.rythme && getRythmeBadge(book.rythme)}
-
-                      {book.date_lecture && (
-                        <div className="flex items-center gap-2 px-3 py-1 bg-white rounded-full text-sm border border-gray-200">
-                          <Calendar className="w-4 h-4" style={{ color: '#6B4C7B' }} />
-                          <span style={{ fontFamily: 'Inter, sans-serif', color: '#2C1810' }}>
-                            Lu le {new Date(book.date_lecture).toLocaleDateString('fr-FR')}
-                          </span>
-                        </div>
-                      )}
-
-                      <div className="flex items-center gap-2 px-3 py-1 bg-white rounded-full text-sm border border-gray-200">
-                        <Globe className="w-4 h-4" style={{ color: '#6B4C7B' }} />
-                        <span style={{ fontFamily: 'Inter, sans-serif', color: '#2C1810' }}>
-                          {book.langue === 'FR' ? 'Français 🇫🇷' : 'Anglais 🇺🇸'}
-                        </span>
-                      </div>
-
-                      {book.nombre_pages && (
-                        <div className="flex items-center gap-2 px-3 py-1 bg-white rounded-full text-sm border border-gray-200">
-                          <BookOpen className="w-4 h-4" style={{ color: '#6B4C7B' }} />
-                          <span style={{ fontFamily: 'Inter, sans-serif', color: '#2C1810' }}>
-                            {book.nombre_pages} pages
-                          </span>
-                        </div>
-                      )}
-                    </motion.div>
-
-                    {/* Métadonnées éditeur */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6, duration: 0.6 }}
-                      className="pt-6 border-t"
-                      style={{ borderColor: 'rgba(107, 76, 123, 0.1)' }}
-                    >
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                        {book.editeur && (
-                          <div style={{ fontFamily: 'Inter, sans-serif', color: '#6B4C7B' }}>
-                            <span className="font-medium">Éditeur:</span>
-                            <span className="ml-1" style={{ color: '#2C1810' }}>{book.editeur}</span>
-                          </div>
-                        )}
-                        {book.date_publication && (
-                          <div style={{ fontFamily: 'Inter, sans-serif', color: '#6B4C7B' }}>
-                            <span className="font-medium">Publication:</span>
-                            <span className="ml-1" style={{ color: '#2C1810' }}>
-                              {new Date(book.date_publication).getFullYear()}
-                            </span>
-                          </div>
-                        )}
-                        <div style={{ fontFamily: 'Inter, sans-serif', color: '#6B4C7B' }}>
-                          <span className="font-medium">Ajouté par:</span>
-                          <span className="ml-1" style={{ color: '#2C1810' }}>
-                            {book.user?.nom_complet || 'Bruna'}
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Section Saga */}
-        {book.saga && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.6 }}
-            className="mb-8"
-          >
-            <SagaInfo
-              saga={book.saga}
-              sagaOrder={book.sagaOrder || 1}
-              sagaNeighbors={book.sagaNeighbors}
-            />
-          </motion.div>
-        )}
-
-        {/* Navigation par onglets avec style romantique */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="mb-8"
-        >
-          <div
-            className="rounded-2xl overflow-hidden shadow-lg"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.8)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(107, 76, 123, 0.1)'
-            }}
-          >
-            <nav className="flex overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {tabs.map((tab, index) => (
-                <motion.button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`
-                    flex items-center gap-3 px-6 py-4 text-sm font-medium border-b-3 transition-all duration-300 whitespace-nowrap flex-shrink-0
-                    ${activeTab === tab.id
-                      ? 'border-b-3 shadow-sm'
-                      : 'border-transparent hover:bg-white/50'
-                    }
-                  `}
-                  style={{
-                    borderBottomColor: activeTab === tab.id ? '#8B1538' : 'transparent',
-                    backgroundColor: activeTab === tab.id ? 'rgba(139, 21, 56, 0.05)' : 'transparent',
-                    color: activeTab === tab.id ? '#8B1538' : '#6B4C7B',
-                    fontFamily: 'Inter, sans-serif'
-                  }}
-                >
-                  <tab.icon className={`w-4 h-4 transition-transform duration-200 ${activeTab === tab.id ? 'scale-110' : ''}`} />
-                  <span>{tab.label}</span>
-                  {tab.count !== null && (
-                    <span
-                      className="px-2 py-1 rounded-full text-xs font-medium"
-                      style={{
-                        backgroundColor: activeTab === tab.id ? 'rgba(139, 21, 56, 0.1)' : 'rgba(107, 76, 123, 0.1)',
-                        color: activeTab === tab.id ? '#8B1538' : '#6B4C7B'
-                      }}
-                    >
-                      {tab.count}
-                    </span>
-                  )}
-                </motion.button>
-              ))}
-            </nav>
-          </div>
-        </motion.div>
-
-        {/* Contenu des onglets avec animations */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="space-y-8 pb-16"
-        >
-
-          {/* Onglet Résumé & Critique */}
-          {activeTab === 'resume' && (
-            <div className="space-y-8">
-
-              {/* Résumé officiel avec design épuré */}
-              {book.resume_officiel && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="rounded-2xl overflow-hidden shadow-lg"
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(107, 76, 123, 0.1)'
-                  }}
-                >
-                  <div className="p-8">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                        style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                      >
-                        <BookOpen className="w-6 h-6" style={{ color: '#6B4C7B' }} />
-                      </div>
-                      <h2
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          fontSize: '1.5rem',
-                          fontWeight: 700,
-                          color: '#2C1810'
-                        }}
-                      >
-                        Résumé officiel
-                      </h2>
-                    </div>
-
-                    <div
-                      className="prose prose-lg max-w-none leading-relaxed"
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        color: '#2C1810',
-                        lineHeight: '1.7'
-                      }}
-                      dangerouslySetInnerHTML={{ __html: book.resume_officiel }}
-                    />
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Critique de Bruna avec accent coloré */}
-              {book.critique_detaillee && (
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="rounded-2xl overflow-hidden shadow-lg"
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    backdropFilter: 'blur(20px)',
-                    border: '2px solid rgba(139, 21, 56, 0.2)'
-                  }}
-                >
-                  <div
-                    className="h-1"
-                    style={{
-                      background: 'linear-gradient(90deg, #8B1538 0%, #6B4C7B 100%)'
-                    }}
-                  />
-
-                  <div className="p-8">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                        style={{ backgroundColor: 'rgba(139, 21, 56, 0.1)' }}
-                      >
-                        <Heart className="w-6 h-6" style={{ color: '#8B1538' }} />
-                      </div>
-                      <h2
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          fontSize: '1.5rem',
-                          fontWeight: 700,
-                          color: '#8B1538'
-                        }}
-                      >
-                        Critique de {book.user?.nom_complet || 'Bruna'}
-                      </h2>
-                    </div>
-
-                    <p
-                      className="leading-relaxed whitespace-pre-line mb-6"
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '1.1rem',
-                        color: '#2C1810',
-                        lineHeight: '1.7'
-                      }}
-                    >
-                      {book.critique_detaillee}
-                    </p>
-
-                    {/* Avis personnel en encart */}
-                    {book.resume_personnel && (
-                      <div
-                        className="mt-8 p-6 rounded-xl"
-                        style={{
-                          backgroundColor: 'rgba(139, 21, 56, 0.05)',
-                          border: '1px solid rgba(139, 21, 56, 0.1)'
-                        }}
-                      >
-                        <h4
-                          className="flex items-center gap-3 mb-3"
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 600,
-                            color: '#8B1538'
-                          }}
-                        >
-                          <span className="text-lg">💝</span>
-                          Avis personnel
-                        </h4>
-                        <p
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            color: '#2C1810',
-                            lineHeight: '1.6'
-                          }}
-                        >
-                          {book.resume_personnel}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Citations favorites avec style poétique */}
-              {book.citations_favorites && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="rounded-2xl overflow-hidden shadow-lg text-center py-12"
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(184, 134, 11, 0.2)'
-                  }}
-                >
-                  <div className="px-8">
-                    <div className="flex items-center justify-center gap-4 mb-8">
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                        style={{ backgroundColor: 'rgba(184, 134, 11, 0.1)' }}
-                      >
-                        <Quote className="w-6 h-6" style={{ color: '#B8860B' }} />
-                      </div>
-                      <h2
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          fontSize: '1.5rem',
-                          fontWeight: 700,
-                          color: '#B8860B'
-                        }}
-                      >
-                        Citations favorites
-                      </h2>
-                    </div>
-
-                    <blockquote
-                      className="relative max-w-3xl mx-auto"
-                      style={{
-                        fontFamily: 'Playfair Display, serif',
-                        fontSize: '1.3rem',
-                        fontStyle: 'italic',
-                        color: '#2C1810',
-                        lineHeight: '1.6'
-                      }}
-                    >
-                      <div
-                        className="absolute -top-4 -left-4 text-4xl opacity-30"
-                        style={{ color: '#B8860B', fontFamily: 'serif' }}
-                      >
-                        "
-                      </div>
-                      <div
-                        className="absolute -bottom-4 -right-4 text-4xl opacity-30"
-                        style={{ color: '#B8860B', fontFamily: 'serif' }}
-                      >
-                        "
-                      </div>
-                      {book.citations_favorites}
-                    </blockquote>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Pourquoi vous allez l'aimer */}
-              {book.pourquoi_aimer && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="rounded-2xl overflow-hidden shadow-lg"
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(16, 185, 129, 0.2)'
-                  }}
-                >
-                  <div className="p-8">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                        style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
-                      >
-                        <ThumbsUp className="w-6 h-6" style={{ color: '#10B981' }} />
-                      </div>
-                      <h2
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          fontSize: '1.5rem',
-                          fontWeight: 700,
-                          color: '#10B981'
-                        }}
-                      >
-                        Pourquoi vous allez l'aimer
-                      </h2>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
-                      >
-                        <span className="text-xl">❤️</span>
-                      </div>
-                      <p
-                        className="leading-relaxed"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '1.1rem',
-                          color: '#2C1810',
-                          lineHeight: '1.7'
-                        }}
-                      >
-                        {book.pourquoi_aimer}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </div>
-          )}
-
-          {/* Onglet Évaluations avec design circulaire */}
-          {activeTab === 'stats' && (
-            <motion.div
-              className="rounded-2xl overflow-hidden shadow-lg"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(107, 76, 123, 0.1)'
-              }}
-            >
-              <div className="p-8">
-                <div className="flex items-center gap-4 mb-8">
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                    style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                  >
-                    <BarChart3 className="w-6 h-6" style={{ color: '#6B4C7B' }} />
-                  </div>
-                  <h2
-                    style={{
-                      fontFamily: 'Playfair Display, serif',
-                      fontSize: '1.5rem',
-                      fontWeight: 700,
-                      color: '#2C1810'
-                    }}
-                  >
-                    Évaluations détaillées
-                  </h2>
-                </div>
-
-                <div className="space-y-12">
-                  {/* Note générale mise en avant */}
-                  <div className="text-center py-12">
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: 'spring', stiffness: 100, delay: 0.2 }}
-                      className="inline-flex items-baseline gap-2 mb-6"
-                    >
-                      <span
-                        className="text-6xl font-bold"
-                        style={{ color: '#8B1538', fontFamily: 'Inter, sans-serif' }}
-                      >
-                        {book.note_generale}
-                      </span>
-                      <span
-                        className="text-2xl opacity-60"
-                        style={{ color: '#6B4C7B', fontFamily: 'Inter, sans-serif' }}
-                      >
-                        /10
-                      </span>
-                    </motion.div>
-
-                    <div className="flex items-center justify-center gap-1 mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.3 + i * 0.1 }}
-                        >
-                          <Star
-                            className={`w-6 h-6 ${
-                              i < Math.round(book.note_generale / 2)
-                                ? 'fill-current text-yellow-400'
-                                : 'fill-gray-200 text-gray-200'
-                            }`}
-                          />
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    <p
-                      className="font-medium"
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        color: '#6B4C7B',
-                        fontSize: '1.1rem'
-                      }}
-                    >
-                      Note générale
-                    </p>
-                  </div>
-
-                  {/* Grille des évaluations */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-                    {/* Métriques positives */}
-                    <div className="space-y-6">
-                      <h3
-                        className="text-center mb-8"
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          fontSize: '1.3rem',
-                          fontWeight: 600,
-                          color: '#2C1810'
-                        }}
-                      >
-                        Émotions & Qualités
-                      </h3>
-                      {[
-                        { label: 'Romance', value: book.niveau_romance, icon: '❤️', color: '#8B1538' },
-                        { label: 'Intensité émotionnelle', value: book.intensite_emotionnelle, icon: '💫', color: '#6B4C7B' },
-                        { label: 'Originalité', value: book.originalite, icon: '✨', color: '#B8860B' },
-                      ].map((item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.5 + index * 0.1 }}
-                          className="space-y-3"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className="w-10 h-10 rounded-full flex items-center justify-center"
-                                style={{ backgroundColor: `${item.color}20` }}
-                              >
-                                <span className="text-lg">{item.icon}</span>
-                              </div>
-                              <span
-                                style={{
-                                  fontFamily: 'Inter, sans-serif',
-                                  fontWeight: 500,
-                                  color: '#2C1810'
-                                }}
-                              >
-                                {item.label}
-                              </span>
-                            </div>
-                            <span
-                              className="text-xl font-bold"
-                              style={{
-                                color: item.color,
-                                fontFamily: 'Inter, sans-serif'
-                              }}
-                            >
-                              {item.value}
-                              <span className="text-sm opacity-60 ml-1">/10</span>
-                            </span>
-                          </div>
-                          <div
-                            className="w-full bg-gray-100 rounded-full h-2 overflow-hidden"
-                          >
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${(item.value / 10) * 100}%` }}
-                              transition={{
-                                duration: 1,
-                                delay: 0.7 + index * 0.1,
-                                ease: 'easeOut'
-                              }}
-                              className="h-2 rounded-full"
-                              style={{ backgroundColor: item.color }}
-                            />
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-
-                    {/* Métriques d'intensité */}
-                    <div className="space-y-6">
-                      <h3
-                        className="text-center mb-8"
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          fontSize: '1.3rem',
-                          fontWeight: 600,
-                          color: '#2C1810'
-                        }}
-                      >
-                        Intensité & Contenu
-                      </h3>
-                      {[
-                        { label: 'Niveau Spicy', value: book.niveau_spicy, icon: '🌶️', color: '#F59E0B' },
-                        { label: 'Danger', value: book.danger, icon: '⚠️', color: '#EF4444' },
-                        { label: 'Violence', value: book.violence, icon: '⚔️', color: '#DC2626' },
-                        { label: 'Dark', value: book.niveau_dark, icon: '🌒', color: '#374151' },
-                      ].map((item, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.5 + index * 0.1 }}
-                          className="space-y-3"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className="w-10 h-10 rounded-full flex items-center justify-center"
-                                style={{ backgroundColor: `${item.color}20` }}
-                              >
-                                <span className="text-lg">{item.icon}</span>
-                              </div>
-                              <span
-                                style={{
-                                  fontFamily: 'Inter, sans-serif',
-                                  fontWeight: 500,
-                                  color: '#2C1810'
-                                }}
-                              >
-                                {item.label}
-                              </span>
-                            </div>
-                            <span
-                              className="text-xl font-bold"
-                              style={{
-                                color: item.color,
-                                fontFamily: 'Inter, sans-serif'
-                              }}
-                            >
-                              {item.value}
-                              <span className="text-sm opacity-60 ml-1">/10</span>
-                            </span>
-                          </div>
-                          <div
-                            className="w-full bg-gray-100 rounded-full h-2 overflow-hidden"
-                          >
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${(item.value / 10) * 100}%` }}
-                              transition={{
-                                duration: 1,
-                                delay: 0.7 + index * 0.1,
-                                ease: 'easeOut'
-                              }}
-                              className="h-2 rounded-full"
-                              style={{ backgroundColor: item.color }}
-                            />
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Onglet Tags & Genres avec style coloré */}
-          {activeTab === 'tags' && (
-            <motion.div
-              className="rounded-2xl overflow-hidden shadow-lg"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(107, 76, 123, 0.1)'
-              }}
-            >
-              <div className="p-8">
-                <div className="flex items-center gap-4 mb-8">
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                    style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                  >
-                    <Tag className="w-6 h-6" style={{ color: '#6B4C7B' }} />
-                  </div>
-                  <h2
-                    style={{
-                      fontFamily: 'Playfair Display, serif',
-                      fontSize: '1.5rem',
-                      fontWeight: 700,
-                      color: '#2C1810'
-                    }}
-                  >
-                    Genres & Tags
-                  </h2>
-                </div>
-
-                <div className="space-y-8">
-                  {/* Catégories */}
-                  {book.categories && book.categories.length > 0 && (
-                    <div>
-                      <h3
-                        className="flex items-center gap-3 mb-6"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontWeight: 600,
-                          color: '#2C1810',
-                          fontSize: '1.1rem'
-                        }}
-                      >
-                        <span className="text-xl">🎭</span>
-                        Genres littéraires
-                      </h3>
-                      <div className="flex flex-wrap gap-3">
-                        {book.categories.map((cat, index) => (
-                          <motion.div
-                            key={cat.category.id}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                          >
-                            <Link href={`/books?category=${cat.category.id}`}>
-                              <motion.div
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 px-4 py-2 rounded-full font-medium shadow-sm cursor-pointer"
-                                style={{
-                                  backgroundColor: `${cat.category.couleur}15`,
-                                  color: cat.category.couleur,
-                                  border: `1px solid ${cat.category.couleur}30`,
-                                  fontFamily: 'Inter, sans-serif'
-                                }}
-                              >
-                                <span>{cat.category.icone}</span>
-                                {cat.category.nom}
-                              </motion.div>
-                            </Link>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tags */}
-                  {book.tags && book.tags.length > 0 && (
-                    <div>
-                      <h3
-                        className="flex items-center gap-3 mb-6"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontWeight: 600,
-                          color: '#2C1810',
-                          fontSize: '1.1rem'
-                        }}
-                      >
-                        <span className="text-xl">🏷️</span>
-                        Tags thématiques
-                      </h3>
-
-                      {(() => {
-                        const tagsByType = book.tags.reduce((acc: any, tag) => {
-                          const type = tag.tag.type;
-                          if (!acc[type]) acc[type] = [];
-                          acc[type].push(tag);
-                          return acc;
-                        }, {});
-
-                        return Object.entries(tagsByType).map(([type, typeTags]: [string, any]) => (
-                          <div key={type} className="mb-6">
-                            <div
-                              className="flex items-center gap-2 mb-4"
-                              style={{
-                                fontFamily: 'Inter, sans-serif',
-                                fontSize: '0.9rem',
-                                fontWeight: 600,
-                                color: '#6B4C7B',
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.05em'
-                              }}
-                            >
-                              <span>
-                                {type === 'TROPE' ? '💫' : type === 'GENRE' ? '📚' : '⚠️'}
-                              </span>
-                              {type}
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              {typeTags.map((tag: any, index: number) => (
-                                <motion.div
-                                  key={tag.tag.id}
-                                  initial={{ opacity: 0, scale: 0.8 }}
-                                  animate={{ opacity: 1, scale: 1 }}
-                                  transition={{ delay: index * 0.05 }}
-                                >
-                                  <Link href={`/books?tag=${tag.tag.id}`}>
-                                    <motion.div
-                                      whileHover={{ scale: 1.05 }}
-                                      whileTap={{ scale: 0.95 }}
-                                      className="px-3 py-1.5 rounded-full text-sm font-medium cursor-pointer"
-                                      style={{
-                                        backgroundColor: `${tag.tag.couleur}10`,
-                                        color: tag.tag.couleur,
-                                        border: `1px solid ${tag.tag.couleur}30`,
-                                        fontFamily: 'Inter, sans-serif'
-                                      }}
-                                    >
-                                      {tag.tag.nom}
-                                    </motion.div>
-                                  </Link>
-                                </motion.div>
-                              ))}
-                            </div>
-                          </div>
-                        ));
-                      })()}
-                    </div>
-                  )}
-
-                  {/* Message si vide */}
-                  {(!book.categories || book.categories.length === 0) && (!book.tags || book.tags.length === 0) && (
-                    <div className="text-center py-16">
-                      <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                        style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                      >
-                        <Tag className="w-8 h-8 opacity-50" style={{ color: '#6B4C7B' }} />
-                      </div>
-                      <p style={{ fontFamily: 'Inter, sans-serif', color: '#6B4C7B' }}>
-                        Aucun genre ou tag assigné pour le moment
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Onglet Questions FAQ avec design moderne */}
-          {activeTab === 'faq' && (
-            <motion.div
-              className="rounded-2xl overflow-hidden shadow-lg"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(107, 76, 123, 0.1)'
-              }}
-            >
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-4">
-                    <div
-                      className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                      style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                    >
-                      <MessageCircle className="w-6 h-6" style={{ color: '#6B4C7B' }} />
-                    </div>
-                    <h2
-                      style={{
-                        fontFamily: 'Playfair Display, serif',
-                        fontSize: '1.5rem',
-                        fontWeight: 700,
-                        color: '#2C1810'
-                      }}
-                    >
-                      Questions & Réponses
-                    </h2>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <span
-                      className="px-3 py-1 rounded-full text-xs font-medium"
-                      style={{
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        color: '#059669',
-                        border: '1px solid rgba(16, 185, 129, 0.2)',
-                        fontFamily: 'Inter, sans-serif'
-                      }}
-                    >
-                      {questions.filter(q => q.status === 'ANSWERED').length} répondu{questions.filter(q => q.status === 'ANSWERED').length !== 1 ? 's' : ''}
-                    </span>
-                    <span
-                      className="px-3 py-1 rounded-full text-xs font-medium"
-                      style={{
-                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                        color: '#D97706',
-                        border: '1px solid rgba(245, 158, 11, 0.2)',
-                        fontFamily: 'Inter, sans-serif'
-                      }}
-                    >
-                      {questions.filter(q => q.status === 'PENDING').length} en attente
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-8">
-                  {/* Réflexions de Bruna */}
-                  {book.questions_sur_le_livre && (
-                    <div
-                      className="p-6 rounded-xl"
-                      style={{
-                        backgroundColor: 'rgba(107, 76, 123, 0.05)',
-                        border: '1px solid rgba(107, 76, 123, 0.1)'
-                      }}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0"
-                          style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                        >
-                          <span className="text-lg">💭</span>
-                        </div>
-                        <div>
-                          <h4
-                            className="mb-3"
-                            style={{
-                              fontFamily: 'Inter, sans-serif',
-                              fontWeight: 600,
-                              color: '#2C1810'
-                            }}
-                          >
-                            Réflexions de Bruna
-                          </h4>
-                          <p
-                            className="leading-relaxed"
-                            style={{
-                              fontFamily: 'Inter, sans-serif',
-                              color: '#2C1810',
-                              lineHeight: '1.6'
-                            }}
-                          >
-                            {book.questions_sur_le_livre}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Zone de saisie nouvelle question */}
-                  {currentUser ? (
-                    <div
-                      className="p-6 rounded-xl shadow-sm"
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                        border: '1px solid rgba(107, 76, 123, 0.1)'
-                      }}
-                    >
-                      <div className="flex items-center gap-3 mb-4">
-                        <div
-                          className="w-10 h-10 rounded-2xl flex items-center justify-center"
-                          style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                        >
-                          <MessageCircle className="w-5 h-5" style={{ color: '#6B4C7B' }} />
-                        </div>
-                        <div>
-                          <h3
-                            style={{
-                              fontFamily: 'Inter, sans-serif',
-                              fontWeight: 600,
-                              color: '#2C1810'
-                            }}
-                          >
-                            Poser une question
-                          </h3>
-                          <p
-                            style={{
-                              fontFamily: 'Inter, sans-serif',
-                              fontSize: '0.9rem',
-                              color: '#6B4C7B'
-                            }}
-                          >
-                            Bruna vous répondra personnellement
-                          </p>
-                        </div>
-                      </div>
-
-                      <form onSubmit={handleSubmitQuestion} className="space-y-4">
-                        <div className="relative">
-                          <Textarea
-                            placeholder="Que souhaitez-vous savoir sur ce livre ?"
-                            value={newQuestion}
-                            onChange={(e) => setNewQuestion(e.target.value)}
-                            className="min-h-[120px] resize-none rounded-xl focus:ring-2 transition-all"
-                            style={{
-                              backgroundColor: 'rgba(250, 248, 245, 0.8)',
-                              border: '1px solid rgba(107, 76, 123, 0.2)',
-                              fontFamily: 'Inter, sans-serif'
-                            }}
-                            disabled={isSubmittingQuestion}
-                          />
-                          <div
-                            className="absolute bottom-3 right-3 text-xs"
-                            style={{ color: '#6B4C7B', opacity: 0.7 }}
-                          >
-                            {newQuestion.length}/1000
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-sm" style={{ color: '#6B4C7B' }}>
-                            <div
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: '#10B981' }}
-                            />
-                            Réponse sous 24h en moyenne
-                          </div>
-                          <motion.button
-                            type="submit"
-                            disabled={!newQuestion.trim() || newQuestion.trim().length < 10 || newQuestion.trim().length > 1000 || isSubmittingQuestion}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="flex items-center gap-2 px-6 py-2 rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                            style={{
-                              background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                              color: 'white',
-                              fontFamily: 'Inter, sans-serif',
-                              boxShadow: '0 4px 15px rgba(139, 21, 56, 0.3)'
-                            }}
-                          >
-                            {isSubmittingQuestion ? (
-                              'Envoi en cours...'
-                            ) : (
-                              <>
-                                <Send className="w-4 h-4" />
-                                Envoyer ma question
-                              </>
-                            )}
-                          </motion.button>
-                        </div>
-                      </form>
-                    </div>
-                  ) : (
-                    <div
-                      className="p-8 rounded-xl text-center"
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                        border: '1px solid rgba(107, 76, 123, 0.1)'
-                      }}
-                    >
-                      <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                        style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                      >
-                        <MessageCircle className="w-8 h-8" style={{ color: '#6B4C7B' }} />
-                      </div>
-                      <h3
-                        className="mb-2"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontWeight: 600,
-                          color: '#2C1810'
-                        }}
-                      >
-                        Posez votre question à Bruna
-                      </h3>
-                      <p
-                        className="mb-6"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#6B4C7B'
-                        }}
-                      >
-                        Connectez-vous pour obtenir des réponses personnalisées
-                      </p>
-                      <motion.button
-                        onClick={() => router.push('/login')}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-6 py-2 rounded-xl font-medium"
-                        style={{
-                          background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                          color: 'white',
-                          fontFamily: 'Inter, sans-serif',
-                          boxShadow: '0 4px 15px rgba(139, 21, 56, 0.3)'
-                        }}
-                      >
-                        Se connecter
-                      </motion.button>
-                    </div>
-                  )}
-
-                  {/* Questions & Réponses */}
-                  <div className="space-y-6">
-                    {questions.length === 0 ? (
-                      <div className="text-center py-16">
-                        <div
-                          className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                          style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                        >
-                          <MessageCircle className="w-10 h-10" style={{ color: '#6B4C7B', opacity: 0.5 }} />
-                        </div>
-                        <h3
-                          className="text-xl mb-2"
-                          style={{
-                            fontFamily: 'Playfair Display, serif',
-                            fontWeight: 600,
-                            color: '#2C1810'
-                          }}
-                        >
-                          Aucune question pour le moment
-                        </h3>
-                        <p style={{ fontFamily: 'Inter, sans-serif', color: '#6B4C7B' }}>
-                          Soyez le premier à poser une question sur ce livre !
-                        </p>
                       </div>
                     ) : (
-                      questions.map((question, index) => (
-                        <motion.div
-                          key={question.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          className="rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-                          style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                            border: '1px solid rgba(107, 76, 123, 0.1)'
-                          }}
-                        >
+                      <div className="w-44 md:w-52 flex items-center justify-center rounded-2xl shadow-2xl relative bg-gradient-to-br from-primary to-primary/80"
+                        style={{
+                          aspectRatio: '2/3'
+                        }}
+                      >
+                        <BookOpen className="w-16 h-16 text-white opacity-70" />
 
-                          {/* Question */}
-                          <div className="p-6">
-                            <div className="flex items-start gap-4">
-                              <div
-                                className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0"
-                                style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                              >
-                                <MessageCircle className="w-5 h-5" style={{ color: '#6B4C7B' }} />
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-center gap-3 mb-2">
-                                  <span
-                                    style={{
-                                      fontFamily: 'Inter, sans-serif',
-                                      fontWeight: 600,
-                                      color: '#2C1810'
-                                    }}
-                                  >
-                                    {question.user.nom_complet}
-                                  </span>
-                                  <span
-                                    style={{
-                                      fontFamily: 'Inter, sans-serif',
-                                      fontSize: '0.8rem',
-                                      color: '#6B4C7B'
-                                    }}
-                                  >
-                                    {formatDate(question.date_question)}
-                                  </span>
-                                </div>
-                                <p
-                                  className="leading-relaxed"
-                                  style={{
-                                    fontFamily: 'Inter, sans-serif',
-                                    color: '#2C1810',
-                                    lineHeight: '1.6'
-                                  }}
-                                >
-                                  {question.question}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Réponse ou état d'attente */}
-                          {question.reponse ? (
-                            <div
-                              className="border-t p-6"
-                              style={{
-                                backgroundColor: 'rgba(16, 185, 129, 0.05)',
-                                borderColor: 'rgba(16, 185, 129, 0.1)'
-                              }}
-                            >
-                              <div className="flex items-start gap-4">
-                                <div
-                                  className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0"
-                                  style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
-                                >
-                                  <span
-                                    className="font-bold text-sm"
-                                    style={{ color: '#059669' }}
-                                  >
-                                    ✓
-                                  </span>
-                                </div>
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-3 mb-3">
-                                    <span
-                                      style={{
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 600,
-                                        color: '#059669'
-                                      }}
-                                    >
-                                      {question.answeredBy?.nom_complet || 'Bruna'}
-                                    </span>
-                                    <span
-                                      className="px-2 py-1 rounded-full text-xs font-medium"
-                                      style={{
-                                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                                        color: '#059669',
-                                        fontFamily: 'Inter, sans-serif'
-                                      }}
-                                    >
-                                      Admin
-                                    </span>
-                                    {question.date_reponse && (
-                                      <span
-                                        style={{
-                                          fontFamily: 'Inter, sans-serif',
-                                          fontSize: '0.8rem',
-                                          color: '#059669'
-                                        }}
-                                      >
-                                        {formatDate(question.date_reponse)}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <p
-                                    className="leading-relaxed"
-                                    style={{
-                                      fontFamily: 'Inter, sans-serif',
-                                      color: '#059669',
-                                      lineHeight: '1.6'
-                                    }}
-                                  >
-                                    {question.reponse}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          ) : (
-                            <div
-                              className="border-t p-6"
-                              style={{
-                                backgroundColor: 'rgba(245, 158, 11, 0.05)',
-                                borderColor: 'rgba(245, 158, 11, 0.1)'
-                              }}
-                            >
-                              <div className="flex items-center gap-3">
-                                <div
-                                  className="w-8 h-8 rounded-2xl flex items-center justify-center"
-                                  style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
-                                >
-                                  <span style={{ color: '#D97706' }}>⏳</span>
-                                </div>
-                                <span
-                                  style={{
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontSize: '0.9rem',
-                                    fontWeight: 500,
-                                    color: '#D97706'
-                                  }}
-                                >
-                                  En attente d'une réponse de l'admin
-                                </span>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Actions */}
-                          <div
-                            className="px-6 py-3 border-t"
-                            style={{
-                              backgroundColor: 'rgba(250, 248, 245, 0.5)',
-                              borderColor: 'rgba(107, 76, 123, 0.05)'
-                            }}
-                          >
-                            <motion.button
-                              disabled={!currentUser || toggleLikeMutation.isPending}
-                              onClick={() => currentUser && toggleLikeMutation.mutate(question.id)}
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              className={`
-                                flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all
-                                ${question.is_liked
-                                  ? 'text-rose-600 bg-rose-50 hover:bg-rose-100'
-                                  : 'text-gray-600 hover:bg-gray-50'
-                                }
-                                ${!currentUser ? 'opacity-50 cursor-not-allowed' : ''}
-                              `}
-                              style={{ fontFamily: 'Inter, sans-serif' }}
-                            >
-                              <ThumbsUp className={`w-4 h-4 ${question.is_liked ? 'fill-current' : ''}`} />
-                              {question.likes_count || 0} J'aime
-                            </motion.button>
-                          </div>
-                        </motion.div>
-                      ))
+                        {/* Status badge pour placeholder */}
+                        <div className="absolute top-2 right-2 z-10">
+                          {getStatusConfig(book.statut)}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
+
+                {/* Informations */}
+                <div className="lg:col-span-3 space-y-3 sm:space-y-4 md:space-y-6">
+                  <div className="text-center md:text-left">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground"
+                      style={{
+                        fontFamily: 'Playfair Display, serif',
+                        lineHeight: '1.2'
+                      }}
+                    >
+                      {book.titre}
+                    </h1>
+                    <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 md:mb-6 text-foreground/80"
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: 400
+                      }}
+                    >
+                      par {book.auteur}
+                    </p>
+                  </div>
+
+                  {/* Métriques avec barres de progression - Masqué sur mobile */}
+                  <div className="hidden md:grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    {[
+                      { label: '🌶️ Spicy', value: book.niveau_spicy, colorClass: 'text-orange-600 dark:text-orange-400', bgClass: 'from-orange-500 to-red-500' },
+                      { label: '💕 Romance', value: book.niveau_romance, colorClass: 'text-primary', bgClass: 'from-pink-500 to-rose-500' },
+                      { label: '🖤 Dark', value: book.niveau_dark, colorClass: 'text-gray-700 dark:text-gray-300', bgClass: 'from-gray-500 to-gray-700' },
+                      { label: '✨ Émotions', value: book.intensite_emotionnelle, colorClass: 'text-purple-600 dark:text-purple-400', bgClass: 'from-purple-500 to-indigo-500' }
+                    ].map((metric, index) => (
+                      <div key={index} className="p-4 sm:p-5 rounded-xl bg-card/50 border border-border">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-sm sm:text-base font-medium text-foreground"
+                            style={{
+                              fontFamily: 'Inter, sans-serif'
+                            }}
+                          >
+                            {metric.label}
+                          </span>
+                          <span className={'text-2xl font-bold ${metric.colorClass}'}
+                            style={{
+                              fontFamily: 'Playfair Display, serif'
+                            }}
+                          >
+                            {metric.value}/10
+                          </span>
+                        </div>
+                        <div className="w-full rounded-full h-3 bg-muted">
+                          <div
+                            className={'h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
+                            style={{
+                              width: '${(metric.value / 10) * 100}%'
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
               </div>
-            </motion.div>
+            </div>
+          </div>
+
+          {/* Saga Section */}
+          {book.saga && (
+            <SagaInfo
+              saga={book.saga}
+              sagaOrder={book.sagaOrder || 0}
+              sagaNeighbors={book.sagaNeighbors}
+            />
           )}
 
-          {/* Onglet Recommandations */}
-          {activeTab === 'reco' && (
-            <motion.div
-              className="rounded-2xl overflow-hidden shadow-lg"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(107, 76, 123, 0.1)'
-              }}
-            >
-              <div className="p-8">
-                <div className="flex items-center gap-4 mb-8">
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                    style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                  >
-                    <Users className="w-6 h-6" style={{ color: '#6B4C7B' }} />
-                  </div>
-                  <h2
+          {/* Navigation des onglets avec style cohérent */}
+          <div className="mb-3 sm:mb-4 md:mb-8 rounded-2xl overflow-hidden shadow-lg bg-card/95 backdrop-blur-xl border border-border"
+          >
+            <div className="p-2 sm:p-3 md:p-6">
+              <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all duration-200 cursor-pointer border-2 relative ${
+                      activeTab === tab.id
+                        ? 'text-primary-foreground shadow-lg border-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90'
+                        : 'hover:bg-muted/50 border-transparent hover:border-border text-muted-foreground hover:text-foreground'
+                    }'}
                     style={{
-                      fontFamily: 'Playfair Display, serif',
-                      fontSize: '1.5rem',
-                      fontWeight: 700,
-                      color: '#2C1810'
+                      fontFamily: 'Inter, sans-serif',
+                      ...(activeTab === tab.id
+                        ? {
+                            background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 100%)',
+                            color: 'hsl(var(--primary-foreground))'
+                          }
+                        : {})
                     }}
                   >
-                    Livres similaires
-                  </h2>
+                    <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="hidden xs:inline sm:inline">{tab.label}</span>
+                    {tab.count !== null && (
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-200 ${
+                        activeTab === tab.id
+                          ? 'bg-primary-foreground/20 text-primary-foreground shadow-sm'
+                          : 'bg-muted text-muted-foreground'
+                      }'}>
+                        {tab.count}
+                      </span>
+                    )}
+                    {/* Indicateur actif */}
+                    {activeTab === tab.id && (
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-primary-foreground rounded-full" />
+                    )}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          </div>
+
+          {/* Contenu des onglets avec style cohérent */}
+          <div className="rounded-3xl overflow-hidden shadow-xl bg-card/95 backdrop-blur-xl border border-border mb-24 sm:mb-32"
+          >
+            <div className="p-3 sm:p-4 md:p-6 lg:p-12">
+
+            {/* Onglet Résumé */}
+            {activeTab === 'resume' && (
+              <div className="space-y-4">
+                {/* Résumé officiel */}
+                {book.resume_officiel && (
+                  <div className="border border-border rounded-xl bg-card">
+                    <button
+                      onClick={() => toggleSection('resume_officiel')}
+                      className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <BookOpen className="w-5 h-5 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          Résumé officiel
+                        </h3>
+                      </div>
+                      {expandedSections.has('resume_officiel') ? (
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                      )}
+                    </button>
+                    {expandedSections.has('resume_officiel') && (
+                      <div className="px-4 pb-4">
+                        <div
+                          className="prose prose-sm max-w-none leading-relaxed dark:prose-invert text-foreground/80"
+                          style={{ fontFamily: 'Inter, sans-serif' }}
+                          dangerouslySetInnerHTML={{ __html: book.resume_officiel }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Critique de Bruna */}
+                {book.critique_detaillee && (
+                  <div className="border border-border rounded-xl bg-card">
+                    <button
+                      onClick={() => toggleSection('critique_detaillee')}
+                      className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Heart className="w-5 h-5 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          Critique de {book.user?.nom_complet || 'Bruna'}
+                        </h3>
+                      </div>
+                      {expandedSections.has('critique_detaillee') ? (
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                      )}
+                    </button>
+                    {expandedSections.has('critique_detaillee') && (
+                      <div className="px-4 pb-4">
+                        <p className="leading-relaxed whitespace-pre-line text-foreground/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {book.critique_detaillee}
+                        </p>
+                        {book.resume_personnel && (
+                          <div className="mt-4 p-4 rounded-lg bg-muted/50">
+                            <h4 className="font-semibold mb-2 text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                              💝 Avis personnel
+                            </h4>
+                            <p className="text-foreground/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              {book.resume_personnel}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Citations favorites */}
+                {book.citations_favorites && (
+                  <div className="border border-border rounded-xl bg-card">
+                    <button
+                      onClick={() => toggleSection('citations_favorites')}
+                      className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Quote className="w-5 h-5 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          Citations favorites
+                        </h3>
+                      </div>
+                      {expandedSections.has('citations_favorites') ? (
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                      )}
+                    </button>
+                    {expandedSections.has('citations_favorites') && (
+                      <div className="px-4 pb-4">
+                        <blockquote className="italic leading-relaxed text-foreground/80 border-l-4 border-primary pl-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          {book.citations_favorites}
+                        </blockquote>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Pourquoi vous allez l'aimer */}
+                {book.pourquoi_aimer && (
+                  <div className="border border-border rounded-xl bg-card">
+                    <button
+                      onClick={() => toggleSection('pourquoi_aimer')}
+                      className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
+                    >
+                      <div className="flex items-center gap-3">
+                        <ThumbsUp className="w-5 h-5 text-primary" />
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          Pourquoi vous allez l'aimer
+                        </h3>
+                      </div>
+                      {expandedSections.has('pourquoi_aimer') ? (
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                      )}
+                    </button>
+                    {expandedSections.has('pourquoi_aimer') && (
+                      <div className="px-4 pb-4">
+                        <p className="leading-relaxed text-foreground/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {book.pourquoi_aimer}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Onglet Statistiques */}
+            {activeTab === 'stats' && (
+              <div className="space-y-4 md:space-y-8">
+                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-8 flex items-center gap-2 md:gap-3 text-foreground"
+                  style={{
+                    fontFamily: 'Playfair Display, serif'
+                  }}
+                >
+                  <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-primary" />
+                  Évaluations détaillées
+                </h3>
+
+                {/* Note générale - Version compacte mobile */}
+                <div className="text-center py-3 md:py-8 rounded-xl md:rounded-2xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%)',
+                    border: '2px solid rgba(212, 175, 55, 0.2)'
+                  }}
+                >
+                  <div className="text-xl md:text-4xl font-bold mb-2 md:mb-3 text-yellow-700 dark:text-yellow-300"
+                    style={{
+                      fontFamily: 'Playfair Display, serif'
+                    }}
+                  >
+                    {book.note_generale}/10
+                  </div>
+
+                  {/* Affichage correct: 10 étoiles pour /10 */}
+                  <div className="flex justify-center gap-0.5 md:gap-1 mb-2 md:mb-3">
+                    {Array.from({ length: 10 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-2.5 h-2.5 md:w-5 md:h-5 ${
+                          i < book.note_generale
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'fill-muted text-muted'
+                        }'}
+                      />
+                    ))}
+                  </div>
+
+                  <p className="text-xs md:text-base text-yellow-700 dark:text-yellow-300 font-medium"
+                    style={{
+                      fontFamily: 'Inter, sans-serif'
+                    }}
+                  >
+                    Note générale
+                  </p>
                 </div>
 
-                {book.recommandation_personnalisee ? (
-                  <div
-                    className="p-8 rounded-xl"
+                {/* Grille des métriques - Version compacte mobile */}
+                <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
+                  {[
+                    { label: '🌶️ Spicy', value: book.niveau_spicy, colorClass: 'text-orange-600 dark:text-orange-400', bgClass: 'from-orange-600 to-orange-500' },
+                    { label: '💕 Romance', value: book.niveau_romance, colorClass: 'text-primary', bgClass: 'from-primary to-primary/80' },
+                    { label: '🖤 Dark', value: book.niveau_dark, colorClass: 'text-gray-700 dark:text-gray-300', bgClass: 'from-gray-600 to-gray-500' },
+                    { label: '✨ Émotions', value: book.intensite_emotionnelle, colorClass: 'text-purple-600 dark:text-purple-400', bgClass: 'from-purple-600 to-purple-500' },
+                    { label: '⚠️ Danger', value: book.danger, colorClass: 'text-red-600 dark:text-red-400', bgClass: 'from-red-600 to-red-500' },
+                    { label: '🔥 Violence', value: book.violence, colorClass: 'text-red-700 dark:text-red-300', bgClass: 'from-red-700 to-red-600' },
+                    { label: '🌟 Originalité', value: book.originalite, colorClass: 'text-yellow-700 dark:text-yellow-300', bgClass: 'from-yellow-600 to-yellow-500' }
+                  ].map((metric, index) => (
+                    <div key={index} className="p-3 md:p-6 rounded-xl md:rounded-2xl bg-card/90 backdrop-blur-lg border border-border shadow-lg"
+                    >
+                      <div className="flex items-center justify-between mb-2 md:mb-4">
+                        <span className="text-sm md:text-lg font-medium"
+                          style={{
+                              fontFamily: 'Inter, sans-serif'
+                          }}
+                        >
+                          {metric.label}
+                        </span>
+                        <span className={'text-lg md:text-2xl font-bold ${metric.colorClass}'}
+                          style={{
+                            fontFamily: 'Playfair Display, serif'
+                          }}
+                        >
+                          {metric.value}/10
+                        </span>
+                      </div>
+                      <div className="w-full rounded-full h-2 md:h-3 bg-muted">
+                        <div
+                          className={'h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
+                          style={{
+                            width: '${(metric.value / 10) * 100}%'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Onglet Genres & Tropes */}
+            {activeTab === 'genres' && (
+              <div className="space-y-4 sm:space-y-6 md:space-y-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
+                  style={{
+                    fontFamily: 'Playfair Display, serif'
+                  }}
+                >
+                  <Tag className="w-6 h-6 text-primary" />
+                  Genres & Tropes
+                </h3>
+
+                <div className="space-y-6">
+                  {/* Rythme de lecture */}
+                  {book.rythme && (
+                    <div className="p-4 sm:p-6 rounded-xl bg-card/90 backdrop-blur-lg border border-border shadow-lg">
+                      <h4 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2"
+                        style={{
+                          fontFamily: 'Playfair Display, serif'
+                        }}
+                      >
+                        🔥 Rythme de lecture
+                      </h4>
+                      <span className="inline-flex items-center gap-2 px-4 py-3 rounded-full text-base font-medium bg-primary/10 border border-primary/20 text-primary"
+                        style={{
+                          fontFamily: 'Inter, sans-serif'
+                        }}
+                      >
+                        {(() => {
+                          const rhythmConfig = {
+                            'SLOW_BURN': { emoji: '🐌', text: 'Slow Burn' },
+                            'MEDIUM_BURN': { emoji: '🔥', text: 'Medium Burn' },
+                            'FAST_PACE': { emoji: '⚡', text: 'Fast Pace' },
+                            'INSTA_LOVE': { emoji: '💕', text: 'Insta Love' }
+                          };
+                          const config = rhythmConfig[book.rythme as keyof typeof rhythmConfig] || { emoji: '', text: book.rythme };
+                          return (
+                            <>
+                              <span>{config.emoji}</span>
+                              {config.text}
+                            </>
+                          );
+                        })()}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Genres et Tropes - Section compacte */}
+                  {(book.categories.length > 0 || book.tags.length > 0) && (
+                    <div className="bg-card border border-border rounded-xl p-4">
+                      {/* Genres */}
+                      {book.categories.length > 0 && (
+                        <div className="mb-4 last:mb-0">
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-lg">📚</span>
+                            <h4 className="text-sm font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                              Genres
+                            </h4>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {book.categories.map((item) => (
+                              <Badge
+                                key={item.category.id}
+                                className="px-3 py-1 text-sm font-medium"
+                                style={{
+                                  backgroundColor: item.category.couleur,
+                                  color: 'white',
+                                  border: 'none'
+                                }}
+                              >
+                                {item.category.icone} {item.category.nom}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Separator */}
+                      {book.categories.length > 0 && book.tags.length > 0 && (
+                        <div className="border-t border-border/50 my-4" />
+                      )}
+
+                      {/* Tropes */}
+                      {book.tags.length > 0 && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="text-lg">🏷️</span>
+                            <h4 className="text-sm font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                              Tropes & Thèmes
+                            </h4>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {book.tags.map((item) => (
+                              <Badge
+                                key={item.tag.id}
+                                variant="outline"
+                                className="px-3 py-1 text-sm font-medium border"
+                                style={{
+                                  borderColor: item.tag.couleur,
+                                  color: item.tag.couleur,
+                                  backgroundColor: 'transparent'
+                                }}
+                              >
+                                {item.tag.nom}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Onglet Informations */}
+            {activeTab === 'info' && (
+              <div className="space-y-4 sm:space-y-6 md:space-y-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
+                  style={{
+                    fontFamily: 'Playfair Display, serif'
+                  }}
+                >
+                  <FileText className="w-6 h-6 text-primary" />
+                  Informations détaillées
+                </h3>
+
+                <div className="bg-card border border-border rounded-xl p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      { label: 'Auteur', value: book.auteur, icon: '👤' },
+                      { label: 'ISBN', value: book.isbn, icon: '📊' },
+                      { label: 'Éditeur', value: book.editeur, icon: '🏢' },
+                      { label: 'Date de publication', value: book.date_publication ? new Date(book.date_publication).toLocaleDateString('fr-FR') : null, icon: '📅' },
+                      { label: 'Nombre de pages', value: book.nombre_pages, icon: '📄' },
+                      { label: 'Langue', value: book.langue === 'FR' ? 'Français 🇫🇷' : 'Anglais 🇺🇸', icon: '🌍' },
+                      { label: 'Date de lecture', value: book.date_lecture ? new Date(book.date_lecture).toLocaleDateString('fr-FR') : null, icon: '📖' },
+                      {
+                        label: 'Statut',
+                        value: book.statut === 'A_LIRE' ? 'À lire' :
+                               book.statut === 'EN_COURS' ? 'En cours' :
+                               book.statut === 'LU' ? 'Lu' :
+                               book.statut === 'ABANDONNE' ? 'Abandonné' : book.statut,
+                        icon: '📋'
+                      }
+                    ].filter(item => item.value).map((item, index) => (
+                      <div key={index} className="flex items-center gap-3 py-2 border-b border-border/50 last:border-b-0">
+                        <span className="text-lg">{item.icon}</span>
+                        <div className="flex-1">
+                          <div className="text-sm text-muted-foreground font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            {item.label}
+                          </div>
+                          <div className="text-base font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            {item.value}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Onglet Questions */}
+            {activeTab === 'faq' && (
+              <div className="space-y-6 md:space-y-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                  <h3 className="text-xl sm:text-2xl font-bold flex items-center gap-2 sm:gap-3 text-foreground"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.05) 0%, rgba(107, 76, 123, 0.05) 100%)',
-                      border: '1px solid rgba(139, 21, 56, 0.1)'
+                      fontFamily: 'Playfair Display, serif',
                     }}
                   >
-                    <div className="flex items-start gap-4">
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: 'rgba(139, 21, 56, 0.1)' }}
-                      >
-                        <span className="text-xl">💭</span>
-                      </div>
-                      <div>
-                        <h4
-                          className="mb-3"
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 600,
-                            color: '#2C1810'
-                          }}
+                    <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+                    Questions sur le livre
+                  </h3>
+                  <span className="text-sm sm:text-lg font-medium px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 text-primary"
+                    style={{
+                      fontFamily: 'Inter, sans-serif'
+                    }}
+                  >
+                    {questions.length} question{questions.length > 1 ? 's' : ''}
+                  </span>
+                </div>
+
+                {/* Formulaire pour poser une question */}
+                {isAuthenticated ? (
+                  <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-primary/10 border border-primary/20"
+                  >
+                    <h4 className="font-bold mb-3 sm:mb-4 text-lg sm:text-xl text-foreground"
+                      style={{
+                          fontFamily: 'Playfair Display, serif'
+                      }}
+                    >
+                      Poser une question
+                    </h4>
+                    <div className="space-y-3 sm:space-y-4">
+                      <Textarea
+                        placeholder="Votre question sur ce livre..."
+                        value={newQuestion}
+                        onChange={(e) => setNewQuestion(e.target.value)}
+                        className="resize-none border rounded-xl p-3 sm:p-4 text-sm sm:text-base bg-background"
+                        style={{
+                          fontFamily: 'Inter, sans-serif'
+                        }}
+                        rows={4}
+                      />
+                      <div className="flex justify-end">
+                        <Button
+                          onClick={handleSubmitQuestion}
+                          disabled={!newQuestion.trim() || isSubmittingQuestion}
+                          className="px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white shadow-lg bg-gradient-to-br from-primary to-primary/90"
                         >
-                          Recommandations personnalisées de Bruna
-                        </h4>
-                        <p
-                          className="leading-relaxed"
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            color: '#2C1810',
-                            lineHeight: '1.7'
-                          }}
-                        >
-                          {book.recommandation_personnalisee}
-                        </p>
+                          <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                          {isSubmittingQuestion ? 'Envoi...' : 'Envoyer'}
+                        </Button>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-16">
-                    <div
-                      className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                      style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)' }}
-                    >
-                      <Users className="w-10 h-10" style={{ color: '#6B4C7B', opacity: 0.5 }} />
-                    </div>
-                    <h3
-                      className="text-xl mb-2"
+                  <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center bg-primary/10 border border-primary/20"
+                  >
+                    <p className="mb-3 sm:mb-4 text-base sm:text-lg text-foreground/80"
                       style={{
-                        fontFamily: 'Playfair Display, serif',
-                        fontWeight: 600,
-                        color: '#2C1810'
+                        fontFamily: 'Inter, sans-serif'
                       }}
                     >
-                      Fonctionnalité à venir
-                    </h3>
-                    <p style={{ fontFamily: 'Inter, sans-serif', color: '#6B4C7B' }}>
-                      Les recommandations automatiques arriveront prochainement
+                      Connectez-vous pour poser une question sur ce livre
                     </p>
+                    <Button
+                      onClick={() => router.push('/login')}
+                      variant="outline"
+                      className="px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium border"
+                    >
+                      Se connecter
+                    </Button>
                   </div>
                 )}
+
+                {/* Liste des questions */}
+                <div className="space-y-6">
+                  {questions.length === 0 ? (
+                    <div className="text-center py-12 rounded-2xl bg-card/90 backdrop-blur-lg border border-border"
+                    >
+                      <MessageCircle className="w-16 h-16 mx-auto mb-4 text-primary" />
+                      <p className="text-xl mb-2"
+                        style={{
+                          fontFamily: 'Playfair Display, serif'
+                        }}
+                      >
+                        Aucune question pour le moment
+                      </p>
+                      <p className="text-base"
+                        style={{
+                          fontFamily: 'Inter, sans-serif'
+                        }}
+                      >
+                        Soyez le premier à poser une question !
+                      </p>
+                    </div>
+                  ) : (
+                    questions.map((question) => (
+                      <div key={question.id} className="bg-card/90 backdrop-blur-lg border border-border/50 rounded-2xl overflow-hidden shadow-lg"
+                      >
+                        {/* Header with user info and like button */}
+                        <div className="flex items-center justify-between p-4 border-b border-border/30">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-primary/80"
+                            >
+                              <User className="w-5 h-5 text-primary-foreground" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-sm text-foreground"
+                                style={{
+                                  fontFamily: 'Playfair Display, serif'
+                                }}
+                              >
+                                {question.user.nom_complet}
+                              </h4>
+                              <p className="text-xs text-muted-foreground"
+                                style={{
+                                  fontFamily: 'Inter, sans-serif'
+                                }}
+                              >
+                                {new Date(question.date_question).toLocaleDateString('fr-FR')}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Like button */}
+                          <button
+                            onClick={() => handleLikeQuestion(question.id)}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 active:scale-95 ${
+                              question.is_liked
+                                ? 'bg-primary/15 text-primary border border-primary/20'
+                                : 'bg-background/50 text-muted-foreground border border-border/30 hover:bg-primary/10 hover:text-primary hover:border-primary/20'
+                            }'}
+                          >
+                            <ThumbsUp className={`w-3.5 h-3.5 transition-all duration-200 ${
+                              question.is_liked ? 'fill-current' : ''
+                            }'} />
+                            <span className="font-medium">{question.likes_count}</span>
+                          </button>
+                        </div>
+
+                        {/* Question content */}
+                        <div className="p-4">
+                          <div className="p-4 rounded-xl bg-background/40 border border-border/30">
+                            <p className="text-sm sm:text-base leading-relaxed text-foreground break-words overflow-wrap-anywhere hyphens-auto"
+                              style={{
+                                fontFamily: 'Inter, sans-serif'
+                              }}
+                            >
+                              {question.question}
+                            </p>
+                          </div>
+
+                          {/* Response section */}
+                          {question.status === 'ANSWERED' && question.reponse && (
+                            <div className="mt-4 p-4 rounded-xl bg-green-50/80 dark:bg-green-950/30 border border-green-200/50 dark:border-green-800/30"
+                            >
+                              <div className="flex items-center justify-between mb-3">
+                                <span className="font-semibold text-sm text-green-800 dark:text-green-200"
+                                  style={{
+                                    fontFamily: 'Playfair Display, serif'
+                                  }}
+                                >
+                                  Réponse de {question.answeredBy?.nom_complet || 'Bruna'}
+                                </span>
+                                <span className="text-xs px-2 py-1 rounded-full bg-green-200/80 dark:bg-green-800/50 text-green-700 dark:text-green-300"
+                                  style={{
+                                    fontFamily: 'Inter, sans-serif'
+                                  }}
+                                >
+                                  {question.date_reponse && new Date(question.date_reponse).toLocaleDateString('fr-FR')}
+                                </span>
+                              </div>
+                              <p className="text-sm leading-relaxed text-green-800 dark:text-green-200 break-words overflow-wrap-anywhere hyphens-auto"
+                                style={{
+                                  fontFamily: 'Inter, sans-serif'
+                                }}
+                              >
+                                {question.reponse}
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Pending status */}
+                          {question.status === 'PENDING' && (
+                            <div className="mt-4 p-3 rounded-xl bg-yellow-50/80 dark:bg-yellow-950/30 border border-yellow-200/50 dark:border-yellow-800/30"
+                            >
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                                <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200"
+                                  style={{
+                                    fontFamily: 'Inter, sans-serif'
+                                  }}
+                                >
+                                  En attente de réponse
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
-            </motion.div>
-          )}
-        </motion.div>
+            )}
+
+            {/* Message pour les autres onglets */}
+            {!('resume,stats,genres,info,faq'.split(',').includes(activeTab)) && (
+              <div className="text-center py-16">
+                <div className="mb-6">
+                  <MessageCircle className="w-20 h-20 mx-auto mb-6 text-primary/50"
+                  />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-foreground"
+                  style={{
+                    fontFamily: 'Playfair Display, serif'
+                  }}
+                >
+                  Contenu à venir
+                </h3>
+                <p className="text-lg"
+                  style={{
+                    fontFamily: 'Inter, sans-serif'
+                  }}
+                >
+                  Cette section sera bientôt disponible avec encore plus de fonctionnalités.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
+
+    {/* Boutons flottants qui apparaissent quand la section sticky n'est plus visible */}
+    <FloatingActionButtons
+      onBack={() => router.push('/books')}
+      triggerRef={stickyHeaderRef}
+    />
+    </>
   );
 }

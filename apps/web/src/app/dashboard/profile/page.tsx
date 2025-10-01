@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { apiClient } from '@/lib/api-client';
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -67,7 +68,7 @@ export default function ProfilePage() {
   } = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
-      const response = await fetch("/api/proxy/auth/profile", {
+      const response = await apiClient.get('/api/auth/profile", {
         credentials: 'include'
       });
       
@@ -96,7 +97,7 @@ export default function ProfilePage() {
   // Mutation pour mettre à jour le profil
   const updateProfileMutation = useMutation({
     mutationFn: async (data: { nom_complet: string; username: string; email: string }) => {
-      const response = await fetch("/api/proxy/auth/profile", {
+      const response = await apiClient.get('/api/auth/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -145,21 +146,15 @@ export default function ProfilePage() {
 
   const getRoleBadge = (role: string) => {
     const roleConfig = {
-      ADMIN: { label: "Administrateur", color: "bg-gradient-to-r from-red-50 to-red-100 text-red-800 border-red-200" },
-      MODERATOR: { label: "Modérateur", color: "bg-gradient-to-r from-violet-50 to-violet-100 text-violet-800 border-violet-200" },
-      USER: { label: "Utilisateur", color: "bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-emerald-200" }
+      ADMIN: { label: "Administrateur", variant: "destructive" as const },
+      MODERATOR: { label: "Modérateur", variant: "secondary" as const },
+      USER: { label: "Utilisateur", variant: "outline" as const }
     };
 
     const config = roleConfig[role as keyof typeof roleConfig] || roleConfig.USER;
     return (
-      <Badge
-        className={`${config.color} text-sm font-medium gap-2 px-3 py-2`}
-        style={{
-          borderRadius: '12px',
-          fontFamily: 'Inter, sans-serif'
-        }}
-      >
-        <Shield className="w-4 h-4" />
+      <Badge variant={config.variant} className="text-xs">
+        <Shield className="w-3 h-3 mr-1" />
         {config.label}
       </Badge>
     );
@@ -168,32 +163,23 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <AuthGuard requireAuth={true}>
-        <div className="min-h-screen" style={{backgroundColor: '#FAF8F5'}}>
-          {/* Elegant background with subtle texture */}
-          <div
-            className="absolute inset-0 opacity-20 mix-blend-multiply"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
-            }}
-          />
-          <div className="relative z-10">
+        <div className="min-h-screen bg-background transition-colors duration-300">
           <div className="container mx-auto max-w-4xl px-4 py-6">
             <div className="space-y-6">
-              <Card className="animate-pulse">
+              <Card className="animate-pulse bg-card border">
                 <CardHeader>
-                  <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  <div className="h-6 bg-muted rounded w-1/3"></div>
+                  <div className="h-4 bg-muted rounded w-1/2"></div>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-muted rounded"></div>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
                   </div>
                 </CardContent>
               </Card>
             </div>
           </div>
-        </div>
         </div>
       </AuthGuard>
     );
@@ -202,23 +188,15 @@ export default function ProfilePage() {
   if (isError || !profile) {
     return (
       <AuthGuard requireAuth={true}>
-        <div className="min-h-screen" style={{backgroundColor: '#FAF8F5'}}>
-          {/* Elegant background with subtle texture */}
-          <div
-            className="absolute inset-0 opacity-20 mix-blend-multiply"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
-            }}
-          />
-          <div className="relative z-10">
+        <div className="min-h-screen bg-background transition-colors duration-300">
           <div className="container mx-auto max-w-4xl px-4 py-6">
-            <Card className="text-center py-12">
+            <Card className="text-center py-12 bg-card border">
               <CardContent>
-                <User className="w-16 h-16 text-red-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                <User className="w-16 h-16 text-destructive/60 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">
                   Erreur de chargement
                 </h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Impossible de charger votre profil.
                 </p>
                 <Button onClick={() => refetch()} variant="outline">
@@ -228,166 +206,80 @@ export default function ProfilePage() {
             </Card>
           </div>
         </div>
-        </div>
       </AuthGuard>
     );
   }
 
   return (
     <AuthGuard requireAuth={true}>
-      <div className="min-h-screen" style={{backgroundColor: '#FAF8F5'}}>
-        {/* Elegant background with subtle texture */}
-        <div
-          className="absolute inset-0 opacity-20 mix-blend-multiply"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
-          }}
-        />
-        <div className="relative z-10">
+      <div className="min-h-screen bg-background transition-colors duration-300">
         <div className="container mx-auto max-w-4xl px-4 py-6">
           
           {/* Header */}
-          <div className="flex items-center gap-6 mb-10">
-            <button
-              className="group px-4 py-3 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-2"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: '2px solid rgba(107, 76, 123, 0.3)',
-                color: '#6B4C7B',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.875rem',
-                fontWeight: 500,
-                boxShadow: '0 4px 20px rgba(107, 76, 123, 0.15)',
-              }}
+          <motion.div
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Button
+              variant="outline"
               onClick={() => window.location.href = '/dashboard'}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.5)';
-                e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-                e.currentTarget.style.transform = 'none';
-              }}
+              className="bg-card/50 backdrop-blur border-border/50 hover:bg-card/70 text-foreground transition-all duration-200"
             >
-              <ArrowLeft className="w-4 h-4" style={{strokeWidth: 1.5}} />
-              Retour au tableau de bord
-            </button>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Retour
+            </Button>
 
             <div className="flex-1">
-              <h1
-                className="text-4xl font-bold mb-2 flex items-center gap-4"
-                style={{
-                  fontFamily: 'Playfair Display, serif',
-                  background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
-                }}
-              >
-                <User className="w-10 h-10" style={{color: '#6B4C7B'}} />
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2 flex items-center gap-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <User className="w-6 h-6 text-primary" />
                 Mon Profil
               </h1>
-              <p
-                className="text-lg"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  color: '#2C1810',
-                  opacity: 0.8,
-                  lineHeight: '1.6'
-                }}
-              >
-                Gérez vos informations personnelles et consultez vos statistiques
+              <p className="text-sm sm:text-base text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Gérez vos informations personnelles
               </p>
             </div>
 
-            <button
+            <Button
               onClick={() => setIsEditing(!isEditing)}
-              className="group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-3"
-              style={{
-                background: isEditing
-                  ? 'rgba(255, 255, 255, 0.9)'
-                  : 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                backdropFilter: 'blur(10px)',
-                border: isEditing ? '2px solid rgba(107, 76, 123, 0.3)' : 'none',
-                color: isEditing ? '#6B4C7B' : 'white',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                boxShadow: isEditing
-                  ? '0 4px 20px rgba(107, 76, 123, 0.15)'
-                  : '0 8px 25px rgba(139, 21, 56, 0.3)',
-              }}
-              onMouseEnter={(e) => {
-                if (isEditing) {
-                  e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                  e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.5)';
-                  e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (isEditing) {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                  e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-                  e.currentTarget.style.transform = 'none';
-                }
-              }}
+              variant={isEditing ? "outline" : "default"}
+              className={isEditing ? "bg-card/50 backdrop-blur border-border/50 hover:bg-card/70 text-foreground" : "bg-primary text-primary-foreground hover:bg-primary/90"}
             >
               {isEditing ? (
                 <>
-                  <EyeOff className="w-4 h-4" />
+                  <EyeOff className="w-4 h-4 mr-2" />
                   Annuler
                 </>
               ) : (
                 <>
-                  <Settings className="w-4 h-4" />
+                  <Settings className="w-4 h-4 mr-2" />
                   Modifier
                 </>
               )}
-            </button>
-          </div>
+            </Button>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Profil principal */}
             <div className="lg:col-span-2 space-y-6">
               
               {/* Informations personnelles */}
-              <Card
-                className="shadow-xl border-0 overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
-                  boxShadow: '0 12px 40px rgba(139, 21, 56, 0.15)'
-                }}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <CardHeader>
-                  <CardTitle
-                    className="flex items-center gap-3 text-xl font-bold"
-                    style={{
-                      fontFamily: 'Playfair Display, serif',
-                      background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text'
-                    }}
-                  >
-                    <User className="w-6 h-6" style={{color: '#6B4C7B'}} />
-                    Informations personnelles
-                  </CardTitle>
-                  <CardDescription
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      color: '#2C1810',
-                      opacity: 0.7,
-                      fontSize: '1rem'
-                    }}
-                  >
-                    {isEditing ? "Modifiez vos informations" : "Vos informations de profil"}
-                  </CardDescription>
-                </CardHeader>
+                <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      <User className="w-5 h-5 text-primary" />
+                      Informations personnelles
+                    </CardTitle>
+                    <CardDescription className="text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      {isEditing ? "Modifiez vos informations" : "Vos informations de profil"}
+                    </CardDescription>
+                  </CardHeader>
                 <CardContent>
                   {isEditing ? (
                     <motion.form 
@@ -439,75 +331,48 @@ export default function ProfilePage() {
                         />
                       </div>
 
-                      <div className="flex gap-4 pt-6">
-                        <button
+                      <div className="flex flex-col sm:flex-row gap-3 pt-6">
+                        <Button
                           type="submit"
                           disabled={updateProfileMutation.isPending}
-                          className="group px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                          style={{
-                            background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                            color: 'white',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '1rem',
-                            fontWeight: 600,
-                            boxShadow: '0 8px 25px rgba(139, 21, 56, 0.3)',
-                          }}
+                          className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
                         >
-                          <Save className="w-4 h-4" />
+                          <Save className="w-4 h-4 mr-2" />
                           {updateProfileMutation.isPending ? "Sauvegarde..." : "Sauvegarder"}
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
                           type="button"
+                          variant="outline"
                           onClick={() => setIsEditing(false)}
-                          className="group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                          style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                            backdropFilter: 'blur(10px)',
-                            border: '2px solid rgba(107, 76, 123, 0.3)',
-                            color: '#6B4C7B',
-                            fontFamily: 'Inter, sans-serif',
-                            fontSize: '0.95rem',
-                            fontWeight: 500,
-                            boxShadow: '0 4px 20px rgba(107, 76, 123, 0.15)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                            e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.5)';
-                            e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                            e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-                            e.currentTarget.style.transform = 'none';
-                          }}
+                          className="bg-card/50 border-border/50 hover:bg-card/70 text-foreground"
                         >
                           Annuler
-                        </button>
+                        </Button>
                       </div>
                     </motion.form>
                   ) : (
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label className="text-sm font-medium text-gray-600">Nom complet</Label>
-                          <p className="text-sm text-gray-900 mt-1">
+                          <Label className="text-sm font-medium text-muted-foreground">Nom complet</Label>
+                          <p className="text-sm text-foreground mt-1">
                             {profile.nom_complet || "Non renseigné"}
                           </p>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium text-gray-600">Nom d'utilisateur</Label>
-                          <p className="text-sm text-gray-900 mt-1">
+                          <Label className="text-sm font-medium text-muted-foreground">Nom d'utilisateur</Label>
+                          <p className="text-sm text-foreground mt-1">
                             {profile.username || "Non renseigné"}
                           </p>
                         </div>
                       </div>
 
                       <div>
-                        <Label className="text-sm font-medium text-gray-600">Email</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">Email</Label>
                         <div className="flex items-center gap-2 mt-1">
-                          <Mail className="w-4 h-4 text-gray-400" />
-                          <p className="text-sm text-gray-900">{profile.email}</p>
+                          <Mail className="w-4 h-4 text-muted-foreground" />
+                          <p className="text-sm text-foreground">{profile.email}</p>
                           {profile.emailVerified && (
                             <Badge variant="secondary" className="text-xs">
                               Vérifié
@@ -519,29 +384,17 @@ export default function ProfilePage() {
                   )}
                 </CardContent>
               </Card>
+              </motion.div>
 
-              {/* Informations du compte */}
-              <Card
-                className="shadow-xl border-0 overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
-                  boxShadow: '0 12px 40px rgba(139, 21, 56, 0.15)'
-                }}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <CardHeader>
-                  <CardTitle
-                    className="flex items-center gap-3 text-xl font-bold"
-                    style={{
-                      fontFamily: 'Playfair Display, serif',
-                      background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text'
-                    }}
-                  >
-                    <Shield className="w-6 h-6" style={{color: '#6B4C7B'}} />
+                <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <Shield className="w-5 h-5 text-primary" />
                     Informations du compte
                   </CardTitle>
                 </CardHeader>
@@ -549,14 +402,14 @@ export default function ProfilePage() {
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm font-medium text-gray-600">Rôle</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">Rôle</Label>
                         <div className="mt-1">
                           {getRoleBadge(profile.role)}
                         </div>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-600">ID Utilisateur</Label>
-                        <p className="text-sm text-gray-500 mt-1 font-mono">
+                        <Label className="text-sm font-medium text-muted-foreground">ID Utilisateur</Label>
+                        <p className="text-sm text-muted-foreground mt-1 font-mono">
                           {profile.id}
                         </p>
                       </div>
@@ -566,20 +419,20 @@ export default function ProfilePage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm font-medium text-gray-600">Membre depuis</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">Membre depuis</Label>
                         <div className="flex items-center gap-2 mt-1">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <p className="text-sm text-gray-900">
+                          <Calendar className="w-4 h-4 text-muted-foreground" />
+                          <p className="text-sm text-foreground">
                             {formatDate(profile.date_creation)}
                           </p>
                         </div>
                       </div>
                       {profile.derniere_connexion && (
                         <div>
-                          <Label className="text-sm font-medium text-gray-600">Dernière connexion</Label>
+                          <Label className="text-sm font-medium text-muted-foreground">Dernière connexion</Label>
                           <div className="flex items-center gap-2 mt-1">
-                            <Eye className="w-4 h-4 text-gray-400" />
-                            <p className="text-sm text-gray-900">
+                            <Eye className="w-4 h-4 text-muted-foreground" />
+                            <p className="text-sm text-foreground">
                               {formatDate(profile.derniere_connexion)}
                             </p>
                           </div>
@@ -589,272 +442,119 @@ export default function ProfilePage() {
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             </div>
 
             {/* Statistiques */}
             <div className="space-y-6">
-              
+
               {/* Stats principales */}
-              <Card
-                className="shadow-xl border-0 overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
-                  boxShadow: '0 12px 40px rgba(139, 21, 56, 0.15)'
-                }}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
               >
-                <CardHeader>
-                  <CardTitle
-                    className="flex items-center gap-3 text-xl font-bold"
-                    style={{
-                      fontFamily: 'Playfair Display, serif',
-                      background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text'
-                    }}
-                  >
-                    <Award className="w-6 h-6" style={{color: '#6B4C7B'}} />
+              <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <Award className="w-5 h-5 text-primary" />
                     Mes statistiques
                   </CardTitle>
-                  <CardDescription
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      color: '#2C1810',
-                      opacity: 0.7,
-                      fontSize: '1rem'
-                    }}
-                  >
+                  <CardDescription className="text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Votre activité sur la plateforme
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div
-                      className="flex items-center justify-between p-4 rounded-xl transition-all duration-300 hover:scale-105"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.08) 0%, rgba(139, 21, 56, 0.03) 100%)',
-                        border: '1px solid rgba(139, 21, 56, 0.1)',
-                        boxShadow: '0 4px 20px rgba(139, 21, 56, 0.1)'
-                      }}
-                    >
-                      <div className="flex items-center gap-4">
-                        <BookOpen className="w-6 h-6" style={{color: '#8B1538'}} />
+                    <div className="flex items-center justify-between p-4 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-all duration-200">
+                      <div className="flex items-center gap-3">
+                        <BookOpen className="w-5 h-5 text-primary" />
                         <div>
-                          <p
-                            className="text-base font-semibold"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#2C1810'}}
-                          >
-                            Livres ajoutés
-                          </p>
-                          <p
-                            className="text-sm"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#8B1538', opacity: 0.8}}
-                          >
-                            Contributions
-                          </p>
+                          <p className="text-sm font-medium text-foreground">Livres ajoutés</p>
+                          <p className="text-xs text-muted-foreground">Contributions</p>
                         </div>
                       </div>
-                      <span
-                        className="text-2xl font-bold"
-                        style={{fontFamily: 'Playfair Display, serif', color: '#8B1538'}}
-                      >
+                      <span className="text-xl font-bold text-primary" style={{ fontFamily: 'Playfair Display, serif' }}>
                         {profile.stats.books_count}
                       </span>
                     </div>
 
-                    <div
-                      className="flex items-center justify-between p-4 rounded-xl transition-all duration-300 hover:scale-105"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(107, 76, 123, 0.08) 0%, rgba(107, 76, 123, 0.03) 100%)',
-                        border: '1px solid rgba(107, 76, 123, 0.1)',
-                        boxShadow: '0 4px 20px rgba(107, 76, 123, 0.1)'
-                      }}
-                    >
-                      <div className="flex items-center gap-4">
-                        <MessageCircle className="w-6 h-6" style={{color: '#6B4C7B'}} />
+                    <div className="flex items-center justify-between p-4 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-950/30 transition-all duration-200">
+                      <div className="flex items-center gap-3">
+                        <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                         <div>
-                          <p
-                            className="text-base font-semibold"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#2C1810'}}
-                          >
-                            Questions posées
-                          </p>
-                          <p
-                            className="text-sm"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#6B4C7B', opacity: 0.8}}
-                          >
-                            Interactions
-                          </p>
+                          <p className="text-sm font-medium text-foreground">Questions posées</p>
+                          <p className="text-xs text-muted-foreground">Interactions</p>
                         </div>
                       </div>
-                      <span
-                        className="text-2xl font-bold"
-                        style={{fontFamily: 'Playfair Display, serif', color: '#6B4C7B'}}
-                      >
+                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400" style={{ fontFamily: 'Playfair Display, serif' }}>
                         {profile.stats.questions_count}
                       </span>
                     </div>
 
-                    <div
-                      className="flex items-center justify-between p-4 rounded-xl transition-all duration-300 hover:scale-105"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(220, 38, 127, 0.08) 0%, rgba(220, 38, 127, 0.03) 100%)',
-                        border: '1px solid rgba(220, 38, 127, 0.1)',
-                        boxShadow: '0 4px 20px rgba(220, 38, 127, 0.1)'
-                      }}
-                    >
-                      <div className="flex items-center gap-4">
-                        <Heart className="w-6 h-6" style={{color: '#DC267F'}} />
+                    <div className="flex items-center justify-between p-4 rounded-lg bg-pink-50 dark:bg-pink-950/20 border border-pink-200 dark:border-pink-800 hover:bg-pink-100 dark:hover:bg-pink-950/30 transition-all duration-200">
+                      <div className="flex items-center gap-3">
+                        <Heart className="w-5 h-5 text-pink-600 dark:text-pink-400" />
                         <div>
-                          <p
-                            className="text-base font-semibold"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#2C1810'}}
-                          >
-                            Likes donnés
-                          </p>
-                          <p
-                            className="text-sm"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#DC267F', opacity: 0.8}}
-                          >
-                            Appréciations
-                          </p>
+                          <p className="text-sm font-medium text-foreground">Likes donnés</p>
+                          <p className="text-xs text-muted-foreground">Appréciations</p>
                         </div>
                       </div>
-                      <span
-                        className="text-2xl font-bold"
-                        style={{fontFamily: 'Playfair Display, serif', color: '#DC267F'}}
-                      >
+                      <span className="text-xl font-bold text-pink-600 dark:text-pink-400" style={{ fontFamily: 'Playfair Display, serif' }}>
                         {profile.stats.likes_given_count}
                       </span>
                     </div>
 
-                    <div
-                      className="flex items-center justify-between p-4 rounded-xl transition-all duration-300 hover:scale-105"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(184, 134, 11, 0.08) 0%, rgba(184, 134, 11, 0.03) 100%)',
-                        border: '1px solid rgba(184, 134, 11, 0.1)',
-                        boxShadow: '0 4px 20px rgba(184, 134, 11, 0.1)'
-                      }}
-                    >
-                      <div className="flex items-center gap-4">
-                        <Star className="w-6 h-6" style={{color: '#B8860B'}} />
+                    <div className="flex items-center justify-between p-4 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-950/30 transition-all duration-200">
+                      <div className="flex items-center gap-3">
+                        <Star className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                         <div>
-                          <p
-                            className="text-base font-semibold"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#2C1810'}}
-                          >
-                            Favoris
-                          </p>
-                          <p
-                            className="text-sm"
-                            style={{fontFamily: 'Inter, sans-serif', color: '#B8860B', opacity: 0.8}}
-                          >
-                            Sélections
-                          </p>
+                          <p className="text-sm font-medium text-foreground">Favoris</p>
+                          <p className="text-xs text-muted-foreground">Sélections</p>
                         </div>
                       </div>
-                      <span
-                        className="text-2xl font-bold"
-                        style={{fontFamily: 'Playfair Display, serif', color: '#B8860B'}}
-                      >
+                      <span className="text-xl font-bold text-amber-600 dark:text-amber-400" style={{ fontFamily: 'Playfair Display, serif' }}>
                         {profile.stats.favorites_count}
                       </span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
 
               {/* Actions rapides */}
-              <Card
-                className="shadow-xl border-0 overflow-hidden"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '24px',
-                  boxShadow: '0 12px 40px rgba(139, 21, 56, 0.15)'
-                }}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
               >
-                <CardHeader>
-                  <CardTitle
-                    className="text-xl font-bold"
-                    style={{
-                      fontFamily: 'Playfair Display, serif',
-                      background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text'
-                    }}
-                  >
+              <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
                     Actions rapides
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <Link
-                      href="/dashboard/questions"
-                      className="group w-full px-6 py-4 rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-3 text-left"
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        backdropFilter: 'blur(10px)',
-                        border: '2px solid rgba(107, 76, 123, 0.3)',
-                        color: '#6B4C7B',
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '0.95rem',
-                        fontWeight: 500,
-                        boxShadow: '0 4px 20px rgba(107, 76, 123, 0.15)',
-                        textDecoration: 'none'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                        e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.5)';
-                        e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                        e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-                        e.currentTarget.style.transform = 'none';
-                      }}
-                    >
-                      <MessageCircle className="w-5 h-5" style={{strokeWidth: 1.5}} />
-                      Mes questions
-                    </Link>
+                  <div className="space-y-3">
+                    <Button asChild variant="outline" className="w-full justify-start bg-card/50 border-border/50 hover:bg-card/70 text-foreground">
+                      <Link href="/dashboard/questions">
+                        <MessageCircle className="w-4 h-4 mr-3" />
+                        Mes questions
+                      </Link>
+                    </Button>
 
-                    <Link
-                      href="/books"
-                      className="group w-full px-6 py-4 rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-3 text-left"
-                      style={{
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        backdropFilter: 'blur(10px)',
-                        border: '2px solid rgba(107, 76, 123, 0.3)',
-                        color: '#6B4C7B',
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '0.95rem',
-                        fontWeight: 500,
-                        boxShadow: '0 4px 20px rgba(107, 76, 123, 0.15)',
-                        textDecoration: 'none'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                        e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.5)';
-                        e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                        e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-                        e.currentTarget.style.transform = 'none';
-                      }}
-                    >
-                      <BookOpen className="w-5 h-5" style={{strokeWidth: 1.5}} />
-                      Explorer les livres
-                    </Link>
+                    <Button asChild variant="outline" className="w-full justify-start bg-card/50 border-border/50 hover:bg-card/70 text-foreground">
+                      <Link href="/books">
+                        <BookOpen className="w-4 h-4 mr-3" />
+                        Explorer les livres
+                      </Link>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
+              </motion.div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </AuthGuard>

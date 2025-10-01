@@ -19,6 +19,7 @@ import {
   Share2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -94,7 +95,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       setLoading(true);
 
       // Récupérer les détails de la liste
-      const listResponse = await fetch(`/api/proxy/lists/${resolvedParams.id}?include_books=false`);
+      const listResponse = await apiClient.get('/api/lists/${resolvedParams.id}?include_books=false');
       const listResult = await listResponse.json();
 
       if (!listResult.success) {
@@ -107,7 +108,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       }
 
       // Récupérer les livres de la liste
-      const booksResponse = await fetch(`/api/proxy/lists/${resolvedParams.id}/books`);
+      const booksResponse = await apiClient.get('/api/lists/${resolvedParams.id}/books');
       const booksResult = await booksResponse.json();
 
       if (!booksResult.success) {
@@ -120,7 +121,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       });
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      setError(err instanceof Error ? err.message : 'Erreur inconnue`);
       toast({
         title: "Erreur",
         description: "Impossible de charger la liste",
@@ -375,7 +376,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                         {book.image_couverture ? (
                           <img
                             src={book.image_couverture}
-                            alt={`Couverture de ${book.titre}`}
+                            alt={'Couverture de ${book.titre}'}
                             className="w-16 h-20 object-cover rounded border"
                           />
                         ) : (
@@ -439,7 +440,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                           variant="outline"
                           size="sm"
                           className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                          onClick={() => router.push(`/books/${book.id}`)}
+                          onClick={() => router.push('/books/${book.id}')}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Voir les détails

@@ -20,7 +20,6 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { LogoutButton } from './LogoutButton';
-import { RoleIndicator } from './RoleIndicator';
 import { useRoleCheck } from '@/hooks/useRoleCheck';
 
 export const UserMenu: React.FC = () => {
@@ -64,9 +63,6 @@ export const UserMenu: React.FC = () => {
 
   return (
     <div className="flex items-center space-x-2">
-      {/* Indicateur de rôle */}
-      <RoleIndicator size="sm" />
-      
       {/* Menu utilisateur */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -80,7 +76,7 @@ export const UserMenu: React.FC = () => {
           </Button>
         </DropdownMenuTrigger>
         
-        <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuContent className="w-56 z-[150]" align="end" forceMount>
           {/* Info utilisateur */}
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">

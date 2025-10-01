@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BookOpen, ExternalLink, Heart } from 'lucide-react';
+import { BookOpen, ExternalLink, Heart, Star, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -50,7 +50,7 @@ export function SpotlightBook() {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -58,46 +58,38 @@ export function SpotlightBook() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <div className="h-10 w-80 bg-gray-300 rounded mx-auto mb-4 animate-pulse"></div>
-            <div className="h-6 w-96 bg-gray-200 rounded mx-auto animate-pulse"></div>
+            <div className="h-10 w-80 bg-muted rounded mx-auto mb-4 animate-pulse"></div>
+            <div className="h-6 w-96 bg-muted/70 rounded mx-auto animate-pulse"></div>
           </motion.div>
 
-          <div
-            className="relative rounded-3xl overflow-hidden animate-pulse"
-            style={{
-              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(139, 21, 56, 0.1)',
-              boxShadow: '0 12px 40px rgba(139, 21, 56, 0.15)'
-            }}
-          >
+          <div className="relative rounded-3xl overflow-hidden animate-pulse bg-card/60 backdrop-blur-xl border border-border shadow-lg">
             <div className="flex flex-col lg:flex-row">
               {/* Cover placeholder */}
               <div className="lg:w-1/3 relative">
-                <div className="aspect-[2/3] bg-gray-300 lg:rounded-l-3xl"></div>
+                <div className="aspect-[2/3] bg-muted lg:rounded-l-3xl"></div>
               </div>
 
               {/* Content placeholder */}
               <div className="lg:w-2/3 p-8 lg:p-12 flex flex-col justify-center">
                 <div className="space-y-6">
-                  <div className="h-8 bg-gray-300 rounded w-3/4 mb-4"></div>
-                  <div className="h-6 bg-gray-200 rounded w-1/2 mb-6"></div>
+                  <div className="h-8 bg-muted rounded w-3/4 mb-4"></div>
+                  <div className="h-6 bg-muted/70 rounded w-1/2 mb-6"></div>
 
                   <div className="space-y-3 mb-8">
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-muted/70 rounded"></div>
+                    <div className="h-4 bg-muted/70 rounded"></div>
+                    <div className="h-4 bg-muted/70 rounded w-3/4"></div>
                   </div>
 
                   <div className="flex flex-wrap gap-3 mb-8">
-                    <div className="h-8 bg-gray-200 rounded-full w-20"></div>
-                    <div className="h-8 bg-gray-200 rounded-full w-24"></div>
-                    <div className="h-8 bg-gray-200 rounded-full w-16"></div>
+                    <div className="h-8 bg-muted/70 rounded-full w-20"></div>
+                    <div className="h-8 bg-muted/70 rounded-full w-24"></div>
+                    <div className="h-8 bg-muted/70 rounded-full w-16"></div>
                   </div>
 
                   <div className="flex gap-4">
-                    <div className="h-12 bg-gray-300 rounded-full w-32"></div>
-                    <div className="h-12 bg-gray-200 rounded-full w-40"></div>
+                    <div className="h-12 bg-muted rounded-full w-32"></div>
+                    <div className="h-12 bg-muted/70 rounded-full w-40"></div>
                   </div>
                 </div>
               </div>
@@ -115,7 +107,7 @@ export function SpotlightBook() {
   const excerpt = book.resume_personnel || book.pourquoi_aimer;
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -123,20 +115,18 @@ export function SpotlightBook() {
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
-          <h2 
-            className="text-4xl font-bold mb-4"
+          <h2
+            className="text-4xl font-bold mb-4 text-foreground"
             style={{
-              fontFamily: 'Playfair Display, serif',
-              color: '#2C1810'
+              fontFamily: 'Playfair Display, serif'
             }}
           >
             Coup de Cœur du moment
           </h2>
-          <p 
-            className="text-lg opacity-75 max-w-2xl mx-auto"
+          <p
+            className="text-lg opacity-75 max-w-2xl mx-auto text-foreground"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#2C1810'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             Notre sélection spéciale pour vous
@@ -147,19 +137,13 @@ export function SpotlightBook() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="rounded-2xl p-8 lg:p-10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(139, 21, 56, 0.1)',
-            boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
-          }}
+          className="rounded-2xl p-4 sm:p-6 lg:p-10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/60 backdrop-blur-xl border border-border shadow-lg"
         >
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
             {/* Book Cover */}
             <div className="flex-shrink-0 mx-auto lg:mx-0">
               <div className="relative group overflow-hidden rounded-xl">
-                <div className="w-48 h-72 relative overflow-hidden rounded-xl">
+                <div className="w-32 h-48 sm:w-40 sm:h-60 lg:w-48 lg:h-72 relative overflow-hidden rounded-xl">
                   {book.image_couverture ? (
                     <Image
                       src={book.image_couverture}
@@ -195,21 +179,21 @@ export function SpotlightBook() {
             </div>
 
             {/* Book Details */}
-            <div className="flex-1 flex flex-col justify-between">
-              <div className="space-y-4">
+            <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+              {/* Left Column */}
+              <div className="space-y-3 lg:space-y-4">
                 {/* Title & Author */}
                 <div>
-                  <h3 
-                    className="text-2xl lg:text-3xl font-bold mb-3 group-hover:text-[#8B1538] transition-colors duration-300"
+                  <h3
+                    className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 lg:mb-3 group-hover:text-primary transition-colors duration-300 text-foreground"
                     style={{
-                      fontFamily: 'Playfair Display, serif',
-                      color: '#2C1810'
+                      fontFamily: 'Playfair Display, serif'
                     }}
                   >
                     {book.titre}
                   </h3>
-                  <p 
-                    className="text-lg mb-3"
+                  <p
+                    className="text-base lg:text-lg mb-3 lg:mb-4"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       color: '#6B4C7B'
@@ -217,32 +201,31 @@ export function SpotlightBook() {
                   >
                     par {book.auteur}
                   </p>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 lg:gap-4 mb-3 lg:mb-4">
                     <div className="flex items-center gap-2">
-                      <div 
-                        className="p-2 rounded-lg"
+                      <Star className="w-5 h-5 text-yellow-500 fill-current" />
+                      <span
+                        className="text-xl lg:text-2xl font-bold text-primary"
                         style={{
-                          backgroundColor: 'rgba(139, 21, 56, 0.1)'
-                        }}
-                      >
-                        <BookOpen className="w-5 h-5" style={{ color: '#8B1538' }} />
-                      </div>
-                      <span 
-                        className="text-2xl font-bold"
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#8B1538'
+                          fontFamily: 'Inter, sans-serif'
                         }}
                       >
                         {book.note_generale}/10
                       </span>
                     </div>
-                    <RhythmBadgeLarge rhythm={book.rythme} />
+                  </div>
+
+                  {/* Rythme badge */}
+                  <div className="mb-3 lg:mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-foreground/60 uppercase tracking-wide">Rythme:</span>
+                      <RhythmBadgeLarge rhythm={book.rythme} />
+                    </div>
                   </div>
                 </div>
 
                 {/* Ratings */}
-                <div className="py-4">
+                <div>
                   <RatingChipsLarge
                     spicy={book.niveau_spicy}
                     dark={book.niveau_dark}
@@ -250,57 +233,105 @@ export function SpotlightBook() {
                   />
                 </div>
 
+                {/* Categories & Tags */}
+                <div className="space-y-2 lg:space-y-3">
+                  {book.categories && book.categories.length > 0 && (
+                    <div>
+                      <h4 className="text-xs lg:text-sm font-semibold text-foreground/80 mb-1 lg:mb-2">Genres</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {book.categories.slice(0, 3).map((category: any) => (
+                          <span
+                            key={category.id}
+                            className="px-3 py-1 rounded-full text-xs font-medium"
+                            style={{
+                              backgroundColor: '${category.couleur}20',
+                              color: category.couleur,
+                              border: '1px solid ${category.couleur}40'
+                            }}
+                          >
+                            {category.nom}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {book.tags && book.tags.length > 0 && (
+                    <div>
+                      <h4 className="text-xs lg:text-sm font-semibold text-foreground/80 mb-1 lg:mb-2">Tropes</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {book.tags.slice(0, 6).map((tag: any) => (
+                          <span
+                            key={tag.id}
+                            className="px-2 py-1 rounded-md text-xs font-medium"
+                            style={{
+                              backgroundColor: '${tag.couleur}15',
+                              color: tag.couleur,
+                              border: '1px solid ${tag.couleur}30'
+                            }}
+                          >
+                            {tag.nom}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-3 lg:space-y-4">
                 {/* Excerpt */}
                 {excerpt && (
-                  <div 
-                    className="rounded-xl p-6 border-l-4"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.03) 0%, rgba(107, 76, 123, 0.03) 100%)',
-                      borderLeftColor: '#8B1538'
-                    }}
-                  >
-                    <p 
-                      className="italic leading-relaxed line-clamp-3"
+                  <div className="rounded-xl p-4 lg:p-6 border-l-4 border-l-primary bg-primary/5">
+                    <h4 className="text-xs lg:text-sm font-semibold text-foreground/80 mb-2 lg:mb-3">Pourquoi craquer ?</h4>
+                    <p
+                      className="italic leading-relaxed line-clamp-4 lg:line-clamp-5 text-foreground"
                       style={{
                         fontFamily: 'Playfair Display, serif',
-                        color: '#2C1810',
-                        fontSize: '1.1rem'
+                        fontSize: 'clamp(0.9rem, 2vw, 1rem)'
                       }}
                     >
                       "{excerpt}"
                     </p>
                   </div>
                 )}
-              </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                <Link
-                  href={`/books/${book.id}`}
-                  className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2"
-                  style={{
-                    background: 'linear-gradient(135deg, #8B1538, #6B4C7B)',
-                    color: 'white',
-                    fontFamily: 'Inter, sans-serif',
-                  }}
-                >
-                  <BookOpen className="w-5 h-5" />
-                  Voir la critique
-                </Link>
+                {/* Book Stats */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-card/40 rounded-lg p-2.5 lg:p-3 border border-border">
+                    <div className="text-xs text-foreground/60 uppercase tracking-wide">Pages</div>
+                    <div className="text-base lg:text-lg font-bold text-foreground">
+                      {book.nombre_pages || 'N/A'}
+                    </div>
+                  </div>
+                  <div className="bg-card/40 rounded-lg p-2.5 lg:p-3 border border-border">
+                    <div className="text-xs text-foreground/60 uppercase tracking-wide flex items-center gap-1">
+                      <Heart className="w-3 h-3" />
+                      Favoris
+                    </div>
+                    <div className="text-base lg:text-lg font-bold text-foreground">
+                      {book._count?.book_favorite ? '${book._count.book_favorite}' : '0'}
+                    </div>
+                  </div>
+                </div>
 
-                <Link
-                  href={`/books/${book.id}`}
-                  className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2"
-                  style={{
-                    backgroundColor: 'rgba(139, 21, 56, 0.08)',
-                    color: '#8B1538',
-                    border: '1px solid rgba(139, 21, 56, 0.2)',
-                    fontFamily: 'Inter, sans-serif',
-                  }}
-                >
-                  <ExternalLink className="w-5 h-5" />
-                  Détail du livre
-                </Link>
+                {/* Action Button */}
+                <div className="pt-2 lg:pt-4">
+                  <Link
+                    href={'/books/${book.id}'}
+                    className="inline-flex items-center justify-center gap-2 lg:gap-3 px-6 lg:px-8 py-3 lg:py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 w-full text-sm lg:text-base"
+                    style={{
+                      background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
+                      color: 'white',
+                      fontFamily: 'Inter, sans-serif',
+                      boxShadow: '0 8px 25px rgba(139, 21, 56, 0.3)'
+                    }}
+                  >
+                    <BookOpen className="w-5 h-5" />
+                    Découvrir ce livre
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

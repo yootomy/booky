@@ -211,7 +211,7 @@ export default function CategoryDetailPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSort('date_lecture', 'desc')}
+            onClick={() => handleSort('date_lecture', 'desc`)}
           >
             <Calendar className="h-4 w-4 mr-2" />
             Plus récents
@@ -323,7 +323,7 @@ export default function CategoryDetailPage() {
             <h3 className="text-lg font-medium text-white mb-2">Aucun livre dans cette catégorie</h3>
             <p className="text-gray-400 mb-6">
               {bookFilters.statut 
-                ? `Aucun livre avec le statut "${bookFilters.statut}" dans cette catégorie`
+                ? `Aucun livre avec le statut "${bookFilters.statut}" dans cette catégorie'
                 : 'Cette catégorie ne contient aucun livre pour le moment'
               }
             </p>

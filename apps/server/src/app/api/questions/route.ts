@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
       const page = parseInt(searchParams.get('page') || '1');
       const limit = parseInt(searchParams.get('limit') || '20');
       const status = searchParams.get('status') || '';
+      const include = searchParams.get('include') || '';
 
       const skip = (page - 1) * limit;
 
@@ -23,32 +24,47 @@ export async function GET(request: NextRequest) {
         whereClause.status = status;
       }
 
+      // Configuration des includes selon les paramètres
+      const includeConfig: any = {
+        book: {
+          select: {
+            id: true,
+            titre: true,
+            auteur: true,
+            image_couverture: true
+          }
+        },
+        user_book_question_authorIdTouser: {
+          select: {
+            nom_complet: true,
+            username: true,
+            avatar: true
+          }
+        },
+        _count: {
+          select: {
+            book_question_like: true
+          }
+        }
+      };
+
+      // Ajouter les données admin seulement si on demande les réponses
+      if (include.includes('responses')) {
+        includeConfig.user_book_question_answeredByIdTouser = {
+          select: {
+            nom_complet: true,
+            username: true,
+            avatar: true,
+            role: true
+          }
+        };
+      }
+
       // Récupérer les questions avec comptage
       const [questions, totalCount] = await Promise.all([
         db.book_question.findMany({
           where: whereClause,
-          include: {
-            book: {
-              select: {
-                id: true,
-                titre: true,
-                auteur: true,
-                image_couverture: true
-              }
-            },
-            user_book_question_authorIdTouser: {
-              select: {
-                nom_complet: true,
-                username: true,
-                avatar: true
-              }
-            },
-            _count: {
-              select: {
-                book_question_like: true
-              }
-            }
-          },
+          include: includeConfig,
           orderBy: {
             date_question: 'desc'
           },
@@ -63,28 +79,52 @@ export async function GET(request: NextRequest) {
       // Transformer les données pour le frontend
       const questionsFormatted = questions.map(q => {
         const finalStatus = q.reponse ? 'APPROVED' : q.status;
-        return {
+
+        // Construire l'array des réponses si elles sont demandées et qu'il y en a
+        const responses = [];
+        if (include.includes('responses') && q.reponse && q.user_book_question_answeredByIdTouser) {
+          responses.push({
+            id: `${q.id}-response`, // ID unique pour la réponse
+            contenu: q.reponse,
+            date_creation: q.date_reponse?.toISOString() || q.date_question.toISOString(),
+            author: {
+              nom_complet: q.user_book_question_answeredByIdTouser.nom_complet,
+              username: q.user_book_question_answeredByIdTouser.username,
+              avatar: q.user_book_question_answeredByIdTouser.avatar,
+              role: q.user_book_question_answeredByIdTouser.role || 'ADMIN'
+            }
+          });
+        }
+
+        const result: any = {
           id: q.id,
           contenu: q.question, // Schema uses 'question' field
           status: finalStatus, // If there's a response, mark as APPROVED
           date_creation: q.date_question.toISOString(), // Schema uses 'date_question' field
           date_modification: q.date_reponse?.toISOString() || null, // Using date_reponse as modification date
           book: {
-          id: q.book.id,
-          titre: q.book.titre,
-          auteur: q.book.auteur,
-          image_couverture: q.book.image_couverture
-        },
-        author: {
-          nom_complet: q.user_book_question_authorIdTouser.nom_complet,
-          username: q.user_book_question_authorIdTouser.username,
-          avatar: q.user_book_question_authorIdTouser.avatar
-        },
-        stats: {
-          likes_count: q._count.book_question_like,
-          responses_count: q.reponse ? 1 : 0 // Use reponse field to check if there's a response
+            id: q.book.id,
+            titre: q.book.titre,
+            auteur: q.book.auteur,
+            image_couverture: q.book.image_couverture
+          },
+          author: {
+            nom_complet: q.user_book_question_authorIdTouser.nom_complet,
+            username: q.user_book_question_authorIdTouser.username,
+            avatar: q.user_book_question_authorIdTouser.avatar
+          },
+          stats: {
+            likes_count: q._count.book_question_like,
+            responses_count: q.reponse ? 1 : 0 // Compter les réponses disponibles
+          }
+        };
+
+        // Ajouter les réponses seulement si demandées
+        if (include.includes('responses')) {
+          result.responses = responses;
         }
-      };
+
+        return result;
       });
 
       return NextResponse.json({

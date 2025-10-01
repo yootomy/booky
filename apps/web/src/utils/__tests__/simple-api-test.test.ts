@@ -82,11 +82,11 @@ describe('API Configuration Tests', () => {
     const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     
     const endpoints = {
-      auth: `${API_BASE_URL}/api/auth`,
-      books: `${API_BASE_URL}/api/books`, 
-      categories: `${API_BASE_URL}/api/categories`,
-      tags: `${API_BASE_URL}/api/tags`,
-      dashboard: `${API_BASE_URL}/api/dashboard`
+      auth: '${API_BASE_URL}/api/auth',
+      books: '${API_BASE_URL}/api/books', 
+      categories: '${API_BASE_URL}/api/categories',
+      tags: '${API_BASE_URL}/api/tags',
+      dashboard: '${API_BASE_URL}/api/dashboard'
     };
     
     expect(endpoints.auth).toContain('/api/auth');

@@ -186,7 +186,7 @@ export function ExportManager({ className }: ExportManagerProps) {
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = `export-${exportId}`;
+      a.download = 'export-${exportId}';
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -198,7 +198,7 @@ export function ExportManager({ className }: ExportManagerProps) {
   }, []);
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`space-y-6 ${className}' }>
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
@@ -418,7 +418,7 @@ interface ExportTypeCardProps {
 function ExportTypeCard({ icon, title, description, format, isSelected, onSelect }: ExportTypeCardProps) {
   return (
     <Card 
-      className={`cursor-pointer transition-all hover:shadow-md ${isSelected ? 'ring-2 ring-primary' : ''}`}
+      className="cursor-pointer transition-all hover:shadow-md"
       onClick={onSelect}
     >
       <CardContent className="p-6 text-center">
@@ -800,9 +800,9 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    if (bytes < 1024) return '${bytes} B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toFixed(1)} KB';
+    return '${(bytes / (1024 * 1024)).toFixed(1)} MB';
   };
 
   return (
@@ -837,7 +837,7 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
               day: '2-digit',
               month: '2-digit',
               year: 'numeric',
-              hour: '2-digit',
+              hour: '2-digit,
               minute: '2-digit'
             })} • {formatFileSize(exportItem.file_size)}
           </div>
@@ -862,3 +862,4 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
 }
 
 export default ExportManager;
+

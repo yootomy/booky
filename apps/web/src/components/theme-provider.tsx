@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-export type Theme = "light" | "dark" | "dark-romance" | "system";
+export type Theme = "light" | "dark" | "system";
 
 export interface ThemeProviderProps extends Omit<React.ComponentProps<typeof NextThemesProvider>, 'themes'> {
   children: React.ReactNode;
@@ -12,9 +12,11 @@ export interface ThemeProviderProps extends Omit<React.ComponentProps<typeof Nex
 
 export function ThemeProvider({
   children,
-  themes = ["light", "dark", "dark-romance", "system"],
-  defaultTheme = "system",
+  themes = ["light", "dark", "system"],
+  defaultTheme = "light",
   attribute = "class",
+  enableSystem = true,
+  disableTransitionOnChange = false,
   ...props
 }: ThemeProviderProps) {
   return (
@@ -22,6 +24,8 @@ export function ThemeProvider({
       themes={themes}
       defaultTheme={defaultTheme}
       attribute={attribute}
+      enableSystem={enableSystem}
+      disableTransitionOnChange={disableTransitionOnChange}
       {...props}
     >
       {children}

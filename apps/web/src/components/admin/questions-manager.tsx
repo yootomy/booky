@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { apiClient } from '@/lib/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -74,7 +75,7 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
 
       if (action === 'ANSWERED') {
         // Répondre à la question via le proxy (pour garder les cookies)
-        const res = await fetch(`/api/proxy/books/${bookId}/questions/${questionId}`, {
+        const res = await apiClient.get(`/api/books/${bookId}/questions/${questionId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -102,7 +103,7 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
         });
       } else {
         // Rejeter la question via le proxy (pour garder les cookies)
-        const res = await fetch(`/api/proxy/books/${bookId}/questions/${questionId}`, {
+        const res = await apiClient.get('/api/books/${bookId}/questions/${questionId}', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

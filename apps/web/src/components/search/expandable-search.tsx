@@ -4,6 +4,9 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SearchBox } from './search-box';
+import { cn } from '@/lib/utils';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 interface ExpandableSearchProps {
   className?: string;
@@ -68,7 +71,7 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
   }, [handleClose]);
 
   return (
-    <div className={`relative flex items-center ${className}`}>
+    <div className={'relative flex items-center ${className}'}>
       {/* Container avec largeur animée */}
       <motion.div
         className="flex items-center overflow-hidden"
@@ -84,11 +87,12 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
         <button
           ref={triggerRef}
           onClick={handleOpen}
-          className={`
-            flex-shrink-0 p-2 text-gray-600 hover:text-purple-700 hover:bg-gray-100 
-            rounded-lg transition-colors z-10
-            ${isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-          `}
+          className={cn(
+            "flex-shrink-0 p-2 rounded-full transition-all duration-300 hover:scale-105 z-10",
+            "border border-transparent hover:border-primary/20 hover:bg-primary/10",
+            "text-muted-foreground hover:text-primary",
+            isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          )}
           style={{
             transition: 'opacity 0.2s ease-in-out'
           }}
@@ -135,21 +139,16 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
   );
 }
 
-// Version mobile avec comportement adapté
+// Version mobile avec modal plein écran centré
 export function ExpandableSearchMobile({ className = '' }: ExpandableSearchProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const inputRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = useCallback(() => {
-    setIsExpanded(true);
-    setTimeout(() => {
-      const input = inputRef.current?.querySelector('input');
-      input?.focus();
-    }, 200);
+    setIsOpen(true);
   }, []);
 
   const handleClose = useCallback(() => {
-    setIsExpanded(false);
+    setIsOpen(false);
   }, []);
 
   const handleSearchComplete = useCallback(() => {
@@ -157,51 +156,43 @@ export function ExpandableSearchMobile({ className = '' }: ExpandableSearchProps
   }, [handleClose]);
 
   return (
-    <div className={`relative ${className}`}>
-      {/* Version mobile : expansion full-width */}
-      <motion.div
-        className="flex items-center"
-        animate={{ 
-          width: isExpanded ? '100vw' : 40
-        }}
-        transition={{ 
-          duration: 0.25, 
-          ease: "easeInOut" 
-        }}
-      >
-        {!isExpanded ? (
-          <button
-            onClick={handleOpen}
-            className="p-2 text-gray-600 hover:text-purple-700 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="Ouvrir la recherche"
-          >
-            <Search className="w-5 h-5" />
-          </button>
-        ) : (
-          <motion.div
-            ref={inputRef}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed left-0 top-16 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-200/20 p-4 z-50"
-            role="search"
-          >
-            <div className="relative">
-              <SearchBox
-                placeholder="Rechercher..."
-                onSearchComplete={handleSearchComplete}
-                className="w-full pr-10"
-              />
-              <button
-                onClick={handleClose}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 rounded"
-                aria-label="Fermer la recherche"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </motion.div>
+    <div className={className}>
+      {/* Bouton trigger */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleOpen}
+        className={cn(
+          "p-2 rounded-full transition-all duration-200",
+          "text-muted-foreground hover:text-primary",
+          "hover:bg-primary/10 active:scale-95"
         )}
-      </motion.div>
+        aria-label="Ouvrir la recherche"
+      >
+        <Search className="w-5 h-5" />
+      </Button>
+
+      {/* Modal simple avec juste la SearchBox */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent
+          className={cn(
+            "max-w-2xl w-[95vw] p-6 bg-background/95 backdrop-blur-xl border border-border",
+            "dark:bg-background/90 dark:border-border/50"
+          )}
+        >
+          <div className="space-y-4">
+            <DialogTitle className="text-xl font-semibold text-foreground mb-4">
+              Rechercher
+            </DialogTitle>
+
+            <SearchBox
+              className="w-full"
+              placeholder="Rechercher un livre, un auteur..."
+              onSearchComplete={handleSearchComplete}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

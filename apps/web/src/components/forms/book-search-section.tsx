@@ -66,7 +66,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
     updateQuery(searchQuery);
   };
 
-  // Gérer la sélection d'un livre
+  // Gérer la sélection d`un livre
   const handleBookSelect = (book: ExternalBookResult) => {
     onBookSelect(book);
     setIsExpanded(false);
@@ -128,7 +128,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                     searchType === 'general' 
                       ? 'bg-blue-100 text-blue-700 border border-blue-300' 
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  }'}
                 >
                   🔍 Général
                 </button>
@@ -139,7 +139,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                     searchType === 'title' 
                       ? 'bg-blue-100 text-blue-700 border border-blue-300' 
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  }'}
                 >
                   📖 Titre
                 </button>
@@ -150,7 +150,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                     searchType === 'author' 
                       ? 'bg-blue-100 text-blue-700 border border-blue-300' 
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  }'}
                 >
                   ✍️ Auteur
                 </button>
@@ -161,7 +161,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                     searchType === 'isbn' 
                       ? 'bg-blue-100 text-blue-700 border border-blue-300' 
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
+                  }'}
                 >
                   🔢 ISBN
                 </button>
@@ -224,7 +224,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                 <ScrollArea className="h-96 pr-4">
                   <div className="grid gap-3">
                     {('combinedResults' in searchResults ? searchResults.combinedResults : searchResults.items).map((book, index) => (
-                      <Card key={`${book.source}-${book.identifiant_externe || book.id}`} className="hover:shadow-md transition-shadow">
+                      <Card key={'${book.source}-${book.identifiant_externe || book.id}'} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-4">
                           <div className="flex space-x-4">
                             {/* Image de couverture */}

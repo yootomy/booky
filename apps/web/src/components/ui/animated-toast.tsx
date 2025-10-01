@@ -146,7 +146,7 @@ export function AnimatedToast({
                   type === 'warning' && 'bg-orange-500',
                   type === 'info' && 'bg-blue-500'
                 )}
-                style={{ width: `${progress}%` }}
+                style={{ width: '${progress}%' }}
               />
             </div>
           )}

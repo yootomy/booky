@@ -480,7 +480,7 @@ export function CategoryForm({
                   variant="secondary"
                   className="px-3 py-1"
                   style={{
-                    backgroundColor: `${watchedValues.couleur}20`,
+                    backgroundColor: '${watchedValues.couleur}20',
                     color: watchedValues.couleur,
                     borderColor: watchedValues.couleur
                   }}

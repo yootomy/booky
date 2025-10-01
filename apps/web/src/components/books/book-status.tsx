@@ -235,15 +235,15 @@ export function ReadingProgress({
       <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-300"
-          style={{ width: `${Math.min(progress, 100)}%` }}
+          style={{ width: '${Math.min(progress, 100)}%' }}
         />
       </div>
       {showText && (
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>
             {currentPage && totalPages 
-              ? `Page ${currentPage}/${totalPages}`
-              : `${progress}% lu`
+              ? 'Page ${currentPage}/${totalPages}'
+              : '${progress}% lu'
             }
           </span>
           <span>{progress}%</span>

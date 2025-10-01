@@ -31,7 +31,7 @@ function QuoteCard({ quote, index }: { quote: HauntingQuote; index: number }) {
       transition={{ duration: 0.6, delay: index * 0.15 }}
       className="group cursor-pointer"
     >
-      <Link href={`/books/${quote.book_id}`}>
+      <Link href={'/books/${quote.book_id}'}>
         <div 
           className="relative p-8 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
           style={{

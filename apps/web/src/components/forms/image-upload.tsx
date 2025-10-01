@@ -94,7 +94,7 @@ export function ImageUpload({
     // Taille du fichier
     const sizeInMB = file.size / (1024 * 1024);
     if (sizeInMB > maxSize) {
-      return `L'image ne doit pas dépasser ${maxSize}MB`;
+      return 'L'image ne doit pas dépasser ${maxSize}MB';
     }
 
     return null;
@@ -363,7 +363,7 @@ export function ImageUpload({
                   <p className="text-xs text-muted-foreground">
                     {dragActive 
                       ? 'Relâchez pour uploader'
-                      : `Formats acceptés: PNG, JPG, GIF (max ${maxSize}MB)`
+                      : 'Formats acceptés: PNG, JPG, GIF (max ${maxSize}MB)'
                     }
                   </p>
                 </div>
@@ -403,7 +403,7 @@ export function ImageUpload({
         <div className="flex flex-wrap gap-2 text-xs">
           <Badge variant="secondary">
             {typeof value === 'object' && value instanceof File 
-              ? `${(value.size / 1024).toFixed(0)} KB`
+              ? '${(value.size / 1024).toFixed(0)} KB'
               : 'Image externe'
             }
           </Badge>

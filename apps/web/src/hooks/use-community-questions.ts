@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 interface CommunityQuestion {
   id: string;
@@ -32,7 +33,7 @@ export function useCommunityQuestions() {
         setIsLoading(true);
         
         // Récupérer les questions publiques depuis l'API proxy
-        const response = await fetch('/api/proxy/questions?is_public=true&sort=likes_count_desc&limit=4');
+        const response = await apiClient.get('/api/questions?is_public=true&sort=likes_count_desc&limit=4');
         
         if (!response.ok) {
           // Fallback: utiliser des données simulées si l'API n'existe pas encore

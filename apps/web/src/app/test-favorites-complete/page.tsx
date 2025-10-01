@@ -35,7 +35,7 @@ export default function TestFavoritesCompletePage() {
   const addTestResult = (name: string, success: boolean, message: string, data?: any) => {
     const result: TestResult = { name, success, message, data };
     setTestResults(prev => [...prev, result]);
-    console.log(`[TEST] ${name}: ${success ? '✅' : '❌'} ${message}`, data);
+    console.log(`[TEST] ${name}: ${success ? '✅' : '❌'} ${message}', data);
   };
 
   const testApiEndpoint = async (url: string, method: string = 'GET', body?: any) => {
@@ -73,7 +73,7 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Auth Check', 
         isAuthenticated, 
-        isAuthenticated ? `Connecté comme ${user?.email}` : 'Non connecté'
+        isAuthenticated ? 'Connecté comme ${user?.email}' : 'Non connecté'
       );
 
       if (!isAuthenticated) {
@@ -86,7 +86,7 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'API Status',
         statusResult.success,
-        statusResult.success ? 'Status API OK' : `Status API échec: ${statusResult.status}`,
+        statusResult.success ? 'Status API OK' : 'Status API échec: ${statusResult.status}',
         statusResult.data
       );
 
@@ -96,8 +96,8 @@ export default function TestFavoritesCompletePage() {
         'GET Favorites',
         getFavoritesResult.success,
         getFavoritesResult.success 
-          ? `${getFavoritesResult.data?.data?.length || 0} favoris trouvés`
-          : `GET échec: ${getFavoritesResult.status}`,
+          ? '${getFavoritesResult.data?.data?.length || 0} favoris trouvés'
+          : 'GET échec: ${getFavoritesResult.status}',
         getFavoritesResult.data
       );
 
@@ -105,7 +105,7 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Hook State',
         true,
-        `Hook: ${favorites.size} favoris, loading: ${favoritesLoading}`,
+        'Hook: ${favorites.size} favoris, loading: ${favoritesLoading}',
         { favorites: Array.from(favorites), isLoading: favoritesLoading }
       );
 
@@ -114,7 +114,7 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Hook isFavorite',
         true,
-        `Livre ${testBookId} est favori selon hook: ${isTestBookFavorite}`,
+        'Livre ${testBookId} est favori selon hook: ${isTestBookFavorite}',
         { bookId: testBookId, isFavorite: isTestBookFavorite }
       );
 
@@ -123,7 +123,7 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Add Favorite',
         addResult.success,
-        addResult.success ? 'Ajout favori OK' : `Ajout échec: ${addResult.status}`,
+        addResult.success ? 'Ajout favori OK' : 'Ajout échec: ${addResult.status}',
         addResult.data
       );
 
@@ -134,7 +134,7 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Verify Add (API)',
         isInApiAfterAdd,
-        `Livre ${testBookId} ${isInApiAfterAdd ? 'trouvé' : 'NON trouvé'} dans API après ajout`,
+        'Livre ${testBookId} ${isInApiAfterAdd ? 'trouvé' : 'NON trouvé'} dans API après ajout',
         { favorites: favoritesAfterAdd, searchedId: testBookId }
       );
 
@@ -146,16 +146,16 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Verify Add (Hook after refresh)',
         isInHookAfterRefresh,
-        `Livre ${testBookId} ${isInHookAfterRefresh ? 'trouvé' : 'NON trouvé'} dans hook après refresh`,
+        `Livre ${testBookId} ${isInHookAfterRefresh ? 'trouvé' : 'NON trouvé'} dans hook après refresh',
         { bookId: testBookId, isFavorite: isInHookAfterRefresh, hookFavorites: Array.from(favorites) }
       );
 
       // Test 9: Test de suppression
-      const removeResult = await testApiEndpoint(`/api/favorites/${testBookId}`, 'DELETE');
+      const removeResult = await testApiEndpoint('/api/favorites/${testBookId}', 'DELETE');
       addTestResult(
         'Remove Favorite',
         removeResult.success,
-        removeResult.success ? 'Suppression OK' : `Suppression échec: ${removeResult.status}`,
+        removeResult.success ? 'Suppression OK' : 'Suppression échec: ${removeResult.status}',
         removeResult.data
       );
 
@@ -166,12 +166,12 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Verify Remove (API)',
         !isInApiFinal,
-        `Livre ${testBookId} ${isInApiFinal ? 'ENCORE présent' : 'bien supprimé'} de l'API`,
+        'Livre ${testBookId} ${isInApiFinal ? 'ENCORE présent' : 'bien supprimé'} de l'API',
         { favorites: finalFavorites }
       );
 
     } catch (error) {
-      addTestResult('Test Error', false, `Erreur durant les tests: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      addTestResult('Test Error', false, `Erreur durant les tests: ${error instanceof Error ? error.message : 'Unknown error'}');
     } finally {
       setLoading(false);
     }
@@ -201,7 +201,7 @@ export default function TestFavoritesCompletePage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Heart className={`h-4 w-4 ${favorites.size > 0 ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+              <Heart className={`h-4 w-4 ${favorites.size > 0 ? 'fill-red-500 text-red-500' : 'text-gray-400'}'} />
               <span className="text-sm">{favorites.size} favoris (hook)</span>
             </div>
           </CardContent>
@@ -210,7 +210,7 @@ export default function TestFavoritesCompletePage() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Loader2 className={`h-4 w-4 ${favoritesLoading ? 'animate-spin' : 'text-gray-400'}`} />
+              <Loader2 className={`h-4 w-4 ${favoritesLoading ? 'animate-spin' : 'text-gray-400'}'} />
               <span className="text-sm">
                 {favoritesLoading ? 'Chargement...' : hasInitialLoad ? 'Chargé' : 'Pas encore chargé'}
               </span>
@@ -259,7 +259,7 @@ export default function TestFavoritesCompletePage() {
                 className="flex-1"
                 disabled={!isAuthenticated}
               >
-                <Heart className={`mr-2 h-4 w-4 ${isFavorite(testBookId) ? 'fill-current' : ''}`} />
+                <Heart className={`mr-2 h-4 w-4 ${isFavorite(testBookId) ? 'fill-current' : ''}'} />
                 Toggle Test Book
               </Button>
               
@@ -295,7 +295,7 @@ export default function TestFavoritesCompletePage() {
                   result.success 
                     ? 'bg-green-50 border-green-200' 
                     : 'bg-red-50 border-red-200'
-                }`}
+                }'}
               >
                 <div className="flex items-start gap-2">
                   {result.success ? (

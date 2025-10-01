@@ -66,7 +66,7 @@ interface TagFormData {
 
 const PREDEFINED_COLORS = [
   '#DC2626', '#EA580C', '#D97706', '#65A30D', '#16A34A', '#059669',
-  '#0891B2', '#0284C7', '#2563EB', '#7C3AED', '#C026D3', '#DC2626'
+  '#0891B2', '#0284C7', '#2563EB', '#7C3AED', '#C026D3', '#E11D48'
 ];
 
 const TAG_TYPE_LABELS = {
@@ -224,27 +224,60 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
 
   const handleDelete = async (tagId: string) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce tag ?')) return;
-    
-    await deleteTagMutation.mutateAsync(tagId);
+
+    try {
+      await deleteTagMutation.mutateAsync(tagId);
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      toast({
+        title: "Erreur",
+        description: typeof error === 'object' && error && 'message' in error
+          ? (error as any).message
+          : "Impossible de supprimer le tag",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleToggleFavorite = async (tag: Tag) => {
-    await toggleFavoriteMutation.mutateAsync({
-      id: tag.id,
-      est_favori: !tag.est_favori
-    });
+    try {
+      await toggleFavoriteMutation.mutateAsync({
+        id: tag.id,
+        est_favori: !tag.est_favori
+      });
+    } catch (error) {
+      console.error('Erreur lors du toggle favori:', error);
+      toast({
+        title: "Erreur",
+        description: typeof error === 'object' && error && 'message' in error
+          ? (error as any).message
+          : "Impossible de modifier le tag",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (editingTag) {
-      await updateTagMutation.mutateAsync({
-        id: editingTag.id,
-        ...formData
+
+    try {
+      if (editingTag) {
+        await updateTagMutation.mutateAsync({
+          id: editingTag.id,
+          ...formData
+        });
+      } else {
+        await createTagMutation.mutateAsync(formData);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la soumission:', error);
+      toast({
+        title: "Erreur",
+        description: typeof error === 'object' && error && 'message' in error
+          ? (error as any).message
+          : "Une erreur inattendue s'est produite",
+        variant: "destructive",
       });
-    } else {
-      await createTagMutation.mutateAsync(formData);
     }
   };
 
@@ -458,7 +491,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                         </h3>
                         <Badge 
                           variant="outline" 
-                          className={`text-xs ${TAG_TYPE_COLORS[tag.type]} mt-1`}
+                          className={`text-xs ${TAG_TYPE_COLORS[tag.type]} mt-1' }
                         >
                           {TAG_TYPE_LABELS[tag.type]}
                         </Badge>
@@ -490,7 +523,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                             )}
                             {tag.est_favori ? 'Retirer favori' : 'Marquer favori'}
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => router.push(`/tags/${tag.id}` as any)}>
+                          <DropdownMenuItem onClick={() => router.push('/tags/${tag.id}" as any)}>
                             <Eye className="h-4 w-4 mr-2" />
                             Voir les livres
                           </DropdownMenuItem>
@@ -511,7 +544,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center space-x-1 text-muted-foreground">
                       <BookOpen className="h-3 w-3" />
-                      <span>{tag._count?.books || 0} livre{(tag._count?.books || 0) > 1 ? 's' : ''}</span>
+                      <span>{tag._count?.books || 0} livre{(tag._count?.books || 0) > 1 ? 's' : '' }</span>
                     </div>
                     
                     <div className="flex items-center space-x-1 text-muted-foreground">
@@ -531,10 +564,10 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                 <h3 className="text-lg font-semibold mb-2">Aucun tag trouvé</h3>
                 <p className="text-muted-foreground mb-4">
                   {searchQuery 
-                    ? `Aucun tag ne correspond à votre recherche "${searchQuery}"`
-                    : activeTab === 'ALL' 
+                    ? "Aucun tag ne correspond à votre recherche"
+                    : activeTab === 'ALL'
                       ? "Commencez par créer votre premier tag"
-                      : `Aucun tag de type "${TAG_TYPE_LABELS[activeTab as TagType]}"`
+                      : "Aucun tag de ce type trouvé"
                   }
                 </p>
                 <Button 
@@ -564,3 +597,6 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
     </div>
   );
 }
+
+export default TagsManager;
+

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface MoodTag {
   id: string;
@@ -18,7 +19,7 @@ export function useMoodExplorer() {
       try {
         setIsLoading(true);
         
-        const response = await fetch('/api/proxy/categories'); // Utiliser categories comme tags
+        const response = await apiClient.get('/api/categories'); // Utiliser categories comme tags
         if (!response.ok) throw new Error('Failed to fetch tags');
         
         const tags = await response.json();

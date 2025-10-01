@@ -158,8 +158,8 @@ export function useCreateSaga() {
       // Invalider les listes de sagas
       queryClient.invalidateQueries({ queryKey: sagaKeys.lists() });
       
-      toast.success('Saga créée avec succès', {
-        description: `La saga "${response.data.name}" a été créée`
+      toast.success('Saga créée avec succès`, {
+        description: `La saga "${response.data.name}" a été créée'
       });
     },
     onError: (error: any) => {
@@ -187,7 +187,7 @@ export function useUpdateSaga() {
       queryClient.invalidateQueries({ queryKey: sagaKeys.lists() });
       
       toast.success('Saga mise à jour', {
-        description: `Les modifications ont été enregistrées`
+        description: 'Les modifications ont été enregistrées'
       });
     },
     onError: (error: any) => {
@@ -248,7 +248,7 @@ export function useAssignBookToSaga() {
       queryClient.invalidateQueries({ queryKey: sagaKeys.detail(data.sagaId) });
       
       toast.success('Livre assigné à la saga', {
-        description: `Le livre a été assigné à l'ordre ${data.sagaOrder}`
+        description: 'Le livre a été assigné à l'ordre ${data.sagaOrder}'
       });
     },
     onError: (error: any) => {

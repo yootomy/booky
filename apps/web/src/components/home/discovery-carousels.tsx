@@ -199,7 +199,7 @@ export function DiscoveryCarousels() {
 }
 
 /* Hide scrollbars */
-const styles = `
+const styles = '
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -207,7 +207,7 @@ const styles = `
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-`;
+';
 
 if (typeof document !== 'undefined') {
   const styleSheet = document.createElement('style');

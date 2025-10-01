@@ -60,7 +60,7 @@ export function StatsCards({ stats, isLoading, listsCount = 0, publicListsCount 
   const calculateTrend = (current: number, base: number = 10): string => {
     if (base === 0) return '+0%';
     const trend = Math.round(((current - base) / base) * 100);
-    return trend > 0 ? `+${trend}%` : `${trend}%`;
+    return trend > 0 ? '+${trend}%' : '${trend}%';
   };
 
   return (

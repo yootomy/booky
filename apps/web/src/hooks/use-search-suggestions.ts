@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { apiClient } from '@/lib/api-client';
 import { useDebounce } from './use-debounce';
 
 export interface SuggestionItem {
@@ -64,7 +65,7 @@ export function useSearchSuggestions(
     }
 
     // Vérifier le cache
-    const cacheKey = `suggestions_${query.toLowerCase()}`;
+    const cacheKey = 'suggestions_${query.toLowerCase()}';
     const cached = cache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       setSuggestions(cached.data);
@@ -84,9 +85,7 @@ export function useSearchSuggestions(
     setError(null);
 
     try {
-      const response = await fetch(
-        `/api/proxy/search/suggest?q=${encodeURIComponent(query)}&limit=${maxSuggestions}`,
-        {
+      const response = await apiClient.get(`/api/search/suggest?q=${encodeURIComponent(query)}&limit=${maxSuggestions}`, {
           signal: abortControllerRef.current.signal,
         }
       );

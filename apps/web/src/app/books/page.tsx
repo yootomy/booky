@@ -10,6 +10,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { apiClient } from '@/utils/orpc';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useAuth } from '@/contexts/AuthContext';
+import { useViewMode } from '@/contexts/ViewModeContext';
+import { useMobileContext } from '@/contexts/MobileContext';
+import { MobileAwareLayout } from '@/components/mobile-aware-layout';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -160,34 +163,30 @@ const sortOptions = [
 // Skeleton Loader Component
 const BookSkeleton = ({ viewMode }: { viewMode: 'grid' | 'list' }) => (
   <Card
-    className={`overflow-hidden animate-pulse ${
+    className={`overflow-hidden animate-pulse bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
       viewMode === 'grid' ? 'book-card-grid' : 'h-32 flex'
-    } !p-0`}
+    } !p-0'}
     style={{
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-      backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(139, 21, 56, 0.1)',
-      borderRadius: '20px',
-      boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
+      borderRadius: '20px'
     }}
   >
     {viewMode === 'grid' ? (
       <>
         {/* Image placeholder avec ratio 2:3 exact */}
         <div className="book-cover-container">
-          <div className="w-full h-full bg-gray-200 rounded-none" />
+          <div className="w-full h-full bg-muted rounded-none" />
         </div>
 
         {/* Zone contenu exactement comme les vraies cartes */}
         <div className="book-content">
           <div className="mb-3">
-            <div className="h-4 bg-gray-200 rounded mb-2" />
-            <div className="h-3 bg-gray-200 rounded w-2/3" />
+            <div className="h-4 bg-muted rounded mb-2" />
+            <div className="h-3 bg-muted rounded w-2/3" />
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-3 bg-gray-200 rounded w-8" />
-              <div className="h-3 bg-gray-200 rounded w-8" />
+              <div className="h-3 bg-muted rounded w-8" />
+              <div className="h-3 bg-muted rounded w-8" />
             </div>
           </div>
         </div>
@@ -196,20 +195,20 @@ const BookSkeleton = ({ viewMode }: { viewMode: 'grid' | 'list' }) => (
       <CardContent className="!p-0 h-full flex">
         <div className="flex gap-4 p-4 h-full w-full">
           {/* Vignette 2:3 identique */}
-          <div className="w-16 flex-shrink-0 relative overflow-hidden rounded bg-gray-200" style={{ aspectRatio: '2/3' }} />
+          <div className="w-16 flex-shrink-0 relative overflow-hidden rounded bg-muted" style={{ aspectRatio: '2/3' }} />
 
           <div className="flex-1 min-w-0 flex flex-col justify-between">
             <div>
-              <div className="h-4 bg-gray-200 rounded mb-2" />
-              <div className="h-3 bg-gray-200 rounded w-3/4 mb-2" />
+              <div className="h-4 bg-muted rounded mb-2" />
+              <div className="h-3 bg-muted rounded w-3/4 mb-2" />
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-3 bg-gray-200 rounded w-8" />
-                <div className="h-3 bg-gray-200 rounded w-8" />
-                <div className="h-3 bg-gray-200 rounded w-8" />
+                <div className="h-3 bg-muted rounded w-8" />
+                <div className="h-3 bg-muted rounded w-8" />
+                <div className="h-3 bg-muted rounded w-8" />
               </div>
-              <div className="h-4 bg-gray-200 rounded w-12" />
+              <div className="h-4 bg-muted rounded w-12" />
             </div>
           </div>
         </div>
@@ -246,6 +245,8 @@ function BooksPageContent() {
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuth();
+  const { viewMode, setViewMode } = useViewMode();
+  const { isMobile } = useMobileContext();
   
   // Utiliser le hook useFavorites
   const { 
@@ -260,12 +261,17 @@ function BooksPageContent() {
   useEffect(() => {
     console.log('BooksPageContent: Favorites updated:', Array.from(favorites));
   }, [favorites]);
-  
+
   const [filters, setFilters] = useState<BookFilters>(defaultFilters);
   const [searchInput, setSearchInput] = useState('');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  // Scroll automatique en haut de page au chargement
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   
   // Initialiser les filtres depuis les paramètres d'URL
   useEffect(() => {
@@ -295,6 +301,9 @@ function BooksPageContent() {
       }
 
       setFilters(newFilters);
+
+      // Scroll en haut quand on arrive avec des paramètres URL
+      window.scrollTo(0, 0);
     }
   }, [searchParams]);
   
@@ -319,7 +328,7 @@ function BooksPageContent() {
     if (filters.genre && filters.genre !== 'ALL') params.category = filters.genre;
     if (filters.tags && filters.tags.length > 0) params.tag = filters.tags; // Passer l'array directement
     if (filters.rythme && filters.rythme !== 'ALL') params.rythme = filters.rythme;
-    if (filters.collection && filters.collection !== 'ALL') params.collection = filters.collection;
+    if (filters.collection && filters.collection !== 'ALL') params.liste_id = filters.collection;
 
     // Filtres numériques - utiliser les bons paramètres API
     if (filters.note_min !== 0) params.note_min = filters.note_min.toString();
@@ -334,9 +343,18 @@ function BooksPageContent() {
     return params;
   }, [filters, debouncedSearch]);
 
-  // Query pour récupérer les livres
+  // Query pour récupérer les livres avec une clé plus spécifique
   const booksQuery = useQuery({
-    queryKey: ['books', queryParams],
+    queryKey: [
+      'books',
+      queryParams,
+      // Ajouter des clés spécifiques pour forcer le refresh
+      filters.collection,
+      filters.search,
+      filters.genre,
+      filters.tags,
+      debouncedSearch
+    ],
     queryFn: async () => {
       const searchParams = new URLSearchParams();
       
@@ -350,13 +368,40 @@ function BooksPageContent() {
         }
       });
       
-      // Utiliser l'API de recherche si on a un terme de recherche, sinon l'API books normale
-      const endpoint = queryParams.q ? 
-        `/api/proxy/search?${searchParams}` : 
-        `/api/books?${searchParams}`;
-      
-      const response = await apiClient.get<BooksResponse>(endpoint);
-      return response;
+      // Choisir l'endpoint selon les paramètres
+      let endpoint;
+      if (queryParams.q) {
+        // API de recherche pour les recherches textuelles
+        endpoint = '/api/proxy/search?${searchParams}';
+      } else if (queryParams.liste_id) {
+        // API spécifique pour les collections
+        const listId = Array.isArray(queryParams.liste_id) ? queryParams.liste_id[0] : queryParams.liste_id;
+        console.log('Using collection API for listId:', listId);
+
+        // Retirer liste_id des paramètres pour cette API
+        const paramsWithoutListId = new URLSearchParams();
+        Object.entries(queryParams).forEach(([key, value]) => {
+          if (key !== 'liste_id') {
+            if (Array.isArray(value)) {
+              value.forEach(v => paramsWithoutListId.append(key, v));
+            } else {
+              paramsWithoutListId.append(key, value);
+            }
+          }
+        });
+        endpoint = '/api/proxy/lists/${listId}/books?${paramsWithoutListId}';
+      } else {
+        // API books standard
+        console.log('Using standard books API');
+        endpoint = '/api/proxy/books?${searchParams}';
+      }
+
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      const data = await response.json();
+      return data;
     },
     placeholderData: (previousData) => previousData, // Équivalent de keepPreviousData
     staleTime: 30000, // 30s - garde les données fraîches plus longtemps
@@ -364,12 +409,23 @@ function BooksPageContent() {
     refetchOnWindowFocus: false // Évite les refetch inutiles
   });
 
+  // Force le refetch quand les filtres importants changent
+  useEffect(() => {
+    console.log('Filters changed, forcing refetch. Collection:', filters.collection);
+    if (booksQuery.refetch) {
+      booksQuery.refetch();
+    }
+  }, [filters.collection, filters.genre, filters.tags, debouncedSearch, booksQuery.refetch]);
+
   // Query pour récupérer les catégories (pour les filtres)
   const categoriesQuery = useQuery({
     queryKey: ['categories', 'active'],
     queryFn: async () => {
-      const response = await apiClient.get<any>('/api/categories?est_actif=true&limit=100');
-      return response;
+      const response = await apiClient.get('/api/categories?est_actif=true&limit=100');
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      return await response.json();
     }
   });
 
@@ -377,8 +433,11 @@ function BooksPageContent() {
   const tagsQuery = useQuery({
     queryKey: ['tags', 'active'],
     queryFn: async () => {
-      const response = await apiClient.get<any>('/api/tags?limit=100');
-      return response;
+      const response = await apiClient.get('/api/tags?limit=100');
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      return await response.json();
     }
   });
 
@@ -386,8 +445,11 @@ function BooksPageContent() {
   const collectionsQuery = useQuery({
     queryKey: ['collections'],
     queryFn: async () => {
-      const response = await apiClient.get<any>('/api/lists?est_publique=true&limit=100');
-      return response;
+      const response = await apiClient.get('/api/lists?est_publique=true&limit=100');
+      if (!response.ok) {
+        throw new Error('HTTP error! status: ${response.status}');
+      }
+      return await response.json();
     }
   });
 
@@ -403,7 +465,7 @@ function BooksPageContent() {
         action: {
           label: 'Se connecter',
           onClick: () => {
-            window.location.href = '/auth/login';
+            window.location.href = '/login';
           }
         }
       });
@@ -437,10 +499,10 @@ function BooksPageContent() {
 
   const getStatusBadgeColor = (statut: string) => {
     switch (statut) {
-      case 'LU': return 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-emerald-200';
-      case 'EN_COURS': return 'bg-gradient-to-r from-violet-50 to-violet-100 text-violet-800 border-violet-200';
-      case 'A_LIRE': return 'bg-gradient-to-r from-amber-50 to-amber-100 text-amber-800 border-amber-200';
-      default: return 'bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-gray-200';
+      case 'LU': return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700';
+      case 'EN_COURS': return 'bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 border-violet-200 dark:border-violet-700';
+      case 'A_LIRE': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700';
+      default: return 'bg-muted text-foreground border-border';
     }
   };
 
@@ -448,13 +510,33 @@ function BooksPageContent() {
     return Array.from({ length: 10 }, (_, i) => (
       <Star 
         key={i} 
-        className={`w-3 h-3 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+        className={`w-3 h-3 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}'}
       />
     ));
   };
 
   // Filtrer les livres en fonction des favoris si nécessaire
-  const allBooks = booksQuery.data?.data || [];
+  // Gérer les différentes structures de réponse selon l'API utilisée
+  const allBooks = useMemo(() => {
+    if (!booksQuery.data) return [];
+
+    // Pour l'API collections (/lists/{id}/books), les livres sont dans data.data.books
+    if (booksQuery.data.data?.books && Array.isArray(booksQuery.data.data.books)) {
+      console.log('Using collection API structure - books found:', booksQuery.data.data.books.length);
+      return booksQuery.data.data.books;
+    }
+
+    // Pour les autres APIs, les livres sont dans data.data
+    if (booksQuery.data.data && Array.isArray(booksQuery.data.data)) {
+      console.log('Using standard API structure - books found:', booksQuery.data.data.length);
+      return booksQuery.data.data;
+    }
+
+    // Fallback si la structure est différente
+    console.warn('Structure de réponse inattendue:', booksQuery.data);
+    return [];
+  }, [booksQuery.data]);
+
   const books = useMemo(() => {
     console.log('BooksPageContent: Filtering books', {
       allBooksCount: allBooks.length,
@@ -470,39 +552,105 @@ function BooksPageContent() {
     
     // Filtrer uniquement les livres favoris
     console.log('=== FILTERING FAVORITES ===');
-    console.log('Available books:', allBooks.map(b => ({ id: b.id, titre: b.titre })));
+    console.log('Available books:', allBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
     console.log('Current favorites:', Array.from(favorites));
-    console.log('Book IDs type check:', allBooks.slice(0, 3).map(b => ({ id: b.id, type: typeof b.id })));
-    console.log('Favorite IDs type check:', Array.from(favorites).slice(0, 3).map(id => ({ id, type: typeof id })));
+    console.log('Book IDs type check:', allBooks.slice(0, 3).map((b: any) => ({ id: b.id, type: typeof b.id })));
+    console.log('Favorite IDs type check:', Array.from(favorites).slice(0, 3).map((id: any) => ({ id, type: typeof id })));
 
-    const filteredBooks = allBooks.filter(book => {
+    const filteredBooks = allBooks.filter((book: any) => {
       const isBookFavorite = isFavorite(book.id);
-      console.log(`Checking book ${book.id} (${book.titre}): ${isBookFavorite ? 'FAVORITE' : 'not favorite'}`);
+      console.log(`Checking book ${book.id} (${book.titre}): ${isBookFavorite ? 'FAVORITE' : 'not favorite'}');
       return isBookFavorite;
     });
     
-    console.log(`✅ Filtered ${filteredBooks.length} favorite books out of ${allBooks.length} total books`);
-    console.log('Favorite books found:', filteredBooks.map(b => ({ id: b.id, titre: b.titre })));
+    console.log('✅ Filtered ${filteredBooks.length} favorite books out of ${allBooks.length} total books');
+    console.log('Favorite books found:', filteredBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
     console.log('=== END FILTERING ===');
     
     return filteredBooks;
   }, [allBooks, filters.favoritesOnly, isAuthenticated, isFavorite, favorites.size]);
-  
-  const pagination = booksQuery.data?.pagination;
-  const searchInfo = booksQuery.data?.search_info;
+
+  // Gérer la pagination selon la structure de réponse
+  const pagination = useMemo(() => {
+    if (!booksQuery.data) return null;
+
+    // Structure standard avec pagination
+    if (booksQuery.data.pagination) {
+      return booksQuery.data.pagination;
+    }
+
+    // Pour l'API collections, créer une pagination basique
+    if (booksQuery.data.data?.books) {
+      return {
+        page: 1,
+        limit: booksQuery.data.data.books.length,
+        totalCount: booksQuery.data.data.books.length,
+        totalPages: 1,
+        hasNextPage: false,
+        hasPreviousPage: false
+      };
+    }
+
+    return null;
+  }, [booksQuery.data]);
+
+  const searchInfo = useMemo(() => {
+    if (!booksQuery.data) return null;
+
+    // Structure standard avec search_info
+    if (booksQuery.data.search_info) {
+      return booksQuery.data.search_info;
+    }
+
+    // Pour l'API collections, créer des infos basiques
+    if (booksQuery.data.data?.books) {
+      return {
+        total_results: booksQuery.data.data.books.length,
+        filters_applied: filters.collection !== 'ALL' ? ['collection'] : [],
+        execution_time_ms: 0
+      };
+    }
+
+    return null;
+  }, [booksQuery.data, filters.collection]);
   const categories = categoriesQuery.data?.data || [];
   const tags = tagsQuery.data?.data || [];
 
   return (
-    <>
-      <div className="w-full" style={{
-        backgroundColor: '#FAF8F5',
-        minHeight: '100vh',
-        height: '100%'
-      }}>
+    <MobileAwareLayout>
 
         <div className="relative z-10">
-        <style jsx global>{`
+
+        {/* Header Hero Section - Style identique à /lists */}
+        <div className="text-center mb-12 space-y-6 pt-8">
+          <div className="space-y-4">
+            <h1
+              className="text-5xl md:text-6xl font-bold text-foreground"
+              style={{ fontFamily: 'Playfair Display, serif' }}
+            >
+              Mon Catalogue de{' '}
+              <span
+                className="block mt-2"
+                style={{
+                  background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
+              >
+                Dark Romance
+              </span>
+            </h1>
+            <p
+              className="text-xl max-w-3xl mx-auto leading-relaxed text-foreground/80"
+            >
+              Explorez ma collection complète de romans captivants, où passion, mystère et émotions intenses
+              se mêlent pour créer des histoires inoubliables.
+            </p>
+          </div>
+        </div>
+
+        <style jsx global>{'
           .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
           }
@@ -525,7 +673,6 @@ function BooksPageContent() {
             height: auto; /* Hauteur auto basée sur le ratio + contenu */
             padding: 0 !important; /* Force zéro padding */
             margin: 0; /* Zéro marge externe */
-            border: 1px solid #e5e7eb; /* Bordure explicite */
             gap: 0; /* Aucun gap entre les enfants flex */
             /* Assurer que l'image colle parfaitement partout */
           }
@@ -608,7 +755,6 @@ function BooksPageContent() {
             margin: 0; /* Zéro marge */
             margin-top: 0 !important; /* Force zéro marge en haut */
             border: none; /* Aucune bordure */
-            background: white; /* Fond blanc pour la zone contenu */
             /* Coller directement à l'image */
             border-top: none;
           }
@@ -676,189 +822,154 @@ function BooksPageContent() {
             position: relative;
             z-index: 1;
           }
-        `}</style>
+        '}</style>
         <div className="container mx-auto max-w-7xl px-4 py-4">
         
-        {/* Barre d'outils compacte STICKY */}
+        {/* Barre d'outils STICKY - Mobile Simple / Desktop Complète */}
         <div className="mb-6">
           <div
-            className="sticky top-16 z-40 py-6 -mx-4 px-8 mb-6 rounded-2xl"
-            style={{
-              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(139, 21, 56, 0.1)',
-              boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
-            }}
+            className="sticky top-16 z-30 py-4 md:py-6 mx-2 md:-mx-4 px-4 md:px-8 mb-6 rounded-2xl bg-background/95 backdrop-blur-xl border border-border shadow-lg"
           >
-            <div className="flex items-center gap-3 flex-wrap">
-            {/* Recherche */}
-            <div className="relative">
-              <Search
-                className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5"
-                style={{color: '#6B4C7B', strokeWidth: 1.5}}
-              />
-              <Input
-                type="text"
-                placeholder="Rechercher votre prochaine passion..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '1rem',
-                  height: '56px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  backdropFilter: 'blur(10px)',
-                  border: '2px solid rgba(107, 76, 123, 0.2)',
-                  borderRadius: '28px',
-                  paddingLeft: '3rem',
-                  paddingRight: '1.5rem',
-                  color: '#2C1810',
-                  boxShadow: '0 8px 32px rgba(139, 21, 56, 0.1)',
-                  transition: 'all 0.3s ease',
-                  width: '320px'
-                }}
-                className="placeholder:text-gray-500 focus:outline-none focus:border-[#8B1538] focus:shadow-lg focus:shadow-red-100/30"
-              />
+            {/* VERSION MOBILE - Simplifiée */}
+            <div className="flex md:hidden items-center gap-3">
+              {/* Recherche mobile */}
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary" />
+                <Input
+                  type="text"
+                  placeholder="Rechercher..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="h-12 w-full pl-12 pr-6 rounded-full bg-background border-2 border-primary/20 text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-300 text-base"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                />
+              </div>
+
+              {/* Bouton Filtrer mobile */}
+              <button
+                onClick={() => setIsMobileFiltersOpen(true)}
+                className="group px-4 py-3 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-2 bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-medium text-base min-h-[48px] whitespace-nowrap"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <Filter className="w-4 h-4" />
+                <span>Filtrer</span>
+                {(filters.statut !== 'ALL' || filters.genre !== 'ALL' || filters.tags.length > 0 ||
+                  filters.auteur || filters.rythme !== 'ALL' || filters.note_min > 0 || filters.note_max < 10 ||
+                  filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
+                  filters.niveau_dark[0] > 0 || filters.niveau_dark[1] < 10 || filters.favoritesOnly) && (
+                  <div className="w-2 h-2 rounded-full bg-primary" />
+                )}
+              </button>
             </div>
 
-            {/* Séparateur */}
-            <Separator orientation="vertical" className="h-6" />
+            {/* VERSION DESKTOP - Complète */}
+            <div className="hidden md:flex flex-row items-center gap-3">
+              {/* Recherche desktop */}
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary" />
+                <Input
+                  type="text"
+                  placeholder="Rechercher votre prochaine passion..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="h-14 w-80 pl-12 pr-6 rounded-full bg-background border-2 border-primary/20 text-foreground placeholder:text-foreground/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-300 text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                />
+              </div>
 
-            {/* Filtres rapides */}
-            <button
-              onClick={() => setFiltersOpen(!filtersOpen)}
-              className="group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-3"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: '2px solid rgba(107, 76, 123, 0.3)',
-                color: '#6B4C7B',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                boxShadow: '0 4px 20px rgba(107, 76, 123, 0.15)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.5)';
-                e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-                e.currentTarget.style.transform = 'none';
-              }}
-            >
-              <Filter className="w-4 h-4" style={{strokeWidth: 1.5}} />
-              Filtres
-              {filtersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              {(filters.statut !== 'ALL' || filters.genre !== 'ALL' || filters.tags.length > 0 ||
-                filters.auteur || filters.rythme !== 'ALL' || filters.note_min > 0 || filters.note_max < 10 ||
-                filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
-                filters.niveau_dark[0] > 0 || filters.niveau_dark[1] < 10 || filters.favoritesOnly) && (
-                <div className="w-2 h-2 rounded-full" style={{backgroundColor: '#8B1538'}} />
-              )}
-            </button>
+              <Separator orientation="vertical" className="h-6" />
 
-            {/* Tri rapide */}
-            <Select 
-              value={filters.sort} 
-              onValueChange={(value) => updateFilters({ sort: value })}
-            >
-              <SelectTrigger className="w-40 h-10 bg-white border-gray-300">
-                <SortAsc className="w-4 h-4 mr-2" />
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {sortOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => updateFilters({ order: filters.order === 'asc' ? 'desc' : 'asc' })}
-              className="h-10 px-2"
-              title={`Trier par ordre ${filters.order === 'asc' ? 'décroissant' : 'croissant'}`}
-            >
-              {filters.order === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
-            </Button>
-
-            {/* Séparateur */}
-            <Separator orientation="vertical" className="h-6" />
-
-            {/* Mode d'affichage */}
-            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-                className="h-8 px-3"
-                title="Vue en grille"
+              {/* Filtres rapides desktop */}
+              <button
+                onClick={() => setFiltersOpen(!filtersOpen)}
+                className="group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-medium text-sm"
+                style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                <Grid className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="h-8 px-3"
-                title="Vue en liste"
+                <Filter className="w-4 h-4" />
+                <span>Filtres</span>
+                {filtersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                {(filters.statut !== 'ALL' || filters.genre !== 'ALL' || filters.tags.length > 0 ||
+                  filters.auteur || filters.rythme !== 'ALL' || filters.note_min > 0 || filters.note_max < 10 ||
+                  filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
+                  filters.niveau_dark[0] > 0 || filters.niveau_dark[1] < 10 || filters.favoritesOnly) && (
+                  <div className="w-2 h-2 rounded-full bg-primary" />
+                )}
+              </button>
+
+              {/* Tri rapide desktop */}
+              <Select
+                value={filters.sort}
+                onValueChange={(value) => updateFilters({ sort: value })}
               >
-                <List className="w-4 h-4" />
+                <SelectTrigger className="w-40 h-12 bg-background border-border text-foreground text-sm">
+                  <SortAsc className="w-4 h-4 mr-2" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {sortOptions.map(option => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => updateFilters({ order: filters.order === 'asc' ? 'desc' : 'asc' })}
+                className="h-10 px-2"
+                title={`Trier par ordre ${filters.order === 'asc' ? 'décroissant' : 'croissant'}'}
+              >
+                {filters.order === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
               </Button>
-            </div>
 
-            {/* Séparateur */}
-            <Separator orientation="vertical" className="h-6" />
+              <Separator orientation="vertical" className="h-6" />
 
-            {/* Favoris */}
-            <button
-              onClick={handleFavoritesFilter}
-              disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
-              className="group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{
-                background: filters.favoritesOnly
-                  ? 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'
-                  : 'rgba(255, 255, 255, 0.9)',
-                backdropFilter: 'blur(10px)',
-                border: filters.favoritesOnly
-                  ? 'none'
-                  : '2px solid rgba(107, 76, 123, 0.3)',
-                color: filters.favoritesOnly ? 'white' : '#6B4C7B',
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                boxShadow: filters.favoritesOnly
-                  ? '0 8px 25px rgba(139, 21, 56, 0.3)'
-                  : '0 4px 20px rgba(107, 76, 123, 0.15)',
-              }}
-              title={isAuthenticated ?
-                (filters.favoritesOnly ? "Afficher tous les livres" : "Afficher uniquement mes favoris") :
-                "Connectez-vous pour voir vos favoris"
-              }
-              onMouseEnter={(e) => {
-                if (!filters.favoritesOnly && !e.currentTarget.disabled) {
-                  e.currentTarget.style.backgroundColor = 'rgba(107, 76, 123, 0.05)';
-                  e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.5)';
-                  e.currentTarget.style.transform = 'translateY(-1px) scale(1.05)';
+              {/* Mode d'affichage desktop */}
+              <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="h-8 px-3"
+                  title="Vue en grille"
+                >
+                  <Grid className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="h-8 px-3"
+                  title="Vue en liste"
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <Separator orientation="vertical" className="h-6" />
+
+              {/* Favoris desktop */}
+              <button
+                onClick={handleFavoritesFilter}
+                disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
+                className={`group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-base ${
+                  filters.favoritesOnly
+                    ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg'
+                    : 'bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50'
+                }'}
+                style={{ fontFamily: 'Inter, sans-serif' }}
+                title={isAuthenticated ?
+                  (filters.favoritesOnly ? "Afficher tous les livres" : "Afficher uniquement mes favoris") :
+                  "Connectez-vous pour voir vos favoris"
                 }
-              }}
-              onMouseLeave={(e) => {
-                if (!filters.favoritesOnly && !e.currentTarget.disabled) {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                  e.currentTarget.style.borderColor = 'rgba(107, 76, 123, 0.3)';
-                  e.currentTarget.style.transform = 'none';
-                }
-              }}
-            >
-              <Heart className={`w-4 h-4 ${filters.favoritesOnly ? 'fill-current' : ''}`} />
-              Favoris : {filters.favoritesOnly ? `Mes favoris (${favorites.size})` : 'Tous'}
-            </button>
+              >
+                <Heart className={`w-4 h-4 ${filters.favoritesOnly ? 'fill-current' : ''}'} />
+                <span>
+                  {filters.favoritesOnly ? 'Mes favoris (${favorites.size})' : 'Favoris'}
+                </span>
+              </button>
             </div>
           </div>
 
@@ -872,37 +983,23 @@ function BooksPageContent() {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <Card
-                  className="shadow-xl border-0 overflow-hidden"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                    backdropFilter: 'blur(20px)',
-                    borderRadius: '24px',
-                    boxShadow: '0 12px 40px rgba(139, 21, 56, 0.15)'
-                  }}
-                >
-                  <CardContent className="p-8">
+                <Card className="bg-card/95 backdrop-blur-xl border border-border shadow-xl rounded-3xl overflow-hidden relative z-40">
+                  <CardContent className="p-3 md:p-8">
                     
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center justify-between mb-4 md:mb-8">
                       <h3
-                        className="font-bold flex items-center gap-3 text-xl"
-                        style={{
-                          fontFamily: 'Playfair Display, serif',
-                          background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          backgroundClip: 'text'
-                        }}
+                        className="font-bold flex items-center gap-3 text-xl text-foreground"
+                        style={{ fontFamily: 'Playfair Display, serif' }}
                       >
-                        <Filter className="w-5 h-5" style={{color: '#6B4C7B'}} />
+                        <Filter className="w-5 h-5 text-primary" />
                         Filtres avancés
                       </h3>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={resetFilters}
-                        className="text-xs text-gray-500 hover:text-purple-600"
+                        className="text-xs text-foreground/60 hover:text-primary"
                       >
                         <RefreshCcw className="w-3 h-3 mr-1" />
                         Réinitialiser
@@ -910,18 +1007,18 @@ function BooksPageContent() {
                     </div>
 
                     {/* Filters Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                       
                       {/* Status & Genre */}
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         {/* Status Filter */}
                         <div>
                           <Label className="text-sm font-medium mb-2 block">Statut</Label>
-                          <Select 
-                            value={filters.statut} 
+                          <Select
+                            value={filters.statut}
                             onValueChange={(value) => updateFilters({ statut: value })}
                           >
-                            <SelectTrigger className="h-9">
+                            <SelectTrigger className="h-11 md:h-9 text-base md:text-sm">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -937,11 +1034,11 @@ function BooksPageContent() {
                         {/* Genre Filter */}
                         <div>
                           <Label className="text-sm font-medium mb-2 block">Genre</Label>
-                          <Select 
-                            value={filters.genre} 
+                          <Select
+                            value={filters.genre}
                             onValueChange={(value) => updateFilters({ genre: value })}
                           >
-                            <SelectTrigger className="h-9">
+                            <SelectTrigger className="h-11 md:h-9 text-base md:text-sm">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -962,7 +1059,7 @@ function BooksPageContent() {
                             value={filters.collection}
                             onValueChange={(value) => updateFilters({ collection: value })}
                           >
-                            <SelectTrigger className="h-9">
+                            <SelectTrigger className="h-11 md:h-9 text-base md:text-sm">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -978,7 +1075,7 @@ function BooksPageContent() {
                       </div>
 
                       {/* Tags & Author */}
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         {/* Tags Selection */}
                         <div>
                           <Label className="text-sm font-medium mb-2 block">
@@ -1000,7 +1097,7 @@ function BooksPageContent() {
                                         backgroundColor: tag.couleur + '20',
                                         borderColor: tag.couleur,
                                         color: tag.couleur,
-                                        border: `1px solid ${tag.couleur}`
+                                        border: '1px solid ${tag.couleur}'
                                       }}
                                       onClick={() => removeTag(tagId)}
                                     >
@@ -1021,7 +1118,7 @@ function BooksPageContent() {
                           {/* Tag Selection Button */}
                           <Button
                             variant="outline"
-                            className="w-full justify-center"
+                            className="w-full justify-center h-11 md:h-9 text-base md:text-sm"
                             onClick={() => setIsTagModalOpen(true)}
                           >
                             <Tag className="w-4 h-4 mr-2" />
@@ -1038,16 +1135,16 @@ function BooksPageContent() {
                             placeholder="Nom de l'auteur"
                             value={filters.auteur}
                             onChange={(e) => updateFilters({ auteur: e.target.value })}
-                            className="h-9"
+                            className="h-11 md:h-9 text-base md:text-sm"
                           />
                         </div>
                       </div>
 
                       {/* Rating & Rhythm */}
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         {/* Rating Range */}
                         <div>
-                          <Label className="text-sm font-medium mb-2 block">
+                          <Label className="text-sm font-medium mb-3 block">
                             Note ({filters.note_min} - {filters.note_max})
                           </Label>
                           <div className="px-1">
@@ -1057,7 +1154,7 @@ function BooksPageContent() {
                               max={10}
                               min={0}
                               step={1}
-                              className="w-full"
+                              className="w-full h-6 md:h-auto"
                             />
                             <div className="flex justify-between text-xs text-gray-500 mt-1">
                               <span>0</span>
@@ -1069,11 +1166,11 @@ function BooksPageContent() {
                         {/* Rhythm Filter */}
                         <div>
                           <Label className="text-sm font-medium mb-2 block">Rythme</Label>
-                          <Select 
-                            value={filters.rythme} 
+                          <Select
+                            value={filters.rythme}
                             onValueChange={(value) => updateFilters({ rythme: value })}
                           >
-                            <SelectTrigger className="h-9">
+                            <SelectTrigger className="h-11 md:h-9 text-base md:text-sm">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1088,10 +1185,10 @@ function BooksPageContent() {
                       </div>
 
                       {/* Levels */}
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         {/* Spicy Level */}
                         <div>
-                          <Label className="text-sm font-medium mb-2 block">
+                          <Label className="text-sm font-medium mb-3 block">
                             🌶️ Spicy ({filters.niveau_spicy[0]} - {filters.niveau_spicy[1]})
                           </Label>
                           <div className="px-1">
@@ -1101,7 +1198,7 @@ function BooksPageContent() {
                               max={10}
                               min={0}
                               step={1}
-                              className="w-full"
+                              className="w-full h-6 md:h-auto"
                             />
                             <div className="flex justify-between text-xs text-gray-500 mt-1">
                               <span>0</span>
@@ -1113,7 +1210,7 @@ function BooksPageContent() {
 
                         {/* Dark Level */}
                         <div>
-                          <Label className="text-sm font-medium mb-2 block">
+                          <Label className="text-sm font-medium mb-3 block">
                             🖤 Dark ({filters.niveau_dark[0]} - {filters.niveau_dark[1]})
                           </Label>
                           <div className="px-1">
@@ -1123,7 +1220,7 @@ function BooksPageContent() {
                               max={10}
                               min={0}
                               step={1}
-                              className="w-full"
+                              className="w-full h-6 md:h-auto"
                             />
                             <div className="flex justify-between text-xs text-gray-500 mt-1">
                               <span>0</span>
@@ -1148,11 +1245,11 @@ function BooksPageContent() {
             <div className="flex items-center gap-4 mb-6 flex-wrap">
               {/* Compteur de résultats */}
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-gray-900 font-medium">
+                <span className="text-foreground font-medium">
                   <strong>{searchInfo?.total_results || books.length}</strong> livre{(searchInfo?.total_results || books.length) > 1 ? 's' : ''} trouvé{(searchInfo?.total_results || books.length) > 1 ? 's' : ''}
                 </span>
                 {booksQuery.isFetching && (
-                  <div className="w-3 h-3 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                 )}
               </div>
 
@@ -1162,7 +1259,7 @@ function BooksPageContent() {
                 {debouncedSearch && (
                   <Badge 
                     variant="secondary" 
-                    className="bg-purple-100 text-purple-800 hover:bg-purple-200 cursor-pointer gap-1"
+                    className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 cursor-pointer gap-1"
                     onClick={() => setSearchInput('')}
                   >
                     Recherche: "{debouncedSearch}"
@@ -1174,7 +1271,7 @@ function BooksPageContent() {
                 {filters.statut !== 'ALL' && (
                   <Badge 
                     variant="secondary" 
-                    className="bg-blue-100 text-blue-800 hover:bg-blue-200 cursor-pointer gap-1"
+                    className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 cursor-pointer gap-1"
                     onClick={() => updateFilters({ statut: 'ALL' })}
                   >
                     Statut: {statutOptions.find(s => s.value === filters.statut)?.label}
@@ -1186,7 +1283,7 @@ function BooksPageContent() {
                 {filters.genre !== 'ALL' && (
                   <Badge 
                     variant="secondary" 
-                    className="bg-green-100 text-green-800 hover:bg-green-200 cursor-pointer gap-1"
+                    className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 cursor-pointer gap-1"
                     onClick={() => updateFilters({ genre: 'ALL' })}
                   >
                     Genre: {categories.find((c: any) => c.id === filters.genre)?.nom || 'Sélectionné'}
@@ -1198,17 +1295,12 @@ function BooksPageContent() {
                 {filters.tags.length > 0 && (
                   <Badge
                     variant="secondary"
-                    className="cursor-pointer gap-1"
-                    style={{
-                      backgroundColor: 'rgba(139, 21, 56, 0.1)',
-                      color: '#8B1538',
-                      border: '1px solid rgba(139, 21, 56, 0.2)'
-                    }}
+                    className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 cursor-pointer gap-1"
                     onClick={() => updateFilters({ tags: [] })}
                   >
                     {filters.tags.length === 1
-                      ? `Tag: ${tags.find((t: any) => t.id === filters.tags[0])?.nom || 'Sélectionné'}`
-                      : `Tags (${filters.tags.length})`
+                      ? `Tag: ${tags.find((t: any) => t.id === filters.tags[0])?.nom || 'Sélectionné'}'
+                      : 'Tags (${filters.tags.length})'
                     }
                     <X className="w-3 h-3" />
                   </Badge>
@@ -1218,7 +1310,7 @@ function BooksPageContent() {
                 {filters.collection !== 'ALL' && (
                   <Badge
                     variant="secondary"
-                    className="bg-purple-100 text-purple-800 hover:bg-purple-200 cursor-pointer gap-1"
+                    className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 cursor-pointer gap-1"
                     onClick={() => updateFilters({ collection: 'ALL' })}
                   >
                     Collection: {collectionsQuery.data?.data?.find((c: any) => c.id === filters.collection)?.nom || 'Sélectionnée'}
@@ -1230,7 +1322,7 @@ function BooksPageContent() {
                 {filters.auteur && (
                   <Badge 
                     variant="secondary" 
-                    className="bg-indigo-100 text-indigo-800 hover:bg-indigo-200 cursor-pointer gap-1"
+                    className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-900/50 cursor-pointer gap-1"
                     onClick={() => updateFilters({ auteur: '' })}
                   >
                     Auteur: {filters.auteur}
@@ -1242,7 +1334,7 @@ function BooksPageContent() {
                 {(filters.note_min > 0 || filters.note_max < 10) && (
                   <Badge 
                     variant="secondary" 
-                    className="bg-orange-100 text-orange-800 hover:bg-orange-200 cursor-pointer gap-1"
+                    className="bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 hover:bg-orange-200 dark:hover:bg-orange-900/50 cursor-pointer gap-1"
                     onClick={() => updateFilters({ note_min: 0, note_max: 10 })}
                   >
                     Note: {filters.note_min}-{filters.note_max}
@@ -1254,7 +1346,7 @@ function BooksPageContent() {
                 {filters.favoritesOnly && (
                   <Badge 
                     variant="secondary" 
-                    className="bg-red-100 text-red-800 hover:bg-red-200 cursor-pointer gap-1"
+                    className="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50 cursor-pointer gap-1"
                     onClick={() => updateFilters({ favoritesOnly: false })}
                   >
                     Mes favoris
@@ -1315,9 +1407,9 @@ function BooksPageContent() {
               <>
                 {books.length === 0 ? (
                   <div className="text-center py-12">
-                    <Book className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">Aucun livre trouvé</h3>
-                    <p className="text-gray-600">
+                    <Book className="w-16 h-16 text-foreground/30 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-foreground mb-2">Aucun livre trouvé</h3>
+                    <p className="text-foreground/70">
                       Essayez de modifier vos critères de recherche ou de réinitialiser les filtres.
                     </p>
                   </div>
@@ -1344,40 +1436,14 @@ function BooksPageContent() {
                             transition={{ delay: index * 0.05 }}
                             className="relative group"
                           >
-                            {/* Favorite Button - Discret en overlay */}
-                            <motion.button
-                              className="absolute top-2 right-2 z-20 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200"
-                              variants={heartVariants}
-                              animate={bookIsFavorite ? "active" : "inactive"}
-                              whileHover="hover"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                handleFavoriteToggle(book.id);
-                              }}
-                              title={bookIsFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
-                              aria-label={bookIsFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
-                            >
-                              <Heart 
-                                className={`w-4 h-4 transition-colors ${
-                                  bookIsFavorite 
-                                    ? 'fill-red-500 text-red-500' 
-                                    : 'text-gray-600 hover:text-red-500'
-                                }`}
-                              />
-                            </motion.button>
 
-                            <Link href={`/books/${book.id}`}>
+                            <Link href={'/books/${book.id}'}>
                               <Card
-                                className={`overflow-hidden cursor-pointer ${
+                                className={`overflow-hidden cursor-pointer bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
                                   viewMode === 'grid' ? 'book-card-grid' : 'h-32 flex'
-                                } !p-0 group-hover:scale-105 transition-all duration-300`}
+                                } !p-0 group-hover:scale-105 transition-all duration-300'}
                                 style={{
-                                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                                  backdropFilter: 'blur(20px)',
-                                  border: '1px solid rgba(139, 21, 56, 0.1)',
                                   borderRadius: '20px',
-                                  boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)',
                                   transition: 'all 0.3s ease'
                                 }}
                                 onMouseEnter={(e) => {
@@ -1402,7 +1468,7 @@ function BooksPageContent() {
                                       {book.image_couverture ? (
                                         <img
                                           src={book.image_couverture}
-                                          alt={`${book.titre} — ${book.auteur}`}
+                                          alt={'${book.titre} — ${book.auteur}'}
                                           className="book-cover-image opacity-0"
                                           loading={index < 6 ? 'eager' : 'lazy'}
                                           onLoad={(e) => {
@@ -1431,32 +1497,17 @@ function BooksPageContent() {
                                     <div className="book-content">
                                       {/* En-tête : titre et auteur - DIRECTEMENT sous l'image */}
                                       <div className="mb-3">
-                                        <h3
-                                          className="font-semibold text-sm line-clamp-2 mb-2 transition-colors leading-tight m-0"
-                                          style={{
-                                            fontFamily: 'Inter, sans-serif',
-                                            color: '#2C1810',
-                                            fontSize: '0.875rem',
-                                            fontWeight: 600
-                                          }}
-                                        >
+                                        <h3 className="font-semibold text-sm line-clamp-2 mb-2 transition-colors leading-tight m-0 text-foreground">
                                           {book.titre}
                                         </h3>
-                                        <p
-                                          className="text-xs line-clamp-1 m-0"
-                                          style={{
-                                            fontFamily: 'Inter, sans-serif',
-                                            color: '#6B4C7B',
-                                            fontSize: '0.75rem'
-                                          }}
-                                        >
+                                        <p className="text-xs line-clamp-1 m-0 text-foreground/70">
                                           {book.auteur}
                                         </p>
                                       </div>
 
                                       {/* Pied : rangée méta sur une ligne */}
                                       <div className="flex items-center justify-between text-xs">
-                                        <div className="flex items-center gap-2 text-gray-500">
+                                        <div className="flex items-center gap-2 text-foreground/60">
                                           {book.note_generale > 0 && (
                                             <span className="flex items-center gap-0.5" title="Note générale" style={{ color: '#B8860B' }}>
                                               <Star className="w-3 h-3 fill-current" />
@@ -1485,7 +1536,7 @@ function BooksPageContent() {
                                         {book.image_couverture ? (
                                           <img 
                                             src={book.image_couverture} 
-                                            alt={`${book.titre} — ${book.auteur}`}
+                                            alt={'${book.titre} — ${book.auteur}'}
                                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             loading="lazy"
                                             onError={(e) => {
@@ -1498,8 +1549,8 @@ function BooksPageContent() {
                                           />
                                         ) : null}
                                         
-                                        <div className={`absolute inset-0 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center ${book.image_couverture ? 'hidden' : ''}`}>
-                                          <Book className="w-4 h-4 text-purple-400" />
+                                        <div className={`absolute inset-0 bg-muted flex items-center justify-center ${book.image_couverture ? 'hidden' : ''}'}>
+                                          <Book className="w-4 h-4 text-foreground/40" />
                                         </div>
 
                                       </div>
@@ -1508,10 +1559,10 @@ function BooksPageContent() {
                                       <div className="flex-1 min-w-0 flex flex-col justify-between">
                                         {/* En-tête */}
                                         <div>
-                                          <h3 className="font-semibold text-base text-gray-900 line-clamp-1 mb-1 group-hover:text-purple-700 transition-colors">
+                                          <h3 className="font-semibold text-base text-foreground line-clamp-1 mb-1 group-hover:text-primary transition-colors">
                                             {book.titre}
                                           </h3>
-                                          <p className="text-sm text-gray-600 line-clamp-1 mb-2 flex items-center">
+                                          <p className="text-sm text-foreground/70 line-clamp-1 mb-2 flex items-center">
                                             <User className="w-3 h-3 mr-1" />
                                             {book.auteur}
                                           </p>
@@ -1519,7 +1570,7 @@ function BooksPageContent() {
 
                                         {/* Pied */}
                                         <div className="flex items-center justify-between">
-                                          <div className="flex items-center gap-3 text-sm text-gray-500">
+                                          <div className="flex items-center gap-3 text-sm text-foreground/60">
                                             {book.note_generale > 0 && (
                                               <span className="flex items-center gap-1" title="Note générale" style={{ color: '#B8860B' }}>
                                                 <Star className="w-3 h-3 fill-current" />
@@ -1530,6 +1581,26 @@ function BooksPageContent() {
                                             <span title="Niveau Dark">🖤{book.niveau_dark}</span>
                                             <span title="Romance">💖{book.niveau_romance}</span>
                                           </div>
+
+                                          {/* Favorite Button for list view */}
+                                          <button
+                                            onClick={(e) => {
+                                              e.preventDefault();
+                                              e.stopPropagation();
+                                              handleFavoriteToggle(book.id);
+                                            }}
+                                            className="p-1 rounded-full hover:bg-background/50 transition-colors"
+                                            title={bookIsFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+                                            aria-label={bookIsFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+                                          >
+                                            <Heart
+                                              className={`w-4 h-4 transition-colors ${
+                                                bookIsFavorite
+                                                  ? 'fill-red-500 text-red-500'
+                                                  : 'text-gray-600 hover:text-red-500'
+                                              }'}
+                                            />
+                                          </button>
                                         </div>
                                       </div>
                                     </div>
@@ -1612,8 +1683,8 @@ function BooksPageContent() {
                     </Button>
                     
                     {/* Info pagination */}
-                    <div className="ml-4 text-sm text-gray-600">
-                      Page {pagination.page} sur {pagination.totalPages} 
+                    <div className="ml-4 text-sm text-foreground/70">
+                      Page {pagination.page} sur {pagination.totalPages}
                       ({pagination.totalCount} livre{pagination.totalCount > 1 ? 's' : ''} au total)
                     </div>
                   </div>
@@ -1623,7 +1694,406 @@ function BooksPageContent() {
           </div>
         </div>
       </div>
-      </div>
+
+      {/* Mobile Filters Modal */}
+      <AnimatePresence>
+        {isMobileFiltersOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-0 md:p-4"
+            style={{
+              height: '100vh',
+              height: '100dvh',
+              background: 'rgba(0, 0, 0, 0.8)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)'
+            }}
+            onClick={() => setIsMobileFiltersOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: "100%" }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: "100%" }}
+              className="w-full h-full md:h-auto overflow-hidden md:rounded-lg md:max-w-lg md:w-full md:max-h-[80vh] md:border md:mx-4 flex flex-col md:bg-card"
+              style={{
+                height: '100vh',
+                height: '100dvh',
+                maxHeight: '100vh',
+                maxHeight: '100dvh',
+                background: 'var(--background)',
+                position: 'relative'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="p-4 md:p-6 border-b border-border bg-muted">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                    <Filter className="w-5 h-5 text-primary" />
+                    Filtres et options
+                  </h3>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsMobileFiltersOpen(false)}
+                    className="h-8 w-8 p-0"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="overflow-y-auto flex-1 md:max-h-[calc(80vh-160px)]">
+                <div className="p-4 md:p-6 space-y-6">
+
+                  {/* Favoris */}
+                  <div className="space-y-3">
+                    <Label className="text-base font-medium">Affichage</Label>
+                    <button
+                      onClick={handleFavoritesFilter}
+                      disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
+                      className={`w-full p-4 rounded-xl transition-all duration-300 flex items-center justify-between disabled:opacity-50 disabled:cursor-not-allowed ${
+                        filters.favoritesOnly
+                          ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg'
+                          : 'bg-muted hover:bg-muted/80 border border-border'
+                      }' }
+                    >
+                      <div className="flex items-center gap-3">
+                        <Heart className={`w-5 h-5 ${filters.favoritesOnly ? 'fill-current' : 'text-primary'}' } />
+                        <div className="text-left">
+                          <div className="font-medium">
+                            {filters.favoritesOnly ? 'Mes favoris (${favorites.size})' : 'Afficher mes favoris'}
+                          </div>
+                          <div className="text-sm opacity-75">
+                            {filters.favoritesOnly ? 'Affichage des favoris uniquement' : 'Afficher tous les livres'}
+                          </div>
+                        </div>
+                      </div>
+                      <div className={`w-5 h-5 rounded-full border-2 ${
+                        filters.favoritesOnly ? 'bg-background border-primary' : 'border-primary'
+                      }'}>
+                        {filters.favoritesOnly && (
+                          <div className="w-full h-full rounded-full bg-primary" />
+                        )}
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Tri et Ordre */}
+                  <div className="space-y-3">
+                    <Label className="text-base font-medium">Tri</Label>
+                    <div className="space-y-3">
+                      <Select
+                        value={filters.sort}
+                        onValueChange={(value) => updateFilters({ sort: value })}
+                      >
+                        <SelectTrigger className="h-12 text-base">
+                          <SortAsc className="w-4 h-4 mr-2" />
+                          <SelectValue placeholder="Trier par..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {sortOptions.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <div className="flex gap-2">
+                        <Button
+                          variant={filters.order === 'asc' ? 'default' : 'outline'}
+                          onClick={() => updateFilters({ order: 'asc' })}
+                          className="flex-1 h-12"
+                        >
+                          <SortAsc className="w-4 h-4 mr-2" />
+                          Croissant
+                        </Button>
+                        <Button
+                          variant={filters.order === 'desc' ? 'default' : 'outline'}
+                          onClick={() => updateFilters({ order: 'desc' })}
+                          className="flex-1 h-12"
+                        >
+                          <SortDesc className="w-4 h-4 mr-2" />
+                          Décroissant
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Mode d'affichage */}
+                  <div className="space-y-3">
+                    <Label className="text-base font-medium">Vue</Label>
+                    <div className="flex gap-2">
+                      <Button
+                        variant={viewMode === 'grid' ? 'default' : 'outline'}
+                        onClick={() => setViewMode('grid')}
+                        className="flex-1 h-12"
+                      >
+                        <Grid className="w-4 h-4 mr-2" />
+                        Grille
+                      </Button>
+                      <Button
+                        variant={viewMode === 'list' ? 'default' : 'outline'}
+                        onClick={() => setViewMode('list')}
+                        className="flex-1 h-12"
+                      >
+                        <List className="w-4 h-4 mr-2" />
+                        Liste
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Filtres avancés - Section collapsible */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-base font-medium">Filtres avancés</Label>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={resetFilters}
+                        className="text-primary hover:text-primary/80"
+                      >
+                        <RefreshCcw className="w-4 h-4 mr-1" />
+                        Réinitialiser
+                      </Button>
+                    </div>
+
+                    {/* Status Filter */}
+                    <div className="space-y-2">
+                      <Label className="text-sm text-muted-foreground">Statut</Label>
+                      <Select
+                        value={filters.statut}
+                        onValueChange={(value) => updateFilters({ statut: value })}
+                      >
+                        <SelectTrigger className="h-11">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {statutOptions.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Genre Filter */}
+                    <div className="space-y-2">
+                      <Label className="text-sm text-muted-foreground">Genre</Label>
+                      <Select
+                        value={filters.genre}
+                        onValueChange={(value) => updateFilters({ genre: value })}
+                      >
+                        <SelectTrigger className="h-11">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ALL">Tous les genres</SelectItem>
+                          {categories.map((category: any) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.icone} {category.nom}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Collection Filter */}
+                    <div className="space-y-2">
+                      <Label className="text-sm text-muted-foreground">Collection</Label>
+                      <Select
+                        value={filters.collection}
+                        onValueChange={(value) => updateFilters({ collection: value })}
+                      >
+                        <SelectTrigger className="h-11">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="ALL">Toutes les collections</SelectItem>
+                          {collectionsQuery.data?.success && collectionsQuery.data?.data?.map((collection: any) => (
+                            <SelectItem key={collection.id} value={collection.id}>
+                              {collection.nom}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Rythme Filter */}
+                    <div className="space-y-2">
+                      <Label className="text-sm text-muted-foreground">Rythme</Label>
+                      <Select
+                        value={filters.rythme}
+                        onValueChange={(value) => updateFilters({ rythme: value })}
+                      >
+                        <SelectTrigger className="h-11">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {rythmeOptions.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Author Filter */}
+                    <div className="space-y-2">
+                      <Label className="text-sm text-muted-foreground">Auteur</Label>
+                      <Input
+                        type="text"
+                        placeholder="Nom de l'auteur"
+                        value={filters.auteur}
+                        onChange={(e) => updateFilters({ auteur: e.target.value })}
+                        className="h-11"
+                      />
+                    </div>
+
+                    {/* Tags Selection */}
+                    <div className="space-y-2">
+                      <Label className="text-sm text-muted-foreground">
+                        Tags ({filters.tags.length} sélectionné{filters.tags.length > 1 ? 's' : ''})
+                      </Label>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-center h-11"
+                        onClick={() => {
+                          setIsTagModalOpen(true);
+                          setIsMobileFiltersOpen(false);
+                        }}
+                      >
+                        <Tag className="w-4 h-4 mr-2" />
+                        Sélectionner les tags
+                      </Button>
+                      {filters.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {filters.tags.slice(0, 3).map(tagId => {
+                            const tag = tags.find((t: any) => t.id === tagId);
+                            if (!tag) return null;
+                            return (
+                              <Badge
+                                key={tagId}
+                                className="text-xs cursor-pointer"
+                                style={{
+                                  backgroundColor: tag.couleur + '20',
+                                  borderColor: tag.couleur,
+                                  color: tag.couleur,
+                                  border: '1px solid ${tag.couleur}'
+                                }}
+                                onClick={() => removeTag(tagId)}
+                              >
+                                {tag.nom}
+                                <X className="w-3 h-3 ml-1" />
+                              </Badge>
+                            );
+                          })}
+                          {filters.tags.length > 3 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{filters.tags.length - 3} autres
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Rating Range */}
+                    <div className="space-y-3">
+                      <Label className="text-sm text-muted-foreground">
+                        Note ({filters.note_min} - {filters.note_max})
+                      </Label>
+                      <Slider
+                        value={[filters.note_min, filters.note_max]}
+                        onValueChange={([min, max]) => updateFilters({ note_min: min, note_max: max })}
+                        max={10}
+                        min={0}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Spicy Level */}
+                    <div className="space-y-3">
+                      <Label className="text-sm text-muted-foreground">
+                        🌶️ Spicy ({filters.niveau_spicy[0]} - {filters.niveau_spicy[1]})
+                      </Label>
+                      <Slider
+                        value={filters.niveau_spicy}
+                        onValueChange={(value) => updateFilters({ niveau_spicy: value })}
+                        max={10}
+                        min={0}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Dark Level */}
+                    <div className="space-y-3">
+                      <Label className="text-sm text-muted-foreground">
+                        🖤 Dark ({filters.niveau_dark[0]} - {filters.niveau_dark[1]})
+                      </Label>
+                      <Slider
+                        value={filters.niveau_dark}
+                        onValueChange={(value) => updateFilters({ niveau_dark: value })}
+                        max={10}
+                        min={0}
+                        step={1}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer - Protection complète Safari */}
+              <div
+                className="border-t border-border"
+                style={{
+                  background: 'var(--background)',
+                  position: 'sticky',
+                  bottom: 0,
+                  zIndex: 100
+                }}
+              >
+                <div className="p-4 md:p-6" style={{ background: 'var(--muted)' }}>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsMobileFiltersOpen(false)}
+                      className="flex-1 h-12"
+                    >
+                      Annuler
+                    </Button>
+                    <Button
+                      onClick={() => setIsMobileFiltersOpen(false)}
+                      className="flex-1 h-12 bg-primary hover:bg-primary/90"
+                    >
+                      Appliquer
+                    </Button>
+                  </div>
+                </div>
+                {/* Zone Safari avec background opaque complet */}
+                <div
+                  className="md:hidden"
+                  style={{
+                    height: 'max(3rem, env(safe-area-inset-bottom, 3rem))',
+                    background: 'var(--background)',
+                    width: '100%',
+                    position: 'relative',
+                    zIndex: 101
+                  }}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Tags Selection Modal */}
       <AnimatePresence>
@@ -1632,21 +2102,21 @@ function BooksPageContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 md:p-4"
             onClick={() => setIsTagModalOpen(false)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden"
+              className="bg-card rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] md:max-h-[80vh] overflow-hidden border border-border"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="p-4 border-b border-gray-200">
+              <div className="p-3 md:p-4 border-b border-border">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                    <Tag className="w-5 h-5 text-purple-600" />
+                  <h3 className="text-base md:text-lg font-semibold text-foreground flex items-center gap-2">
+                    <Tag className="w-4 md:w-5 h-4 md:h-5 text-primary" />
                     Sélectionner les tags
                   </h3>
                   <div className="flex items-center gap-2">
@@ -1678,8 +2148,8 @@ function BooksPageContent() {
 
               {/* Selected Tags */}
               {filters.tags.length > 0 && (
-                <div className="p-4 bg-gray-50 border-b border-gray-200">
-                  <div className="text-xs text-gray-500 mb-2">Tags sélectionnés:</div>
+                <div className="p-3 md:p-4 bg-muted border-b border-border">
+                  <div className="text-xs text-foreground/60 mb-2">Tags sélectionnés:</div>
                   <div className="flex flex-wrap gap-2">
                     {filters.tags.map(tagId => {
                       const tag = tags.find((t: any) => t.id === tagId);
@@ -1692,7 +2162,7 @@ function BooksPageContent() {
                             backgroundColor: tag.couleur + '20',
                             borderColor: tag.couleur,
                             color: tag.couleur,
-                            border: `1px solid ${tag.couleur}`
+                            border: '1px solid ${tag.couleur}'
                           }}
                           onClick={() => removeTag(tagId)}
                         >
@@ -1706,20 +2176,20 @@ function BooksPageContent() {
               )}
 
               {/* Tags Grid */}
-              <div className="p-4 overflow-y-auto max-h-96">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="p-3 md:p-4 overflow-y-auto max-h-80 md:max-h-96">
+                <div className="grid grid-cols-1 gap-2">
                   {tags.map((tag: any) => {
                     const isSelected = filters.tags.includes(tag.id);
                     return (
                       <div 
                         key={tag.id} 
-                        className={`
-                          flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200
-                          ${isSelected 
-                            ? 'bg-purple-50 border-2 border-purple-200 shadow-sm' 
-                            : 'border-2 border-transparent hover:bg-gray-50 hover:border-gray-200'
+                        className={'
+                          flex items-center justify-between p-4 md:p-3 rounded-lg cursor-pointer transition-all duration-200 touch-manipulation
+                          ${isSelected
+                            ? 'bg-primary/10 border-2 border-primary/20 shadow-sm'
+                            : 'border-2 border-transparent hover:bg-muted hover:border-border active:bg-muted'
                           }
-                        `}
+                        '}
                         onClick={() => handleTagToggle(tag.id)}
                       >
                         <div className="flex items-center space-x-3">
@@ -1727,20 +2197,20 @@ function BooksPageContent() {
                             className="w-4 h-4 rounded-full ring-2 ring-white shadow-sm" 
                             style={{backgroundColor: tag.couleur}}
                           />
-                          <span className={`font-medium ${isSelected ? 'text-purple-700' : 'text-gray-700'}`}>
+                          <span className={`font-medium text-base md:text-sm ${isSelected ? 'text-primary' : 'text-foreground'}'}>
                             {tag.nom}
                           </span>
                         </div>
-                        <div className={`
-                          w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
-                          ${isSelected 
-                            ? 'bg-purple-500 border-purple-500' 
-                            : 'border-gray-300 hover:border-purple-400'
+                        <div className={'
+                          w-7 h-7 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center transition-all
+                          ${isSelected
+                            ? 'bg-primary border-primary'
+                            : 'border-muted-foreground hover:border-primary'
                           }
-                        `}>
+                        '}>
                           {isSelected && (
                             <motion.div 
-                              className="w-3 h-3 bg-white rounded-full" 
+                              className="w-3.5 h-3.5 md:w-3 md:h-3 bg-background rounded-full" 
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
                               transition={{ duration: 0.2 }}
@@ -1754,14 +2224,14 @@ function BooksPageContent() {
               </div>
 
               {/* Footer */}
-              <div className="p-4 border-t border-gray-200 bg-gray-50">
+              <div className="p-3 md:p-4 border-t border-border bg-muted">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-foreground/60">
                     {tags.length} tags disponibles
                   </div>
                   <Button
                     onClick={() => setIsTagModalOpen(false)}
-                    className="bg-purple-600 hover:bg-purple-700"
+                    className="bg-primary hover:bg-primary/90 h-11 md:h-9 text-base md:text-sm px-6 md:px-4"
                   >
                     Terminé
                   </Button>
@@ -1771,17 +2241,17 @@ function BooksPageContent() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </MobileAwareLayout>
   );
 }
 
 export default function BooksPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement du catalogue...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-foreground/70">Chargement du catalogue...</p>
         </div>
       </div>
     }>

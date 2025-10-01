@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface TrustStats {
   total_books: number;
@@ -20,13 +21,13 @@ export function useTrustStats() {
         setIsLoading(true);
         
         // Récupérer les statistiques générales
-        const response = await fetch('/api/proxy/stats/general');
+        const response = await apiClient.get('/api/stats/general');
         if (!response.ok) throw new Error('Failed to fetch stats');
         
         const stats = await response.json();
         
         // Si l'API stats ne contient pas tout, calculer depuis l'API books
-        const booksResponse = await fetch('/api/proxy/books');
+        const booksResponse = await apiClient.get('/api/books');
         const allBooks = booksResponse.ok ? await booksResponse.json() : [];
         
         const total_books = allBooks.length || stats.total_books || 0;

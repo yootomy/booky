@@ -70,7 +70,7 @@ function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
   
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i];
-    currentPath += `/${segment}`;
+    currentPath += '/${segment}';
     
     const config = PATH_CONFIG[segment];
     const isLast = i === segments.length - 1;

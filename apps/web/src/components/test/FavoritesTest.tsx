@@ -76,7 +76,7 @@ export function FavoritesTest({ testBookId = 'test-book-1' }: FavoritesTestProps
               onClick={() => toggleFavorite(testBookId)}
               className="flex items-center gap-1"
             >
-              <Heart className={`h-4 w-4 ${bookIsFavorite ? 'fill-current' : ''}`} />
+              <Heart className={`h-4 w-4 ${bookIsFavorite ? 'fill-current' : ''}'} />
               {bookIsFavorite ? 'Retirer' : 'Ajouter'}
             </Button>
           </div>

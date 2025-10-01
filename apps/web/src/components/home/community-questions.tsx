@@ -40,7 +40,7 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={`/books/${question.book.id}/questions/${question.id}` as any}>
+      <Link href={'/books/${question.book.id}/questions/${question.id}' as any}>
         <div 
           className="relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
           style={{
@@ -116,7 +116,7 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
             <div className="w-10 h-12 relative flex-shrink-0">
               <Image
                 src={question.book.image_couverture || '/placeholder-book.svg'}
-                alt={`Couverture de ${question.book.titre}`}
+                alt={'Couverture de ${question.book.titre}'}
                 fill
                 className="object-cover rounded"
                 sizes="40px"

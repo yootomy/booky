@@ -86,7 +86,7 @@ export function DarkRating({
   const displayValue = isHovering && hoverEffect ? hoveredValue : value;
   const clampedValue = Math.max(0, Math.min(max, displayValue));
 
-  // Fonction pour obtenir l'intensité de la couleur selon la valeur
+  // Fonction pour obtenir l`intensité de la couleur selon la valeur
   const getDarkIntensity = (darkIndex: number) => {
     const darkValue = darkIndex + 1;
     const intensity = darkValue / max;
@@ -118,7 +118,7 @@ export function DarkRating({
         onClick={() => handleDarkClick(darkValue)}
         onMouseEnter={() => handleDarkHover(darkValue)}
         onFocus={() => handleDarkHover(darkValue)}
-        aria-label={`Niveau dark ${darkValue} sur ${max}`}
+        aria-label={'Niveau dark ${darkValue} sur ${max}'}
       >
         {/* Crâne de base (vide) */}
         <Skull
@@ -186,7 +186,7 @@ export function DarkRating({
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
         role="radiogroup"
-        aria-label={`Niveau dark sur ${max}`}
+        aria-label={'Niveau dark sur ${max}'}
       >
         {Array.from({ length: max }, (_, index) => renderDark(index))}
       </div>

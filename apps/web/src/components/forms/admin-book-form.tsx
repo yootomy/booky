@@ -108,12 +108,20 @@ export function AdminBookForm({ book, onSuccess, onCancel }: AdminBookFormProps)
       }
     },
     onError: (error) => {
+      const errorMessage = error instanceof Error ? error.message :
+                           typeof error === 'string' ? error :
+                           'Erreur inconnue lors de la mise à jour';
+
       toast({
         title: "Erreur",
-        description: "Impossible de mettre à jour le livre",
+        description: 'Impossible de mettre à jour le livre: ${errorMessage}',
         variant: "destructive",
       });
-      console.error('Erreur mise à jour livre:', error);
+      console.error('Erreur mise à jour livre:', {
+        error,
+        message: errorMessage,
+        stack: error instanceof Error ? error.stack : undefined
+      });
     },
   });
 

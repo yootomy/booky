@@ -116,7 +116,7 @@ export function ExternalBookSearch({ onImportComplete, className }: ExternalBook
   };
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={'space-y-6 ${className}'}>
       {/* Interface de recherche */}
       <Card>
         <CardHeader>
@@ -208,11 +208,11 @@ export function ExternalBookSearch({ onImportComplete, className }: ExternalBook
             <Badge variant="secondary">
               {source === 'combined' ? (
                 searchResults.combinedResults ? 
-                  `${searchResults.combinedResults.length} résultats`
+                  '${searchResults.combinedResults.length} résultats'
                 : '0 résultats'
               ) : (
                 'items' in searchResults && searchResults.items ? 
-                  `${searchResults.items.length} résultats`
+                  '${searchResults.items.length} résultats'
                 : '0 résultats'
               )}
             </Badge>
@@ -359,7 +359,7 @@ function BookResultsList({ books, onImportClick }: BookResultsListProps) {
         <div className="space-y-4">
           {books.map((book, index) => (
             <BookResultCard
-              key={`${book.source}-${book.identifiant_externe}-${index}`}
+              key={'${book.source}-${book.identifiant_externe}-${index}'}
               book={book}
               onImportClick={() => onImportClick(book)}
             />
@@ -394,10 +394,10 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
             {book.image_couverture && !imageError ? (
               <img
                 src={book.image_couverture}
-                alt={`Couverture de ${book.titre}`}
+                alt={'Couverture de ${book.titre}'}
                 className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-200 ${
                   imageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
+                }'}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => {
                   setImageError(true);
@@ -503,7 +503,7 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
                 <div className="flex items-center gap-1">
                   <span className="text-muted-foreground">📟</span>
                   <span className="text-muted-foreground font-mono text-[10px]">
-                    {book.isbn.length > 13 ? `${book.isbn.slice(0, 13)}...` : book.isbn}
+                    {book.isbn.length > 13 ? '${book.isbn.slice(0, 13)}...' : book.isbn}
                   </span>
                 </div>
               )}
@@ -515,7 +515,7 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
             <div className="flex flex-wrap gap-1">
               {book.categories.slice(0, 3).map((category, index) => (
                 <Badge key={index} variant="outline" className="text-[10px] px-1.5 py-0.5 bg-blue-50 text-blue-600 border-blue-200">
-                  {category.length > 15 ? `${category.slice(0, 15)}...` : category}
+                  {category.length > 15 ? '${category.slice(0, 15)}...' : category}
                 </Badge>
               ))}
               {book.categories.length > 3 && (
@@ -531,7 +531,7 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
                 {[...Array(5)].map((_, i) => (
                   <span key={i} className={`text-xs ${
                     i < Math.round(book.note_moyenne!) ? 'text-yellow-400' : 'text-gray-300'
-                  }`}>⭐</span>
+                  }'}>⭐</span>
                 ))}
               </div>
               <span className="text-muted-foreground">
@@ -545,7 +545,7 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
             <div className="bg-gray-50/50 rounded-md p-2 border-l-2 border-gray-200">
               <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
                 {book.resume_officiel.length > 200 
-                  ? `${book.resume_officiel.slice(0, 200)}...` 
+                  ? '${book.resume_officiel.slice(0, 200)}...' 
                   : book.resume_officiel}
               </p>
             </div>
@@ -566,8 +566,8 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
           <Button variant="outline" size="sm" asChild className="shadow-sm hover:shadow-md transition-shadow">
             <a 
               href={book.source === 'google_books' 
-                ? `https://books.google.com/books?id=${book.identifiant_externe}`
-                : `https://openlibrary.org${book.identifiant_externe}`
+                ? 'https://books.google.com/books?id=${book.identifiant_externe}'
+                : 'https://openlibrary.org${book.identifiant_externe}'
               } 
               target="_blank" 
               rel="noopener noreferrer"
@@ -649,7 +649,7 @@ function ImportBookDialog({ book, open, onOpenChange, onImportComplete }: Import
               <div className="flex gap-4">
                 <img
                   src={book.image_couverture || getDefaultCoverUrl(book.titre)}
-                  alt={`Couverture de ${book.titre}`}
+                  alt={'Couverture de ${book.titre}'}
                   className="w-20 h-30 object-cover rounded"
                 />
                 <div className="space-y-1">

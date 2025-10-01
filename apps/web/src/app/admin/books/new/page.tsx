@@ -39,7 +39,7 @@ export default function NewBookPage() {
           <div className="max-w-4xl mx-auto">
             <AdminBookForm 
               onSuccess={(book) => {
-                router.push(`/admin/books/${book.id}/edit`);
+                router.push('/admin/books/${book.id}/edit');
               }}
               onCancel={() => router.back()}
             />

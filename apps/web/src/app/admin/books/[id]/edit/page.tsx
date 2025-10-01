@@ -204,7 +204,7 @@ export default function EditBookPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open(`/books/${bookId}`, '_blank')}
+                onClick={() => window.open('/books/${bookId}', '_blank')}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 Prévisualiser

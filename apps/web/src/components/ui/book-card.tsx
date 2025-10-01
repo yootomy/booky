@@ -54,7 +54,7 @@ export function BookCard({
         className
       )}
     >
-      <Link href={`/books/${book.id}`} className="block">
+      <Link href={'/books/${book.id}'} className="block">
         <div className="flex flex-col h-full">
           {/* Cover Image */}
           <div className="relative mb-3 flex-shrink-0">

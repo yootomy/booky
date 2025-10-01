@@ -45,22 +45,66 @@ function LoginContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <div className="w-full max-w-md space-y-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background transition-colors duration-300">
+      <div className="w-full max-w-md space-y-8">
+        {/* Header simple */}
+        <div className="text-center space-y-4">
+          <h1
+            className="text-3xl font-bold text-foreground"
+            style={{
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            Connexion
+          </h1>
+          <p
+            className="text-sm text-foreground/70"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Reconnectez-vous à votre bibliothèque
+          </p>
+        </div>
+
         {/* Message d'information si présent */}
         {message && (
-          <Alert>
-            <AlertDescription>{message}</AlertDescription>
-          </Alert>
+          <div
+            className="p-4 rounded-xl text-sm bg-primary/5 text-primary border border-primary/10"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            {message}
+          </div>
         )}
-        
-        {/* Formulaire de connexion */}
-        <LoginForm 
+
+        {/* Login form */}
+        <LoginForm
           redirectPath={redirectPath}
           onSuccess={() => {
             // La redirection est gérée par le hook useLogin
           }}
         />
+
+        {/* Navigation vers register */}
+        <div className="text-center space-y-4">
+          <div className="h-px w-full bg-primary/20" />
+          <p
+            className="text-sm text-foreground/70"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Pas encore de compte ?{' '}
+            <button
+              onClick={() => router.push('/register')}
+              className="font-medium hover:underline transition-all duration-200 text-primary hover:text-primary/80"
+            >
+              Créer un compte
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

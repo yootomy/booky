@@ -109,7 +109,7 @@ export default function TagsPage() {
               size="sm"
               onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             >
-              <Heart className={`h-4 w-4 mr-1 ${showFavoritesOnly ? 'fill-current' : ''}`} />
+              <Heart className={`h-4 w-4 mr-1 ${showFavoritesOnly ? 'fill-current' : ''}'} />
               Favoris
             </Button>
           </div>
@@ -202,12 +202,12 @@ export default function TagsPage() {
             ) : tags.length > 0 ? (
               <div className="flex flex-wrap gap-2 items-center">
                 {tags.map((tag) => (
-                  <Link key={tag.id} href={`/tags/${tag.id}`}>
+                  <Link key={tag.id} href={'/tags/${tag.id}'}>
                     <Badge
                       variant="outline"
                       className="hover:scale-105 transition-transform cursor-pointer border-2 relative"
                       style={{
-                        fontSize: `${getTagSize(tag.utilisation_count, maxUsageCount)}px`,
+                        fontSize: '${getTagSize(tag.utilisation_count, maxUsageCount)}px',
                         borderColor: tag.couleur,
                         color: tag.couleur,
                         opacity: 0.7 + (tag.utilisation_count / maxUsageCount) * 0.3,
@@ -255,7 +255,7 @@ export default function TagsPage() {
             ))
           ) : (
             tags.map((tag) => (
-              <Link key={tag.id} href={`/tags/${tag.id}`}>
+              <Link key={tag.id} href={'/tags/${tag.id}'}>
                 <Card className="h-full hover:bg-gray-800/50 transition-colors cursor-pointer group">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
@@ -311,7 +311,7 @@ export default function TagsPage() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {typeTags.map((tag) => (
-                      <Link key={tag.id} href={`/tags/${tag.id}`}>
+                      <Link key={tag.id} href={'/tags/${tag.id}'}>
                         <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer">
                           <div className="flex items-center space-x-3">
                             <div 

@@ -36,6 +36,7 @@ import {
   GripVertical
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -94,7 +95,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
       if (searchQuery) params.append('search', searchQuery);
       params.append('limit', '50');
 
-      const response = await fetch(`/api/proxy/lists/${listId}/books?${params.toString()}`);
+      const response = await apiClient.get('/api/lists/${listId}/books?${params.toString()}');
       const data = await response.json();
 
       if (data.success) {
@@ -122,7 +123,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
 
     try {
       setRemoving(true);
-      const response = await fetch(`/api/proxy/lists/${listId}/books/${bookToRemove.id}`, {
+      const response = await apiClient.get('/api/lists/${listId}/books/${bookToRemove.id}', {
         method: 'DELETE',
       });
 
@@ -263,7 +264,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
                   {book.image_couverture ? (
                     <img
                       src={book.image_couverture}
-                      alt={`Couverture de ${book.titre}`}
+                      alt={'Couverture de ${book.titre}'}
                       className="w-16 h-20 object-cover rounded border"
                     />
                   ) : (
@@ -293,7 +294,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem
-                          onClick={() => router.push(`/books/${book.id}`)}
+                          onClick={() => router.push('/books/${book.id}')}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Voir le livre

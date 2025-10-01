@@ -37,30 +37,51 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
 
+    // Essayer d'obtenir l'utilisateur connecté (optionnel)
+    let currentUserId: string | null = null;
+    try {
+      // Utiliser une approche simplifiée pour extraire l'utilisateur des cookies
+      const { cookies } = await import('next/headers');
+      const cookieStore = await cookies();
+      const authCookie = cookieStore.get('booky_auth');
+
+      if (authCookie) {
+        // Décoder le JWT pour obtenir l'ID utilisateur (simple extraction)
+        const payload = JSON.parse(Buffer.from(authCookie.value.split('.')[1], 'base64').toString());
+        currentUserId = payload.sub || payload.id;
+      }
+    } catch {
+      // Pas d'utilisateur connecté, c'est OK
+    }
+
     const questions = await db.book_question.findMany({
-      where: { 
+      where: {
         bookId,
         is_public: true,
         status: { in: ['ANSWERED', 'PENDING'] }
       },
       include: {
         user_book_question_authorIdTouser: {
-          select: { 
+          select: {
             id: true,
-            nom_complet: true, 
-            avatar: true 
+            nom_complet: true,
+            avatar: true
           }
         },
         user_book_question_answeredByIdTouser: {
-          select: { 
+          select: {
             id: true,
-            nom_complet: true, 
-            avatar: true 
+            nom_complet: true,
+            avatar: true
           }
         },
         _count: {
           select: { book_question_like: true }
-        }
+        },
+        book_question_like: currentUserId ? {
+          where: { userId: currentUserId },
+          select: { id: true }
+        } : false
       },
       orderBy: [
         { status: 'asc' }, // ANSWERED en premier
@@ -85,7 +106,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         avatar: q.user_book_question_answeredByIdTouser.avatar
       } : null,
       likes_count: q._count.book_question_like,
-      is_liked: false // TODO: vérifier si l'utilisateur connecté a liké
+      is_liked: currentUserId && q.book_question_like && q.book_question_like.length > 0
     }));
 
     return NextResponse.json({

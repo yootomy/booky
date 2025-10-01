@@ -13,6 +13,7 @@ import { QuestionsManager } from '@/components/admin/questions-manager';
 import { RecentActivity } from '@/components/admin/recent-activity';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { apiClient } from '@/lib/api-client';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -23,7 +24,7 @@ export default function AdminDashboard() {
   const { data: conseilsData } = useQuery({
     queryKey: ['admin-conseil-requests-stats'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/conseil-requests?isAdmin=true');
+      const response = await apiClient.get('/api/conseil-requests?isAdmin=true');
       if (!response.ok) return { data: [] };
       const result = await response.json();
       return result;
@@ -34,7 +35,7 @@ export default function AdminDashboard() {
   const { data: listsData } = useQuery({
     queryKey: ['admin-lists-stats'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/lists?limit=50');
+      const response = await apiClient.get('/api/lists?limit=50');
       if (!response.ok) return { data: [] };
       const result = await response.json();
       return result;
@@ -104,7 +105,7 @@ export default function AdminDashboard() {
               disabled={isLoading}
               className="border-gray-200 text-gray-700 hover:bg-gray-50 mt-4 sm:mt-0"
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}'} />
               Actualiser (r)
             </Button>
           </div>

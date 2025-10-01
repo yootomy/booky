@@ -185,14 +185,21 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
 
       const body = await req.json();
-      
-      console.log('🔍 Update book - Saga data:', {
-        sagaId: body.sagaId,
-        sagaOrder: body.sagaOrder,
-        hasSagaId: body.sagaId !== undefined,
-        hasSagaOrder: body.sagaOrder !== undefined
+
+      console.log('📚 Update book request:', {
+        bookId: id,
+        userId: user.id,
+        userRole: user.role,
+        bodyKeys: Object.keys(body),
+        statut: body.statut,
+        sagaData: {
+          sagaId: body.sagaId,
+          sagaOrder: body.sagaOrder,
+          hasSagaId: body.sagaId !== undefined,
+          hasSagaOrder: body.sagaOrder !== undefined
+        }
       });
-      
+
       // Valider les données d'entrée
       const validatedData = updateBookSchema.parse(body);
       const { categories, tags, sagaId, sagaOrder, ...bookData } = validatedData;

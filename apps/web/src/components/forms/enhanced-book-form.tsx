@@ -90,7 +90,7 @@ const mapExternalBookToFormData = (book: ExternalBookResult) => {
     try {
       // Si c'est juste une année
       if (/^\d{4}$/.test(dateStr)) {
-        return `${dateStr}-01-01`;
+        return '${dateStr}-01-01';
       }
       // Si c'est déjà au format YYYY-MM-DD
       if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
@@ -167,8 +167,8 @@ export function EnhancedBookForm(props: EnhancedBookFormProps) {
     setFormData(mappedData as any);
     setHasImported(true);
     
-    toast.success(`Données importées`, {
-      description: `Les informations de "${book.titre}" ont été chargées dans le formulaire`
+    toast.success('Données importées`, {
+      description: `Les informations de "${book.titre}" ont été chargées dans le formulaire'
     });
   };
 

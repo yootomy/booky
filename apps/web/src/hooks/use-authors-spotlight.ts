@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 interface Author {
   nom: string;
@@ -26,7 +27,7 @@ export function useAuthorsSpotlight() {
         setIsLoading(true);
         
         // Récupérer tous les livres pour calculer les stats par auteur
-        const response = await fetch('/api/proxy/books');
+        const response = await apiClient.get('/api/books');
         if (!response.ok) throw new Error('Failed to fetch books');
         
         const books = await response.json();

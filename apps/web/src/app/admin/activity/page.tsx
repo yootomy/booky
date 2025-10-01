@@ -69,7 +69,7 @@ export default function AdminActivity() {
         activities.push({
           id: question.id,
           type: 'question',
-          title: 'Nouvelle question posée',
+          title: 'Nouvelle question posée`,
           description: `"${question.question.substring(0, 100)}..." sur ${question.book_title}`,
           user: question.user_name,
           time: new Date(question.date_question).toLocaleString('fr-FR'),
@@ -86,7 +86,7 @@ export default function AdminActivity() {
         activities.push({
           id: book.id,
           type: 'book',
-          title: 'Livre ajouté',
+          title: 'Livre ajouté`,
           description: `"${book.titre}" par ${book.auteur}`,
           user: 'Admin',
           time: new Date(book.date_creation).toLocaleString('fr-FR'),
@@ -100,9 +100,9 @@ export default function AdminActivity() {
     if (stats?.recent_books) {
       stats.recent_books.filter(book => book.note_generale && book.note_generale > 0).forEach((book) => {
         activities.push({
-          id: `rating_${book.id}`,
+          id: 'rating_${book.id}',
           type: 'rating',
-          title: 'Note attribuée',
+          title: 'Note attribuée`,
           description: `Note de ${book.note_generale}/10 pour "${book.titre}"`,
           user: 'Admin',
           time: new Date(book.date_creation).toLocaleString('fr-FR'),
@@ -310,7 +310,7 @@ export default function AdminActivity() {
                     return (
                       <div key={activity.id} className="relative">
                         <div className="flex items-start space-x-4 p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
-                          <div className={`w-3 h-3 rounded-full mt-2 ${getActivityColor(activity.type)}`}></div>
+                          <div className={'w-3 h-3 rounded-full mt-2 ${getActivityColor(activity.type)}'}></div>
                           
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
@@ -350,7 +350,7 @@ export default function AdminActivity() {
                               </div>
                               
                               {activity.bookId && (
-                                <Link href={`/books/${activity.bookId}`}>
+                                <Link href={'/books/${activity.bookId}'}>
                                   <Button variant="ghost" size="sm">
                                     <Eye className="h-3 w-3 mr-1" />
                                     Voir

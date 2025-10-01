@@ -62,10 +62,10 @@ const PREDEFINED_COLORS = [
   '#059669', // Emerald
   '#0891B2', // Cyan
   '#0284C7', // Blue
-  '#2563EB', // Blue
+  '#2563EB', // Indigo
   '#7C3AED', // Violet
   '#C026D3', // Fuchsia
-  '#DC2626', // Rose
+  '#E11D48', // Rose
 ];
 
 export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
@@ -191,20 +191,42 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
 
   const handleDelete = async (categoryId: string) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')) return;
-    
-    await deleteCategoryMutation.mutateAsync(categoryId);
+
+    try {
+      await deleteCategoryMutation.mutateAsync(categoryId);
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      toast({
+        title: "Erreur",
+        description: typeof error === 'object' && error && 'message' in error
+          ? (error as any).message
+          : "Impossible de supprimer la catégorie",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (editingCategory) {
-      await updateCategoryMutation.mutateAsync({
-        id: editingCategory.id,
-        ...formData
+
+    try {
+      if (editingCategory) {
+        await updateCategoryMutation.mutateAsync({
+          id: editingCategory.id,
+          ...formData
+        });
+      } else {
+        await createCategoryMutation.mutateAsync(formData);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la soumission:', error);
+      toast({
+        title: "Erreur",
+        description: typeof error === 'object' && error && 'message' in error
+          ? (error as any).message
+          : "Une erreur inattendue s'est produite",
+        variant: "destructive",
       });
-    } else {
-      await createCategoryMutation.mutateAsync(formData);
     }
   };
 
@@ -435,7 +457,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
                   variant="secondary" 
                   className="text-xs"
                   style={{
-                    backgroundColor: `${category.couleur}20`,
+                    backgroundColor: '${category.couleur}20',
                     color: category.couleur
                   }}
                 >

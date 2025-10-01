@@ -35,6 +35,7 @@ import {
   Lock
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 
 interface Book {
@@ -96,7 +97,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
       params.append('include_books', 'true');
       params.append('limit', '50');
 
-      const response = await fetch(`/api/proxy/lists?${params.toString()}`);
+      const response = await apiClient.get(`/api/lists?${params.toString()}`);
       const data = await response.json();
 
       if (data.success) {
@@ -124,7 +125,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
 
     try {
       setDeleting(true);
-      const response = await fetch(`/api/proxy/lists/${listToDelete.id}`, {
+      const response = await apiClient.delete(`/api/lists/${listToDelete.id}`, {
         method: 'DELETE',
       });
 
@@ -267,7 +268,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
               <div
                 className="absolute top-0 right-0 w-16 h-16 opacity-5"
                 style={{
-                  background: `radial-gradient(circle, ${list.couleur} 0%, transparent 70%)`,
+                  background: 'radial-gradient(circle, ${list.couleur} 0%, transparent 70%)',
                   transform: 'translate(50%, -50%)'
                 }}
               />
@@ -421,7 +422,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                     className="text-xs opacity-50"
                     style={{
                       fontFamily: 'Inter, sans-serif',
-                      color: '#2C1810'
+                      color: `#2C1810`
                     }}
                   >
                     {new Date(list.date_creation).toLocaleDateString('fr-FR')}

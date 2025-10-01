@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Palette, Search, BookOpen, X } from 'lucide-react';
+import { apiClient } from '@/lib/api-client';
 
 // Schéma de validation
 const listSchema = z.object({
@@ -108,7 +109,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
     const fetchBooks = async () => {
       try {
         setLoadingBooks(true);
-        const response = await fetch('/api/proxy/books?limit=100');
+        const response = await apiClient.get('/api/books?limit=100');
         const result = await response.json();
 
         if (result.success) {
@@ -138,7 +139,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       }
 
       try {
-        const response = await fetch(`/api/proxy/lists/${initialData.id}/books`);
+        const response = await apiClient.get('/api/lists/${initialData.id}/books');
         const result = await response.json();
 
         if (result.success && result.data) {
@@ -177,7 +178,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       setLoading(true);
 
       const url = isEditing && initialData?.id
-        ? `/api/proxy/lists/${initialData.id}`
+        ? '/api/proxy/lists/${initialData.id}'
         : '/api/proxy/lists';
 
       const method = isEditing ? 'PUT' : 'POST';
@@ -330,7 +331,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
                             field.value === color
                               ? 'border-primary ring-2 ring-primary/50'
                               : 'border-border hover:border-primary'
-                          }`}
+                          }'}
                           style={{ backgroundColor: color }}
                           onClick={() => field.onChange(color)}
                           title={color}
@@ -476,14 +477,14 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
                             isSelected
                               ? 'bg-primary/10 border border-primary/20'
                               : 'hover:bg-muted'
-                          }`}
+                          }' }
                           onClick={() => toggleBookSelection(book.id)}
                         >
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                             isSelected
                               ? 'bg-primary border-primary text-primary-foreground'
                               : 'border-gray-300 hover:border-primary'
-                          }`}>
+                          }' }>
                             {isSelected && <span className="text-xs">✓</span>}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -502,7 +503,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
                                       star <= book.note_generale
                                         ? 'text-yellow-500'
                                         : 'text-gray-300'
-                                    }`}
+                                    }'}
                                   >
                                     ★
                                   </span>

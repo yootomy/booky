@@ -39,6 +39,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
 import { StarRating, SpicyRating, DarkRating, RomanceRating, RhythmSelector, type RhythmValue } from '@/components/ratings';
 import { BookStatus } from '@/components/books/book-status';
 import { ImageUpload } from './image-upload';
@@ -181,6 +182,7 @@ export function BookForm({
   sagaErrors,
   excludeBookId
 }: BookFormProps) {
+  const { toast } = useToast();
   const [previewMode, setPreviewMode] = useState(false);
   const [searchingExternal, setSearchingExternal] = useState(false);
   const [externalResults, setExternalResults] = useState<ExternalBookResult[]>([]);
@@ -351,7 +353,22 @@ export function BookForm({
         await onSubmit({ ...submitData, id: initialData!.id });
       }
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
+      const errorMessage = error instanceof Error ? error.message :
+                           typeof error === 'string' ? error :
+                           'Erreur inconnue lors de la soumission';
+
+      console.error('Erreur lors de la soumission:', {
+        error,
+        message: errorMessage,
+        stack: error instanceof Error ? error.stack : undefined
+      });
+
+      // Afficher l'erreur à l'utilisateur
+      toast({
+        title: "Erreur",
+        description: 'Erreur lors de la soumission: ${errorMessage}',
+        variant: "destructive",
+      });
     }
   };
 
@@ -948,7 +965,7 @@ export function BookForm({
                           variant="secondary"
                           className="text-xs"
                           style={{
-                            backgroundColor: `${category.couleur}20`,
+                            backgroundColor: '${category.couleur}20',
                             color: category.couleur
                           }}
                         >

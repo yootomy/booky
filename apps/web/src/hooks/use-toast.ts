@@ -37,7 +37,7 @@ export function useToast() {
     }, newToast.duration);
 
     // Simple console output for now
-    console.log(`🔔 Toast: ${newToast.title || ''} - ${newToast.description || ''}`);
+    console.log('🔔 Toast: ${newToast.title || ''} - ${newToast.description || ''}');
   }, []);
 
   const dismiss = useCallback((id: string) => {

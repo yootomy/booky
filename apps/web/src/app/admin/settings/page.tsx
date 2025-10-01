@@ -30,6 +30,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
+import { apiClient } from '@/lib/api-client';
 
 export default function AdminSettings() {
   const { toast } = useToast();
@@ -68,7 +69,7 @@ export default function AdminSettings() {
   const { data: currentFeaturedBook, isLoading: featuredBookQueryLoading } = useQuery({
     queryKey: ['featured-book'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/featured-book');
+      const response = await apiClient.get('/api/featured-book');
       if (!response.ok) throw new Error('Failed to fetch featured book');
       return response.json();
     }
@@ -78,7 +79,7 @@ export default function AdminSettings() {
     queryKey: ['book-search', bookSearchQuery],
     queryFn: async () => {
       if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
-      const response = await fetch(`/api/proxy/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10`);
+      const response = await apiClient.get('/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10');
       if (!response.ok) throw new Error('Failed to search books');
       return response.json();
     },
@@ -89,7 +90,7 @@ export default function AdminSettings() {
   const setFeaturedBook = async (bookId: string) => {
     try {
       setFeaturedBookLoading(true);
-      const response = await fetch('/api/proxy/featured-book', {
+      const response = await apiClient.get('/api/featured-book', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ bookId })
@@ -125,7 +126,7 @@ export default function AdminSettings() {
   const clearFeaturedBook = async () => {
     try {
       setFeaturedBookLoading(true);
-      const response = await fetch('/api/proxy/featured-book', {
+      const response = await apiClient.get('/api/featured-book', {
         method: 'DELETE'
       });
 

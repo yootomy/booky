@@ -10,11 +10,11 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const queryString = searchParams.toString();
 
-    const response = await fetch(`http://localhost:3000/api/users${queryString ? `?${queryString}` : ''}`, {
+    const response = await fetch(`http://localhost:3000/api/users${queryString ? '?${queryString}` : ''}', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': authToken ? `booky_auth=${authToken}` : '',
+        'Cookie': authToken ? 'booky_auth=${authToken}' : '',
       },
     });
 

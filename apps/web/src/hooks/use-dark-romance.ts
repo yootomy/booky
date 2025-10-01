@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface DarkRomanceBook {
   id: string;
@@ -29,7 +30,7 @@ export function useDarkRomance() {
         setIsLoading(true);
         
         // Récupérer tous les livres et filtrer pour dark romance
-        const response = await fetch('/api/proxy/books');
+        const response = await apiClient.get('/api/books');
         if (!response.ok) throw new Error('Failed to fetch dark romance books');
         
         const books = await response.json();

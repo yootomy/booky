@@ -134,7 +134,7 @@ export const googleBooksApi = {
     searchParams.append('filter', EXTERNAL_API_CONFIG.GOOGLE_BOOKS.defaultFilter);
     
     return apiClient.get<ExternalSearchResult>(
-      `/api/external/google-books/search?${searchParams.toString()}`
+      '/external/google-books/search?${searchParams.toString()}'
     );
   },
 
@@ -200,7 +200,7 @@ export const googleBooksApi = {
   // Obtenir les détails d'un livre spécifique
   async getBookDetails(googleBooksId: string): Promise<ApiResponse<ExternalBookResult>> {
     return apiClient.get<ApiResponse<ExternalBookResult>>(
-      `/api/external/google-books/book/${googleBooksId}`
+      '/external/google-books/book/${googleBooksId}'
     );
   },
 
@@ -213,7 +213,7 @@ export const googleBooksApi = {
     };
     
     return apiClient.post<ImportResult>(
-      '/api/external/google-books/import',
+      '/external/google-books/import',
       importData
     );
   },
@@ -242,14 +242,14 @@ export const openLibraryApi = {
     });
     
     return apiClient.get<ExternalSearchResult>(
-      `/api/external/open-library/search?${searchParams.toString()}`
+      '/external/open-library/search?${searchParams.toString()}'
     );
   },
 
   // Recherche par titre
   async searchByTitle(title: string, options?: { maxResults?: number }): Promise<ExternalSearchResult> {
     return this.search({
-      query: `title:${title}`,
+      query: 'title:${title}',
       maxResults: options?.maxResults || 10,
     });
   },
@@ -257,7 +257,7 @@ export const openLibraryApi = {
   // Recherche par auteur
   async searchByAuthor(author: string, options?: { maxResults?: number }): Promise<ExternalSearchResult> {
     return this.search({
-      query: `author:${author}`,
+      query: 'author:${author}',
       maxResults: options?.maxResults || 10,
     });
   },
@@ -265,7 +265,7 @@ export const openLibraryApi = {
   // Recherche par ISBN
   async searchByISBN(isbn: string): Promise<ExternalSearchResult> {
     return this.search({
-      query: `isbn:${isbn.replace(/[-\s]/g, '')}`,
+      query: `isbn:${isbn.replace(/[-\s]/g, '')}',
       maxResults: 1,
     });
   },
@@ -273,7 +273,7 @@ export const openLibraryApi = {
   // Obtenir les détails d'un livre spécifique
   async getBookDetails(openLibraryKey: string): Promise<ApiResponse<ExternalBookResult>> {
     return apiClient.get<ApiResponse<ExternalBookResult>>(
-      `/api/external/open-library/book/${openLibraryKey.replace('/works/', '')}`
+      '/external/open-library/book/${openLibraryKey.replace('/works/', '')}'
     );
   },
 
@@ -286,7 +286,7 @@ export const openLibraryApi = {
     };
     
     return apiClient.post<ImportResult>(
-      '/api/external/open-library/import',
+      '/external/open-library/import',
       importData
     );
   },
@@ -341,7 +341,7 @@ export const externalSearchApi = {
       return result;
       
     } catch (error) {
-      throw new Error(`Erreur lors de la recherche combinée: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
+      throw new Error(`Erreur lors de la recherche combinée: ${error instanceof Error ? error.message : 'Erreur inconnue'}');
     }
   },
 
@@ -382,7 +382,7 @@ export const externalSearchApi = {
           return await openLibraryApi.search(searchOptions);
         }
       } catch (fallbackError) {
-        throw new Error(`Erreur sur les deux sources: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
+        throw new Error(`Erreur sur les deux sources: ${error instanceof Error ? error.message : 'Erreur inconnue'}');
       }
     }
   },
@@ -400,7 +400,7 @@ export const externalSearchApi = {
       } else {
         const titre = book.titre?.toLowerCase() || 'no-title';
         const auteur = book.auteur?.toLowerCase() || 'no-author';
-        uniqueKey = `${titre}_${auteur}`;
+        uniqueKey = '${titre}_${auteur}';
       }
       
       if (!seen.has(uniqueKey)) {
@@ -518,7 +518,7 @@ export function formatPublicationDate(date?: string): string {
 // Générer une URL de couverture par défaut
 export function getDefaultCoverUrl(title: string, width = 300, height = 400): string {
   const encodedTitle = encodeURIComponent(title);
-  return `https://via.placeholder.com/${width}x${height}/4B0082/FFFFFF?text=${encodedTitle}`;
+  return 'https://via.placeholder.com/${width}x${height}/4B0082/FFFFFF?text=${encodedTitle}';
 }
 
 // =============================================================================

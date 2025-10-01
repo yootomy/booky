@@ -146,7 +146,7 @@ export function RatingBars({
       <div className="flex-1 h-2 bg-ink-700 rounded-full overflow-hidden">
         <div 
           className={cn('h-full rounded-full transition-all duration-500', colorClass)}
-          style={{ width: `${(value / 10) * 100}%` }}
+          style={{ width: '${(value / 10) * 100}%' }}
         />
       </div>
       <span className="text-sm font-semibold text-ash-200 w-8 text-right">{value}</span>

@@ -149,7 +149,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
     const opacity = Math.max(0.3, 1 - Math.abs(z) / 500);
     
     return {
-      transform: `translateX(${x}px) translateZ(${z}px) scale(${scale})`,
+      transform: 'translateX(${x}px) translateZ(${z}px) scale(${scale})',
       opacity,
       zIndex: Math.round(100 + z),
     };
@@ -162,11 +162,11 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
 
     return (
       <div 
-        className={`
+        className={'
           absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
           w-48 h-72 cursor-pointer transition-all duration-500 ease-out
           ${hoveredIndex === index ? 'scale-110' : ''}
-        `}
+        ' }
         style={getBookStyle(index)}
         onMouseEnter={() => setHoveredIndex(index)}
         onMouseLeave={() => setHoveredIndex(null)}
@@ -189,7 +189,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
                 alt={book.titre}
                 className={`w-full h-full object-cover transition-opacity duration-300 ${
                   imageLoaded ? 'opacity-100' : 'opacity-0'
-                }`}
+                }' }
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
                 crossOrigin="anonymous"
@@ -217,11 +217,11 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
           )}
           
           {/* Hover overlay */}
-          <div className={`
+          <div className={'
             absolute inset-0 bg-black/0 hover:bg-black/20 transition-all duration-300
             flex items-center justify-center
             ${hoveredIndex === index ? 'bg-black/10' : ''}
-          `}>
+          '}>
             {hoveredIndex === index && (
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-3 max-w-[80%] text-center transform transition-all duration-300">
                 <p className="font-semibold text-gray-800 text-sm line-clamp-2">{book.titre}</p>
@@ -236,7 +236,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
 
   if (!books || books.length === 0) {
     return (
-      <div className={`w-full h-[500px] flex items-center justify-center ${className}`}>
+      <div className={'w-full h-[500px] flex items-center justify-center ${className}'}>
         <div className="text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
             <BookOpen className="w-12 h-12 text-purple-400" />
@@ -249,7 +249,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
   }
 
   return (
-    <div className={`relative w-full h-[500px] overflow-hidden ${className}`}>
+    <div className={'relative w-full h-[500px] overflow-hidden ${className}'}>
       {/* Main Gallery Container */}
       <div 
         ref={containerRef}
@@ -298,8 +298,8 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
               index === currentIndex 
                 ? 'nav-dot active w-8' 
                 : 'bg-white/50 hover:bg-white/80'
-            }`}
-            aria-label={`Aller au livre ${index + 1}`}
+            }'}
+            aria-label={'Aller au livre ${index + 1}'}
           />
         ))}
       </div>
@@ -330,7 +330,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
             isAutoPlaying 
               ? 'bg-green-500/80 hover:bg-green-500' 
               : 'bg-gray-500/80 hover:bg-gray-500'
-          } text-white shadow-lg`}
+          } text-white shadow-lg'}
           aria-label={isAutoPlaying ? 'Pause auto-play' : 'Play auto-play'}
         >
           {isAutoPlaying ? '⏸' : '▶'}

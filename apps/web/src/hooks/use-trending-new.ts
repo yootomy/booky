@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface Book {
   id: string;
@@ -28,7 +29,7 @@ export function useTrendingNew() {
         setIsLoading(true);
         
         // Récupérer tous les livres
-        const booksResponse = await fetch('/api/proxy/books');
+        const booksResponse = await apiClient.get('/api/books');
         const allBooks = booksResponse.ok ? await booksResponse.json() : [];
         
         // Nouveautés : triés par date de publication ou création

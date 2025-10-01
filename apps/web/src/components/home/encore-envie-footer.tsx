@@ -63,19 +63,12 @@ function NavigationCard({ link, index }: { link: typeof navigationLinks[0]; inde
       className="group"
     >
       <Link href={link.href as any}>
-        <div 
-          className="p-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg text-center"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(250, 248, 245, 0.6) 100%)',
-            backdropFilter: 'blur(10px)',
-            border: `1px solid ${link.color}20`
-          }}
-        >
+        <div className="p-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg text-center bg-card/60 backdrop-blur-xl border border-border">
           {/* Icon */}
-          <div 
+          <div
             className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
             style={{
-              backgroundColor: `${link.color}15`,
+              backgroundColor: '${link.color}15',
               color: link.color
             }}
           >
@@ -83,22 +76,20 @@ function NavigationCard({ link, index }: { link: typeof navigationLinks[0]; inde
           </div>
 
           {/* Title */}
-          <h3 
-            className="font-bold text-lg mb-2 group-hover:text-[#8B1538] transition-colors duration-300"
+          <h3
+            className="font-bold text-lg mb-2 group-hover:text-primary transition-colors duration-300 text-foreground"
             style={{
-              fontFamily: 'Playfair Display, serif',
-              color: '#2C1810'
+              fontFamily: 'Playfair Display, serif'
             }}
           >
             {link.title}
           </h3>
 
           {/* Description */}
-          <p 
-            className="text-sm opacity-75"
+          <p
+            className="text-sm opacity-75 text-foreground"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#2C1810'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             {link.description}
@@ -111,7 +102,7 @@ function NavigationCard({ link, index }: { link: typeof navigationLinks[0]; inde
 
 export function EncoreEnvieFooter({}: EncoreEnvieFooterProps) {
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8">
+    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -120,20 +111,18 @@ export function EncoreEnvieFooter({}: EncoreEnvieFooterProps) {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 
-            className="text-4xl font-bold mb-4"
+          <h2
+            className="text-4xl font-bold mb-4 text-foreground"
             style={{
-              fontFamily: 'Playfair Display, serif',
-              color: '#2C1810'
+              fontFamily: 'Playfair Display, serif'
             }}
           >
             Encore envie ?
           </h2>
-          <p 
-            className="text-lg opacity-75 max-w-2xl mx-auto"
+          <p
+            className="text-lg opacity-75 max-w-2xl mx-auto text-foreground"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#2C1810'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             Explorez notre univers par toutes ses facettes
@@ -148,10 +137,7 @@ export function EncoreEnvieFooter({}: EncoreEnvieFooterProps) {
         </div>
 
         {/* Divider */}
-        <div 
-          className="h-px w-full mb-8 opacity-20"
-          style={{ backgroundColor: '#2C1810' }}
-        />
+        <div className="h-px w-full mb-8 opacity-20 bg-border" />
 
         {/* Footer Links */}
         <motion.div
@@ -162,58 +148,45 @@ export function EncoreEnvieFooter({}: EncoreEnvieFooterProps) {
         >
           <Link
             href={"/about" as any}
-            className="transition-colors duration-300 hover:text-[#8B1538]"
+            className="transition-colors duration-300 hover:text-primary text-accent"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#6B4C7B'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             À propos
           </Link>
-          
-          <div 
-            className="w-1 h-1 rounded-full"
-            style={{ backgroundColor: '#6B4C7B' }}
-          />
-          
+
+          <div className="w-1 h-1 rounded-full bg-accent" />
+
           <Link
             href={"/contact" as any}
-            className="transition-colors duration-300 hover:text-[#8B1538]"
+            className="transition-colors duration-300 hover:text-primary text-accent"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#6B4C7B'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             Contact
           </Link>
-          
-          <div 
-            className="w-1 h-1 rounded-full"
-            style={{ backgroundColor: '#6B4C7B' }}
-          />
-          
+
+          <div className="w-1 h-1 rounded-full bg-accent" />
+
           <Link
             href={"/privacy" as any}
-            className="transition-colors duration-300 hover:text-[#8B1538]"
+            className="transition-colors duration-300 hover:text-primary text-accent"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#6B4C7B'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             Confidentialité
           </Link>
-          
-          <div 
-            className="w-1 h-1 rounded-full"
-            style={{ backgroundColor: '#6B4C7B' }}
-          />
-          
+
+          <div className="w-1 h-1 rounded-full bg-accent" />
+
           <Link
             href={"/help" as any}
-            className="transition-colors duration-300 hover:text-[#8B1538]"
+            className="transition-colors duration-300 hover:text-primary text-accent"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#6B4C7B'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             Aide
@@ -227,11 +200,10 @@ export function EncoreEnvieFooter({}: EncoreEnvieFooterProps) {
           transition={{ duration: 0.6, delay: 1 }}
           className="text-center mt-8"
         >
-          <p 
-            className="text-xs opacity-50"
+          <p
+            className="text-xs opacity-50 text-foreground"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#2C1810'
+              fontFamily: 'Inter, sans-serif'
             }}
           >
             © 2024 Booky — Bibliothèque Romance secrète de Bruna

@@ -197,7 +197,7 @@ export function SearchDemo() {
                         <Badge 
                           key={tagId} 
                           style={{ 
-                            backgroundColor: `${tag.color}20`, 
+                            backgroundColor: '${tag.color}20', 
                             color: tag.color,
                             borderColor: tag.color
                           }}

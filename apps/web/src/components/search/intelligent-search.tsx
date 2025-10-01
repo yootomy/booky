@@ -178,7 +178,7 @@ function useSearchSuggestions(query: string) {
             subtitle: book.auteur,
             description: book.resume_personnel,
             image: book.image_couverture,
-            url: `/books/${book.id}`,
+            url: '/books/${book.id}',
             metadata: {
               note: book.note_generale,
               statut: book.statut,
@@ -199,10 +199,10 @@ function useSearchSuggestions(query: string) {
       authors.forEach(author => {
         results.push({
           type: 'author',
-          id: `author-${author}`,
+          id: 'author-${author}',
           title: author,
           subtitle: 'Auteur',
-          url: `/books?author=${encodeURIComponent(author)}`,
+          url: '/books?author=${encodeURIComponent(author)}',
           metadata: { searchType: 'author' }
         });
       });
@@ -251,11 +251,11 @@ export function IntelligentSearch({
     if ('query' in result) {
       // C'est un élément d'historique
       finalQuery = result.query;
-      url = `/search?q=${encodeURIComponent(result.query)}`;
+      url = '/search?q=${encodeURIComponent(result.query)}';
     } else {
       // C'est un résultat de recherche
       finalQuery = result.title;
-      url = result.url || `/search?q=${encodeURIComponent(result.title)}`;
+      url = result.url || '/search?q=${encodeURIComponent(result.title)}';
     }
 
     setQuery(finalQuery);
@@ -276,7 +276,7 @@ export function IntelligentSearch({
     addToHistory(searchQuery);
     setIsOpen(false);
 
-    const url = `/search?q=${encodeURIComponent(searchQuery)}`;
+    const url = '/search?q=${encodeURIComponent(searchQuery)}';
     router.push(url as any);
   }, [router, addToHistory]);
 
@@ -536,8 +536,8 @@ function SearchResultItem({ result, isSelected, onClick }: SearchResultItemProps
           
           {result.metadata && (
             <div className="text-xs text-muted-foreground truncate mt-1">
-              {result.metadata.categories && `${result.metadata.categories} • `}
-              {result.metadata.note && `Note: ${result.metadata.note}/10`}
+              {result.metadata.categories && '${result.metadata.categories} • '}
+              {result.metadata.note && 'Note: ${result.metadata.note}/10'}
             </div>
           )}
         </div>

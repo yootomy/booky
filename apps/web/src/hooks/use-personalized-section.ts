@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 interface PersonalizedBook {
   id: string;
@@ -33,13 +34,13 @@ export function usePersonalizedSection() {
         setIsLoading(true);
         
         // Vérifier si l'utilisateur est connecté
-        const sessionResponse = await fetch('/api/proxy/auth/session');
+        const sessionResponse = await apiClient.get('/api/auth/session');
         if (!sessionResponse.ok) {
           setIsAuthenticated(false);
           setData({ suggestions: [], currentReading: [], toReadNext: [] });
           return;
         }
-        
+
         const session = await sessionResponse.json();
         if (!session.user) {
           setIsAuthenticated(false);
@@ -48,13 +49,13 @@ export function usePersonalizedSection() {
         }
 
         setIsAuthenticated(true);
-        
+
         // Récupérer les favoris de l'utilisateur
-        const favoritesResponse = await fetch('/api/proxy/favorites');
+        const favoritesResponse = await apiClient.get('/api/favorites');
         const favorites = favoritesResponse.ok ? await favoritesResponse.json() : [];
-        
+
         // Récupérer tous les livres pour les suggestions
-        const booksResponse = await fetch('/api/proxy/books');
+        const booksResponse = await apiClient.get('/api/books');
         const allBooks = booksResponse.ok ? await booksResponse.json() : [];
 
         // Générer des suggestions basées sur les favoris

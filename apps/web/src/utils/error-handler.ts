@@ -110,7 +110,7 @@ export function getErrorMessage(error: unknown, context?: ErrorContext): string 
     
     if (error.statusCode === 404) {
       const resource = context?.action?.includes("book") ? "livre" : "ressource";
-      return `${resource} introuvable.`;
+      return '${resource} introuvable.';
     }
     
     if (error.statusCode === 422) {
@@ -159,7 +159,7 @@ export function getErrorTitle(error: unknown, context?: ErrorContext): string {
       return "Erreur du serveur";
     default:
       return context?.action 
-        ? `Erreur lors de ${context.action}`
+        ? 'Erreur lors de ${context.action}'
         : "Erreur";
   }
 }
@@ -188,7 +188,7 @@ export function getRecoveryActions(error: unknown, context?: ErrorContext) {
     actions.push({
       label: "Se reconnecter",
       action: () => {
-        window.location.href = "/auth/login";
+        window.location.href = "/login";
       }
     });
   }
@@ -286,7 +286,7 @@ export function handleError(
     if (typeof window !== "undefined") {
       localStorage.clear();
       setTimeout(() => {
-        window.location.href = "/auth/login";
+        window.location.href = "/login";
       }, 1000);
     }
   }

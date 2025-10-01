@@ -42,14 +42,14 @@ export default function TestApiPage() {
       addResult(url, method, data, response.status);
       
       if (response.ok) {
-        toast.success(`${method} ${url} - OK`);
+        toast.success('${method} ${url} - OK');
       } else {
-        toast.error(`${method} ${url} - ${response.status}`);
+        toast.error('${method} ${url} - ${response.status}');
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       addResult(url, method, { error: errorMessage }, 0);
-      toast.error(`Error: ${errorMessage}`);
+      toast.error('Error: ${errorMessage}');
     } finally {
       setLoading(false);
     }
@@ -164,7 +164,7 @@ export default function TestApiPage() {
                     : result.status >= 400
                     ? 'bg-red-50 border-red-200'
                     : 'bg-gray-50 border-gray-200'
-                }`}
+                }'}
               >
                 <div className="flex justify-between items-start mb-1">
                   <span className="font-mono font-semibold">
@@ -176,7 +176,7 @@ export default function TestApiPage() {
                       : result.status >= 400
                       ? 'bg-red-100 text-red-800'
                       : 'bg-gray-100 text-gray-800'
-                  }`}>
+                  }'}>
                     {result.status}
                   </span>
                 </div>

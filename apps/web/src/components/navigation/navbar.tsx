@@ -8,6 +8,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import {
   BookOpen,
   Home,
@@ -51,7 +52,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { SearchBox } from '@/components/search/search-box';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 export interface NavItem {
   href: string;
@@ -72,8 +73,6 @@ export interface NavbarProps {
   };
   onLogin?: () => void;
   onLogout?: () => void;
-  onToggleTheme?: () => void;
-  theme?: 'light' | 'dark' | 'system';
   className?: string;
   brandName?: string;
   brandLogo?: string;
@@ -194,39 +193,22 @@ function NavLink({
     <Link
       href={item.href as any}
       onClick={onClick}
-      className="group flex items-center gap-3 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-md relative"
+      className={cn(
+        "group flex items-center gap-3 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-md relative font-medium",
+        isActive
+          ? "bg-primary/10 text-primary border border-primary/20 font-semibold"
+          : "text-foreground hover:bg-card/70 hover:backdrop-blur-lg border border-transparent hover:border-accent/20"
+      )}
       style={{
-        backgroundColor: isActive ? 'rgba(139, 21, 56, 0.08)' : 'transparent',
-        color: isActive ? '#8B1538' : '#2C1810',
-        fontFamily: 'Inter, sans-serif',
-        fontWeight: isActive ? 600 : 500,
-        border: isActive ? '1px solid rgba(139, 21, 56, 0.2)' : '1px solid transparent'
-      }}
-      onMouseEnter={(e) => {
-        if (!isActive) {
-          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-          e.currentTarget.style.backdropFilter = 'blur(10px)';
-          e.currentTarget.style.border = '1px solid rgba(107, 76, 123, 0.2)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!isActive) {
-          e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.border = '1px solid transparent';
-        }
+        fontFamily: 'Inter, sans-serif'
       }}
     >
       <item.icon className="h-4 w-4 group-hover:scale-110 transition-transform duration-300" />
       <span>{item.label}</span>
       {item.badge && (
-        <Badge 
-          variant="secondary" 
-          className="ml-auto"
-          style={{
-            backgroundColor: 'rgba(139, 21, 56, 0.1)',
-            color: '#8B1538',
-            border: '1px solid rgba(139, 21, 56, 0.2)'
-          }}
+        <Badge
+          variant="secondary"
+          className="ml-auto bg-primary/10 text-primary border-primary/20"
         >
           {item.badge}
         </Badge>
@@ -268,12 +250,15 @@ function MobileMenu({
         </SheetHeader>
         
         {/* Recherche mobile */}
-        <div className="mt-6">
-          <SearchBox 
-            className="w-full" 
-            placeholder="Rechercher..."
-            variant="compact"
-          />
+        <div className="mt-6 mb-2">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Rechercher un livre, un auteur..."
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
         </div>
         
         <div className="mt-6 space-y-1">
@@ -333,17 +318,13 @@ function MobileMenu({
 }
 
 // Menu utilisateur desktop
-function UserMenu({ 
-  user, 
-  onLogout, 
-  onToggleTheme, 
-  theme,
-  notifications 
+function UserMenu({
+  user,
+  onLogout,
+  notifications
 }: {
   user: NavbarProps['user'];
   onLogout?: () => void;
-  onToggleTheme?: () => void;
-  theme?: 'light' | 'dark' | 'system';
   notifications?: number;
 }) {
   return (
@@ -353,8 +334,8 @@ function UserMenu({
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-4 w-4" />
           {notifications > 0 && (
-            <Badge 
-              variant="destructive" 
+            <Badge
+              variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
             >
               {notifications > 99 ? '99+' : notifications}
@@ -364,13 +345,7 @@ function UserMenu({
       )}
 
       {/* Toggle theme */}
-      <Button variant="ghost" size="icon" onClick={onToggleTheme}>
-        {theme === 'dark' ? (
-          <Sun className="h-4 w-4" />
-        ) : (
-          <Moon className="h-4 w-4" />
-        )}
-      </Button>
+      <ThemeToggle />
 
       {/* User menu */}
       <DropdownMenu>
@@ -451,8 +426,6 @@ export function Navbar({
   user,
   onLogin,
   onLogout,
-  onToggleTheme,
-  theme = 'system',
   className,
   brandName = 'Booky',
   brandLogo,
@@ -468,15 +441,9 @@ export function Navbar({
 
   return (
     <header className={cn(
-      'sticky top-0 z-50 w-full transition-all duration-300',
+      'sticky top-0 z-50 w-full transition-all duration-300 bg-background/95 backdrop-blur-lg border-b border-border shadow-sm',
       className
-    )}
-      style={{
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-        backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid rgba(139, 21, 56, 0.1)',
-        boxShadow: '0 8px 32px rgba(139, 21, 56, 0.05)'
-      }}>
+    )}>
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between" style={{ fontFamily: 'Inter, sans-serif' }}>
           {/* Logo et navigation mobile */}
@@ -493,17 +460,12 @@ export function Navbar({
               {brandLogo ? (
                 <img src={brandLogo} alt={brandName} className="h-8 w-8" />
               ) : (
-                <BookOpen className="h-6 w-6 group-hover:scale-110 transition-transform duration-300" 
-                  style={{ color: '#8B1538' }} />
+                <BookOpen className="h-6 w-6 group-hover:scale-110 transition-transform duration-300 text-primary" />
               )}
-              <span 
-                className="font-bold text-xl transition-all duration-300 group-hover:scale-105"
+              <span
+                className="font-bold text-xl transition-all duration-300 group-hover:scale-105 bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent"
                 style={{
-                  fontFamily: 'Playfair Display, serif',
-                  background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
+                  fontFamily: 'Playfair Display, serif'
                 }}
               >
                 {brandName}
@@ -553,23 +515,8 @@ export function Navbar({
             )}
           </nav>
 
-          {/* Barre de recherche */}
-          <div className="hidden lg:flex flex-1 justify-center px-4">
-            <SearchBox 
-              className="max-w-md" 
-              placeholder="Rechercher un livre, un auteur..."
-            />
-          </div>
-
           {/* Actions utilisateur */}
           <div className="flex items-center gap-2">
-            {/* Icône recherche pour tablettes */}
-            <div className="flex lg:hidden">
-              <SearchBox 
-                variant="compact"
-                placeholder="Rechercher..."
-              />
-            </div>
             {/* Bouton d'ajout rapide */}
             {user && (
               <DropdownMenu>
@@ -607,34 +554,15 @@ export function Navbar({
               <UserMenu
                 user={user}
                 onLogout={onLogout}
-                onToggleTheme={onToggleTheme}
-                theme={theme}
                 notifications={notifications}
               />
             ) : (
               <div className="hidden md:flex items-center gap-3">
-                <button 
-                  onClick={onToggleTheme}
-                  className="p-2 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-md"
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(107, 76, 123, 0.2)',
-                    color: '#6B4C7B'
-                  }}
-                >
-                  {theme === 'dark' ? (
-                    <Sun className="h-4 w-4" />
-                  ) : (
-                    <Moon className="h-4 w-4" />
-                  )}
-                </button>
-                <button 
+                <ThemeToggle />
+                <button
                   onClick={onLogin}
-                  className="px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl font-semibold"
+                  className="px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl font-semibold bg-gradient-to-br from-primary to-accent text-primary-foreground"
                   style={{
-                    background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                    color: 'white',
                     fontFamily: 'Inter, sans-serif',
                     boxShadow: '0 8px 25px rgba(139, 21, 56, 0.3)'
                   }}

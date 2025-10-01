@@ -19,6 +19,7 @@ import {
   Plus
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -26,12 +27,12 @@ import { cn } from '@/lib/utils';
 const highlightSearchTerm = (text: string, searchTerm: string) => {
   if (!searchTerm.trim()) return text;
 
-  const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  const regex = new RegExp('(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})', 'gi');
   const parts = text.split(regex);
 
   return parts.map((part, index) =>
     regex.test(part) ? (
-      <span key={index} className="bg-yellow-200 text-yellow-800 px-1 rounded font-medium">
+      <span key={index} className="bg-primary/20 text-primary px-1 rounded font-medium">
         {part}
       </span>
     ) : part
@@ -113,7 +114,7 @@ export default function ListsPage() {
       params.append('sort', 'ordre_affichage');
       params.append('order', 'asc');
 
-      const response = await fetch(`/api/proxy/lists?${params.toString()}`);
+      const response = await apiClient.get('/api/lists?${params.toString()}');
       const data = await response.json();
 
       if (data.success) {
@@ -121,7 +122,7 @@ export default function ListsPage() {
         const listsWithBooks = await Promise.all(
           data.data.map(async (list: CustomList) => {
             try {
-              const booksResponse = await fetch(`/api/proxy/lists/${list.id}/books?limit=4`);
+              const booksResponse = await apiClient.get('/api/lists/${list.id}/books?limit=4');
               const booksData = await booksResponse.json();
 
               return {
@@ -156,8 +157,7 @@ export default function ListsPage() {
 
   if (loading) {
     return (
-      <div className="w-full" style={{
-        backgroundColor: '#FAF8F5',
+      <div className="w-full bg-background" style={{
         minHeight: '100vh',
         height: '100%'
       }}>
@@ -165,20 +165,20 @@ export default function ListsPage() {
           {/* Header Hero Placeholder */}
           <div className="text-center mb-12 space-y-6">
             <div className="space-y-4">
-              <div className="h-16 w-96 bg-gray-300 rounded mx-auto animate-pulse"></div>
-              <div className="h-6 w-2/3 bg-gray-200 rounded mx-auto animate-pulse"></div>
-              <div className="h-6 w-1/2 bg-gray-200 rounded mx-auto animate-pulse"></div>
+              <div className="h-16 w-96 bg-muted rounded mx-auto animate-pulse"></div>
+              <div className="h-6 w-2/3 bg-muted rounded mx-auto animate-pulse"></div>
+              <div className="h-6 w-1/2 bg-muted rounded mx-auto animate-pulse"></div>
             </div>
 
             {/* Search bar placeholder */}
             <div className="relative max-w-lg mx-auto">
-              <div className="h-12 w-full bg-gray-200 rounded-full animate-pulse"></div>
+              <div className="h-12 w-full bg-muted rounded-full animate-pulse"></div>
             </div>
           </div>
 
           {/* Stats placeholder */}
           <div className="text-center mb-8">
-            <div className="h-4 w-32 bg-gray-200 rounded mx-auto animate-pulse"></div>
+            <div className="h-4 w-32 bg-muted rounded mx-auto animate-pulse"></div>
           </div>
 
           {/* Lists Grid Placeholder */}
@@ -192,46 +192,40 @@ export default function ListsPage() {
                 className="group cursor-pointer animate-pulse"
               >
                 <Card
-                  className="overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(139, 21, 56, 0.1)',
-                    boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
-                  }}
+                  className="overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/95 backdrop-blur-xl border border-primary/10 shadow-xl"
                 >
                   <CardContent className="p-6">
                     {/* Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3 flex-1">
-                        <div className="w-4 h-4 bg-gray-300 rounded-full"></div>
-                        <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+                        <div className="w-4 h-4 bg-muted rounded-full"></div>
+                        <div className="h-6 bg-muted rounded w-3/4"></div>
                       </div>
-                      <div className="w-6 h-6 bg-gray-200 rounded"></div>
+                      <div className="w-6 h-6 bg-muted rounded"></div>
                     </div>
 
                     {/* Description */}
                     <div className="space-y-2 mb-4">
-                      <div className="h-4 bg-gray-200 rounded w-full"></div>
-                      <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                      <div className="h-4 bg-muted rounded w-full"></div>
+                      <div className="h-4 bg-muted rounded w-2/3"></div>
                     </div>
 
                     {/* Books Grid */}
                     <div className="grid grid-cols-4 gap-2 mb-4">
                       {[...Array(4)].map((_, bookIndex) => (
-                        <div key={bookIndex} className="aspect-[2/3] bg-gray-300 rounded"></div>
+                        <div key={bookIndex} className="aspect-[2/3] bg-muted rounded"></div>
                       ))}
                     </div>
 
                     {/* Footer */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                        <div className="w-6 h-6 bg-muted rounded-full"></div>
+                        <div className="h-4 bg-muted rounded w-20"></div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="h-4 bg-gray-200 rounded w-12"></div>
-                        <div className="h-4 bg-gray-200 rounded w-16"></div>
+                        <div className="h-4 bg-muted rounded w-12"></div>
+                        <div className="h-4 bg-muted rounded w-16"></div>
                       </div>
                     </div>
                   </CardContent>
@@ -245,8 +239,7 @@ export default function ListsPage() {
   }
 
   return (
-    <div className="w-full" style={{
-      backgroundColor: '#FAF8F5',
+    <div className="w-full bg-background" style={{
       minHeight: '100vh',
       height: '100%'
     }}>
@@ -255,10 +248,9 @@ export default function ListsPage() {
         <div className="text-center mb-12 space-y-6">
           <div className="space-y-4">
             <h1
-              className="text-5xl md:text-6xl font-bold"
+              className="text-5xl md:text-6xl font-bold text-foreground"
               style={{
-                fontFamily: 'Playfair Display, serif',
-                color: '#2C1810'
+                fontFamily: 'Playfair Display, serif'
               }}
             >
               Les Collections de{' '}
@@ -275,8 +267,7 @@ export default function ListsPage() {
               </span>
             </h1>
             <p
-              className="text-xl max-w-3xl mx-auto leading-relaxed"
-              style={{ color: '#5D4037' }}
+              className="text-xl max-w-3xl mx-auto leading-relaxed text-muted-foreground"
             >
               Plongez dans mes univers soigneusement sélectionnés de dark romance,
               où chaque liste raconte une histoire et révèle mes coups de cœur littéraires.
@@ -285,34 +276,27 @@ export default function ListsPage() {
 
           {/* Barre de recherche stylée */}
           <div className="relative max-w-lg mx-auto">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5" style={{ color: '#8B1538' }} />
-            </div>
             <Input
               placeholder="Rechercher parmi mes collections..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 pr-4 py-3 text-lg rounded-full bg-white/90 backdrop-blur-sm shadow-lg"
-              style={{
-                borderColor: '#D7B4B3',
-                borderWidth: '2px'
-              }}
+              className="px-4 py-3 text-lg rounded-full bg-background/90 backdrop-blur-sm shadow-lg border-2 border-primary/30"
             />
           </div>
 
           {/* Statistiques élégantes */}
           {lists.length > 0 && (
-            <div className="flex justify-center items-center gap-8 text-sm mt-8" style={{ color: '#5D4037' }}>
+            <div className="flex justify-center items-center gap-8 text-sm mt-8 text-muted-foreground">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#8B1538' }}></div>
-                <span>{filteredLists.length} collection{filteredLists.length > 1 ? 's' : ''} {searchQuery && `sur ${lists.length}`}</span>
+                <div className="w-2 h-2 rounded-full bg-primary"></div>
+                <span>{filteredLists.length} collection{filteredLists.length > 1 ? 's' : ''} {searchQuery && 'sur ${lists.length}'}</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#6B4C7B' }}></div>
+                <div className="w-2 h-2 rounded-full bg-primary/70"></div>
                 <span>{filteredLists.reduce((acc, list) => acc + list._count.list_books, 0)} livres</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#D4AF37' }}></div>
+                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
                 <span>Créées avec ❤️</span>
               </div>
             </div>
@@ -321,10 +305,10 @@ export default function ListsPage() {
           {/* Résultats de recherche */}
           {searchQuery && (
             <div className="text-center mt-4">
-              <p className="text-sm" style={{ color: '#8D6E63' }}>
+              <p className="text-sm text-muted-foreground">
                 {filteredLists.length > 0
                   ? `${filteredLists.length} résultat${filteredLists.length > 1 ? 's' : ''} pour "${searchQuery}"`
-                  : `Aucun résultat pour "${searchQuery}"`
+                  : `Aucun résultat pour "${searchQuery}"'
                 }
               </p>
             </div>
@@ -341,19 +325,18 @@ export default function ListsPage() {
                   background: 'linear-gradient(135deg, #F3E5E7 0%, #E8D2D6 100%)'
                 }}
               >
-                <List className="h-10 w-10" style={{ color: '#8B1538' }} />
+                <List className="h-10 w-10 text-primary" />
               </div>
               <div className="space-y-2">
                 <h3
-                  className="text-2xl font-semibold"
+                  className="text-2xl font-semibold text-foreground"
                   style={{
-                    fontFamily: 'Playfair Display, serif',
-                    color: '#2C1810'
+                    fontFamily: 'Playfair Display, serif'
                   }}
                 >
                   {searchQuery ? "Aucune collection trouvée" : "Mes collections arrivent bientôt"}
                 </h3>
-                <p style={{ color: '#5D4037' }}>
+                <p className="text-muted-foreground">
                   {searchQuery
                     ? "Aucune collection ne correspond à votre recherche."
                     : "Je prépare avec soin mes sélections pour vous offrir le meilleur de la dark romance."}
@@ -372,22 +355,16 @@ export default function ListsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group cursor-pointer"
-                  onClick={() => router.push(`/books?collection=${list.id}`)}
+                  onClick={() => router.push('/books?collection=${list.id}')}
                 >
                   <div
-                    className="relative rounded-2xl p-6 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(139, 21, 56, 0.1)',
-                      boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
-                    }}
+                    className="relative rounded-2xl p-6 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/95 backdrop-blur-xl border border-primary/10 shadow-xl"
                   >
                     {/* Decorative background element */}
                     <div
                       className="absolute top-0 right-0 w-16 h-16 opacity-5"
                       style={{
-                        background: `radial-gradient(circle, ${list.couleur} 0%, transparent 70%)`,
+                        background: 'radial-gradient(circle, ${list.couleur} 0%, transparent 70%)',
                         transform: 'translate(50%, -50%)'
                       }}
                     />
@@ -402,20 +379,18 @@ export default function ListsPage() {
                       {/* Header */}
                       <div className="relative mb-6">
                         <h3
-                          className="text-xl font-bold mb-2 group-hover:text-[#8B1538] transition-colors duration-300"
+                          className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors duration-300"
                           style={{
-                            fontFamily: 'Playfair Display, serif',
-                            color: '#2C1810'
+                            fontFamily: 'Playfair Display, serif'
                           }}
                         >
                           {highlightSearchTerm(list.nom, searchQuery)}
                         </h3>
                         {list.description && (
                           <p
-                            className="text-sm opacity-75 leading-relaxed line-clamp-2"
+                            className="text-sm opacity-75 leading-relaxed line-clamp-2 text-foreground"
                             style={{
-                              fontFamily: 'Inter, sans-serif',
-                              color: '#2C1810'
+                              fontFamily: 'Inter, sans-serif'
                             }}
                           >
                             {highlightSearchTerm(list.description, searchQuery)}
@@ -429,16 +404,16 @@ export default function ListsPage() {
                           <div
                             key={book.id}
                             className="aspect-[2/3] relative rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-300"
-                            style={{ transitionDelay: `${bookIndex * 50}ms` }}
+                            style={{ transitionDelay: '${bookIndex * 50}ms' }}
                             onClick={(e) => {
                               e.stopPropagation();
-                              router.push(`/books/${book.id}`);
+                              router.push('/books/${book.id}');
                             }}
                           >
                             {book.image_couverture ? (
                               <img
                                 src={book.image_couverture}
-                                alt={`Couverture de ${book.titre}`}
+                                alt={'Couverture de ${book.titre}'}
                                 className="w-full h-full object-contain bg-gray-50"
                               />
                             ) : (
@@ -460,26 +435,24 @@ export default function ListsPage() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <span
-                            className="text-sm font-medium opacity-60"
+                            className="text-sm font-medium opacity-60 text-foreground"
                             style={{
-                              fontFamily: 'Inter, sans-serif',
-                              color: '#2C1810'
+                              fontFamily: 'Inter, sans-serif'
                             }}
                           >
                             {list._count.list_books} livre{list._count.list_books > 1 ? 's' : ''}
                           </span>
                           <span
-                            className="text-xs opacity-50"
+                            className="text-xs opacity-50 text-foreground"
                             style={{
-                              fontFamily: 'Inter, sans-serif',
-                              color: '#2C1810'
+                              fontFamily: 'Inter, sans-serif'
                             }}
                           >
                             {list.user.nom_complet}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2 text-sm font-semibold group-hover:gap-3 transition-all duration-300" style={{ color: '#8B1538' }}>
+                        <div className="flex items-center gap-2 text-sm font-semibold group-hover:gap-3 transition-all duration-300 text-primary">
                           Voir la collection
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                         </div>
@@ -495,11 +468,7 @@ export default function ListsPage() {
         {/* Call to action élégant */}
         <div className="mt-20 text-center">
           <div
-            className="max-w-4xl mx-auto p-12 rounded-3xl shadow-lg"
-            style={{
-              background: 'linear-gradient(135deg, #F3E5E7 0%, #E8D2D6 30%, #DCC4C8 100%)',
-              border: '1px solid #D7B4B3'
-            }}
+            className="max-w-4xl mx-auto p-12 rounded-3xl shadow-lg bg-card/80 backdrop-blur-xl border border-primary/20"
           >
             <div className="space-y-6">
               <div
@@ -512,15 +481,14 @@ export default function ListsPage() {
               </div>
               <div className="space-y-4">
                 <h3
-                  className="text-3xl font-bold"
+                  className="text-3xl font-bold text-foreground"
                   style={{
-                    fontFamily: 'Playfair Display, serif',
-                    color: '#2C1810'
+                    fontFamily: 'Playfair Display, serif'
                   }}
                 >
                   Tombée sous le charme ?
                 </h3>
-                <p className="text-lg max-w-2xl mx-auto" style={{ color: '#5D4037' }}>
+                <p className="text-lg max-w-2xl mx-auto text-muted-foreground">
                   Explorez l'intégralité de ma bibliothèque et découvrez tous mes secrets littéraires,
                   mes notes personnelles et mes recommandations exclusives.
                 </p>
@@ -541,12 +509,7 @@ export default function ListsPage() {
                   variant="outline"
                   size="lg"
                   onClick={() => router.push('/categories')}
-                  className="rounded-full px-8 hover:shadow-md transition-all duration-300"
-                  style={{
-                    borderColor: '#8B1538',
-                    borderWidth: '2px',
-                    color: '#8B1538'
-                  }}
+                  className="rounded-full px-8 hover:shadow-md transition-all duration-300 border-2 border-primary text-primary"
                 >
                   Parcourir par genre
                 </Button>

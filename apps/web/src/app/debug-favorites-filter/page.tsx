@@ -199,7 +199,7 @@ export default function DebugFavoritesFilterPage() {
                       result.inFavorites 
                         ? 'bg-green-50 border-green-200' 
                         : 'bg-gray-50 border-gray-200'
-                    }`}
+                    }'}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">

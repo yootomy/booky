@@ -140,7 +140,7 @@ export function AnimatedElement({
 
     // Ajouter le délai si spécifié
     if (delay > 0) {
-      baseClasses.push(`delay-[${delay}ms]`);
+      baseClasses.push('delay-[${delay}ms]');
     }
 
     // État initial ou animé selon le trigger

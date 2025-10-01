@@ -86,7 +86,7 @@ export function SpicyRating({
   const displayValue = isHovering && hoverEffect ? hoveredValue : value;
   const clampedValue = Math.max(0, Math.min(max, displayValue));
 
-  // Fonction pour obtenir l'intensité de la couleur selon la valeur
+  // Fonction pour obtenir l`intensité de la couleur selon la valeur
   const getSpicyIntensity = (spicyIndex: number) => {
     const spicyValue = spicyIndex + 1;
     const intensity = spicyValue / max;
@@ -118,7 +118,7 @@ export function SpicyRating({
         onClick={() => handleSpicyClick(spicyValue)}
         onMouseEnter={() => handleSpicyHover(spicyValue)}
         onFocus={() => handleSpicyHover(spicyValue)}
-        aria-label={`Niveau spicy ${spicyValue} sur ${max}`}
+        aria-label={'Niveau spicy ${spicyValue} sur ${max}'}
       >
         {/* Piment de base (vide) */}
         <Flame
@@ -186,7 +186,7 @@ export function SpicyRating({
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
         role="radiogroup"
-        aria-label={`Niveau spicy sur ${max}`}
+        aria-label={'Niveau spicy sur ${max}'}
       >
         {Array.from({ length: max }, (_, index) => renderSpicy(index))}
       </div>

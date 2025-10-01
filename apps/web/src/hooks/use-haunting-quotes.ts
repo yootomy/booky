@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface HauntingQuote {
   id: string;
@@ -20,7 +21,7 @@ export function useHauntingQuotes() {
         setIsLoading(true);
         
         // Récupérer les livres avec citations
-        const response = await fetch('/api/proxy/books?has_citations=true&limit=20');
+        const response = await apiClient.get('/api/books?has_citations=true&limit=20');
         if (!response.ok) {
           // Fallback en cas d'erreur API
           setData([]);
@@ -43,7 +44,7 @@ export function useHauntingQuotes() {
             // Prendre jusqu'à 2 citations par livre
             citationLines.slice(0, 2).forEach((citation: string, index: number) => {
               quotes.push({
-                id: `${book.id}-${index}`,
+                id: '${book.id}-${index}',
                 text: citation,
                 book_title: book.titre,
                 book_author: book.auteur,

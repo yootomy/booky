@@ -447,7 +447,7 @@ export const BookSearchSchema = BookFiltersSchema.extend({
 // Schéma pour sérialiser un utilisateur (sans données sensibles)
 export const UserResponseSchema = z.object({
   id: z.string(),
-  nom_complet: z.string(),
+  nom_complet: z.string().nullable(),
   avatar: z.string().nullable(),
 });
 

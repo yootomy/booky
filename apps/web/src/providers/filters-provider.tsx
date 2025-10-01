@@ -229,7 +229,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     if (newState.viewMode !== 'grid') params.set('view', newState.viewMode);
     
     const queryString = params.toString();
-    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    const newUrl = queryString ? '${pathname}?${queryString}' : pathname;
     
     router.replace(newUrl as any, { scroll: false });
   }, [syncWithUrl, pathname, router]);

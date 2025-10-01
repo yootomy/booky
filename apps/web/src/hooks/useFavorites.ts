@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { apiClient } from '@/lib/api-client';
 
 export interface UseFavoritesReturn {
   favorites: Set<string>;
@@ -26,10 +27,10 @@ export function useFavorites(): UseFavoritesReturn {
 
   // Fonction pour charger les favoris depuis l'API
   const loadFavorites = useCallback(async () => {
-    console.log('loadFavorites called', { isAuthenticated, userId: user?.id });
-    
+    console.log('[NEW API] loadFavorites called', { isAuthenticated, userId: user?.id });
+
     if (!isAuthenticated || !user) {
-      console.log('loadFavorites: Not authenticated, clearing favorites');
+      console.log('[NEW API] loadFavorites: Not authenticated, clearing favorites');
       setFavorites(new Set());
       return;
     }
@@ -37,35 +38,32 @@ export function useFavorites(): UseFavoritesReturn {
     try {
       setIsLoading(true);
       setError(null);
-      
-      console.log('Loading favorites...');
-      const response = await fetch('/api/proxy/favorites', {
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch favorites: ${response.status}`);
+
+      console.log('[NEW API] Loading favorites...');
+      const response = await apiClient.get('/api/favorites');
+
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to fetch favorites');
       }
-      
-      const data = await response.json();
-      console.log('Favorites response:', data);
-      
-      if (data.success && data.data) {
+
+      console.log('[NEW API] Favorites response:', response);
+
+      if (response.data) {
         // Server returns full book objects, we need to extract IDs
-        const favoritesArray = Array.isArray(data.data) 
-          ? data.data.map((book: any) => book.id) 
+        const favoritesArray = Array.isArray(response.data)
+          ? response.data.map((book: any) => book.id)
           : [];
         setFavorites(new Set(favoritesArray));
         setHasInitialLoad(true);
-        console.log('Favorites loaded and set:', favoritesArray);
+        console.log('[NEW API] Favorites loaded and set:', favoritesArray);
       } else {
-        console.warn('Favorites API returned no data or failed:', data);
+        console.warn('[NEW API] Favorites API returned no data:', response);
         setFavorites(new Set());
         setHasInitialLoad(true);
       }
     } catch (error: any) {
-      console.error('Error loading favorites:', error);
-      if (error.statusCode === 401) {
+      console.error('[NEW API] Error loading favorites:', error);
+      if (error.message?.includes('401')) {
         // Utilisateur non authentifié
         setFavorites(new Set());
         setHasInitialLoad(true);
@@ -80,12 +78,12 @@ export function useFavorites(): UseFavoritesReturn {
 
   // Charger les favoris au montage et quand l'auth change
   useEffect(() => {
-    console.log('useFavorites: useEffect triggered', { isAuthenticated, user: user?.id });
+    console.log('[NEW API] useFavorites: useEffect triggered', { isAuthenticated, user: user?.id });
     if (isAuthenticated && user) {
-      console.log('useFavorites: Loading favorites for authenticated user:', user.id);
+      console.log('[NEW API] useFavorites: Loading favorites for authenticated user:', user.id);
       loadFavorites();
     } else {
-      console.log('useFavorites: Not authenticated, clearing favorites');
+      console.log('[NEW API] useFavorites: Not authenticated, clearing favorites');
       setFavorites(new Set());
     }
   }, [isAuthenticated, user?.id, loadFavorites]);
@@ -94,61 +92,47 @@ export function useFavorites(): UseFavoritesReturn {
   const addToFavorites = useCallback(async (bookId: string) => {
     if (!isAuthenticated) {
       toast.error('Veuillez vous connecter pour ajouter des favoris');
-      // TODO: Ouvrir le modal de connexion
       return;
     }
 
     try {
       // Mise à jour optimiste
       setFavorites(prev => new Set([...prev, bookId]));
-      
-      console.log('Adding to favorites:', bookId);
-      const response = await fetch('/api/proxy/favorites', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ bookId })
-      });
-      
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({
-          error: `Server error: ${response.status}`
-        }));
 
+      console.log('[NEW API] Adding to favorites:', bookId);
+      const response = await apiClient.post('/api/favorites', { bookId });
+
+      if (!response.success) {
         // Handle "already in favorites" case gracefully
-        if (response.status === 400 && data.error?.includes('already in favorites')) {
+        if (response.error?.includes('already in favorites')) {
           // Ensure local state is synced - book should be in favorites
           setFavorites(prev => new Set([...prev, bookId]));
           toast.info('Ce livre est déjà dans vos favoris');
           return;
         }
 
-        throw new Error(data.error || 'Failed to add favorite');
+        throw new Error(response.error || 'Failed to add favorite');
       }
 
-      const data = await response.json();
-      console.log('Add favorite response:', data);
-
+      console.log('[NEW API] Add favorite response:', response);
       toast.success('Livre ajouté aux favoris');
-      
+
     } catch (error: any) {
-      console.error('Error adding to favorites:', error);
-      
+      console.error('[NEW API] Error adding to favorites:', error);
+
       // Rollback en cas d'erreur
       setFavorites(prev => {
         const newSet = new Set(prev);
         newSet.delete(bookId);
         return newSet;
       });
-      
+
       if (error.message?.includes('401')) {
         toast.error('Veuillez vous reconnecter', {
           action: {
             label: 'Se connecter',
             onClick: () => {
-              window.location.href = '/auth/login';
+              window.location.href = '/login';
             }
           }
         });
@@ -172,27 +156,21 @@ export function useFavorites(): UseFavoritesReturn {
         newSet.delete(bookId);
         return newSet;
       });
-      
-      const response = await fetch(`/api/proxy/favorites/${bookId}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
-      
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({
-          error: `Server error: ${response.status}`
-        }));
-        throw new Error(data.error || 'Failed to remove favorite');
+
+      const response = await apiClient.delete(`/api/favorites/${bookId}`);
+
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to remove favorite');
       }
-      
+
       toast.success('Livre retiré des favoris');
-      
+
     } catch (error: any) {
-      console.error('Error removing from favorites:', error);
-      
+      console.error('[NEW API] Error removing from favorites:', error);
+
       // Rollback en cas d'erreur
       setFavorites(prev => new Set([...prev, bookId]));
-      
+
       if (error.message?.includes('401')) {
         toast.error('Veuillez vous reconnecter');
       } else {
@@ -208,7 +186,7 @@ export function useFavorites(): UseFavoritesReturn {
         action: {
           label: 'Se connecter',
           onClick: () => {
-            window.location.href = '/auth/login';
+            window.location.href = '/login';
           }
         }
       });
@@ -229,14 +207,14 @@ export function useFavorites(): UseFavoritesReturn {
     if (favorites.has(bookId)) {
       return true;
     }
-    
+
     // Vérifications tolérantes pour gérer les différences de type
     const bookIdStr = String(bookId);
     const bookIdNum = bookId.toString();
-    
+
     for (const favoriteId of favorites) {
       const favoriteIdStr = String(favoriteId);
-      
+
       // Comparaisons possibles
       if (
         favoriteIdStr === bookIdStr ||
@@ -244,25 +222,25 @@ export function useFavorites(): UseFavoritesReturn {
         favoriteId.toString() === bookIdStr ||
         favoriteIdStr === bookIdNum
       ) {
-        console.log(`[isFavorite] Found match with type conversion: book="${bookId}" (${typeof bookId}) matched favorite="${favoriteId}" (${typeof favoriteId})`);
+        console.log(`[NEW API] [isFavorite] Found match with type conversion: book="${bookId}" (${typeof bookId}) matched favorite="${favoriteId}" (${typeof favoriteId})`);
         return true;
       }
     }
-    
+
     return false;
   }, [favorites]);
 
   // Fonction pour rafraîchir les favoris
   const refreshFavorites = useCallback(async () => {
-    console.log('Force refreshing favorites...');
+    console.log('[NEW API] Force refreshing favorites...');
     await loadFavorites();
   }, [loadFavorites]);
 
   // Fonction pour forcer la synchronisation (utile en cas d'incohérence)
   const forceSync = useCallback(async () => {
     if (!isAuthenticated) return;
-    
-    console.log('Force syncing favorites state...');
+
+    console.log('[NEW API] Force syncing favorites state...');
     setFavorites(new Set()); // Reset local state
     await loadFavorites(); // Reload from server
     toast.info('État des favoris synchronisé');

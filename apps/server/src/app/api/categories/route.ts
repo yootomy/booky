@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/utils/db";
-import { 
-  CreateCategorySchema, 
-  CategoryFiltersSchema, 
-  CategoryErrorMessages 
+import { randomUUID } from "crypto";
+import {
+  CreateCategorySchema,
+  CategoryFiltersSchema,
+  CategoryErrorMessages
 } from "@/schemas/category.schemas";
 import { 
   handleError, 
@@ -163,6 +164,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   // Créer la catégorie
   const category = await db.category.create({
     data: {
+      id: randomUUID(),
       ...cleanedData,
       date_creation: new Date(),
       date_modification: new Date(),

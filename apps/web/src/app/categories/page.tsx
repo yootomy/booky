@@ -101,7 +101,7 @@ export default function CategoriesPage() {
             ))
           ) : (
             categories.map((category) => (
-              <Link key={category.id} href={`/categories/${category.id}`}>
+              <Link key={category.id} href={'/categories/${category.id}'}>
                 <Card className="h-full hover:bg-gray-800/50 transition-colors cursor-pointer group">
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-3 mb-4">
@@ -195,7 +195,7 @@ export default function CategoriesPage() {
             {categories
               .sort((a, b) => (b.book_count || 0) - (a.book_count || 0))
               .map((category) => (
-                <Link key={category.id} href={`/categories/${category.id}`}>
+                <Link key={category.id} href={'/categories/${category.id}'}>
                   <Card className="hover:bg-gray-800/50 transition-colors cursor-pointer">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">

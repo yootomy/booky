@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, List, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api-client';
 import { ListForm } from '@/components/forms/list-form';
 import { useToast } from '@/hooks/use-toast';
 
@@ -38,7 +39,7 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
     const fetchList = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/proxy/lists/${resolvedParams.id}`);
+        const response = await apiClient.get('/api/lists/${resolvedParams.id}');
 
         if (!response.ok) {
           throw new Error('Liste non trouvée');

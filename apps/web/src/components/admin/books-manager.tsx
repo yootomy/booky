@@ -317,7 +317,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                           <Edit2 className="h-4 w-4 mr-2" />
                           Modifier
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => window.open(`/books/${book.id}`, '_blank')}>
+                        <DropdownMenuItem onClick={() => window.open('/books/${book.id}', `_blank)}>
                           <ExternalLink className="h-4 w-4 mr-2" />
                           Ouvrir dans un nouvel onglet
                         </DropdownMenuItem>
@@ -382,8 +382,8 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">Aucun livre trouvé</h3>
               <p className="text-muted-foreground mb-4">
-                {searchQuery 
-                  ? `Aucun livre ne correspond à votre recherche "${searchQuery}"`
+                {searchQuery
+                  ? "Aucun livre ne correspond à votre recherche"
                   : "Commencez par ajouter votre premier livre"
                 }
               </p>
@@ -405,3 +405,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
     </div>
   );
 }
+
+export default BooksManager;
+
+

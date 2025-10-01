@@ -10,7 +10,7 @@ export default function TestIntegrationPage() {
   const [testResult, setTestResult] = useState<string>('');
 
   const handleSubmit = async (data: BookCreateInput | BookUpdateInput) => {
-    console.log('📚 Données du formulaire:', data);
+    console.log('📚 Données du formulaire:`, data);
     setTestResult(`✅ Livre testé: "${data.titre}" par ${data.auteur}`);
     
     // Simuler une sauvegarde

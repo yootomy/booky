@@ -30,7 +30,7 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={`/collections/${collection.id}` as any}>
+      <Link href={'/collections/${collection.id}' as any}>
         <div 
           className="relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
           style={{
@@ -79,12 +79,12 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
               <div
                 key={book.id}
                 className="aspect-[3/4] relative rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-300"
-                style={{ transitionDelay: `${bookIndex * 50}ms` }}
+                style={{ transitionDelay: '${bookIndex * 50}ms' }}
               >
                 {book.image_couverture ? (
                   <Image
                     src={book.image_couverture}
-                    alt={`Couverture de ${book.titre}`}
+                    alt={'Couverture de ${book.titre}'}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 25vw, 12vw"

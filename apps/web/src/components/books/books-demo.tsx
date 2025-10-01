@@ -104,7 +104,7 @@ const mockBooks: BookData[] = [
     statut: "LU" as BookStatusType,
     note_generale: 10,
     niveau_romance: 8,
-    resume_personnel: "Un chef-d'œuvre absolu ! L'histoire d'Evelyn est captivante du début à la fin.",
+    resume_personnel: "Un chef-d'œuvre absolu ! L'histoire d`Evelyn est captivante du début à la fin.",
     date_creation: new Date("2023-12-01"),
     date_lecture: new Date("2023-12-15"),
     nombre_pages: 400,

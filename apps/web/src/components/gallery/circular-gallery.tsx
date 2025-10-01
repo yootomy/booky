@@ -84,7 +84,7 @@ class Media {
     const texture = new Texture(this.gl);
     
     this.program = new Program(this.gl, {
-      vertex: `
+      vertex: '
         attribute vec3 position;
         attribute vec2 uv;
         uniform mat4 modelViewMatrix;
@@ -103,8 +103,8 @@ class Media {
           
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
-      `,
-      fragment: `
+      ',
+      fragment: '
         precision highp float;
         uniform sampler2D tMap;
         uniform vec2 uImageSizes;
@@ -140,7 +140,7 @@ class Media {
           
           gl_FragColor = vec4(finalColor, alpha * color.a);
         }
-      `,
+      ',
       uniforms: {
         tMap: { value: texture },
         uPlaneSizes: { value: [1, 1] },
@@ -313,7 +313,7 @@ class Media {
         ctx.fillStyle = '#ffd700';
         const stars = '★'.repeat(Math.floor(this.book.note_generale / 2)) + 
                      (this.book.note_generale % 2 >= 1 ? '☆' : '');
-        ctx.fillText(`${stars} ${this.book.note_generale}/10`, 200, startY + (lines.length * 30) + 60);
+        ctx.fillText('${stars} ${this.book.note_generale}/10', 200, startY + (lines.length * 30) + 60);
       }
       
       // Icône livre
@@ -689,7 +689,7 @@ export default function CircularGallery({
 
   if (!isClient) {
     return (
-      <div className={`w-full h-full flex items-center justify-center ${className}`}>
+      <div className={'w-full h-full flex items-center justify-center ${className}'}>
         <div className="animate-pulse">
           <div className="flex gap-4">
             {[...Array(5)].map((_, i) => (
@@ -706,7 +706,7 @@ export default function CircularGallery({
 
   if (!books || books.length === 0) {
     return (
-      <div className={`w-full h-full flex items-center justify-center ${className}`}>
+      <div className={'w-full h-full flex items-center justify-center ${className}'}>
         <div className="text-center space-y-4">
           <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
             <BookOpen className="w-10 h-10 text-purple-500" />
@@ -719,7 +719,7 @@ export default function CircularGallery({
 
   return (
     <div 
-      className={`w-full h-full cursor-grab active:cursor-grabbing ${className}`} 
+      className={'w-full h-full cursor-grab active:cursor-grabbing ${className}'} 
       ref={containerRef}
       style={{ touchAction: 'none' }}
     />

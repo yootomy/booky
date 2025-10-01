@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface LatestBook {
   id: string;
@@ -29,7 +30,7 @@ export function useLatestBooks() {
         setIsLoading(true);
         
         // Récupérer les livres triés par date de création (les plus récents en premier)
-        const response = await fetch('/api/proxy/books?limit=8&sortBy=date_creation&sortOrder=desc');
+        const response = await apiClient.get('/api/books?limit=8&sortBy=date_creation&sortOrder=desc');
         if (!response.ok) throw new Error('Failed to fetch latest books');
         
         const books = await response.json();

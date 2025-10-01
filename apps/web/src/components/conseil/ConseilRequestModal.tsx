@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/contexts/AuthContext';
 import { X, ChevronLeft, ChevronRight, Heart, Sparkles, BookOpen, Send, User } from 'lucide-react';
+import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -31,6 +32,7 @@ interface Tag {
 }
 
 const STEPS = {
+  INTRO: 0,
   CATEGORIES: 1,
   TAGS: 2,
   NAME: 3,
@@ -39,6 +41,7 @@ const STEPS = {
 };
 
 const STEP_TITLES = {
+  [STEPS.INTRO]: "Recommandations Bruna",
   [STEPS.CATEGORIES]: "Vos genres préférés",
   [STEPS.TAGS]: "Vos tropes favoris",
   [STEPS.NAME]: "Comment vous appeler ?",
@@ -48,7 +51,7 @@ const STEP_TITLES = {
 
 export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProps) {
   const { user } = useAuth();
-  const [currentStep, setCurrentStep] = useState(STEPS.CATEGORIES);
+  const [currentStep, setCurrentStep] = useState(STEPS.INTRO);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [userName, setUserName] = useState('');
@@ -58,7 +61,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
   // Reset form when modal opens
   useEffect(() => {
     if (isOpen) {
-      setCurrentStep(STEPS.CATEGORIES);
+      setCurrentStep(STEPS.INTRO);
       setSelectedCategories([]);
       setSelectedTags([]);
       setUserName(user?.nom_complet?.split(' ')[0] || '');
@@ -71,7 +74,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
   const { data: categoriesData } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/categories');
+      const response = await apiClient.get('/api/categories');
       if (!response.ok) throw new Error('Failed to fetch categories');
       return response.json();
     },
@@ -82,7 +85,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
   const { data: tagsData } = useQuery({
     queryKey: ['tags-romance'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/tags');
+      const response = await apiClient.get('/api/tags');
       if (!response.ok) throw new Error('Failed to fetch tags');
       const result = await response.json();
       // Filter for romance-related tags
@@ -117,6 +120,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
 
   const canProceedToNext = () => {
     switch (currentStep) {
+      case STEPS.INTRO:
+        return true; // Always can proceed from intro
       case STEPS.CATEGORIES:
         return selectedCategories.length > 0;
       case STEPS.TAGS:
@@ -137,7 +142,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
   };
 
   const handlePrevious = () => {
-    if (currentStep > STEPS.CATEGORIES) {
+    if (currentStep > STEPS.INTRO) {
       setCurrentStep(currentStep - 1);
     }
   };
@@ -156,7 +161,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
         userId: user?.id || null
       };
 
-      const response = await fetch('/api/proxy/conseil-requests', {
+      const response = await apiClient.get('/api/conseil-requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestData)
@@ -182,13 +187,53 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
 
   const renderStepContent = () => {
     switch (currentStep) {
+      case STEPS.INTRO:
+        return (
+          <div className="space-y-4">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full mx-auto flex items-center justify-center mb-3">
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">
+                Recommandations par Bruna
+              </h3>
+              <p className="text-sm text-foreground/70 max-w-sm mx-auto">
+                Bruna va analyser vos goûts pour vous recommander le livre parfait
+              </p>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="flex-1 p-3 bg-card/60 rounded-lg border border-border">
+                <div className="flex items-center gap-2 mb-1">
+                  <Heart className="w-4 h-4 text-red-500" />
+                  <span className="font-medium text-sm">Personnalisé</span>
+                </div>
+                <p className="text-xs text-foreground/70">Selon vos préférences</p>
+              </div>
+              <div className="flex-1 p-3 bg-card/60 rounded-lg border border-border">
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span className="font-medium text-sm">Expert</span>
+                </div>
+                <p className="text-xs text-foreground/70">Par une passionnée</p>
+              </div>
+            </div>
+
+            <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg text-center">
+              <p className="text-sm text-foreground/80">
+                ⏱️ <strong>2 minutes</strong> pour vos recommandations !
+              </p>
+            </div>
+          </div>
+        );
+
       case STEPS.CATEGORIES:
         return (
-          <div className="space-y-6">
-            <p className="text-center text-lg" style={{ color: '#6B4C7B', fontFamily: 'Inter, sans-serif' }}>
-              Quels genres de dark romance vous font vibrer ?
+          <div className="space-y-4">
+            <p className="text-center text-sm text-foreground/80">
+              Quels genres vous font vibrer ?
             </p>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {categories.map((category: Category) => (
                 <motion.div
                   key={category.id}
@@ -198,35 +243,22 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                   <Card
                     className={`cursor-pointer transition-all duration-300 ${
                       selectedCategories.includes(category.id)
-                        ? 'ring-2 ring-opacity-50'
-                        : ''
-                    }`}
-                    style={{
-                      background: selectedCategories.includes(category.id)
-                        ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
-                        : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                      border: selectedCategories.includes(category.id)
-                        ? '2px solid rgba(139, 21, 56, 0.3)'
-                        : '1px solid rgba(139, 21, 56, 0.1)',
-                      borderRadius: '16px'
-                    }}
+                        ? 'ring-2 ring-primary/50 bg-primary/10'
+                        : 'bg-card/60'
+                    } border border-border hover:bg-card/80'}
+                    style={{ borderRadius: '12px' }}
                     onClick={() => handleCategoryToggle(category.id)}
                   >
-                    <CardContent className="p-4 text-center">
+                    <CardContent className="p-3 text-center">
                       <div
                         className="w-3 h-3 rounded-full mx-auto mb-2"
                         style={{ backgroundColor: category.couleur }}
                       />
-                      <h3 className="font-semibold text-sm" style={{ fontFamily: 'Inter, sans-serif', color: '#2C1810' }}>
+                      <h3 className="font-medium text-xs text-foreground">
                         {category.nom}
                       </h3>
-                      {category.description && (
-                        <p className="text-xs mt-1 opacity-70" style={{ color: '#6B4C7B' }}>
-                          {category.description}
-                        </p>
-                      )}
                       {selectedCategories.includes(category.id) && (
-                        <Heart className="w-4 h-4 mx-auto mt-2 text-red-500 fill-current" />
+                        <Heart className="w-3 h-3 mx-auto mt-1 text-red-500 fill-current" />
                       )}
                     </CardContent>
                   </Card>
@@ -238,38 +270,42 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
 
       case STEPS.TAGS:
         return (
-          <div className="space-y-6">
-            <p className="text-center text-lg" style={{ color: '#6B4C7B', fontFamily: 'Inter, sans-serif' }}>
+          <div className="space-y-4">
+            <p className="text-center text-sm text-foreground/80">
               Quels tropes vous font fondre ?
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-80 overflow-y-auto">
+            <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto overflow-x-hidden scrollbar-hide">
               {tags.map((tag: Tag) => (
                 <motion.div
                   key={tag.id}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Badge
-                    className={`cursor-pointer transition-all duration-300 p-3 text-center w-full ${
-                      selectedTags.includes(tag.id) ? 'ring-2 ring-offset-1' : ''
+                  <div
+                    className={`cursor-pointer transition-all duration-300 p-2 text-center w-full rounded-lg border ${
+                      selectedTags.includes(tag.id) ? 'ring-1 ring-offset-0' : ''
                     }`}
                     style={{
                       backgroundColor: selectedTags.includes(tag.id)
                         ? tag.couleur
                         : `${tag.couleur}20`,
                       color: selectedTags.includes(tag.id) ? 'white' : tag.couleur,
-                      border: `1px solid ${tag.couleur}`,
-                      borderRadius: '12px',
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '0.8rem'
+                      borderColor: tag.couleur,
+                      fontSize: '0.7rem',
+                      minHeight: '32px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      maxWidth: '100%',
+                      boxSizing: 'border-box'
                     }}
                     onClick={() => handleTagToggle(tag.id)}
                   >
-                    {tag.nom}
-                    {selectedTags.includes(tag.id) && (
-                      <Sparkles className="w-3 h-3 ml-1 inline" />
-                    )}
-                  </Badge>
+                    <span className="truncate leading-tight" style={{ maxWidth: '100%' }}>
+                      {tag.nom}
+                      {selectedTags.includes(tag.id) && ' ✨'}
+                    </span>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -278,27 +314,25 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
 
       case STEPS.NAME:
         return (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="text-center">
-              <User className="w-12 h-12 mx-auto mb-4" style={{ color: '#6B4C7B' }} />
-              <p className="text-lg" style={{ color: '#6B4C7B', fontFamily: 'Inter, sans-serif' }}>
+              <User className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="text-sm text-foreground/80">
                 Comment Bruna peut-elle vous appeler ?
               </p>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
               <Input
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
                 placeholder="Votre prénom..."
-                className="text-center text-lg py-4"
+                className="text-center py-3 bg-background border-2 border-primary/20 text-foreground focus:border-primary/40"
                 style={{
-                  borderRadius: '16px',
-                  border: '2px solid rgba(139, 21, 56, 0.2)',
-                  fontFamily: 'Inter, sans-serif'
+                  borderRadius: '12px'
                 }}
               />
-              <p className="text-sm text-center opacity-70" style={{ color: '#6B4C7B' }}>
-                Juste votre prénom suffit pour personnaliser ses recommandations ✨
+              <p className="text-xs text-center text-foreground/70">
+                Pour personnaliser ses recommandations ✨
               </p>
             </div>
           </div>
@@ -306,25 +340,23 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
 
       case STEPS.COMMENTS:
         return (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="text-center">
-              <BookOpen className="w-12 h-12 mx-auto mb-4" style={{ color: '#6B4C7B' }} />
-              <p className="text-lg" style={{ color: '#6B4C7B', fontFamily: 'Inter, sans-serif' }}>
+              <BookOpen className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <p className="text-sm text-foreground/80">
                 Quelque chose de spécial à ajouter ?
               </p>
-              <p className="text-sm opacity-70 mt-2" style={{ color: '#6B4C7B' }}>
-                Parlez-nous de vos envies du moment (optionnel)
+              <p className="text-xs text-foreground/70 mt-1">
+                Vos envies du moment (optionnel)
               </p>
             </div>
             <Textarea
               value={comments}
               onChange={(e) => setComments(e.target.value)}
-              placeholder="Ex: Je cherche quelque chose avec beaucoup d'émotion, ou alors un livre qui me fera pleurer, ou encore une histoire avec un anti-héros irrésistible..."
-              className="min-h-32"
+              placeholder="Ex: Envie d'émotion, d'un anti-héros irrésistible..."
+              className="min-h-24 bg-background border-2 border-primary/20 text-foreground focus:border-primary/40 text-sm"
               style={{
-                borderRadius: '16px',
-                border: '2px solid rgba(139, 21, 56, 0.2)',
-                fontFamily: 'Inter, sans-serif'
+                borderRadius: '12px'
               }}
             />
           </div>
@@ -332,57 +364,62 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
 
       case STEPS.CONFIRMATION:
         return (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="text-center">
-              <Send className="w-12 h-12 mx-auto mb-4" style={{ color: '#6B4C7B' }} />
-              <h3 className="text-xl font-bold mb-2" style={{ color: '#2C1810', fontFamily: 'Playfair Display, serif' }}>
-                Prêt(e) à recevoir vos recommandations ?
+              <Send className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <h3 className="text-lg font-bold mb-1 text-foreground">
+                Prêt(e) pour vos recommandations ?
               </h3>
-              <p className="text-sm opacity-70" style={{ color: '#6B4C7B' }}>
-                Bruna va étudier vos goûts et vous proposer ses meilleurs conseils
+              <p className="text-xs text-foreground/70">
+                Bruna va étudier vos goûts
               </p>
             </div>
 
-            <div className="space-y-4 p-4 rounded-xl" style={{ background: 'rgba(139, 21, 56, 0.05)' }}>
+            <div className="space-y-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
               <div>
-                <h4 className="font-semibold text-sm" style={{ color: '#2C1810' }}>Nom :</h4>
-                <p style={{ color: '#6B4C7B' }}>{userName}</p>
+                <h4 className="font-medium text-xs text-foreground mb-1">Nom :</h4>
+                <p className="text-sm text-foreground/80">{userName}</p>
               </div>
               <div>
-                <h4 className="font-semibold text-sm" style={{ color: '#2C1810' }}>Genres sélectionnés :</h4>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {selectedCategories.map(catId => {
+                <h4 className="font-medium text-xs text-foreground mb-1">Genres :</h4>
+                <div className="flex flex-wrap gap-1">
+                  {selectedCategories.slice(0, 3).map(catId => {
                     const cat = categories.find((c: Category) => c.id === catId);
                     return cat ? (
-                      <Badge key={catId} style={{ backgroundColor: cat.couleur, color: 'white', fontSize: '0.7rem' }}>
+                      <Badge key={catId} style={{ backgroundColor: cat.couleur, color: 'white', fontSize: '0.6rem' }}>
                         {cat.nom}
                       </Badge>
                     ) : null;
                   })}
+                  {selectedCategories.length > 3 && (
+                    <Badge style={{ backgroundColor: '#6B4C7B', color: 'white', fontSize: '0.6rem' }}>
+                      +{selectedCategories.length - 3}
+                    </Badge>
+                  )}
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold text-sm" style={{ color: '#2C1810' }}>Tropes sélectionnés :</h4>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {selectedTags.slice(0, 5).map(tagId => {
+                <h4 className="font-medium text-xs text-foreground mb-1">Tropes :</h4>
+                <div className="flex flex-wrap gap-1">
+                  {selectedTags.slice(0, 3).map(tagId => {
                     const tag = tags.find((t: Tag) => t.id === tagId);
                     return tag ? (
-                      <Badge key={tagId} style={{ backgroundColor: tag.couleur, color: 'white', fontSize: '0.7rem' }}>
+                      <Badge key={tagId} style={{ backgroundColor: tag.couleur, color: 'white', fontSize: '0.6rem' }}>
                         {tag.nom}
                       </Badge>
                     ) : null;
                   })}
-                  {selectedTags.length > 5 && (
-                    <Badge style={{ backgroundColor: '#6B4C7B', color: 'white', fontSize: '0.7rem' }}>
-                      +{selectedTags.length - 5} autres
+                  {selectedTags.length > 3 && (
+                    <Badge style={{ backgroundColor: '#6B4C7B', color: 'white', fontSize: '0.6rem' }}>
+                      +{selectedTags.length - 3}
                     </Badge>
                   )}
                 </div>
               </div>
               {comments && (
                 <div>
-                  <h4 className="font-semibold text-sm" style={{ color: '#2C1810' }}>Commentaires :</h4>
-                  <p className="text-sm" style={{ color: '#6B4C7B' }}>{comments}</p>
+                  <h4 className="font-medium text-xs text-foreground mb-1">Commentaires :</h4>
+                  <p className="text-xs text-foreground/80 truncate">{comments}</p>
                 </div>
               )}
             </div>
@@ -411,51 +448,45 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden"
+          className="relative w-full max-w-lg max-h-[85vh] bg-card/95 backdrop-blur-xl border border-border shadow-2xl"
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 248, 245, 0.95) 100%)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(139, 21, 56, 0.1)',
-            borderRadius: '24px',
-            boxShadow: '0 20px 60px rgba(139, 21, 56, 0.3)'
+            borderRadius: '16px'
           }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-opacity-20" style={{ borderColor: '#8B1538' }}>
-            <div>
-              <h2 className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display, serif', color: '#2C1810' }}>
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex-1">
+              <h2 className="text-lg font-bold text-foreground truncate">
                 {STEP_TITLES[currentStep]}
               </h2>
-              <p className="text-sm opacity-70" style={{ color: '#6B4C7B' }}>
-                Étape {currentStep} sur {STEPS.CONFIRMATION}
-              </p>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="w-full bg-muted rounded-full h-1">
+                  <div
+                    className="h-1 rounded-full transition-all duration-500"
+                    style={{
+                      width: '${(currentStep / STEPS.CONFIRMATION) * 100}%',
+                      background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'
+                    }}
+                  />
+                </div>
+                <span className="text-xs text-foreground/60 whitespace-nowrap">
+                  {currentStep}/{STEPS.CONFIRMATION}
+                </span>
+              </div>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="rounded-full w-10 h-10 p-0 hover:bg-red-50"
+              className="rounded-full w-8 h-8 p-0 hover:bg-primary/10 ml-2"
             >
-              <X className="w-5 h-5" style={{ color: '#8B1538' }} />
+              <X className="w-4 h-4 text-primary" />
             </Button>
           </div>
 
-          {/* Progress bar */}
-          <div className="px-6 pt-4">
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="h-2 rounded-full transition-all duration-500"
-                style={{
-                  width: `${(currentStep / STEPS.CONFIRMATION) * 100}%`,
-                  background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'
-                }}
-              />
-            </div>
-          </div>
-
           {/* Content */}
-          <div className="p-6 overflow-y-auto max-h-[60vh]">
+          <div className="p-4 overflow-y-auto max-h-[55vh] scrollbar-hide">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -470,16 +501,12 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between p-6 border-t border-opacity-20" style={{ borderColor: '#8B1538' }}>
+          <div className="flex items-center justify-between p-4 border-t border-border">
             <Button
               variant="outline"
               onClick={handlePrevious}
-              disabled={currentStep === STEPS.CATEGORIES}
-              className="flex items-center gap-2 px-6"
-              style={{
-                borderColor: '#6B4C7B',
-                color: '#6B4C7B'
-              }}
+              disabled={currentStep === STEPS.INTRO}
+              className="flex items-center gap-2 px-6 border-primary/30 text-primary hover:bg-primary/10"
             >
               <ChevronLeft className="w-4 h-4" />
               Précédent

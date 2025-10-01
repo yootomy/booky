@@ -58,7 +58,7 @@ function TimelineItem({ book, index }: TimelineItemProps) {
           {book.image_couverture ? (
             <img
               src={book.image_couverture}
-              alt={`Couverture de ${book.titre}`}
+              alt={'Couverture de ${book.titre}'}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -90,14 +90,14 @@ function TimelineItem({ book, index }: TimelineItemProps) {
           
           {/* Note */}
           {book.note_generale && (
-            <div className={`flex items-center gap-1 text-xs font-medium ${getRatingColor(book.note_generale)}`}>
+            <div className={'flex items-center gap-1 text-xs font-medium ${getRatingColor(book.note_generale)}'}>
               <Star size={12} fill="currentColor" />
               <span>{book.note_generale}/10</span>
             </div>
           )}
           
           {/* Rythme Badge */}
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${rhythm.color}`}>
+          <span className={'px-2 py-1 rounded-full text-xs font-medium ${rhythm.color}'}>
             {rhythm.label}
           </span>
         </div>

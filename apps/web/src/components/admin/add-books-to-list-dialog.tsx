@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 import {
   Dialog,
   DialogContent,
@@ -98,7 +99,7 @@ export function AddBooksToListDialog({
       params.append('page', reset ? '1' : page.toString());
       if (searchQuery) params.append('search', searchQuery);
 
-      const response = await fetch(`/api/proxy/books?${params.toString()}`);
+      const response = await apiClient.get('/api/books?${params.toString()}');
       const data = await response.json();
 
       if (data.success) {
@@ -153,7 +154,7 @@ export function AddBooksToListDialog({
     try {
       setAdding(true);
       const promises = Array.from(selectedBooks).map(bookId =>
-        fetch(`/api/proxy/lists/${listId}/books`, {
+        apiClient.get('/api/lists/${listId}/books', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -171,7 +172,7 @@ export function AddBooksToListDialog({
       if (successCount > 0) {
         toast({
           title: "Succès",
-          description: `${successCount} livre${successCount > 1 ? 's ajoutés' : ' ajouté'} à la liste`,
+          description: `${successCount} livre${successCount > 1 ? 's ajoutés' :  ajouté`} à la liste,
         });
         onBookAdded();
       }
@@ -179,7 +180,7 @@ export function AddBooksToListDialog({
       if (errorCount > 0) {
         toast({
           title: "Attention",
-          description: `${errorCount} livre${errorCount > 1 ? 's' : ''} n'${errorCount > 1 ? 'ont' : 'a'} pas pu être ajouté${errorCount > 1 ? 's' : ''} (déjà dans la liste ou erreur)`,
+          description: "Certains livres n'ont pas pu être ajoutés (déjà dans la liste ou erreur)",
           variant: "destructive"
         });
       }
@@ -275,7 +276,7 @@ export function AddBooksToListDialog({
                     {book.image_couverture ? (
                       <img
                         src={book.image_couverture}
-                        alt={`Couverture de ${book.titre}`}
+                        alt={'Couverture de ${book.titre}'}
                         className="w-12 h-16 object-cover rounded border"
                       />
                     ) : (
@@ -384,10 +385,14 @@ export function AddBooksToListDialog({
             className="bg-gradient-to-r from-primary to-primary/80"
           >
             {adding && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            Ajouter {selectedBooks.size > 0 && `(${selectedBooks.size})`}
+            Ajouter ({selectedBooks.size})
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
+export default AddBooksToListDialog;
+
+

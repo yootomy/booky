@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Zap, Moon, Heart } from 'lucide-react';
+import { apiClient } from '@/lib/api-client';
 
 interface Playlist {
   id: string;
@@ -28,7 +29,7 @@ export function usePlaylistsIndociles() {
         setIsLoading(true);
         
         // Récupérer tous les livres
-        const response = await fetch('/api/proxy/books');
+        const response = await apiClient.get('/api/books');
         if (!response.ok) throw new Error('Failed to fetch books');
         
         const books = await response.json();

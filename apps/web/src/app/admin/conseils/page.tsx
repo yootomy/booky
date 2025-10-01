@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -57,7 +58,7 @@ export default function AdminConseilsPage() {
   const { data: conseilsData, isLoading } = useQuery({
     queryKey: ['admin-conseil-requests'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/conseil-requests?isAdmin=true');
+      const response = await apiClient.get('/api/conseil-requests?isAdmin=true');
       if (!response.ok) throw new Error('Failed to fetch conseil requests');
       return response.json();
     }
@@ -67,7 +68,7 @@ export default function AdminConseilsPage() {
   const { data: categoriesData } = useQuery({
     queryKey: ['categories'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/categories');
+      const response = await apiClient.get('/api/categories');
       if (!response.ok) throw new Error('Failed to fetch categories');
       return response.json();
     }
@@ -76,7 +77,7 @@ export default function AdminConseilsPage() {
   const { data: tagsData } = useQuery({
     queryKey: ['tags'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/tags');
+      const response = await apiClient.get('/api/tags');
       if (!response.ok) throw new Error('Failed to fetch tags');
       return response.json();
     }
@@ -86,7 +87,7 @@ export default function AdminConseilsPage() {
   const { data: booksData } = useQuery({
     queryKey: ['books'],
     queryFn: async () => {
-      const response = await fetch('/api/proxy/books');
+      const response = await apiClient.get('/api/books');
       if (!response.ok) throw new Error('Failed to fetch books');
       return response.json();
     }
@@ -100,7 +101,7 @@ export default function AdminConseilsPage() {
       livres_recommandes: string[];
       status: string;
     }) => {
-      const response = await fetch(`/api/proxy/conseil-requests/${id}`, {
+      const response = await apiClient.get(`/api/conseil-requests/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reponse_bruna, livres_recommandes, status })
@@ -204,7 +205,7 @@ export default function AdminConseilsPage() {
       <div
         className="absolute inset-0 opacity-20 mix-blend-multiply"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")'
         }}
       />
 
@@ -273,7 +274,7 @@ export default function AdminConseilsPage() {
                     <Card
                       className={`cursor-pointer transition-all duration-300 ${
                         selectedRequest?.id === conseil.id ? 'ring-2 ring-offset-2 ring-purple-500' : ''
-                      }`}
+                      }'}
                       style={{
                         background: selectedRequest?.id === conseil.id
                           ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
@@ -297,7 +298,7 @@ export default function AdminConseilsPage() {
                             </div>
                           </div>
                           <Badge
-                            className={`flex items-center gap-1 px-3 py-1 text-xs ${getStatusStyle(conseil.status)}`}
+                            className={'flex items-center gap-1 px-3 py-1 text-xs ${getStatusStyle(conseil.status)}'}
                             style={{ borderRadius: '12px' }}
                           >
                             {getStatusIcon(conseil.status)}
@@ -482,7 +483,7 @@ export default function AdminConseilsPage() {
                               key={book.id}
                               className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all ${
                                 selectedBooks.includes(book.id) ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
-                              }`}
+                              }'}
                               onClick={() => handleBookToggle(book.id)}
                             >
                               <input

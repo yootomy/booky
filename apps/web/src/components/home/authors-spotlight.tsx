@@ -32,7 +32,7 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={`/authors/${author.slug}` as any}>
+      <Link href={'/authors/${author.slug}' as any}>
         <div 
           className="relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
           style={{
@@ -96,7 +96,7 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
               <div className="w-12 h-16 relative flex-shrink-0">
                 <Image
                   src={author.livre_phare.image_couverture || '/placeholder-book.svg'}
-                  alt={`Couverture de ${author.livre_phare.titre}`}
+                  alt={'Couverture de ${author.livre_phare.titre}'}
                   fill
                   className="object-cover rounded"
                   sizes="48px"

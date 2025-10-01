@@ -38,16 +38,16 @@ export function formatRelativeTime(date: string | Date): string {
 	} else if (diffInDays === 1) {
 		return 'Hier';
 	} else if (diffInDays < 7) {
-		return `Il y a ${diffInDays} jour${diffInDays > 1 ? 's' : ''}`;
+		return `Il y a ${diffInDays} jour${diffInDays > 1 ? 's' : ''}';
 	} else if (diffInDays < 30) {
 		const weeks = Math.floor(diffInDays / 7);
-		return `Il y a ${weeks} semaine${weeks > 1 ? 's' : ''}`;
+		return `Il y a ${weeks} semaine${weeks > 1 ? 's' : ''}';
 	} else if (diffInDays < 365) {
 		const months = Math.floor(diffInDays / 30);
-		return `Il y a ${months} mois`;
+		return 'Il y a ${months} mois';
 	} else {
 		const years = Math.floor(diffInDays / 365);
-		return `Il y a ${years} an${years > 1 ? 's' : ''}`;
+		return 'Il y a ${years} an${years > 1 ? 's' : ''}';
 	}
 }
 
@@ -119,13 +119,13 @@ export function generateAvatarColor(name: string): string {
 
 export function hexToRgba(hex: string, alpha: number = 1): string {
 	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	if (!result) return `rgba(0, 0, 0, ${alpha})`;
+	if (!result) return 'rgba(0, 0, 0, ${alpha})';
 	
 	const r = parseInt(result[1], 16);
 	const g = parseInt(result[2], 16);
 	const b = parseInt(result[3], 16);
 	
-	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+	return 'rgba(${r}, ${g}, ${b}, ${alpha})';
 }
 
 // =============================================================================
@@ -144,7 +144,7 @@ export function formatCurrency(amount: number, currency: string = 'EUR'): string
 }
 
 export function formatPercentage(value: number, decimals: number = 1): string {
-	return `${(value * 100).toFixed(decimals)}%`;
+	return '${(value * 100).toFixed(decimals)}%';
 }
 
 // =============================================================================

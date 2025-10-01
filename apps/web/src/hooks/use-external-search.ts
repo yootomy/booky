@@ -133,7 +133,7 @@ export function useOpenLibrarySearch(options: ExternalSearchOptions, enabled = t
 export function useOpenLibrarySearchByTitle(title: string, options?: { maxResults?: number; enabled?: boolean }) {
   return useOpenLibrarySearch(
     {
-      query: `title:${title}`,
+      query: 'title:${title}',
       maxResults: options?.maxResults || 10,
     },
     options?.enabled !== false && !!title.trim()
@@ -143,7 +143,7 @@ export function useOpenLibrarySearchByTitle(title: string, options?: { maxResult
 export function useOpenLibrarySearchByAuthor(author: string, options?: { maxResults?: number; enabled?: boolean }) {
   return useOpenLibrarySearch(
     {
-      query: `author:${author}`,
+      query: 'author:${author}',
       maxResults: options?.maxResults || 10,
     },
     options?.enabled !== false && !!author.trim()
@@ -300,7 +300,7 @@ export function useImportFromGoogleBooks() {
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       
       toast.success('Livre importé depuis Google Books', {
-        description: `"${data.result.livre_cree?.titre || 'Livre'}" a été ajouté à votre bibliothèque`,
+        description: `"${data.result.livre_cree?.titre || 'Livre'}" a été ajouté à votre bibliothèque',
       });
     },
     onError: (error: Error) => {
@@ -322,7 +322,7 @@ export function useImportFromOpenLibrary() {
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
       
       toast.success('Livre importé depuis Open Library', {
-        description: `"${data.result.livre_cree?.titre || 'Livre'}" a été ajouté à votre bibliothèque`,
+        description: `"${data.result.livre_cree?.titre || 'Livre'}" a été ajouté à votre bibliothèque',
       });
     },
     onError: (error: Error) => {

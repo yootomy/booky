@@ -31,22 +31,22 @@ function MoodChip({ tag, index, isSelected, onClick }: {
         isSelected 
           ? 'scale-105 shadow-lg' 
           : 'hover:shadow-md'
-      }`}
+      }'}
       style={{
         backgroundColor: isSelected 
-          ? `${tag.color}15` 
+          ? '${tag.color}15' 
           : 'rgba(255, 255, 255, 0.8)',
-        border: `2px solid ${isSelected ? tag.color : 'rgba(139, 21, 56, 0.1)'}`,
+        border: `2px solid ${isSelected ? tag.color : 'rgba(139, 21, 56, 0.1)'}',
         backdropFilter: 'blur(10px)',
       }}
-      aria-label={`Explorer le mood ${tag.nom} (${tag.books_count} livres)`}
+      aria-label={'Explorer le mood ${tag.nom} (${tag.books_count} livres)'}
     >
       {/* Glow effect for selected */}
       {isSelected && (
         <div 
           className="absolute inset-0 rounded-2xl opacity-20 blur-sm"
           style={{
-            background: `linear-gradient(135deg, ${tag.color}, transparent)`
+            background: 'linear-gradient(135deg, ${tag.color}, transparent)'
           }}
         />
       )}
@@ -55,9 +55,9 @@ function MoodChip({ tag, index, isSelected, onClick }: {
         <div 
           className={`p-2 rounded-lg transition-all duration-300 ${
             isSelected ? 'scale-110' : 'group-hover:scale-110'
-          }`}
+          }'}
           style={{
-            backgroundColor: `${tag.color}20`,
+            backgroundColor: '${tag.color}20',
             color: tag.color
           }}
         >
@@ -156,7 +156,7 @@ export function MoodExplorer({}: MoodExplorerProps) {
     } else {
       setSelectedMood(tagId);
       // Ici on pourrait naviguer vers la page filtrée
-      // router.push(`/books?mood=${tagId}`);
+      // router.push('/books?mood=${tagId}');
     }
   };
 
@@ -237,15 +237,15 @@ export function MoodExplorer({}: MoodExplorerProps) {
                 <div 
                   className="inline-flex flex-col items-center p-8 rounded-3xl max-w-md mx-auto"
                   style={{
-                    background: `linear-gradient(135deg, ${tagWithIcon.color}08, ${tagWithIcon.color}15)`,
-                    border: `1px solid ${tagWithIcon.color}30`,
+                    background: 'linear-gradient(135deg, ${tagWithIcon.color}08, ${tagWithIcon.color}15)',
+                    border: '1px solid ${tagWithIcon.color}30',
                     backdropFilter: 'blur(20px)'
                   }}
                 >
                   <div 
                     className="p-4 rounded-2xl mb-4"
                     style={{
-                      backgroundColor: `${tagWithIcon.color}20`,
+                      backgroundColor: '${tagWithIcon.color}20',
                       color: tagWithIcon.color
                     }}
                   >
@@ -273,7 +273,7 @@ export function MoodExplorer({}: MoodExplorerProps) {
                   </p>
                   
                   <Link
-                    href={`/books?tag=${selectedTag.id}`}
+                    href={'/books?tag=${selectedTag.id}'}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2"
                     style={{
                       backgroundColor: tagWithIcon.color,

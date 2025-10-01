@@ -78,9 +78,9 @@ function SpicyIndicator({ level }: { level: number }) {
   return (
     <span
       className="text-xs font-medium px-2 py-1 rounded-full"
-      title={`Niveau spicy: ${level}/10`}
+      title={'Niveau spicy: ${level}/10'}
       style={{
-        backgroundColor: `${getIndicatorColor()}15`,
+        backgroundColor: '${getIndicatorColor()}15',
         color: getIndicatorColor()
       }}
     >
@@ -101,13 +101,13 @@ function BookCard({ book, index, showTrendingBadge = false }: {
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="group cursor-pointer flex-shrink-0 w-40"
     >
-      <Link href={`/books/${book.id}`}>
+      <Link href={'/books/${book.id}'}>
         <div className="relative">
           {/* Book Cover */}
           <div className="aspect-[3/4] relative mb-3 rounded-lg overflow-hidden group-hover:shadow-lg transition-all duration-300">
             <Image
               src={getBookImage(book)}
-              alt={`Couverture de ${book.titre}`}
+              alt={'Couverture de ${book.titre}'}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               sizes="160px"
@@ -292,7 +292,7 @@ export function TrendingNew({}: TrendingNewProps) {
                 activeTab === 'new' 
                   ? 'text-white shadow-lg' 
                   : 'hover:bg-white/50'
-              }`}
+              }'}
               style={{
                 backgroundColor: activeTab === 'new' ? '#8B1538' : 'transparent',
                 color: activeTab === 'new' ? 'white' : '#8B1538',
@@ -309,7 +309,7 @@ export function TrendingNew({}: TrendingNewProps) {
                 activeTab === 'trending' 
                   ? 'text-white shadow-lg' 
                   : 'hover:bg-white/50'
-              }`}
+              }'}
               style={{
                 backgroundColor: activeTab === 'trending' ? '#8B1538' : 'transparent',
                 color: activeTab === 'trending' ? 'white' : '#8B1538',

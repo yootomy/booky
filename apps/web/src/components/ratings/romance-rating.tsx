@@ -86,7 +86,7 @@ export function RomanceRating({
   const displayValue = isHovering && hoverEffect ? hoveredValue : value;
   const clampedValue = Math.max(0, Math.min(max, displayValue));
 
-  // Fonction pour obtenir l'intensité de la couleur selon la valeur
+  // Fonction pour obtenir l`intensité de la couleur selon la valeur
   const getRomanceIntensity = (romanceIndex: number) => {
     const romanceValue = romanceIndex + 1;
     const intensity = romanceValue / max;
@@ -118,7 +118,7 @@ export function RomanceRating({
         onClick={() => handleRomanceClick(romanceValue)}
         onMouseEnter={() => handleRomanceHover(romanceValue)}
         onFocus={() => handleRomanceHover(romanceValue)}
-        aria-label={`Niveau romance ${romanceValue} sur ${max}`}
+        aria-label={'Niveau romance ${romanceValue} sur ${max}'}
       >
         {/* Cœur de base (vide) */}
         <Heart
@@ -186,7 +186,7 @@ export function RomanceRating({
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
         role="radiogroup"
-        aria-label={`Niveau romance sur ${max}`}
+        aria-label={'Niveau romance sur ${max}'}
       >
         {Array.from({ length: max }, (_, index) => renderRomance(index))}
       </div>

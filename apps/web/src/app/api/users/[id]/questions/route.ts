@@ -19,7 +19,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': authToken ? `booky_auth=${authToken}` : '',
+        'Cookie': authToken ? 'booky_auth=${authToken}' : '',
       },
     });
 

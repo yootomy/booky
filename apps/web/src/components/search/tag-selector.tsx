@@ -197,7 +197,7 @@ export function TagSelector({
                     key={tag.id} 
                     variant="secondary"
                     className="text-xs"
-                    style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
+                    style={{ backgroundColor: '${tag.color}20', color: tag.color }}
                   >
                     {tag.name}
                   </Badge>
@@ -245,7 +245,7 @@ export function TagSelector({
                     key={tag.id}
                     variant="secondary"
                     className="text-xs cursor-pointer"
-                    style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
+                    style={{ backgroundColor: '${tag.color}20`, color: tag.color }}
                     onClick={() => handleToggleTag(tag.id)}
                   >
                     {tag.name}
@@ -460,7 +460,7 @@ export function QuickTagSelector({
         >
           {getTagTypeIcon(tag.type)}
           {tag.name}
-          {tag.count && ` (${tag.count})`}
+          {tag.count && " (${tag.count})' }
         </Badge>
       ))}
     </div>

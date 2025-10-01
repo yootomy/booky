@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface FeaturedCollection {
   id: string;
@@ -25,7 +26,7 @@ export function useFeaturedCollections() {
         setIsLoading(true);
         
         // Récupérer les catégories actives triées par ordre_affichage 
-        const categoriesResponse = await fetch('/api/proxy/categories');
+        const categoriesResponse = await apiClient.get('/api/categories');
         if (!categoriesResponse.ok) throw new Error('Failed to fetch categories');
         
         const allCategories = await categoriesResponse.json();
@@ -37,7 +38,7 @@ export function useFeaturedCollections() {
         // Pour chaque catégorie, récupérer les livres
         const collectionsWithBooks = await Promise.all(
           activeCategories.map(async (category: any) => {
-            const booksResponse = await fetch(`/api/proxy/books`);
+            const booksResponse = await apiClient.get('/api/books');
             const allBooks = booksResponse.ok ? await booksResponse.json() : [];
             
             // Filtrer les livres liés à cette catégorie (via book_category)

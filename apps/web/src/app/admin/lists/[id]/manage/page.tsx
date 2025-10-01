@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, List, Loader2, Search, Plus, BookOpen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
 import { ListBooksManager } from '@/components/admin/list-books-manager';
 import { AddBooksToListDialog } from '@/components/admin/add-books-to-list-dialog';
@@ -44,7 +45,7 @@ export default function ManageListPage({ params }: { params: Promise<{ id: strin
     const fetchList = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/proxy/lists/${resolvedParams.id}`);
+        const response = await apiClient.get('/api/lists/${resolvedParams.id}');
 
         if (!response.ok) {
           throw new Error('Liste non trouvée');
@@ -203,14 +204,14 @@ export default function ManageListPage({ params }: { params: Promise<{ id: strin
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => router.push(`/admin/lists/${list.id}/edit`)}
+                    onClick={() => router.push('/admin/lists/${list.id}/edit')}
                   >
                     Modifier la liste
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => router.push(`/lists/${list.id}`)}
+                    onClick={() => router.push('/lists/${list.id}')}
                   >
                     Voir publiquement
                   </Button>

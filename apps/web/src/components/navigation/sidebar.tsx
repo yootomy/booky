@@ -146,10 +146,10 @@ function CategoryItem({
       <Checkbox
         checked={isSelected}
         onCheckedChange={onToggle}
-        id={`category-${category.id}`}
+        id={'category-${category.id}'}
       />
       <label
-        htmlFor={`category-${category.id}`}
+        htmlFor={'category-${category.id}'}
         className="flex-1 flex items-center gap-2 cursor-pointer text-sm"
       >
         <div
@@ -185,10 +185,10 @@ function TagItem({
       <Checkbox
         checked={isSelected}
         onCheckedChange={onToggle}
-        id={`tag-${tag.id}`}
+        id={'tag-${tag.id}'}
       />
       <label
-        htmlFor={`tag-${tag.id}`}
+        htmlFor={'tag-${tag.id}'}
         className="flex-1 flex items-center gap-2 cursor-pointer text-sm"
       >
         <div
@@ -440,10 +440,10 @@ export function Sidebar({
                       <Checkbox
                         checked={filters.status?.includes(status) || false}
                         onCheckedChange={() => toggleStatus(status)}
-                        id={`status-${status}`}
+                        id={'status-${status}'}
                       />
                       <label
-                        htmlFor={`status-${status}`}
+                        htmlFor={'status-${status}'}
                         className="flex-1 cursor-pointer text-sm"
                       >
                         <BookStatus status={status} size="xs" variant="minimal" />

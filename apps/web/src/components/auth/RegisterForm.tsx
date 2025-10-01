@@ -5,11 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, Mail, Lock, User, UserPlus, CheckCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useRegister } from '@/hooks/useRegister';
 import { RegisterCredentials } from '@/types/auth';
 
@@ -61,16 +56,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
-  const { 
-    register: registerUser, 
-    isLoading, 
-    error, 
-    successMessage, 
+
+  const {
+    register: registerUser,
+    isLoading,
+    error,
+    successMessage,
     clearError,
-    clearSuccess 
+    clearSuccess
   } = useRegister();
-  
+
   const {
     register,
     handleSubmit,
@@ -93,7 +88,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   const onSubmit = async (data: RegisterFormData) => {
     clearError();
     clearSuccess();
-    
+
     const credentials: RegisterCredentials = {
       email: data.email,
       password: data.password,
@@ -102,7 +97,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     };
 
     const success = await registerUser(credentials);
-    
+
     if (success && onSuccess) {
       onSuccess();
     }
@@ -111,225 +106,341 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   // Affichage du message de succès
   if (successMessage) {
     return (
-      <Card className={`w-full max-w-md mx-auto ${className || ''}`}>
-        <CardHeader className="text-center space-y-2">
-          <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <CheckCircle className="h-6 w-6 text-green-600" />
+      <div className={`w-full text-center space-y-6 ${className || ''}'}>
+        <div className="space-y-4">
+          <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30">
+            <CheckCircle className="h-8 w-8 text-white" />
           </div>
-          <CardTitle className="text-xl font-bold text-green-800">
-            Inscription réussie !
-          </CardTitle>
-        </CardHeader>
-        
-        <CardContent>
-          <Alert className="border-green-200 bg-green-50">
-            <AlertDescription className="text-green-800">
-              {successMessage}
-            </AlertDescription>
-          </Alert>
-          
-          <div className="mt-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              Vous allez être redirigé automatiquement...
-            </p>
+          <h2
+            className="text-2xl font-bold text-green-600"
+            style={{ fontFamily: 'Playfair Display, serif' }}
+          >
+            Bienvenue dans le cercle !
+          </h2>
+        </div>
+
+        <div className="p-6 rounded-xl border-l-4 bg-green-500/5 text-green-600 border-l-green-500" style={{ fontFamily: 'Inter, sans-serif' }}>
+          {successMessage}
+        </div>
+
+        <div>
+          <p className="text-sm text-foreground/70" style={{ fontFamily: 'Inter, sans-serif' }}>
+            Vous allez être redirigé automatiquement vers votre nouvelle bibliothèque...
+          </p>
+          <div className="mt-3 flex justify-center">
+            <div className="animate-spin h-5 w-5 border-2 border-green-500 border-t-transparent rounded-full" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className={`w-full max-w-md mx-auto ${className || ''}`}>
-      <CardHeader className="text-center space-y-2">
-        <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
-          <UserPlus className="h-6 w-6 text-primary" />
-          Inscription
-        </CardTitle>
-        <CardDescription>
-          Créez votre compte pour rejoindre la communauté Booky
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Affichage des erreurs */}
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          {/* Champ Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">
-              Email <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                {...register('email')}
-                id="email"
-                type="email"
-                placeholder="votre@email.com"
-                className="pl-10"
-                aria-invalid={!!errors.email}
-              />
-            </div>
-            {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
-            )}
-          </div>
-
-          {/* Champ Username */}
-          <div className="space-y-2">
-            <Label htmlFor="username">Nom d'utilisateur</Label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                {...register('username')}
-                id="username"
-                type="text"
-                placeholder="votre_pseudo"
-                className="pl-10"
-                aria-invalid={!!errors.username}
-              />
-            </div>
-            {errors.username && (
-              <p className="text-sm text-destructive">{errors.username.message}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Optionnel - sera affiché publiquement sur vos questions
-            </p>
-          </div>
-
-          {/* Champ Nom complet */}
-          <div className="space-y-2">
-            <Label htmlFor="nom_complet">Nom complet</Label>
-            <Input
-              {...register('nom_complet')}
-              id="nom_complet"
-              type="text"
-              placeholder="Votre nom complet"
-              aria-invalid={!!errors.nom_complet}
-            />
-            {errors.nom_complet && (
-              <p className="text-sm text-destructive">{errors.nom_complet.message}</p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              Optionnel - utilisé pour personnaliser votre expérience
-            </p>
-          </div>
-
-          {/* Champ Mot de passe */}
-          <div className="space-y-2">
-            <Label htmlFor="password">
-              Mot de passe <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                {...register('password')}
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••"
-                className="pl-10 pr-10"
-                aria-invalid={!!errors.password}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="text-sm text-destructive">{errors.password.message}</p>
-            )}
-          </div>
-
-          {/* Champ Confirmation mot de passe */}
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">
-              Confirmer le mot de passe <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                {...register('confirmPassword')}
-                id="confirmPassword"
-                type={showConfirmPassword ? 'text' : 'password'}
-                placeholder="••••••••"
-                className="pl-10 pr-10"
-                aria-invalid={!!errors.confirmPassword}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-            {errors.confirmPassword && (
-              <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
-            )}
-          </div>
-
-          {/* Force du mot de passe */}
-          {password && (
-            <div className="space-y-1">
-              <div className="text-xs text-muted-foreground">Force du mot de passe:</div>
-              <div className="flex space-x-1">
-                <div className={`h-1 w-1/4 rounded ${password.length >= 6 ? 'bg-yellow-400' : 'bg-gray-200'}`} />
-                <div className={`h-1 w-1/4 rounded ${/[A-Z]/.test(password) ? 'bg-yellow-400' : 'bg-gray-200'}`} />
-                <div className={`h-1 w-1/4 rounded ${/[a-z]/.test(password) ? 'bg-yellow-400' : 'bg-gray-200'}`} />
-                <div className={`h-1 w-1/4 rounded ${/\d/.test(password) ? 'bg-green-500' : 'bg-gray-200'}`} />
-              </div>
-            </div>
-          )}
-
-          {/* Bouton d'inscription */}
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={!isValid || isLoading}
+    <div className={`w-full space-y-6 ${className || ''}'}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Affichage des erreurs */}
+        {error && (
+          <div
+            className="p-4 rounded-lg text-sm border-l-4 bg-destructive/5 text-destructive border-l-destructive"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
           >
-            {isLoading ? (
-              <>
-                <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2" />
-                Inscription...
-              </>
-            ) : (
-              <>
-                <UserPlus className="h-4 w-4 mr-2" />
-                S'inscrire
-              </>
-            )}
-          </Button>
-        </form>
-
-        {/* Lien de connexion */}
-        <div className="mt-6 text-center">
-          <div className="text-sm text-muted-foreground">
-            Déjà un compte ?{' '}
-            <a
-              href="/login"
-              className="text-primary hover:underline font-medium"
-            >
-              Se connecter
-            </a>
+            {error}
           </div>
+        )}
+
+        {/* Champ Email */}
+        <div className="space-y-3">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Adresse email <span className="text-primary">*</span>
+          </label>
+          <div className="relative">
+            <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary" />
+            <input
+              {...register('email')}
+              id="email"
+              type="email"
+              placeholder="votre@email.com"
+              className="w-full pl-11 pr-4 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px'
+              }}
+              aria-invalid={!!errors.email}
+            />
+          </div>
+          {errors.email && (
+            <p
+              className="text-sm text-destructive"
+              style={{
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              {errors.email.message}
+            </p>
+          )}
         </div>
-      </CardContent>
-    </Card>
+
+        {/* Champ Username */}
+        <div className="space-y-3">
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Nom d'utilisateur
+          </label>
+          <div className="relative">
+            <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <input
+              {...register('username')}
+              id="username"
+              type="text"
+              placeholder="votre_pseudo"
+              className="w-full pl-11 pr-4 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px'
+              }}
+              aria-invalid={!!errors.username}
+            />
+          </div>
+          {errors.username && (
+            <p
+              className="text-sm text-destructive"
+              style={{
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              {errors.username.message}
+            </p>
+          )}
+          <p
+            className="text-xs text-muted-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              opacity: 0.7
+            }}
+          >
+            Optionnel - sera affiché publiquement sur vos questions
+          </p>
+        </div>
+
+        {/* Champ Nom complet */}
+        <div className="space-y-3">
+          <label
+            htmlFor="nom_complet"
+            className="block text-sm font-medium text-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Nom complet
+          </label>
+          <input
+            {...register('nom_complet')}
+            id="nom_complet"
+            type="text"
+            placeholder="Votre nom complet"
+            className="w-full px-4 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '16px'
+            }}
+            aria-invalid={!!errors.nom_complet}
+          />
+          {errors.nom_complet && (
+            <p
+              className="text-sm text-destructive"
+              style={{
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              {errors.nom_complet.message}
+            </p>
+          )}
+          <p
+            className="text-xs text-muted-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Optionnel - utilisé pour personnaliser votre expérience
+          </p>
+        </div>
+
+        {/* Champ Mot de passe */}
+        <div className="space-y-3">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Mot de passe <span className="text-primary">*</span>
+          </label>
+          <div className="relative">
+            <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <input
+              {...register('password')}
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              className="w-full pl-11 pr-12 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px'
+              }}
+              aria-invalid={!!errors.password}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 transition-colors duration-200 hover:opacity-80 text-muted-foreground hover:text-foreground"
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          {errors.password && (
+            <p
+              className="text-sm text-destructive"
+              style={{
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        {/* Champ Confirmation mot de passe */}
+        <div className="space-y-3">
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-foreground"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Confirmer le mot de passe <span className="text-primary">*</span>
+          </label>
+          <div className="relative">
+            <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <input
+              {...register('confirmPassword')}
+              id="confirmPassword"
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              className="w-full pl-11 pr-12 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px'
+              }}
+              aria-invalid={!!errors.confirmPassword}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 transition-colors duration-200 hover:opacity-80 text-muted-foreground hover:text-foreground"
+            >
+              {showConfirmPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+          {errors.confirmPassword && (
+            <p
+              className="text-sm text-destructive"
+              style={{
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              {errors.confirmPassword.message}
+            </p>
+          )}
+        </div>
+
+        {/* Force du mot de passe */}
+        {password && (
+          <div className="space-y-2">
+            <div
+              className="text-xs font-medium text-foreground"
+              style={{
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              Force du mot de passe:
+            </div>
+            <div className="flex space-x-1">
+              <div
+                className="h-2 flex-1 rounded-full transition-colors duration-200"
+                style={{
+                  backgroundColor: password.length >= 6 ? '#F59E0B' : 'hsl(var(--muted))'
+                }}
+              />
+              <div
+                className="h-2 flex-1 rounded-full transition-colors duration-200"
+                style={{
+                  backgroundColor: /[A-Z]/.test(password) ? '#F59E0B' : 'hsl(var(--muted))'
+                }}
+              />
+              <div
+                className="h-2 flex-1 rounded-full transition-colors duration-200"
+                style={{
+                  backgroundColor: /[a-z]/.test(password) ? '#F59E0B' : 'hsl(var(--muted))'
+                }}
+              />
+              <div
+                className="h-2 flex-1 rounded-full transition-colors duration-200"
+                style={{
+                  backgroundColor: /\d/.test(password) ? '#22C55E' : 'hsl(var(--muted))'
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Bouton d'inscription */}
+        <button
+          type="submit"
+          disabled={!isValid || isLoading}
+          className="w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 bg-gradient-to-r from-primary to-accent shadow-xl"
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '16px'
+          }}
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <div
+                className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mr-3"
+              />
+              Inscription en cours...
+            </div>
+          ) : (
+            <div className="flex items-center justify-center">
+              <UserPlus className="h-5 w-5 mr-3" />
+              Rejoindre le cercle
+            </div>
+          )}
+        </button>
+      </form>
+    </div>
   );
 };

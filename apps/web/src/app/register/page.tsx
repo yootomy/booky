@@ -44,21 +44,65 @@ function RegisterContent() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
-      <div className="w-full max-w-md space-y-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background transition-colors duration-300">
+      <div className="w-full max-w-md space-y-8">
+        {/* Header simple */}
+        <div className="text-center space-y-4">
+          <h1
+            className="text-3xl font-bold text-foreground"
+            style={{
+              fontFamily: 'Playfair Display, serif'
+            }}
+          >
+            Inscription
+          </h1>
+          <p
+            className="text-sm text-foreground/70"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Rejoignez la communauté des passionnés
+          </p>
+        </div>
+
         {/* Message d'information si présent */}
         {message && (
-          <Alert>
-            <AlertDescription>{message}</AlertDescription>
-          </Alert>
+          <div
+            className="p-4 rounded-xl text-sm bg-accent/5 text-accent border border-accent/10"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            {message}
+          </div>
         )}
-        
-        {/* Formulaire d'inscription */}
-        <RegisterForm 
+
+        {/* Register form */}
+        <RegisterForm
           onSuccess={() => {
             // La redirection est gérée par le hook useRegister
           }}
         />
+
+        {/* Navigation vers login */}
+        <div className="text-center space-y-4">
+          <div className="h-px w-full bg-accent/20" />
+          <p
+            className="text-sm text-foreground/70"
+            style={{
+              fontFamily: 'Inter, sans-serif'
+            }}
+          >
+            Déjà un compte ?{' '}
+            <button
+              onClick={() => router.push('/login')}
+              className="font-medium hover:underline transition-all duration-200 text-accent hover:text-accent/80"
+            >
+              Se connecter
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -38,13 +38,13 @@ interface SagaInfoProps {
 const getStatusBadgeStyle = (status: string) => {
   switch (status) {
     case 'ONGOING':
-      return 'bg-gradient-to-r from-violet-50 to-violet-100 text-violet-800 border-violet-200';
+      return 'bg-gradient-to-r from-violet-100 to-violet-200 dark:from-violet-900 dark:to-violet-800 text-violet-800 dark:text-violet-200 border-violet-200 dark:border-violet-700';
     case 'COMPLETED':
-      return 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-800 border-emerald-200';
+      return 'bg-gradient-to-r from-emerald-100 to-emerald-200 dark:from-emerald-900 dark:to-emerald-800 text-emerald-800 dark:text-emerald-200 border-emerald-200 dark:border-emerald-700';
     case 'HIATUS':
-      return 'bg-gradient-to-r from-amber-50 to-amber-100 text-amber-800 border-amber-200';
+      return 'bg-gradient-to-r from-amber-100 to-amber-200 dark:from-amber-900 dark:to-amber-800 text-amber-800 dark:text-amber-200 border-amber-200 dark:border-amber-700';
     default:
-      return 'bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-gray-200';
+      return 'bg-gradient-to-r from-muted to-muted/80 text-muted-foreground border-border';
   }
 };
 
@@ -89,7 +89,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
       if (!gridRef.current?.contains(activeElement)) return;
 
       switch (e.key) {
-        case 'ArrowLeft':
+        case 'ArrowLeft`:
           e.preventDefault();
           if (activeCardIndex > 0) {
             setActiveCardIndex(activeCardIndex - 1);
@@ -98,7 +98,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
             newCard?.focus();
           }
           break;
-        case 'ArrowRight':
+        case 'ArrowRight`:
           e.preventDefault();
           if (activeCardIndex < allSagaBooks.length - 1) {
             setActiveCardIndex(activeCardIndex + 1);
@@ -112,7 +112,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
           e.preventDefault();
           // Grid navigation - find cards in same column
           const columns = window.innerWidth < 640 ? 2 : window.innerWidth < 768 ? 3 : window.innerWidth < 1024 ? 4 : 5;
-          const newIndex = e.key === 'ArrowUp' 
+          const newIndex = e.key === 'ArrowUp` 
             ? Math.max(0, activeCardIndex - columns)
             : Math.min(allSagaBooks.length - 1, activeCardIndex + columns);
           setActiveCardIndex(newIndex);
@@ -121,7 +121,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
           newCard?.focus();
           break;
         case 'Enter':
-        case ' ':
+        case ' `:
           e.preventDefault();
           const activeCard = gridRef.current?.querySelector(`[data-index="${activeCardIndex}"] a`) as HTMLElement;
           activeCard?.click();
@@ -141,98 +141,50 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="mb-8 relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(139, 21, 56, 0.1)',
-        borderRadius: '24px',
-        boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
-      }}
+      className="mb-4 sm:mb-6 md:mb-8 relative overflow-hidden bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-lg"
     >
-      {/* Floating decorative icons */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div
-          animate={{
-            y: [0, -8, 0],
-            opacity: [0.2, 0.4, 0.2]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-4 right-8"
-        >
-          <Crown className="w-4 h-4" style={{color: '#B8860B'}} />
-        </motion.div>
 
-        <motion.div
-          animate={{
-            rotate: [0, 360],
-            opacity: [0.15, 0.3, 0.15]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          className="absolute bottom-6 left-6"
-        >
-          <Sparkles className="w-3 h-3" style={{color: '#6B4C7B'}} />
-        </motion.div>
-      </div>
-
-      <CardContent className="p-8 relative">
+      <CardContent className="p-3 sm:p-4 md:p-6 relative">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex items-center justify-between mb-8"
+          className="flex items-center justify-between mb-3 sm:mb-4 md:mb-6"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div
-              className="w-12 h-12 rounded-full flex items-center justify-center"
-              style={{
-                background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                boxShadow: '0 4px 20px rgba(139, 21, 56, 0.3)'
-              }}
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-primary to-primary/80 shadow-lg"
             >
-              <BookOpen size={24} className="text-white" />
+              <BookOpen size={16} className="text-primary-foreground sm:w-5 sm:h-5" />
             </div>
-            <div>
-              <div className="flex items-center gap-4 flex-wrap">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <Link
-                  href={`/sagas/${saga.slug}` as any}
+                  href={'/sagas/${saga.slug}' as any}
                   className="group transition-all duration-300"
                 >
                   <h2
-                    className="text-2xl font-bold mb-1 group-hover:opacity-80 transition-opacity"
+                    className="text-lg sm:text-xl md:text-2xl font-bold mb-0 group-hover:opacity-80 transition-opacity truncate text-foreground"
                     style={{
-                      fontFamily: 'Playfair Display, serif',
-                      background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text'
+                      fontFamily: 'Playfair Display, serif'
                     }}
                   >
                     {saga.name}
                   </h2>
                 </Link>
                 <span
-                  className="text-lg font-medium"
+                  className="text-sm sm:text-base font-medium whitespace-nowrap text-primary"
                   style={{
-                    fontFamily: 'Inter, sans-serif',
-                    color: '#6B4C7B'
+                    fontFamily: 'Inter, sans-serif'
                   }}
                 >
                   Tome {sagaOrder}
                 </span>
                 <Badge
-                  className={cn("text-xs font-medium px-3 py-1", getStatusBadgeStyle(saga.status))}
+                  className={cn("text-xs font-medium px-2 py-0.5", getStatusBadgeStyle(saga.status))}
                   style={{
-                    borderRadius: '12px',
+                    borderRadius: '8px',
                     fontFamily: 'Inter, sans-serif'
                   }}
                 >
@@ -248,12 +200,10 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-base leading-relaxed mb-8"
+            className="text-sm sm:text-base leading-relaxed mb-3 sm:mb-4 md:mb-6 text-foreground/80"
             style={{
               fontFamily: 'Inter, sans-serif',
-              color: '#2C1810',
-              opacity: 0.8,
-              lineHeight: '1.7'
+              lineHeight: '1.6'
             }}
           >
             {saga.description}
@@ -267,13 +217,12 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="w-full"
         >
-          <div className="flex items-center gap-3 mb-8">
-            <Feather className="w-5 h-5" style={{color: '#6B4C7B'}} />
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
+            <Feather className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             <h4
-              className="text-lg font-semibold"
+              className="text-base sm:text-lg font-semibold text-foreground"
               style={{
-                fontFamily: 'Playfair Display, serif',
-                color: '#2C1810'
+                fontFamily: 'Playfair Display, serif'
               }}
             >
               Tomes de la saga
@@ -284,7 +233,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
           <div className="w-full">
             <div
               ref={gridRef}
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 sm:gap-8 md:gap-8 lg:gap-8 justify-items-center w-full"
+              className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-5 justify-items-center w-full"
               role="region"
               aria-label="Tomes de la saga"
             >
@@ -301,34 +250,30 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                     initial={{ opacity: 0, y: 20, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="flex flex-col w-full max-w-[140px] transition-all duration-300"
-                    style={{ minHeight: '260px' }}
+                    className="flex flex-col w-full max-w-[100px] sm:max-w-[120px] transition-all duration-300"
+                    style={{ minHeight: '180px' }}
                   >
                     <div
-                      className="group cursor-pointer text-center h-full flex flex-col hover:transform hover:scale-105 transition-all duration-300"
+                      className={`group cursor-pointer text-center h-full flex flex-col hover:transform hover:scale-105 transition-all duration-300 p-1.5 rounded-xl border-2 ${
+                        isCurrentBook
+                          ? 'bg-primary/10 border-primary/20'
+                          : 'border-transparent'
+                      }'}
                       tabIndex={isActiveCard ? 0 : -1}
                       role="button"
                       aria-selected={isCurrentBook}
                       onClick={() => setActiveCardIndex(index)}
-                      style={{
-                        background: isCurrentBook
-                          ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.08) 0%, rgba(107, 76, 123, 0.05) 100%)'
-                          : 'transparent',
-                        borderRadius: '20px',
-                        padding: '12px',
-                        border: isCurrentBook ? '2px solid rgba(139, 21, 56, 0.2)' : '2px solid transparent'
-                      }}
                     >
-                      <Link href={`/books/${book.id}`} className="block h-full flex flex-col">
-                        <div className="relative mb-4 mx-auto flex-shrink-0 w-full flex justify-center">
+                      <Link href={'/books/${book.id}'} className="block h-full flex flex-col">
+                        <div className="relative mb-2 mx-auto flex-shrink-0 w-full flex justify-center">
                           {/* Loading skeleton */}
                           {isLoading && (
                             <div
                               className="animate-pulse rounded-xl"
                               style={{
                                 aspectRatio: '2/3',
-                                width: '90px',
-                                height: '135px',
+                                width: '60px',
+                                height: '90px',
                                 background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
                               }}
                             />
@@ -343,13 +288,13 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                                   alt={book.titre}
                                   className={cn(
                                     "object-cover rounded-xl transition-all duration-300 shadow-lg group-hover:shadow-2xl",
-                                    isCurrentBook ? "ring-2 ring-offset-2 ring-red-700" : "group-hover:scale-105"
+                                    isCurrentBook ? "ring-2 ring-offset-2 ring-primary" : "group-hover:scale-105"
                                   )}
                                   loading="lazy"
                                   style={{
                                     aspectRatio: '2/3',
-                                    width: '90px',
-                                    height: '135px',
+                                    width: '60px',
+                                    height: '90px',
                                     filter: isCurrentBook ? 'brightness(1.05)' : 'none'
                                   }}
                                 />
@@ -357,18 +302,18 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                                 <div
                                   className={cn(
                                     "rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg group-hover:shadow-2xl",
-                                    isCurrentBook ? "ring-2 ring-offset-2 ring-red-700" : "group-hover:scale-105"
+                                    isCurrentBook ? "ring-2 ring-offset-2 ring-primary" : "group-hover:scale-105"
                                   )}
                                   style={{
                                     aspectRatio: '2/3',
-                                    width: '90px',
-                                    height: '135px',
+                                    width: '60px',
+                                    height: '90px',
                                     background: isCurrentBook
                                       ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.15) 0%, rgba(107, 76, 123, 0.1) 100%)'
                                       : 'linear-gradient(135deg, rgba(250, 248, 245, 0.8) 0%, rgba(240, 235, 230, 0.6) 100%)'
                                   }}
                                 >
-                                  <BookOpen className="w-6 h-6" style={{color: isCurrentBook ? '#8B1538' : '#6B4C7B'}} />
+                                  <BookOpen className={`w-4 h-4 ${isCurrentBook ? 'text-primary' : 'text-muted-foreground'}'} />
                                 </div>
                               )}
 
@@ -395,25 +340,23 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                           )}
                         </div>
                         
-                        <div className="flex-1 flex flex-col justify-center space-y-3 min-h-0 px-1">
+                        <div className="flex-1 flex flex-col justify-center space-y-1 min-h-0 px-0.5">
                           <div
-                            className="text-xs font-bold uppercase tracking-wide text-center"
+                            className={`text-xs font-bold uppercase tracking-wide text-center ${isCurrentBook ? 'text-primary' : 'text-muted-foreground'}'}
                             style={{
                               fontFamily: 'Inter, sans-serif',
-                              color: isCurrentBook ? '#8B1538' : '#6B4C7B',
-                              letterSpacing: '0.1em'
+                              letterSpacing: '0.05em'
                             }}
                           >
-                            Tome {book.sagaOrder}
+                            T{book.sagaOrder}
                           </div>
 
                           <div
-                            className="text-sm line-clamp-2 leading-tight font-medium text-center transition-colors duration-300"
+                            className={`text-xs line-clamp-2 leading-tight font-medium text-center transition-colors duration-300 ${isCurrentBook ? 'text-foreground' : 'text-muted-foreground'}'}
                             style={{
                               fontFamily: 'Inter, sans-serif',
-                              color: isCurrentBook ? '#2C1810' : '#374151',
-                              fontSize: '0.875rem',
-                              lineHeight: '1.3'
+                              fontSize: '0.75rem',
+                              lineHeight: '1.2'
                             }}
                           >
                             {book.titre}

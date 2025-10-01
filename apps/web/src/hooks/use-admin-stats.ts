@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { apiClient } from '@/lib/api-client';
 
 export interface AdminStats {
   total_books: number;
@@ -55,20 +56,20 @@ export function useAdminStats() {
   // Fonction pour récupérer les statistiques admin
   const fetchAdminStats = async (): Promise<AdminStats> => {
     const [booksRes, questionsRes, categoriesRes] = await Promise.all([
-      fetch('/api/proxy/books?limit=100', {
+      apiClient.get('/api/books?limit=100', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
       }),
       // Récupérer toutes les questions pour l'admin
-      fetch('/api/proxy/admin/questions', {
+      apiClient.get('/api/admin/questions', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
       }),
-      fetch('/api/proxy/categories?limit=10', {
+      apiClient.get('/api/categories?limit=10', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ export function useAdminStats() {
       allQuestions = books
         .filter((book: any) => book.questions_sur_le_livre && book.questions_sur_le_livre.trim())
         .map((book: any) => ({
-          id: `legacy_${book.id}`,
+          id: 'legacy_${book.id}',
           question: book.questions_sur_le_livre,
           book_title: book.titre,
           book_id: book.id,

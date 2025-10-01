@@ -107,7 +107,7 @@ export function StarRating({
         onClick={() => handleStarClick(starValue)}
         onMouseEnter={() => handleStarHover(starValue)}
         onFocus={() => handleStarHover(starValue)}
-        aria-label={`Noter ${starValue} sur ${max}`}
+        aria-label={'Noter ${starValue} sur ${max}'}
       >
         {/* Étoile de base (vide) */}
         <Star
@@ -163,7 +163,7 @@ export function StarRating({
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
         role="radiogroup"
-        aria-label={`Notation sur ${max} étoiles`}
+        aria-label={'Notation sur ${max} étoiles'}
       >
         {Array.from({ length: max }, (_, index) => renderStar(index))}
       </div>

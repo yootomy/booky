@@ -268,7 +268,7 @@ function ExportAnalytics({ stats }: ExportAnalyticsProps) {
         
         <StatsCard
           title="Note moyenne"
-          value={stats?.note_moyenne ? `${stats.note_moyenne.toFixed(1)}/10` : "N/A"}
+          value={stats?.note_moyenne ? '${stats.note_moyenne.toFixed(1)}/10' : "N/A"}
           subtitle="Qualité générale de la collection"
           icon={<TrendingUpIcon className="h-4 w-4" />}
         />

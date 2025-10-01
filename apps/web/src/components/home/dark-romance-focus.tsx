@@ -52,7 +52,7 @@ function SpicyLevel({ level }: { level: number }) {
     <div
       className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium"
       style={{
-        backgroundColor: `${color}15`,
+        backgroundColor: '${color}15',
         color: color
       }}
     >
@@ -83,13 +83,13 @@ function BookCard({ book, index }: { book: DarkRomanceBook; index: number }) {
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={`/books/${book.id}`}>
+      <Link href={'/books/${book.id}'}>
         <div className="relative">
           {/* Book Cover */}
           <div className="aspect-[3/4] relative mb-4 rounded-xl overflow-hidden group-hover:shadow-2xl transition-all duration-500">
             <Image
               src={getBookImage(book)}
-              alt={`Couverture de ${book.titre}`}
+              alt={'Couverture de ${book.titre}'}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500"
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"

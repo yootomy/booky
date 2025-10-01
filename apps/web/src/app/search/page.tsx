@@ -238,7 +238,7 @@ function SearchPageContent() {
     // Mettre à jour l'URL
     const params = new URLSearchParams();
     params.set('q', searchQuery);
-    router.push(`/search?${params.toString()}`);
+    router.push('/search?${params.toString()}');
   };
 
   const clearSearch = () => {
@@ -409,7 +409,7 @@ function SearchPageContent() {
                 Résultats pour "{activeQuery}"
               </h2>
               <p className="text-gray-400">
-                {isLoading ? 'Recherche en cours...' : `${results.length} résultat${results.length > 1 ? 's' : ''} trouvé${results.length > 1 ? 's' : ''}`}
+                {isLoading ? 'Recherche en cours...' : '${results.length} résultat${results.length > 1 ? 's' : ''} trouvé${results.length > 1 ? 's' : ''}'}
               </p>
             </div>
             {activeQuery && (
@@ -453,7 +453,7 @@ function SearchPageContent() {
                       .filter(r => r.type === 'book')
                       .slice(0, 9)
                       .map((result, index) => (
-                        <BookCard key={`book-${index}`} book={transformBookForCard(result.item)} />
+                        <BookCard key={'book-${index}'} book={transformBookForCard(result.item)} />
                       ))}
                   </div>
                 </div>
@@ -471,7 +471,7 @@ function SearchPageContent() {
                       .filter(r => r.type === 'category')
                       .slice(0, 6)
                       .map((result, index) => (
-                        <Link key={`category-${index}`} href={`/categories/${result.item.id}`}>
+                        <Link key={'category-${index}'} href={'/categories/${result.item.id}'}>
                           <Card className="hover:bg-gray-800/50 transition-colors cursor-pointer">
                             <CardContent className="p-4">
                               <div className="flex items-center justify-between">
@@ -505,7 +505,7 @@ function SearchPageContent() {
                       .filter(r => r.type === 'tag')
                       .slice(0, 20)
                       .map((result, index) => (
-                        <Link key={`tag-${index}`} href={`/tags/${result.item.id}`}>
+                        <Link key={'tag-${index}'} href={'/tags/${result.item.id}'}>
                           <Badge
                             variant="outline"
                             className="hover:scale-105 transition-transform cursor-pointer px-3 py-1"

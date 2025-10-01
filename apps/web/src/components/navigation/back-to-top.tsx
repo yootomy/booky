@@ -233,7 +233,7 @@ export function BackToTopWithProgress({
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            strokeDasharray={`${scrollProgress}, 100`}
+            strokeDasharray={'${scrollProgress}, 100'}
           />
         </svg>
         

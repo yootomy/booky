@@ -184,7 +184,7 @@ export function CustomCarousel({
         ref={scrollRef}
         className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
         style={{
-          gap: `${gap}px`,
+          gap: '${gap}px',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
         }}
@@ -193,7 +193,7 @@ export function CustomCarousel({
           <div
             key={index}
             className="flex-shrink-0 snap-start"
-            style={{ width: `${itemWidth}px` }}
+            style={{ width: '${itemWidth}px' }}
           >
             {child}
           </div>
@@ -213,7 +213,7 @@ export function CustomCarousel({
                   ? 'bg-violet-500 scale-125'
                   : 'bg-ash-400 hover:bg-ash-300'
               )}
-              aria-label={`Aller à la page ${index + 1}`}
+              aria-label={'Aller à la page ${index + 1}'}
             />
           ))}
         </div>

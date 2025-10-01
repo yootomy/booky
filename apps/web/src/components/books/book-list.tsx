@@ -238,7 +238,7 @@ export function BookList({
         return (
           <BookCover
             src={book.image_couverture}
-            alt={`Couverture de ${book.titre}`}
+            alt={'Couverture de ${book.titre}'}
             title={book.titre}
             author={book.auteur}
             size="xs"
@@ -327,7 +327,7 @@ export function BookList({
                 variant="secondary"
                 className="text-xs px-1.5 py-0.5"
                 style={{
-                  backgroundColor: `${cat.category.couleur}20`,
+                  backgroundColor: '${cat.category.couleur}20',
                   color: cat.category.couleur
                 }}
               >
