@@ -201,7 +201,7 @@ export function BackToTopWithProgress({
     window.addEventListener("scroll", updateScrollProgress, { passive: true });
     updateScrollProgress();
 
-    return () => window.removeEventListener("scroll`, updateScrollProgress);
+    return () => window.removeEventListener("scroll', updateScrollProgress);
   }, []);
 
   if (!isVisible) return null;
@@ -233,7 +233,7 @@ export function BackToTopWithProgress({
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            strokeDasharray={`${scrollProgress},`100`}
+            strokeDasharray={'${scrollProgress},'100'}
           />
         </svg>
         
@@ -288,7 +288,7 @@ export function AnimatedBackToTop({
 
   return (
     <Button
-      variant={props.variant || `default'}
+      variant={props.variant || 'default'}
       className={cn(
         'fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full shadow-lg',
         'transition-all duration-300 hover:shadow-xl',

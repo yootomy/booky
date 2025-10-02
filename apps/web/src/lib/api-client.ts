@@ -26,7 +26,7 @@ class ApiClient {
    * Construit l'URL complète avec les paramètres de requête
    */
   private buildUrl(endpoint: string, params?: Record<string, string | number | boolean>): string {
-    const url = `${this.baseUrl}${endpoint}`;
+    const url = '${this.baseUrl}${endpoint}';
 
     if (!params || Object.keys(params).length === 0) {
       return url;
@@ -40,7 +40,7 @@ class ApiClient {
     });
 
     const queryString = searchParams.toString();
-    return queryString ? `${url}?${queryString}` : url;
+    return queryString ? '${url}?${queryString}' : url;
   }
 
   /**
@@ -55,7 +55,7 @@ class ApiClient {
     const url = this.buildUrl(endpoint, params);
 
     const defaultOptions: RequestInit = {
-      credentials: `include', // Inclut automatiquement les cookies d'auth
+      credentials: 'include', // Inclut automatiquement les cookies d'auth
       headers: {
         'Content-Type' : 'application/json',
       },

@@ -97,7 +97,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
       params.append('include_books', 'true');
       params.append('limit', '50');
 
-      const response = await apiClient.get(`/api/lists?${params.toString()}`);
+      const response = await apiClient.get('/api/lists?${params.toString()}');
       const data = await response.json();
 
       if (data.success) {
@@ -113,7 +113,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
       toast({
         title: "Erreur",
         description: "Erreur lors du chargement des listes",
-        variant: `destructive`
+        variant: 'destructive'
       });
     } finally {
       setLoading(false);
@@ -125,7 +125,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
 
     try {
       setDeleting(true);
-      const response = await apiClient.delete(`/api/lists/${listToDelete.id}`, {
+      const response = await apiClient.delete('/api/lists/${listToDelete.id}', {
         method: "DELETE",
       });
 
@@ -232,20 +232,20 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
-                      onClick={() => router.push(`/books?collection=${list.id}`)}
+                      onClick={() => router.push('/books?collection=${list.id}')}
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       Voir la liste
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => router.push(`/admin/lists/${list.id}/manage`)}
+                      onClick={() => router.push('/admin/lists/${list.id}/manage')}
                     >
                       <BookOpen className="h-4 w-4 mr-2" />
                       Gérer les livres
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => router.push(`/admin/lists/${list.id}/edit`)}
+                      onClick={() => router.push('/admin/lists/${list.id}/edit')}
                     >
                       <Edit2 className="h-4 w-4 mr-2" />
                       Modifier
@@ -268,8 +268,8 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
               <div
                 className="absolute top-0 right-0 w-16 h-16 opacity-5"
                 style={{
-                  background: `radial-gradient(circle, ${list.couleur} 0%, transparent 70%)`,
-                  transform: `translate(50%, -50%)`
+                  background: 'radial-gradient(circle, ${list.couleur} 0%, transparent 70%)',
+                  transform: 'translate(50%, -50%)'
                 }}
               />
 
@@ -331,13 +331,13 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                           className="aspect-[3/4] relative rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
                           onClick={(e) => {
                             e.stopPropagation();
-                            router.push(`/books/${book.id}`);
+                            router.push('/books/${book.id}');
                           }}
                         >
                           {book.image_couverture ? (
                             <img
                               src={book.image_couverture}
-                              alt={`Couverture de ${book.titre}`}
+                              alt={'Couverture de ${book.titre}'}
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -386,7 +386,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        router.push(`/admin/lists/${list.id}/manage`);
+                        router.push('/admin/lists/${list.id}/manage');
                       }}
                     >
                       <Plus className="h-4 w-4 mr-2" />

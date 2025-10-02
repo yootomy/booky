@@ -238,7 +238,7 @@ function SearchPageContent() {
     // Mettre à jour l'URL
     const params = new URLSearchParams();
     params.set('q', searchQuery);
-    router.push('/search?${params.toString()}`);
+    router.push('/search?${params.toString()}');
   };
 
   const clearSearch = () => {
@@ -409,11 +409,11 @@ function SearchPageContent() {
                 Résultats pour "{activeQuery}"
               </h2>
               <p className="text-gray-400">
-                {isLoading ? `Recherche en cours...` : `${results.length}`résultat${results.length > 1 ? `s' : '`} trouvé${results.length > 1 ? `s` : '' }`}
+                {isLoading ? 'Recherche en cours...' : '${results.length}'résultat${results.length > 1 ? 's' : ''} trouvé${results.length > 1 ? 's' : '' }'}
               </p>
             </div>
             {activeQuery && (
-              <Button variant=`outline" onClick={clearSearch}>
+              <Button variant='outline" onClick={clearSearch}>
                 <X className="h-4 w-4 mr-2" />
                 Effacer la recherche
               </Button>
@@ -448,19 +448,19 @@ function SearchPageContent() {
                     <BookOpen className="h-5 w-5" />
                     <span>Livres ({results.filter(r => r.type === "book").length})</span>
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                     {results
-                      .filter(r => r.type === `book`)
+                      .filter(r => r.type === 'book')
                       .slice(0, 9)
                       .map((result, index) => (
-                        <BookCard key={`book-${index}`} book={transformBookForCard(result.item)} />
+                        <BookCard key={'book-${index}'} book={transformBookForCard(result.item)} />
                       ))}
                   </div>
                 </div>
               )}
 
               {/* Catégories */}
-              {results.some(r => r.type === `category`) && (
+              {results.some(r => r.type === 'category') && (
                 <div>
                   <h3 className="text-lg font-medium text-white mb-4 flex items-center space-x-2">
                     <Grid3X3 className="h-5 w-5" />
@@ -468,10 +468,10 @@ function SearchPageContent() {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {results
-                      .filter(r => r.type === `category`)
+                      .filter(r => r.type === 'category')
                       .slice(0, 6)
                       .map((result, index) => (
-                        <Link key={`category-${index}`} href={`/categories/${result.item.id}`}>
+                        <Link key={'category-${index}'} href={'/categories/${result.item.id}'}>
                           <Card className="hover:bg-gray-800/50 transition-colors cursor-pointer">
                             <CardContent className="p-4">
                               <div className="flex items-center justify-between">
@@ -502,12 +502,12 @@ function SearchPageContent() {
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {results
-                      .filter(r => r.type === `tag`)
+                      .filter(r => r.type === 'tag')
                       .slice(0, 20)
                       .map((result, index) => (
-                        <Link key={`tag-${index}`} href={`/tags/${result.item.id}`}>
+                        <Link key={'tag-${index}'} href={'/tags/${result.item.id}'}>
                           <Badge
-                            variant=`outline'
+                            variant='outline'
                             className='hover:scale-105 transition-transform cursor-pointer px-3 py-1'
                             style={{ borderColor: result.item.couleur }}
                           >

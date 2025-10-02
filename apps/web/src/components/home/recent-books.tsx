@@ -157,7 +157,7 @@ export function RecentBooks() {
               }}
               whileHover={{ y: -2 }}
               className="group cursor-pointer"
-              onClick={() => window.location.href = `/books/${book.id}`}
+              onClick={() => window.location.href = "/books/${book.id}"}
             >
               <div className="relative rounded-xl overflow-hidden transition-all duration-200 group-hover:shadow-lg bg-card/60 backdrop-blur-xl border border-border shadow-md">
                 {/* Book Cover */}

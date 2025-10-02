@@ -59,7 +59,7 @@ export default function AdminActivity() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   
-  // Générer l`activité récente étendue
+  // Générer l'activité récente étendue
   const generateAllActivity = () => {
     const activities: any[] = [];
 
@@ -96,7 +96,7 @@ export default function AdminActivity() {
       });
     }
 
-    // Ajouter des activités d`exemple pour les notes
+    // Ajouter des activités d'exemple pour les notes
     if (stats?.recent_books) {
       stats.recent_books.filter(book => book.note_generale && book.note_generale > 0).forEach((book) => {
         activities.push({

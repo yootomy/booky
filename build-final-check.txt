@@ -1,0 +1,180 @@
+$ turbo build
+turbo 2.5.6
+
+• Packages in scope: native, server, web
+• Running build in 3 packages
+• Remote caching disabled
+server:build: cache miss, executing 1fc1a89afcf0ead2
+web:build: cache miss, executing 534314f6e40b5b66
+server:build: $ prisma generate && next build
+web:build: $ next build
+web:build:    ▲ Next.js 15.5.0
+web:build:    - Environments: .env.local, .env
+web:build: 
+web:build:    Creating an optimized production build ...
+server:build: Loaded Prisma config from prisma.config.ts.
+server:build: 
+server:build: Prisma config detected, skipping environment variable loading.
+server:build: Prisma schema loaded from prisma\schema
+server:build: 
+server:build: ✔ Generated Prisma Client (6.14.0) to .\prisma\generated in 115ms
+server:build: 
+server:build:    ▲ Next.js 15.5.0
+server:build:    - Environments: .env
+server:build: 
+server:build:    Creating an optimized production build ...
+web:build: Failed to compile.
+web:build: 
+web:build: ./src/components/admin/books-manager.tsx
+web:build: Error:   [31mx[0m Expected ',', got 'Couverture'
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\admin\books-manager.tsx[0m:275:1]
+web:build:  [2m272[0m |                   <Avatar className="h-20 w-16 rounded-lg">
+web:build:  [2m273[0m |                     <AvatarImage
+web:build:  [2m274[0m |                       src={book.image_couverture || ''}
+web:build:  [2m275[0m |                       alt={`Couverture de ${book.titre}`}
+web:build:      : [35;1m                            ^^^^^^^^^^[0m
+web:build:  [2m276[0m |                       className="object-cover"
+web:build:  [2m277[0m |                     />
+web:build:  [2m278[0m |                     <AvatarFallback className="rounded-lg bg-muted">
+web:build:      `----
+web:build:   [31mx[0m Expected ')', got 'Couverture'
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\admin\books-manager.tsx[0m:275:1]
+web:build:  [2m272[0m |                   <Avatar className="h-20 w-16 rounded-lg">
+web:build:  [2m273[0m |                     <AvatarImage
+web:build:  [2m274[0m |                       src={book.image_couverture || ''}
+web:build:  [2m275[0m |                       alt={`Couverture de ${book.titre}`}
+web:build:      : [35;1m                            ^^^^^^^^^^[0m
+web:build:  [2m276[0m |                       className="object-cover"
+web:build:  [2m277[0m |                     />
+web:build:  [2m278[0m |                     <AvatarFallback className="rounded-lg bg-muted">
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/components/admin/books-manager.tsx
+web:build: ./src/app/admin/books/page.tsx
+web:build: 
+web:build: ./src/components/auth/UnauthorizedMessage.tsx
+web:build: Error:   [31mx[0m Unterminated string constant
+web:build:     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\auth\UnauthorizedMessage.tsx[0m:60:1]
+web:build:  [2m57[0m |           )}
+web:build:  [2m58[0m |           
+web:build:  [2m59[0m |           <Button
+web:build:  [2m60[0m |             onClick={() => window.location.href = '/"}
+web:build:     : [35;1m                                                  ^^^^[0m
+web:build:  [2m61[0m |             variant="ghost"
+web:build:  [2m62[0m |             className="w-full"
+web:build:  [2m63[0m |           >
+web:build:     `----
+web:build:   [31mx[0m Expected '</', got 'variant'
+web:build:     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\auth\UnauthorizedMessage.tsx[0m:61:1]
+web:build:  [2m58[0m |           
+web:build:  [2m59[0m |           <Button
+web:build:  [2m60[0m |             onClick={() => window.location.href = '/"}
+web:build:  [2m61[0m |             variant="ghost"
+web:build:     : [35;1m            ^^^^^^^[0m
+web:build:  [2m62[0m |             className="w-full"
+web:build:  [2m63[0m |           >
+web:build:  [2m64[0m |             Retour à l'accueil
+web:build:     `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/components/auth/UnauthorizedMessage.tsx
+web:build: ./src/components/auth/AuthGuard.tsx
+web:build: ./src/components/auth/AdminGuard.tsx
+web:build: ./src/app/admin/books/page.tsx
+web:build: 
+web:build: ./src/components/ui/dropdown-menu.tsx
+web:build: Error:   [31mx[0m Expected ',', got 'size'
+web:build:     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\ui\dropdown-menu.tsx[0m:95:1]
+web:build:  [2m92[0m |         <DropdownMenuPrimitive.CheckboxItem
+web:build:  [2m93[0m |             data-slot="dropdown-menu-checkbox-item"
+web:build:  [2m94[0m |             className={cn(
+web:build:  [2m95[0m |                 "focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4",
+web:build:     : [35;1m                                                                                                                                                                                                                                                                                                             ^^^^[0m
+web:build:  [2m96[0m |                 className,
+web:build:  [2m97[0m |             )}
+web:build:  [2m98[0m |             checked={checked}
+web:build:     `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/components/ui/dropdown-menu.tsx
+web:build: ./src/components/search/sort-dropdown.tsx
+web:build: ./src/components/search/search-test.tsx
+web:build: 
+web:build: ./src/contexts/AuthContext.tsx
+web:build: Error:   [31mx[0m Expected ',', got 'Network'
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\contexts\AuthContext.tsx[0m:183:1]
+web:build:  [2m180[0m |       console.error("Registration error: ", error);
+web:build:  [2m181[0m |       return {
+web:build:  [2m182[0m |         success: false,
+web:build:  [2m183[0m |         error: `Network error during registration',
+web:build:      : [35;1m                ^^^^^^^[0m
+web:build:  [2m184[0m |       };
+web:build:  [2m185[0m |     }
+web:build:  [2m186[0m |   }, [saveAuthData, updateAuthState]);
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/contexts/AuthContext.tsx
+web:build: ./src/hooks/useAuthGuard.ts
+web:build: ./src/components/auth/AuthGuard.tsx
+web:build: ./src/components/auth/AdminGuard.tsx
+web:build: ./src/app/admin/books/page.tsx
+web:build: 
+web:build: ./src/lib/utils.ts
+web:build: Error:   [31mx[0m Unterminated string constant
+web:build:     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\lib\utils.ts[0m:39:1]
+web:build:  [2m36[0m |     if (diffInDays === 0) {
+web:build:  [2m37[0m |         return 'Aujourd\'hui';
+web:build:  [2m38[0m |     } else if (diffInDays === 1) {
+web:build:  [2m39[0m |         return 'Hier`;
+web:build:     : [35;1m               ^^^^^^^[0m
+web:build:  [2m40[0m |     } else if (diffInDays < 7) {
+web:build:  [2m41[0m |         return `Il y a ${diffInDays}`jour${diffInDays > 1 ? `s` : ''}';
+web:build:  [2m41[0m |     } else if (diffInDays < 30) {
+web:build:     `----
+web:build:   [31mx[0m Expected ';', got 'jour$'
+web:build:     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\lib\utils.ts[0m:41:1]
+web:build:  [2m38[0m |     } else if (diffInDays === 1) {
+web:build:  [2m39[0m |         return 'Hier`;
+web:build:  [2m40[0m |     } else if (diffInDays < 7) {
+web:build:  [2m41[0m |         return `Il y a ${diffInDays}`jour${diffInDays > 1 ? `s` : ''}';
+web:build:     : [35;1m                                     ^^^^^[0m
+web:build:  [2m42[0m |     } else if (diffInDays < 30) {
+web:build:  [2m43[0m |         const weeks = Math.floor(diffInDays / 7);
+web:build:  [2m43[0m |         return `Il y a ${weeks}`semaine${weeks > 1 ? `s` : ''}';
+web:build:     `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/lib/utils.ts
+web:build: ./src/components/search/sort-dropdown.tsx
+web:build: ./src/components/search/search-test.tsx
+web:build: 
+web:build: 
+web:build: > Build failed because of webpack errors
+web:build: error: script "build" exited with code 1
+web:build: ERROR: command finished with error: command (C:\Datas\Projects\Booky\booky\apps\web) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+web#build: command (C:\Datas\Projects\Booky\booky\apps\web) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+
+ Tasks:    0 successful, 2 total
+Cached:    0 cached, 2 total
+  Time:    4.866s 
+Failed:    web#build
+
+ ERROR  run failed: command  exited (1)
+error: script "build" exited with code 1

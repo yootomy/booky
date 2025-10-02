@@ -88,23 +88,23 @@ export function ImageUpload({
   const validateFile = (file: File): string | null => {
     // Type de fichier
     if (!file.type.startsWith('image/')) {
-      return 'Veuillez sélectionner une image valide`;
+      return 'Veuillez sélectionner une image valide';
     }
 
     // Taille du fichier
     const sizeInMB = file.size / (1024 * 1024);
     if (sizeInMB > maxSize) {
-      return `L`image ne doit pas dépasser ${maxSize}MB`;
+      return `L'image ne doit pas dépasser ${maxSize}MB`;
     }
 
     return null;
   };
 
-  // Redimensionner et compresser l`image
+  // Redimensionner et compresser l'image
   const processImage = (file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
       const img = new window.Image();
-      const canvas = document.createElement(`canvas');
+      const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
       img.onload = () => {
@@ -352,17 +352,17 @@ export function ImageUpload({
                 
                 <div className="space-y-2">
                   <p className="text-sm font-medium">
-                    {uploadState.error 
-                      ? "Erreur d\"upload'
-                      : uploadState.success 
+                    {uploadState.error
+                      ? "Erreur d'upload"
+                      : uploadState.success
                         ? 'Image uploadée avec succès' : placeholder
                     }
                   </p>
                   
-                  <p className='text-xs text-muted-foreground`>
+                  <p className='text-xs text-muted-foreground'>
                     {dragActive 
-                      ? `Relâchez pour uploader`
-                      : `Formats acceptés: PNG, JPG, GIF (max ${maxSize}MB)`
+                      ? 'Relâchez pour uploader'
+                      : 'Formats acceptés: PNG, JPG, GIF (max ${maxSize}MB)'
                     }
                   </p>
                 </div>
@@ -401,8 +401,8 @@ export function ImageUpload({
       {currentImageUrl && !uploadState.uploading && (
         <div className="flex flex-wrap gap-2 text-xs">
           <Badge variant="secondary">
-            {typeof value === `object` && value instanceof File 
-              ? `${(value.size / 1024).toFixed(0)}`KB" : "Image externe"
+            {typeof value === 'object' && value instanceof File
+              ? `${(value.size / 1024).toFixed(0)} KB` : "Image externe"
             }
           </Badge>
           

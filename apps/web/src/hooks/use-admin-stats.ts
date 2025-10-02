@@ -96,11 +96,11 @@ export function useAdminStats() {
       allQuestions = books
         .filter((book: any) => book.questions_sur_le_livre && book.questions_sur_le_livre.trim())
         .map((book: any) => ({
-          id: `legacy_${book.id}`,
+          id: 'legacy_${book.id}',
           question: book.questions_sur_le_livre,
           book_title: book.titre,
           book_id: book.id,
-          user_name: book.user?.nom_complet || `Utilisateur`,
+          user_name: book.user?.nom_complet || 'Utilisateur',
           status: 'LEGACY', // Statut spécial pour les anciennes questions
           date_question: book.date_creation || new Date().toISOString(),
         }));

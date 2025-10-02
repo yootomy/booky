@@ -184,16 +184,16 @@ export function CustomCarousel({
         ref={scrollRef}
         className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
         style={{
-          gap: `${gap}px`,
-          scrollbarWidth: `none`,
-          msOverflowStyle: `none",
+          gap: '${gap}px',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none",
         }}
       >
         {childrenArray.map((child, index) => (
           <div
             key={index}
             className="flex-shrink-0 snap-start"
-            style={{ width: `${itemWidth}px` }}
+            style={{ width: '${itemWidth}px' }}
           >
             {child}
           </div>
@@ -202,17 +202,17 @@ export function CustomCarousel({
 
       {/* Dots indicator */}
       {showDots && (
-        <div className=`flex justify-center mt-4 gap-2`>
+        <div className='flex justify-center mt-4 gap-2'>
           {Array.from({ length: Math.ceil(totalItems / 2) }).map((_, index) => (
             <button
               key={index}
               onClick={() => scrollToIndex(index * 2)}
               className={cn(
-                `w-2 h-2 rounded-full transition-all duration-200`,
+                'w-2 h-2 rounded-full transition-all duration-200',
                 Math.floor(currentIndex / 2) === index
-                  ? 'bg-violet-500 scale-125' : `bg-ash-400 hover:bg-ash-300`
+                  ? 'bg-violet-500 scale-125' : 'bg-ash-400 hover:bg-ash-300'
               )}
-              aria-label={`Aller à la page ${index + 1}`}
+              aria-label={'Aller à la page ${index + 1}'}
             />
           ))}
         </div>
@@ -236,7 +236,7 @@ export function BookCarousel({
   className?: string;
 }) {
   return (
-    <div className={cn(`space-y-4`, className)}>
+    <div className={cn('space-y-4', className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

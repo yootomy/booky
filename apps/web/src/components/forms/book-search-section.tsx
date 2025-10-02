@@ -123,39 +123,39 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setSearchType("general`)}
+                  onClick={() => setSearchType('general')}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    searchType === `}general` 
-                      ? `bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    searchType === 'general'
+                      ? 'bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
                   🔍 Général
                 </button>
                 <button
-                  type= `button`
-                  onClick={() => setSearchType(`title`)}
+                  type= 'button'
+                  onClick={() => setSearchType('title')}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    searchType === "title" 
+                    searchType === "title"
                       ? 'bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
                   📖 Titre
                 </button>
                 <button
-                  type=`button`
-                  onClick={() => setSearchType(`author`)}
+                  type='button'
+                  onClick={() => setSearchType('author')}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    searchType === `}author` 
-                      ? `bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }'}
+                    searchType === 'author'
+                      ? 'bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
                 >
                   ✍️ Auteur
                 </button>
                 <button
                   type='button'
-                  onClick={() => setSearchType('isbn`)}
+                  onClick={() => setSearchType('isbn')}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    searchType === 'isbn' 
+                    searchType === 'isbn'
                       ? 'bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -172,7 +172,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                   placeholder={
                     searchType === "general" ? "Rechercher un livre..." :
                     searchType === "title" ? "Titre du livre..." :
-                    searchType === "author" ? "Nom de l"auteur...' :
+                    searchType === "author" ? "Nom de l'auteur..." :
                     "Code ISBN (978-...)..."
                   }
                   value={searchQuery}
@@ -218,9 +218,9 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                 </div>
                 
                 <ScrollArea className="h-96 pr-4">
-                  <div className=`grid gap-3`>
-                    {(`combinedResults` in searchResults ? searchResults.combinedResults : searchResults.items).map((book, index) => (
-                      <Card key={`${book.source}-${book.identifiant_externe`|| book.id}`} className="hover:shadow-md transition-shadow">
+                  <div className='grid gap-3'>
+                    {('combinedResults' in searchResults ? searchResults.combinedResults : searchResults.items).map((book, index) => (
+                      <Card key={`${book.source}-${book.identifiant_externe || book.id}`} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-4">
                           <div className="flex space-x-4">
                             {/* Image de couverture */}
@@ -235,7 +235,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                                     target.style.display="none";
                                     const parent = target.parentElement;
                                     if (parent) {
-                                      parent.innerHTML="<div class="text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></div>";
+                                      parent.innerHTML='<div class="text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></div>';
                                     }
                                   }}
                                 />

@@ -139,7 +139,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       }
 
       try {
-        const response = await apiClient.get(`/api/lists/${initialData.id}/books`);
+        const response = await apiClient.get('/api/lists/${initialData.id}/books');
         const result = await response.json();
 
         if (result.success && result.data) {
@@ -178,7 +178,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       setLoading(true);
 
       const url = isEditing && initialData?.id
-        ? `/api/proxy/lists/${initialData.id}` : "/api/proxy/lists";
+        ? '/api/proxy/lists/${initialData.id}' : "/api/proxy/lists";
 
       const method = isEditing ? "PUT" : "POST";
 

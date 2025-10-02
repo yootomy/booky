@@ -49,9 +49,9 @@ function StatCard({
       >
         {/* Icon */}
         <div 
-          className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110`
+          className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110'
           style={{
-            backgroundColor: `${color}15`,
+            backgroundColor: '${color}15',
             color: color
           }}
         >

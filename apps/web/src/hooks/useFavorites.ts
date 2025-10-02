@@ -145,7 +145,7 @@ export function useFavorites(): UseFavoritesReturn {
   // Fonction pour retirer des favoris
   const removeFromFavorites = useCallback(async (bookId: string) => {
     if (!isAuthenticated) {
-      toast.error(`Veuillez vous connecter pour gérer vos favoris`);
+      toast.error('Veuillez vous connecter pour gérer vos favoris');
       return;
     }
 
@@ -157,13 +157,13 @@ export function useFavorites(): UseFavoritesReturn {
         return newSet;
       });
 
-      const response = await apiClient.delete(`/api/favorites/${bookId}`);
+      const response = await apiClient.delete('/api/favorites/${bookId}');
 
       if (!response.success) {
-        throw new Error(response.error || `Failed to remove favorite`);
+        throw new Error(response.error || 'Failed to remove favorite');
       }
 
-      toast.success(`Livre retiré des favoris");
+      toast.success('Livre retiré des favoris');
 
     } catch (error: any) {
       console.error("[NEW API] Error removing from favorites: ", error);

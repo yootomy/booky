@@ -21,8 +21,8 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center space-y-2 ${className}`}>
-      <Loader2 className={`animate-spin ${sizeClasses[size]} text-primary`} />
+    <div className={'flex flex-col items-center justify-center space-y-2 ${className}'}>
+      <Loader2 className={'animate-spin ${sizeClasses[size]} text-primary'} />
       {message && (
         <p className="text-sm text-muted-foreground">{message}</p>
       )}

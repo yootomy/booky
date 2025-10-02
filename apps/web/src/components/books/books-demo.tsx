@@ -117,10 +117,10 @@ const mockBooks: BookData[] = [
 
 export function BooksDemo() {
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
-  const [statusFilter, setStatusFilter] = useState<BookStatusType>("LU`);
+  const [statusFilter, setStatusFilter] = useState<BookStatusType>("LU');
 
   const handleStatusChange = (book: BookData, newStatus: BookStatusType) => {
-    console.log(`Changing status of `${book.titre}` to ${newStatus}`);
+    console.log('Changing status of "${book.titre}` to ${newStatus}');
   };
 
   return (

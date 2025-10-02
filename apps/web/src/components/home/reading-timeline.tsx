@@ -58,7 +58,7 @@ function TimelineItem({ book, index }: TimelineItemProps) {
           {book.image_couverture ? (
             <img
               src={book.image_couverture}
-              alt={`Couverture de ${book.titre}`}
+              alt={'Couverture de ${book.titre}'}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -83,21 +83,21 @@ function TimelineItem({ book, index }: TimelineItemProps) {
             <div className="flex items-center gap-1 text-xs text-ash-400">
               <Calendar size={12} />
               <span>
-                {format(new Date(book.date_lecture), `dd MMM yyyy`, { locale: fr })}
+                {format(new Date(book.date_lecture), 'dd MMM yyyy', { locale: fr })}
               </span>
             </div>
           )}
           
           {/* Note */}
           {book.note_generale && (
-            <div className={`flex items-center gap-1 text-xs font-medium ${getRatingColor(book.note_generale)}`}>
-              <Star size={12} fill=`currentColor` />
+            <div className={'flex items-center gap-1 text-xs font-medium ${getRatingColor(book.note_generale)}'}>
+              <Star size={12} fill='currentColor' />
               <span>{book.note_generale}/10</span>
             </div>
           )}
           
           {/* Rythme Badge */}
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${rhythm.color}`}>
+          <span className={'px-2 py-1 rounded-full text-xs font-medium ${rhythm.color}'}>
             {rhythm.label}
           </span>
         </div>

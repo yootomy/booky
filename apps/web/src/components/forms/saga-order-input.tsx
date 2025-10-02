@@ -115,8 +115,8 @@ export function SagaOrderInput({
   
   const getErrorMessage = () => {
     if (error) return error;
-    if (validationState === `conflict` && shouldValidate) {
-      return `L`ordre ${numberValue}`est déjà occupé dans cette saga`;
+    if (validationState === 'conflict' && shouldValidate) {
+      return `L'ordre ${numberValue} est déjà occupé dans cette saga`;
     }
     return null;
   };
@@ -181,7 +181,7 @@ export function SagaOrderInput({
             {isLoadingNextOrder ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              `Utiliser ${nextOrder}`
+              'Utiliser ${nextOrder}'
             )}
           </Button>
         )}
@@ -202,7 +202,7 @@ export function SagaOrderInput({
       )}
       
       {nextOrder && nextOrder !== numberValue && (
-        <p className="text-sm text-muted-foreground`>
+        <p className="text-sm text-muted-foreground">
           Prochain ordre suggéré: {nextOrder}
         </p>
       )}

@@ -142,21 +142,21 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
         staleTime: 5 * 60 * 1000, // 5 minutes
       });
       
-      // Naviguer vers la page d`édition
-      router.push(`/admin/books/${bookId}/edit`);
+      // Naviguer vers la page d'édition
+      router.push('/admin/books/${bookId}/edit');
     } catch (error) {
-      console.error(`Erreur lors du préfetch: `, error);
-      // Naviguer quand même, la page d`édition gèrera l`erreur
-      router.push(`/admin/books/${bookId}/edit`);
+      console.error('Erreur lors du préfetch: ', error);
+      // Naviguer quand même, la page d'édition gèrera l'erreur
+      router.push('/admin/books/${bookId}/edit');
     }
   };
 
   const handleView = (bookId: string) => {
-    router.push(`/books/${bookId}`);
+    router.push('/books/${bookId}');
   };
 
   const handleDelete = async (bookId: string) => {
-    if (!confirm(`Êtes-vous sûr de vouloir supprimer ce livre ?`)) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')) return;
 
     try {
       // 1. Supprimer immédiatement le livre du cache local (mise à jour optimiste)
@@ -272,7 +272,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                   <Avatar className="h-20 w-16 rounded-lg">
                     <AvatarImage
                       src={book.image_couverture || ''}
-                      alt={`Couverture de ${book.titre}`}
+                      alt={'Couverture de ${book.titre}'}
                       className="object-cover"
                     />
                     <AvatarFallback className="rounded-lg bg-muted">
@@ -317,7 +317,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                           <Edit2 className="h-4 w-4 mr-2" />
                           Modifier
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => window.open(`/books/${book.id}`, '_blank')}>
+                        <DropdownMenuItem onClick={() => window.open('/books/${book.id}', '_blank')}>
                           <ExternalLink className="h-4 w-4 mr-2" />
                           Ouvrir dans un nouvel onglet
                         </DropdownMenuItem>

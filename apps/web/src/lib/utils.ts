@@ -36,7 +36,7 @@ export function formatRelativeTime(date: string | Date): string {
 	if (diffInDays === 0) {
 		return 'Aujourd\'hui';
 	} else if (diffInDays === 1) {
-		return `Hier`;
+		return 'Hier';
 	} else if (diffInDays < 7) {
 		return `Il y a ${diffInDays} jour${diffInDays > 1 ? 's' : ''}`;
 	} else if (diffInDays < 30) {

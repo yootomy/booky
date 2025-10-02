@@ -159,8 +159,8 @@ export function BooksGrid({
       <div className={getGridClasses()}>
         {Array.from({ length: skeletonCount }).map((_, index) => (
           <AnimatedElement
-            key={'skeleton-${index}`}
-            animation=`fadeInUp'
+            key={'skeleton-${index}'}
+            animation='fadeInUp'
             trigger="onMount"
             delay={index * 50}
           >

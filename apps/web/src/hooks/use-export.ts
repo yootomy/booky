@@ -100,12 +100,12 @@ export function useCreateExport() {
       return response;
     },
     onSuccess: (response, variables) => {
-      // Invalider et refetch l`historique
+      // Invalider et refetch l'historique
       queryClient.invalidateQueries({ queryKey: exportQueryKeys.history() });
       
       // Notification de succès
-      toast.success(`Export ${variables.format}`créé avec succès`, {
-        description: "Votre export "${variables.filename || `sans-nom`}` est en cours de génération`,
+      toast.success('Export ${variables.format}'créé avec succès', {
+        description: "Votre export "${variables.filename || 'sans-nom'}' est en cours de génération',
         action: response.data?.download_url ? {
           label: 'Télécharger',
           onClick: () => {
@@ -117,9 +117,9 @@ export function useCreateExport() {
       });
     },
     onError: (error: Error, variables) => {
-      // Notification d`erreur
-      toast.error(`Erreur lors de la création de l`export ${variables.format}`, {
-        description: error.message || `Une erreur inattendue s\`est produite',
+      // Notification d'erreur
+      toast.error('Erreur lors de la création de l'export ${variables.format}', {
+        description: error.message || 'Une erreur inattendue s\'est produite',
         action: {
           label: 'Réessayer',
           onClick: () => {
@@ -145,10 +145,10 @@ export function useDownloadExport() {
         if (response instanceof Blob) {
           // Créer un lien de téléchargement temporaire
           const url = window.URL.createObjectURL(response);
-          const link = document.createElement(`a`);
+          const link = document.createElement('a');
           link.href = url;
-          link.download = `export-${exportId}`;
-          link.style.display = `none`;
+          link.download = 'export-${exportId}';
+          link.style.display = 'none';
           
           document.body.appendChild(link);
           link.click();
@@ -160,12 +160,12 @@ export function useDownloadExport() {
           throw new Error("Format de réponse invalide");
         }
       } catch (error) {
-        throw new Error(`Erreur lors du téléchargement: ${error instanceof Error ? error.message : "Erreur inconnue"}");
+        throw new Error('Erreur lors du téléchargement: ${error instanceof Error ? error.message : "Erreur inconnue"}");
       }
     },
     onSuccess: (_, exportId) => {
-      toast.success("Téléchargement démarré`, {
-        description: `L`export ${exportId}`est en cours de téléchargement',
+      toast.success("Téléchargement démarré', {
+        description: 'L'export ${exportId}'est en cours de téléchargement',
       });
     },
     onError: (error: Error, exportId) => {
@@ -194,15 +194,15 @@ export function useDeleteExport() {
       await exportApi.delete(exportId);
     },
     onSuccess: (_, exportId) => {
-      // Invalider l`historique pour rafraîchir la liste
+      // Invalider l'historique pour rafraîchir la liste
       queryClient.invalidateQueries({ queryKey: exportQueryKeys.history() });
       
       toast.success("Export supprimé", {
-        description: `L`export ${exportId}`a été supprimé avec succès`,
+        description: 'L'export ${exportId}'a été supprimé avec succès',
       });
     },
     onError: (error: Error, exportId) => {
-      toast.error(`Erreur de suppression", {
+      toast.error('Erreur de suppression", {
         description: error.message || "Impossible de supprimer cet export",
       });
     },

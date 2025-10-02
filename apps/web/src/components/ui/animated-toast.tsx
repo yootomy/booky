@@ -144,9 +144,9 @@ export function AnimatedToast({
                   type === 'success' && 'bg-green-500',
                   type === 'error' && 'bg-red-500',
                   type === 'warning' && 'bg-orange-500',
-                  type === 'info` && `bg-blue-500`
+                  type === 'info' && 'bg-blue-500'
                 )}
-                style={{ width: `${progress}%` }}
+                style={{ width: '${progress}%' }}
               />
             </div>
           )}
@@ -190,7 +190,7 @@ export function AnimatedToast({
                     size="sm"
                     className={cn(
                       "h-8 px-3 text-xs",
-                      type === `success' && 'border-green-300 hover:bg-green-100',
+                      type === 'success' && 'border-green-300 hover:bg-green-100',
                       type === 'error' && 'border-red-300 hover:bg-red-100',
                       type === 'warning' && 'border-orange-300 hover:bg-orange-100',
                       type === 'info' && 'border-blue-300 hover:bg-blue-100'

@@ -52,14 +52,14 @@ export function SearchBox({
     maxSuggestions: 8,
   });
 
-  // Afficher les suggestions si on a du texte, qu`on est focus et qu`on a des résultats
+  // Afficher les suggestions si on a du texte, qu'on est focus et qu'on a des résultats
   const shouldShowSuggestions = isFocused && searchTerm.length >= 2 && (suggestions.length > 0 || isLoading);
 
   // Fonction pour surligner les termes qui matchent
   const highlightMatch = useCallback((text: string, query: string) => {
     if (!query) return text;
 
-    const regex = new RegExp(`(${query})`, 'gi');
+    const regex = new RegExp('(${query})', 'gi');
     const parts = text.split(regex);
 
     return parts.map((part, index) =>
@@ -174,7 +174,7 @@ export function SearchBox({
         break;
 
       case "category":
-        router.push(`/books?category=${suggestion.id}`);
+        router.push('/books?category=${suggestion.id}');
         break;
     }
 
@@ -187,7 +187,7 @@ export function SearchBox({
     
     setShowSuggestions(false);
     setSelectedIndex(-1);
-    router.push(`/books?q=${encodeURIComponent(query.trim())}`);
+    router.push('/books?q=${encodeURIComponent(query.trim())}');
     onSearchComplete?.(query);
   }, [router, onSearchComplete]);
 
@@ -276,9 +276,9 @@ export function SearchBox({
             aria-expanded={shouldShowSuggestions}
             aria-haspopup="listbox"
             aria-autocomplete="list"
-            aria-owns={shouldShowSuggestions ? `search-suggestions` : undefined}
+            aria-owns={shouldShowSuggestions ? 'search-suggestions' : undefined}
             aria-activedescendant={
-              selectedIndex >= 0 ? `suggestion-${selectedIndex}` : undefined
+              selectedIndex >= 0 ? 'suggestion-${selectedIndex}' : undefined
             }
           />
 
@@ -380,8 +380,8 @@ export function SearchBox({
 
           {suggestions.map((suggestion, index) => (
             <div
-              key={`${suggestion.type}-${suggestion.id}`}
-              id={`suggestion-${index}`}
+              key={'${suggestion.type}-${suggestion.id}'}
+              id={'suggestion-${index}'}
               role="option"
               aria-selected={index === selectedIndex}
               className={cn(

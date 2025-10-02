@@ -363,11 +363,11 @@ export function BookForm({
         stack: error instanceof Error ? error.stack : undefined
       });
 
-      // Afficher l'erreur à l`utilisateur
+      // Afficher l'erreur à l'utilisateur
       toast({
         title: "Erreur",
         description: `Erreur lors de la soumission: ${errorMessage}`,
-        variant: `destructive",
+        variant: 'destructive',
       });
     }
   };

@@ -178,11 +178,11 @@ function useSearchSuggestions(query: string) {
             subtitle: book.auteur,
             description: book.resume_personnel,
             image: book.image_couverture,
-            url: `/books/${book.id}`,
+            url: '/books/${book.id}',
             metadata: {
               note: book.note_generale,
               statut: book.statut,
-              categories: book.categories?.map(c => c.category.nom).join(`, '),
+              categories: book.categories?.map(c => c.category.nom).join(', '),
             }
           });
         });
@@ -198,12 +198,12 @@ function useSearchSuggestions(query: string) {
 
       authors.forEach(author => {
         results.push({
-          type: `author`,
-          id: `author-${author}`,
+          type: 'author',
+          id: 'author-${author}',
           title: author,
-          subtitle: `Auteur`,
-          url: `/books?author=${encodeURIComponent(author)}`,
-          metadata: { searchType: `author` }
+          subtitle: 'Auteur',
+          url: '/books?author=${encodeURIComponent(author)}',
+          metadata: { searchType: 'author' }
         });
       });
 
@@ -221,14 +221,14 @@ function useSearchSuggestions(query: string) {
 
 export function IntelligentSearch({
   className,
-  placeholder = `Rechercher des livres, auteurs, genres...",
+  placeholder = 'Rechercher des livres, auteurs, genres...",
   onResultSelect,
   showExternalResults = false,
   maxSuggestions = 8,
   debounceMs = 300
 }: IntelligentSearchProps) {
   const router = useRouter();
-  const [query, setQuery] = useState("`);
+  const [query, setQuery] = useState("');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -243,7 +243,7 @@ export function IntelligentSearch({
     ...(query.length < 2 ? history.slice(0, 5) : [])
   ];
 
-  // Gérer la sélection d`un résultat
+  // Gérer la sélection d'un résultat
   const handleSelect = useCallback((result: SearchResult | SearchSuggestion) => {
     let finalQuery = '';
     let url = '';
@@ -251,11 +251,11 @@ export function IntelligentSearch({
     if ('query' in result) {
       // C'est un élément d'historique
       finalQuery = result.query;
-      url = `/search?q=${encodeURIComponent(result.query)}`;
+      url = '/search?q=${encodeURIComponent(result.query)}';
     } else {
-      // C`est un résultat de recherche
+      // C'est un résultat de recherche
       finalQuery = result.title;
-      url = result.url || `/search?q=${encodeURIComponent(result.title)}`;
+      url = result.url || '/search?q=${encodeURIComponent(result.title)}';
     }
 
     setQuery(finalQuery);
@@ -276,7 +276,7 @@ export function IntelligentSearch({
     addToHistory(searchQuery);
     setIsOpen(false);
 
-    const url = `/search?q=${encodeURIComponent(searchQuery)}`;
+    const url = '/search?q=${encodeURIComponent(searchQuery)}';
     router.push(url as any);
   }, [router, addToHistory]);
 
@@ -285,7 +285,7 @@ export function IntelligentSearch({
     if (!isOpen) return;
 
     switch (e.key) {
-      case `ArrowDown`:
+      case 'ArrowDown':
         e.preventDefault();
         setSelectedIndex(prev => 
           prev < allSuggestions.length - 1 ? prev + 1 : 0
@@ -535,9 +535,9 @@ function SearchResultItem({ result, isSelected, onClick }: SearchResultItemProps
           )}
           
           {result.metadata && (
-            <div className="text-xs text-muted-foreground truncate mt-1`>
-              {result.metadata.categories && `${result.metadata.categories}`• `}
-              {result.metadata.note && `Note: ${result.metadata.note}/10`}
+            <div className="text-xs text-muted-foreground truncate mt-1'>
+              {result.metadata.categories && '${result.metadata.categories}'• '}
+              {result.metadata.note && "Note: ${result.metadata.note}/10'}
             </div>
           )}
         </div>

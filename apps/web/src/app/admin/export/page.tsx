@@ -169,7 +169,7 @@ function ExportTemplatesManager() {
             "Titre et auteur",
             "Statut de lecture",
             "Note générale",
-            "Date d"ajout'
+            "Date d'ajout"
           ]}
         />
         
@@ -268,7 +268,7 @@ function ExportAnalytics({ stats }: ExportAnalyticsProps) {
         
         <StatsCard
           title="Note moyenne"
-          value={stats?.note_moyenne ? "${stats.note_moyenne.toFixed(1)}/10` : "N/A"}
+          value={stats?.note_moyenne ? `${stats.note_moyenne.toFixed(1)}/10` : "N/A"}
           subtitle="Qualité générale de la collection"
           icon={<TrendingUpIcon className="h-4 w-4" />}
         />
@@ -284,7 +284,7 @@ function ExportAnalytics({ stats }: ExportAnalyticsProps) {
       {/* Recommandations d'export */}
       <Card>
         <CardHeader>
-          <CardTitle>Recommandations d`export</CardTitle>
+          <CardTitle>Recommandations d'export</CardTitle>
           <CardDescription>
             Suggestions basées sur votre collection et vos habitudes
           </CardDescription>

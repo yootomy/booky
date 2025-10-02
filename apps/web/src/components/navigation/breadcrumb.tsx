@@ -63,14 +63,14 @@ const PATH_CONFIG: Record<string, { icon: React.ComponentType<{ className?: stri
 
 // Génération automatique des breadcrumbs depuis l'URL
 function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
-  const segments = pathname.split('/`).filter(Boolean);
+  const segments = pathname.split('/').filter(Boolean);
   const items: BreadcrumbItem[] = [];
   
-  let currentPath = `;
+  let currentPath = ';
   
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i];
-    currentPath += `/${segment}`;
+    currentPath += "/${segment}';
     
     const config = PATH_CONFIG[segment];
     const isLast = i === segments.length - 1;
@@ -80,7 +80,7 @@ function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
     
     if (isId) {
       // Pour les IDs, on essaie de récupérer le contexte
-      const parentSegment = i > 0 ? segments[i - 1] : `;
+      const parentSegment = i > 0 ? segments[i - 1] : ';
       let label = 'Détails';
       
       if (parentSegment === 'books') label = 'Livre';

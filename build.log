@@ -1,0 +1,138 @@
+$ turbo build
+turbo 2.5.6
+
+• Packages in scope: native, server, web
+• Running build in 3 packages
+• Remote caching disabled
+server:build: cache miss, executing 1fc1a89afcf0ead2
+web:build: cache miss, executing 0206c5e1c7331f12
+server:build: $ prisma generate && next build
+web:build: $ next build
+web:build:    ▲ Next.js 15.5.0
+web:build:    - Environments: .env.local, .env
+web:build: 
+server:build: Loaded Prisma config from prisma.config.ts.
+server:build: 
+web:build:    Creating an optimized production build ...
+server:build: Prisma config detected, skipping environment variable loading.
+server:build: Prisma schema loaded from prisma\schema
+server:build: 
+server:build: ✔ Generated Prisma Client (6.14.0) to .\prisma\generated in 120ms
+server:build: 
+server:build:    ▲ Next.js 15.5.0
+server:build:    - Environments: .env
+server:build: 
+server:build:    Creating an optimized production build ...
+web:build: Failed to compile.
+web:build: 
+web:build: ./src/hooks/useFavorites.ts
+web:build: Error:   [31mx[0m Unexpected eof
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\hooks\useFavorites.ts[0m:261:1]
+web:build:  [2m258[0m |     refreshFavorites,
+web:build:  [2m259[0m |     forceSync
+web:build:  [2m260[0m |   };
+web:build:  [2m261[0m | }
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/hooks/useFavorites.ts
+web:build: ./src/components/test/FavoritesTest.tsx
+web:build: ./src/app/test-favorites/page.tsx
+web:build: 
+web:build: ./src/lib/api-client.ts
+web:build: Error:   [31mx[0m Expected ',', got 'GET'
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\lib\api-client.ts[0m:125:1]
+web:build:  [2m122[0m |    * GET request
+web:build:  [2m123[0m |    */
+web:build:  [2m124[0m |   async get<T = any>(endpoint: string, params?: Record<string, string | number | boolean>): Promise<ApiResponse<T>> {
+web:build:  [2m125[0m |     return this.request<T>(endpoint, { method: `GET', params });
+web:build:      : [35;1m                                                ^^^[0m
+web:build:  [2m126[0m |   }
+web:build:  [2m127[0m | 
+web:build:  [2m127[0m |   /**
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/lib/api-client.ts
+web:build: ./src/app/admin/lists/[id]/edit/page.tsx
+web:build: 
+web:build: ./src/lib/utils.ts
+web:build: Error:   [31mx[0m Expected ',', got 'fr'
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\lib\utils.ts[0m:136:1]
+web:build:  [2m133[0m | // =============================================================================
+web:build:  [2m134[0m | 
+web:build:  [2m135[0m | export function formatNumber(num: number, options?: Intl.NumberFormatOptions): string {
+web:build:  [2m136[0m |     return new Intl.NumberFormat(`fr-FR`, options).format(num);
+web:build:      : [35;1m                                  ^^[0m
+web:build:  [2m137[0m | }
+web:build:  [2m138[0m | 
+web:build:  [2m138[0m | export function formatCurrency(amount: number, currency: string = 'EUR'): string {
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/lib/utils.ts
+web:build: ./src/components/ui/button.tsx
+web:build: ./src/app/debug-simple/page.tsx
+web:build: 
+web:build: ./src/utils/orpc.ts
+web:build: Error:   [31mx[0m Expected ',', got '{'
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\utils\orpc.ts[0m:255:1]
+web:build:  [2m252[0m |     apiClient.get<PaginatedResponse<Book>>("/books", filters),
+web:build:  [2m253[0m |   
+web:build:  [2m254[0m |   getById: (id: string) =>
+web:build:  [2m255[0m |     apiClient.get<ApiResponse<Book>>(`/books/${id}`),
+web:build:      : [35;1m                                              ^[0m
+web:build:  [2m256[0m |   
+web:build:  [2m257[0m |   create: (data: BookCreateInput) =>
+web:build:  [2m257[0m |     apiClient.post<ApiResponse<Book>>(`/books`, data),
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/utils/orpc.ts
+web:build: ./src/components/admin/tags-manager.tsx
+web:build: ./src/app/admin/tags/page.tsx
+web:build: 
+web:build: ./src/app/admin/activity/page.tsx
+web:build: Error:   [31mx[0m Expected ',', got '$'
+web:build:     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\app\admin\activity\page.tsx[0m:73:1]
+web:build:  [2m70[0m |           id: question.id,
+web:build:  [2m71[0m |           type: `question",
+web:build:  [2m72[0m |           title: "Nouvelle question posée",
+web:build:  [2m73[0m |           description: "`${question.question.substring(0, 100)}...` sur ${question.book_title}`,
+web:build:     : [35;1m                         ^[0m
+web:build:  [2m74[0m |           user: question.user_name,
+web:build:  [2m75[0m |           time: new Date(question.date_question).toLocaleString(`fr-FR`),
+web:build:  [2m75[0m |           timestamp: new Date(question.date_question),
+web:build:     `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/app/admin/activity/page.tsx
+web:build: 
+web:build: 
+web:build: > Build failed because of webpack errors
+web:build: error: script "build" exited with code 1
+web:build: ERROR: command finished with error: command (C:\Datas\Projects\Booky\booky\apps\web) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+web#build: command (C:\Datas\Projects\Booky\booky\apps\web) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+
+ Tasks:    0 successful, 2 total
+Cached:    0 cached, 2 total
+  Time:    5.335s 
+Failed:    web#build
+
+ ERROR  run failed: command  exited (1)
+error: script "build" exited with code 1

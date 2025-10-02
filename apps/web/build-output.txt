@@ -1,0 +1,153 @@
+$ next build
+   ▲ Next.js 15.5.0
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/components/forms/book-search-section.tsx
+Error:   [31mx[0m Expected '</', got 'text'
+     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\forms\book-search-section.tsx[0m:238:1]
+ [2m235[0m |                                     target.style.display="none";
+ [2m236[0m |                                     const parent = target.parentElement;
+ [2m237[0m |                                     if (parent) {
+ [2m238[0m |                                       parent.innerHTML="<div class="text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></div>";
+     : [35;1m                                                                    ^^^^[0m
+ [2m239[0m |                                     }
+ [2m240[0m |                                   }}
+ [2m240[0m |                                 />
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/forms/book-search-section.tsx
+./src/components/forms/enhanced-book-form.tsx
+./src/app/test-integration/page.tsx
+
+./src/components/ratings/romance-rating.tsx
+Error:   [31mx[0m Unterminated string constant
+     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\ratings\romance-rating.tsx[0m:195:1]
+ [2m192[0m |       </div>
+ [2m193[0m |       
+ [2m194[0m |       {showValue && (
+ [2m195[0m |         <div className="ml-2 flex flex-col">
+     : [35;1m                                          ^^[0m
+ [2m196[0m |           <span className={cn("font-medium text-foreground", textSizeClasses[size])}>
+ [2m197[0m |             {displayValue.toFixed(allowHalf ? 1 : 0)}/{max}
+ [2m197[0m |           </span>
+     `----
+  [31mx[0m Expected '</', got 'string literal (>, ">)'
+     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\ratings\romance-rating.tsx[0m:195:1]
+ [2m192[0m |       </div>
+ [2m193[0m |       
+ [2m194[0m |       {showValue && (
+ [2m195[0m |         <div className="ml-2 flex flex-col">
+     : [35;1m                                          ^^[0m
+ [2m196[0m |           <span className={cn("font-medium text-foreground", textSizeClasses[size])}>
+ [2m197[0m |             {displayValue.toFixed(allowHalf ? 1 : 0)}/{max}
+ [2m197[0m |           </span>
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/ratings/romance-rating.tsx
+./src/components/ratings/index.ts
+./src/components/forms/book-form.tsx
+./src/components/forms/enhanced-book-form.tsx
+./src/app/test-integration/page.tsx
+
+./src/components/ratings/spicy-rating.tsx
+Error:   [31mx[0m Unterminated string constant
+     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\ratings\spicy-rating.tsx[0m:127:1]
+ [2m124[0m |         <Flame
+ [2m125[0m |           className={cn(
+ [2m126[0m |             sizeClasses[size],
+ [2m127[0m |             'transition-all duration-200",
+     : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m128[0m |             "text-gray-300 dark:text-gray-600",
+ [2m129[0m |             emptySpicyClassName
+ [2m129[0m |           )}
+     `----
+  [31mx[0m Expected '</', got 'string literal (text-gray-300 dark:text-gray-600, "text-gray-300 dark:text-gray-600")'
+     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\ratings\spicy-rating.tsx[0m:128:1]
+ [2m125[0m |           className={cn(
+ [2m126[0m |             sizeClasses[size],
+ [2m127[0m |             'transition-all duration-200",
+ [2m128[0m |             "text-gray-300 dark:text-gray-600",
+     : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m129[0m |             emptySpicyClassName
+ [2m130[0m |           )}
+ [2m130[0m |         />
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/ratings/spicy-rating.tsx
+./src/components/ratings/index.ts
+./src/components/forms/book-form.tsx
+./src/components/forms/enhanced-book-form.tsx
+./src/app/test-integration/page.tsx
+
+./src/components/ratings/star-rating.tsx
+Error:   [31mx[0m Unterminated string constant
+     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\ratings\star-rating.tsx[0m:116:1]
+ [2m113[0m |         <Star
+ [2m114[0m |           className={cn(
+ [2m115[0m |             sizeClasses[size],
+ [2m116[0m |             'transition-all duration-200",
+     : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m117[0m |             ratingDarkRomanceStyles.starEmpty,
+ [2m118[0m |             emptyStarClassName
+ [2m118[0m |           )}
+     `----
+  [31mx[0m Expected '</', got 'ratingDarkRomanceStyles'
+     ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\ratings\star-rating.tsx[0m:117:1]
+ [2m114[0m |           className={cn(
+ [2m115[0m |             sizeClasses[size],
+ [2m116[0m |             'transition-all duration-200",
+ [2m117[0m |             ratingDarkRomanceStyles.starEmpty,
+     : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m118[0m |             emptyStarClassName
+ [2m119[0m |           )}
+ [2m119[0m |         />
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/ratings/star-rating.tsx
+./src/components/ratings/index.ts
+./src/components/forms/book-form.tsx
+./src/components/forms/enhanced-book-form.tsx
+./src/app/test-integration/page.tsx
+
+./src/components/test/FavoritesTest.tsx
+Error:   [31mx[0m Expected '</', got 'fill'
+    ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\test\FavoritesTest.tsx[0m:79:1]
+ [2m76[0m |               onClick={() => toggleFavorite(testBookId)}
+ [2m77[0m |               className="flex items-center gap-1"
+ [2m78[0m |             >
+ [2m79[0m |               <Heart className={'h-4 w-4 ${bookIsFavorite ? 'fill-current' : ''}'} />
+    : [35;1m                                                             ^^^^[0m
+ [2m80[0m |               {bookIsFavorite ? "Retirer" : "Ajouter"}
+ [2m81[0m |             </Button>
+ [2m81[0m |           </div>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/components/test/FavoritesTest.tsx
+./src/app/test-favorites/page.tsx
+
+
+> Build failed because of webpack errors
+error: script "build" exited with code 1

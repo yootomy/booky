@@ -21,13 +21,13 @@ import {
 import { useRouter } from 'next/navigation';
 import { apiClient } from '@/lib/api-client';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils`;
+import { cn } from '@/lib/utils';
 
 // Fonction pour highlight les termes de recherche
 const highlightSearchTerm = (text: string, searchTerm: string) => {
   if (!searchTerm.trim()) return text;
 
-  const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g,`"\\$&`)})', 'gi');
+  const regex = new RegExp('(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g,'"\\$&')})', 'gi');
   const parts = text.split(regex);
 
   return parts.map((part, index) =>
@@ -77,7 +77,7 @@ export default function ListsPage() {
   const [lists, setLists] = useState<CustomList[]>([]);
   const [filteredLists, setFilteredLists] = useState<CustomList[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("`);
+  const [searchQuery, setSearchQuery] = useState("');
 
   useEffect(() => {
     fetchLists();
@@ -112,9 +112,9 @@ export default function ListsPage() {
       params.append('est_publique', 'true'); // Seulement les listes publiques
       params.append('limit', '50');
       params.append('sort', 'ordre_affichage');
-      params.append('order', `asc`);
+      params.append('order', 'asc');
 
-      const response = await apiClient.get(`/api/lists?${params.toString()}`);
+      const response = await apiClient.get('/api/lists?${params.toString()}');
       const data = await response.json();
 
       if (data.success) {
@@ -122,7 +122,7 @@ export default function ListsPage() {
         const listsWithBooks = await Promise.all(
           data.data.map(async (list: CustomList) => {
             try {
-              const booksResponse = await apiClient.get(`/api/lists/${list.id}/books?limit=4`);
+              const booksResponse = await apiClient.get('/api/lists/${list.id}/books?limit=4');
               const booksData = await booksResponse.json();
 
               return {
@@ -240,7 +240,7 @@ export default function ListsPage() {
 
   return (
     <div className="w-full bg-background" style={{
-      minHeight: "100vh`,
+      minHeight: "100vh',
       height: "100%"
     }}>
       <div className="container mx-auto py-12 px-4 sm:px-8 lg:px-20 min-h-screen">
@@ -288,8 +288,8 @@ export default function ListsPage() {
           {lists.length > 0 && (
             <div className="flex justify-center items-center gap-8 text-sm mt-8 text-muted-foreground">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-primary`></div>
-                <span>{filteredLists.length} collection{filteredLists.length > 1 ? 's' : '`} {searchQuery && `sur ${lists.length}`}</span>
+                <div className="w-2 h-2 rounded-full bg-primary'></div>
+                <span>{filteredLists.length} collection{filteredLists.length > 1 ? 's' : ''} {searchQuery && 'sur ${lists.length}'}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-primary/70"></div>
@@ -307,8 +307,8 @@ export default function ListsPage() {
             <div className="text-center mt-4">
               <p className="text-sm text-muted-foreground">
                 {filteredLists.length > 0
-                  ? `${filteredLists.length}`résultat${filteredLists.length > 1 ? `s` : `} pour `${searchQuery}`
-                  : `Aucun résultat pour `${searchQuery}`
+                  ? '${filteredLists.length}'résultat${filteredLists.length > 1 ? 's' : '} pour '${searchQuery}'
+                  : 'Aucun résultat pour '${searchQuery}'
                 }
               </p>
             </div>
@@ -331,7 +331,7 @@ export default function ListsPage() {
                 <h3
                   className="text-2xl font-semibold text-foreground"
                   style={{
-                    fontFamily: "Playfair Display, serif`
+                    fontFamily: "Playfair Display, serif'
                   }}
                 >
                   {searchQuery ? "Aucune collection trouvée" : "Mes collections arrivent bientôt"}
@@ -355,17 +355,17 @@ export default function ListsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group cursor-pointer"
-                  onClick={() => router.push(`/books?collection=${list.id}`)}
+                  onClick={() => router.push('/books?collection=${list.id}')}
                 >
                   <div
                     className="relative rounded-2xl p-6 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/95 backdrop-blur-xl border border-primary/10 shadow-xl"
                   >
                     {/* Decorative background element */}
                     <div
-                      className="absolute top-0 right-0 w-16 h-16 opacity-5`
+                      className="absolute top-0 right-0 w-16 h-16 opacity-5'
                       style={{
-                        background: `radial-gradient(circle, ${list.couleur}`0%, transparent 70%),
-                        transform: `translate(50%, -50%)`
+                        background: 'radial-gradient(circle, ${list.couleur}'0%, transparent 70%),
+                        transform: 'translate(50%, -50%)'
                       }}
                     />
 
@@ -390,7 +390,7 @@ export default function ListsPage() {
                           <p
                             className="text-sm opacity-75 leading-relaxed line-clamp-2 text-foreground"
                             style={{
-                              fontFamily: "Inter, sans-serif`
+                              fontFamily: "Inter, sans-serif'
                             }}
                           >
                             {highlightSearchTerm(list.description, searchQuery)}
@@ -404,16 +404,16 @@ export default function ListsPage() {
                           <div
                             key={book.id}
                             className="aspect-[2/3] relative rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-300"
-                            style={{ transitionDelay: `${bookIndex * 50}ms` }}
+                            style={{ transitionDelay: '${bookIndex * 50}ms' }}
                             onClick={(e) => {
                               e.stopPropagation();
-                              router.push(`/books/${book.id}`);
+                              router.push('/books/${book.id}');
                             }}
                           >
                             {book.image_couverture ? (
                               <img
                                 src={book.image_couverture}
-                                alt={`Couverture de ${book.titre}`}
+                                alt={'Couverture de ${book.titre}'}
                                 className="w-full h-full object-contain bg-gray-50"
                               />
                             ) : (

@@ -323,8 +323,8 @@ export default function CategoryDetailPage() {
             <h3 className="text-lg font-medium text-white mb-2">Aucun livre dans cette catégorie</h3>
             <p className="text-gray-400 mb-6">
               {bookFilters.statut 
-                ? `Aucun livre avec le statut `${bookFilters.statut}` dans cette catégorie`
-                : `Cette catégorie ne contient aucun livre pour le moment"
+                ? 'Aucun livre avec le statut '${bookFilters.statut}' dans cette catégorie'
+                : 'Cette catégorie ne contient aucun livre pour le moment"
               }
             </p>
             {bookFilters.statut && (

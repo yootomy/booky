@@ -34,7 +34,7 @@ export default function ManageListPage({ params }: { params: Promise<{ id: strin
   const [list, setList] = useState<CustomList | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState(`);
+  const [searchQuery, setSearchQuery] = useState(');
   const [addBooksDialogOpen, setAddBooksDialogOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -45,7 +45,7 @@ export default function ManageListPage({ params }: { params: Promise<{ id: strin
     const fetchList = async () => {
       try {
         setLoading(true);
-        const response = await apiClient.get(`/api/lists/${resolvedParams.id}");
+        const response = await apiClient.get('/api/lists/${resolvedParams.id}");
 
         if (!response.ok) {
           throw new Error("Liste non trouvée");
@@ -55,7 +55,7 @@ export default function ManageListPage({ params }: { params: Promise<{ id: strin
         if (data.success) {
           setList(data.data);
         } else {
-          throw new Error(data.error || `Erreur lors du chargement`);
+          throw new Error(data.error || 'Erreur lors du chargement');
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Erreur inconnue");
@@ -203,15 +203,15 @@ export default function ManageListPage({ params }: { params: Promise<{ id: strin
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    size="sm`
-                    onClick={() => router.push(`/admin/lists/${list.id}/edit`)}
+                    size="sm'
+                    onClick={() => router.push('/admin/lists/${list.id}/edit')}
                   >
                     Modifier la liste
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => router.push(`/lists/${list.id}`)}
+                    onClick={() => router.push('/lists/${list.id}')}
                   >
                     Voir publiquement
                   </Button>

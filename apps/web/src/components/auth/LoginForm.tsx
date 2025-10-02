@@ -53,7 +53,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     mode: 'onChange',
   });
 
-  const rememberValue = watch(`remember`);
+  const rememberValue = watch('remember');
 
   const onSubmit = async (data: LoginFormData) => {
     clearError();
@@ -72,7 +72,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <div className={`w-full space-y-6 ${className || ""}`}>
+    <div className={`w-full space-y-6 ${className || ""}'}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Affichage des erreurs */}
         {error && (

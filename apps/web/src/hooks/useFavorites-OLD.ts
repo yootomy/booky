@@ -43,7 +43,7 @@ export function useFavorites(): UseFavoritesReturn {
       const response = await apiClient.get('/api/favorites');
       
       if (!response.success) {
-        throw new Error("Failed to fetch favorites: ${response.status}`);
+        throw new Error("Failed to fetch favorites: ${response.status}');
       }
       
       const data = response.data;
@@ -102,15 +102,15 @@ export function useFavorites(): UseFavoritesReturn {
       setFavorites(prev => new Set([...prev, bookId]));
       
       console.log("Adding to favorites: ", bookId);
-      const response = await apiClient.post("/api/favorites`, { bookId });
+      const response = await apiClient.post("/api/favorites', { bookId });
       
       if (!response.success) {
         const data = response.data.catch(() => ({
-          error: `Server error: ${response.status}`
+          error: 'Server error: ${response.status}'
         }));
 
-        // Handle `already in favorites` case gracefully
-        if (response.status === 400 && data.error?.includes(`already in favorites')) {
+        // Handle 'already in favorites' case gracefully
+        if (response.status === 400 && data.error?.includes('already in favorites')) {
           // Ensure local state is synced - book should be in favorites
           setFavorites(prev => new Set([...prev, bookId]));
           toast.info('Ce livre est déjà dans vos favoris');
@@ -145,7 +145,7 @@ export function useFavorites(): UseFavoritesReturn {
           }
         });
       } else {
-        toast.error(`Impossible d`ajouter aux favoris. Erreur: ${error.message || 'Inconnue'}`);
+        toast.error('Impossible d'ajouter aux favoris. Erreur: ${error.message || 'Inconnue'}');
       }
     }
   }, [isAuthenticated]);
@@ -153,7 +153,7 @@ export function useFavorites(): UseFavoritesReturn {
   // Fonction pour retirer des favoris
   const removeFromFavorites = useCallback(async (bookId: string) => {
     if (!isAuthenticated) {
-      toast.error(`Veuillez vous connecter pour gérer vos favoris`);
+      toast.error('Veuillez vous connecter pour gérer vos favoris');
       return;
     }
 
@@ -165,16 +165,16 @@ export function useFavorites(): UseFavoritesReturn {
         return newSet;
       });
       
-      const response = await apiClient.get(`/api/favorites/${bookId}`, {
-        method: `DELETE`,
-        credentials: `include`
+      const response = await apiClient.get('/api/favorites/${bookId}', {
+        method: 'DELETE',
+        credentials: 'include'
       });
       
       if (!response.success) {
         const data = response.data.catch(() => ({
-          error: `Server error: ${response.status}`
+          error: 'Server error: ${response.status}'
         }));
-        throw new Error(data.error || `Failed to remove favorite');
+        throw new Error(data.error || 'Failed to remove favorite');
       }
       
       toast.success("Livre retiré des favoris");
@@ -217,7 +217,7 @@ export function useFavorites(): UseFavoritesReturn {
 
   // Fonction pour vérifier si un livre est favori (avec conversion de type tolérante)
   const isFavorite = useCallback((bookId: string): boolean => {
-    // Vérification exacte d`abord
+    // Vérification exacte d'abord
     if (favorites.has(bookId)) {
       return true;
     }
@@ -236,7 +236,7 @@ export function useFavorites(): UseFavoritesReturn {
         favoriteId.toString() === bookIdStr ||
         favoriteIdStr === bookIdNum
       ) {
-        console.log(`[isFavorite] Found match with type conversion: book=`${bookId}` (${typeof bookId}) matched favorite=`${favoriteId}` (${typeof favoriteId})`);
+        console.log('[isFavorite] Found match with type conversion: book="${bookId}` (${typeof bookId}) matched favorite=`${favoriteId}` (${typeof favoriteId})');
         return true;
       }
     }

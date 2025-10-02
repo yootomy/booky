@@ -96,10 +96,10 @@ export function AddBooksToListDialog({
       setLoading(true);
       const params = new URLSearchParams();
       params.append('limit', '20');
-      params.append('page', reset ? '1` : page.toString());
-      if (searchQuery) params.append(`search`, searchQuery);
+      params.append('page', reset ? '1' : page.toString());
+      if (searchQuery) params.append('search', searchQuery);
 
-      const response = await apiClient.get(`/api/books?${params.toString()}`);
+      const response = await apiClient.get('/api/books?${params.toString()}');
       const data = await response.json();
 
       if (data.success) {
@@ -122,7 +122,7 @@ export function AddBooksToListDialog({
       toast({
         title: "Erreur",
         description: "Erreur lors du chargement des livres",
-        variant: `destructive`
+        variant: 'destructive'
       });
     } finally {
       setLoading(false);
@@ -154,8 +154,8 @@ export function AddBooksToListDialog({
     try {
       setAdding(true);
       const promises = Array.from(selectedBooks).map(bookId =>
-        apiClient.get(`/api/lists/${listId}/books`, {
-          method: `POST`,
+        apiClient.get('/api/lists/${listId}/books', {
+          method: 'POST',
           headers: {
             'Content-Type' : 'application/json',
           },
@@ -172,14 +172,14 @@ export function AddBooksToListDialog({
       if (successCount > 0) {
         toast({
           title: "Succès",
-          description: `${successCount}`livre${successCount > 1 ? `s ajoutés` : ' ajouté'} à la liste`,
+          description: '${successCount}'livre${successCount > 1 ? 's ajoutés' : ' ajouté'} à la liste',
         });
         onBookAdded();
       }
 
       if (errorCount > 0) {
         toast({
-          title: `Attention",
+          title: 'Attention",
           description: "Certains livres n"ont pas pu être ajoutés (déjà dans la liste ou erreur)',
           variant: "destructive"
         });
@@ -276,7 +276,7 @@ export function AddBooksToListDialog({
                     {book.image_couverture ? (
                       <img
                         src={book.image_couverture}
-                        alt={`Couverture de ${book.titre}`}
+                        alt={"Couverture de ${book.titre}'}
                         className="w-12 h-16 object-cover rounded border"
                       />
                     ) : (

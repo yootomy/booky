@@ -198,7 +198,7 @@ export default function Dashboard() {
                     <div className="space-y-1">
                       <h3
                         className="font-semibold text-foreground"
-                        style={{ fontFamily: "Inter, sans-serif` }}
+                        style={{ fontFamily: "Inter, sans-serif' }}
                       >
                         {user?.nom_complet || user?.username || "Utilisateur"}
                       </h3>
@@ -244,7 +244,7 @@ export default function Dashboard() {
               >
                 <Link href={card.href as any}>
                   <div className="flex items-center space-x-3 p-3 rounded-lg bg-card/50 border border-border/30 hover:border-primary/40 hover:bg-card/70 transition-all duration-200 cursor-pointer">
-                    <div className={`p-2 rounded-lg ${card.bgColor}flex-shrink-0`}>
+                    <div className={'p-2 rounded-lg ${card.bgColor}flex-shrink-0'}>
                       <card.icon className="w-4 h-4 text-primary" />
                     </div>
 

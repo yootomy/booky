@@ -131,15 +131,15 @@ export const googleBooksApi = {
     }
     
     // Ajouter des filtres de qualité
-    searchParams.append('filter`, EXTERNAL_API_CONFIG.GOOGLE_BOOKS.defaultFilter);
+    searchParams.append('filter', EXTERNAL_API_CONFIG.GOOGLE_BOOKS.defaultFilter);
     
     return apiClient.get<ExternalSearchResult>(
-      `/external/google-books/search?${searchParams.toString()}`
+      '/external/google-books/search?${searchParams.toString()}'
     );
   },
 
   // Détection automatique du type de recherche
-  detectSearchType(query: string): `title` | 'author' | 'isbn' | 'general' {
+  detectSearchType(query: string): 'title' | 'author' | 'isbn' | 'general' {
     // Nettoyer la requête
     const cleanQuery = query.trim().toLowerCase();
     
@@ -200,7 +200,7 @@ export const googleBooksApi = {
   // Obtenir les détails d'un livre spécifique
   async getBookDetails(googleBooksId: string): Promise<ApiResponse<ExternalBookResult>> {
     return apiClient.get<ApiResponse<ExternalBookResult>>(
-      `/external/google-books/book/${googleBooksId}`
+      '/external/google-books/book/${googleBooksId}'
     );
   },
 
@@ -208,7 +208,7 @@ export const googleBooksApi = {
   async importBook(googleBooksId: string, options?: BookImportOptions): Promise<ImportResult> {
     const importData = {
       externalId: googleBooksId,
-      source: `google_books` as const,
+      source: 'google_books' as const,
       ...options,
     };
     
@@ -230,7 +230,7 @@ export const openLibraryApi = {
       q: options.query,
       limit: Math.min(options.maxResults || 10, EXTERNAL_API_CONFIG.OPEN_LIBRARY.limit),
       offset: options.startIndex || 0,
-      fields: options.fields || `key,title,author_name,first_publish_year,isbn,cover_i,publisher,language`,
+      fields: options.fields || 'key,title,author_name,first_publish_year,isbn,cover_i,publisher,language',
       sort: options.sort || EXTERNAL_API_CONFIG.OPEN_LIBRARY.defaultSort,
     };
     
@@ -242,14 +242,14 @@ export const openLibraryApi = {
     });
     
     return apiClient.get<ExternalSearchResult>(
-      `/external/open-library/search?${searchParams.toString()}`
+      '/external/open-library/search?${searchParams.toString()}'
     );
   },
 
   // Recherche par titre
   async searchByTitle(title: string, options?: { maxResults?: number }): Promise<ExternalSearchResult> {
     return this.search({
-      query: `title:${title}`,
+      query: 'title:${title}',
       maxResults: options?.maxResults || 10,
     });
   },
@@ -257,7 +257,7 @@ export const openLibraryApi = {
   // Recherche par auteur
   async searchByAuthor(author: string, options?: { maxResults?: number }): Promise<ExternalSearchResult> {
     return this.search({
-      query: `author:${author}`,
+      query: 'author:${author}',
       maxResults: options?.maxResults || 10,
     });
   },
@@ -270,10 +270,10 @@ export const openLibraryApi = {
     });
   },
 
-  // Obtenir les détails d`un livre spécifique
+  // Obtenir les détails d'un livre spécifique
   async getBookDetails(openLibraryKey: string): Promise<ApiResponse<ExternalBookResult>> {
     return apiClient.get<ApiResponse<ExternalBookResult>>(
-      `/external/open-library/book/${openLibraryKey.replace(`/works/', '')}`
+      `/external/open-library/book/${openLibraryKey.replace('/works/', '')}`
     );
   },
 
@@ -341,13 +341,13 @@ export const externalSearchApi = {
       return result;
       
     } catch (error) {
-      throw new Error(`Erreur lors de la recherche combinée: ${error instanceof Error ? error.message : "Erreur inconnue"}`);
+      throw new Error('Erreur lors de la recherche combinée: ${error instanceof Error ? error.message : "Erreur inconnue"}');
     }
   },
 
   // Recherche intelligente avec fallback
   async smartSearch(query: string, options?: {
-    preferredSource?: `google_books' | 'open_library';
+    preferredSource?: 'google_books' | 'open_library';
     maxResults?: number;
     fallbackOnError?: boolean;
   }): Promise<ExternalSearchResult> {
@@ -373,7 +373,7 @@ export const externalSearchApi = {
       }
       
       // Fallback vers l'autre source
-      const fallbackSource = preferredSource === 'google_books' ? 'open_library" : "google_books";
+      const fallbackSource = preferredSource === 'google_books' ? 'open_library' : 'google_books';
       
       try {
         if (fallbackSource === 'google_books') {
@@ -382,7 +382,7 @@ export const externalSearchApi = {
           return await openLibraryApi.search(searchOptions);
         }
       } catch (fallbackError) {
-        throw new Error(`Erreur sur les deux sources: ${error instanceof Error ? error.message : `Erreur inconnue'}`);
+        throw new Error(`Erreur sur les deux sources: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
       }
     }
   },
@@ -394,13 +394,13 @@ export const externalSearchApi = {
     
     for (const book of results) {
       // Créer une clé unique basée sur ISBN ou titre+auteur
-      let uniqueKey = `';
+      let uniqueKey = '';
       if (book.isbn && typeof book.isbn === 'string') {
         uniqueKey = book.isbn.replace(/[-\s]/g, '');
       } else {
         const titre = book.titre?.toLowerCase() || 'no-title';
-        const auteur = book.auteur?.toLowerCase() || 'no-author`;
-        uniqueKey = `${titre}_${auteur}`;
+        const auteur = book.auteur?.toLowerCase() || 'no-author';
+        uniqueKey = '${titre}_${auteur}';
       }
       
       if (!seen.has(uniqueKey)) {
@@ -417,7 +417,7 @@ export const externalSearchApi = {
 // 🚀 FONCTIONS UTILITAIRES
 // =============================================================================
 
-// Transformer un résultat externe en données de livre pour l`import
+// Transformer un résultat externe en données de livre pour l'import
 export function transformExternalBookToBookInput(
   book: ExternalBookResult, 
   customData?: Partial<BookImportOptions>

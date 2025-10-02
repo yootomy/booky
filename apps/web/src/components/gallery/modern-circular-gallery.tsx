@@ -128,7 +128,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
     };
 
     window.addEventListener('keydown', handleKeydown);
-    return () => window.removeEventListener(`keydown`, handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
   }, [goToNext, goToPrevious]);
 
   // Calculate positions for circular layout
@@ -149,7 +149,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
     const opacity = Math.max(0.3, 1 - Math.abs(z) / 500);
     
     return {
-      transform: `translateX(${x}px)`translateZ(${z}px) scale(${scale})`,
+      transform: "translateX(${x}px)'translateZ(${z}px) scale(${scale})',
       opacity,
       zIndex: Math.round(100 + z),
     };
@@ -162,11 +162,11 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
 
     return (
       <div 
-        className={`
+        className={'
           absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
           w-48 h-72 cursor-pointer transition-all duration-500 ease-out
-          ${hoveredIndex === index ? `scale-110" : "`}
-        ` }
+          ${hoveredIndex === index ? 'scale-110" : "'}
+        ' }
         style={getBookStyle(index)}
         onMouseEnter={() => setHoveredIndex(index)}
         onMouseLeave={() => setHoveredIndex(null)}
@@ -181,15 +181,15 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
         }}
       >
         {/* Book Card */}
-        <div className=`relative w-full h-full rounded-2xl overflow-hidden shadow-book hover:shadow-book-hover book-shine gallery-book-enter bg-gradient-to-br from-purple-100 to-pink-100 border border-white/50 transition-all duration-300`>
+        <div className='relative w-full h-full rounded-2xl overflow-hidden shadow-book hover:shadow-book-hover book-shine gallery-book-enter bg-gradient-to-br from-purple-100 to-pink-100 border border-white/50 transition-all duration-300'>
           {!imageError && book.image_couverture ? (
             <>
               <img
                 src={book.image_couverture}
                 alt={book.titre}
-                className={`w-full h-full object-cover transition-opacity duration-300 ${
-                  imageLoaded ? `opacity-100" : "opacity-0"
-                }` }
+                className={'w-full h-full object-cover transition-opacity duration-300 ${
+                  imageLoaded ? 'opacity-100" : "opacity-0"
+                }' }
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImageError(true)}
                 crossOrigin="anonymous"
@@ -210,22 +210,22 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
               {book.note_generale && (
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-yellow-300 text-yellow-300 star-sparkle" />
-                  <span className="text-sm font-medium`>{book.note_generale}/10</span>
+                  <span className="text-sm font-medium'>{book.note_generale}/10</span>
                 </div>
               )}
             </div>
           )}
           
           {/* Hover overlay */}
-          <div className={`
+          <div className={'
             absolute inset-0 bg-black/0 hover:bg-black/20 transition-all duration-300
             flex items-center justify-center
-            ${hoveredIndex === index ? `bg-black/10" : "`}
-`         "}>
+            ${hoveredIndex === index ? 'bg-black/10" : "'}
+'         "}>
             {hoveredIndex === index && (
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-3 max-w-[80%] text-center transform transition-all duration-300">
                 <p className="font-semibold text-gray-800 text-sm line-clamp-2">{book.titre}</p>
-                <p className="text-gray-600 text-xs mt-1`>{book.auteur}</p>
+                <p className="text-gray-600 text-xs mt-1'>{book.auteur}</p>
               </div>
             )}
           </div>
@@ -236,7 +236,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
 
   if (!books || books.length === 0) {
     return (
-      <div className={`w-full h-[500px] flex items-center justify-center ${className}`}>
+      <div className={'w-full h-[500px] flex items-center justify-center ${className}'}>
         <div className="text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
             <BookOpen className="w-12 h-12 text-purple-400" />
@@ -249,7 +249,7 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
   }
 
   return (
-    <div className={`relative w-full h-[500px] overflow-hidden ${className}`}>
+    <div className={'relative w-full h-[500px] overflow-hidden ${className}'}>
       {/* Main Gallery Container */}
       <div 
         ref={containerRef}
@@ -289,22 +289,22 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10`>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10'>
         {books.slice(0, 7).map((_, index) => (
           <button
             key={index}
             onClick={() => goToIndex(index)}
-            className={`nav-dot w-2 h-2 rounded-full transition-all duration-300 ${
+            className={'nav-dot w-2 h-2 rounded-full transition-all duration-300 ${
               index === currentIndex 
                 ? 'nav-dot active w-8' : 'bg-white/50 hover:bg-white/80'
-            }`}
-            aria-label={`Aller au livre ${index + 1}`}
+            }'}
+            aria-label={'Aller au livre ${index + 1}'}
           />
         ))}
       </div>
 
       {/* Book Info Panel */}
-      <div className=`absolute top-6 left-6 glass-effect bg-white/90 rounded-xl p-4 max-w-xs shadow-lg z-10 gallery-book-enter">
+      <div className='absolute top-6 left-6 glass-effect bg-white/90 rounded-xl p-4 max-w-xs shadow-lg z-10 gallery-book-enter">
         <h3 className="font-bold text-gray-800 text-lg mb-1 line-clamp-2">
           {books[currentIndex]?.titre}
         </h3>
@@ -325,14 +325,14 @@ const ModernCircularGallery: React.FC<ModernCircularGalleryProps> = ({
       <div className="absolute top-6 right-6 z-10">
         <button
           onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-          className={`w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center ${
+          className={'w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center ${
             isAutoPlaying 
-              ? `bg-green-500/80 hover:bg-green-500` 
+              ? 'bg-green-500/80 hover:bg-green-500' 
               : "bg-gray-500/80 hover:bg-gray-500"
-          }`text-white shadow-lg`}
+          }'text-white shadow-lg'}
           aria-label={isAutoPlaying ? 'Pause auto-play' : 'Play auto-play'}
         >
-          {isAutoPlaying ? "⏸" : "▶`}
+          {isAutoPlaying ? "⏸" : "▶'}
         </button>
       </div>
     </div>

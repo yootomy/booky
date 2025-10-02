@@ -59,9 +59,9 @@ export function RecentActivity({ stats }: RecentActivityProps) {
           id: question.id,
           type: "question",
           title: "Nouvelle question posée",
-          description: `${question.question.substring(0, 50)}...` sur ${question.book_title}`,
+          description: `${question.question.substring(0, 50)}... sur ${question.book_title}`,
           user: question.user_name,
-          time: new Date(question.date_question).toLocaleString(`fr-FR`),
+          time: new Date(question.date_question).toLocaleString('fr-FR'),
           timestamp: new Date(question.date_question)
         });
       });
@@ -72,11 +72,11 @@ export function RecentActivity({ stats }: RecentActivityProps) {
       stats.recent_books.slice(0, 3).forEach((book) => {
         activities.push({
           id: book.id,
-          type: `book`,
+          type: 'book',
           title: "Livre ajouté",
-          description: `${book.titre}` par ${book.auteur}`,
-          user: `Admin`,
-          time: new Date(book.date_creation).toLocaleString(`fr-FR`),
+          description: `${book.titre} par ${book.auteur}`,
+          user: 'Admin',
+          time: new Date(book.date_creation).toLocaleString('fr-FR'),
           timestamp: new Date(book.date_creation),
           rating: book.note_generale
         });

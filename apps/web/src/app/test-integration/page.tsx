@@ -7,11 +7,11 @@ import type { BookCreateInput, BookUpdateInput } from '@/types/book';
 import { TagType } from '@/types/api';
 
 export default function TestIntegrationPage() {
-  const [testResult, setTestResult] = useState<string>('`);
+  const [testResult, setTestResult] = useState<string>('');
 
   const handleSubmit = async (data: BookCreateInput | BookUpdateInput) => {
-    console.log(`📚 Données du formulaire:`, data);
-    setTestResult(`✅ Livre testé: `${data.titre}` par ${data.auteur}`);
+    console.log('📚 Données du formulaire:', data);
+    setTestResult('✅ Livre testé: "${data.titre}` par ${data.auteur}');
     
     // Simuler une sauvegarde
     await new Promise(resolve => setTimeout(resolve, 1000));

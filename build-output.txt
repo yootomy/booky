@@ -1,0 +1,124 @@
+$ turbo build
+turbo 2.5.6
+
+• Packages in scope: native, server, web
+• Running build in 3 packages
+• Remote caching disabled
+web:build: cache miss, executing 3d3caa8b858ec355
+server:build: cache miss, executing 1fc1a89afcf0ead2
+web:build: $ next build
+server:build: $ prisma generate && next build
+web:build:    ▲ Next.js 15.5.0
+web:build:    - Environments: .env.local, .env
+web:build: 
+server:build: Loaded Prisma config from prisma.config.ts.
+server:build: 
+web:build:    Creating an optimized production build ...
+server:build: Prisma config detected, skipping environment variable loading.
+server:build: Prisma schema loaded from prisma\schema
+server:build: 
+server:build: ✔ Generated Prisma Client (6.14.0) to .\prisma\generated in 127ms
+server:build: 
+server:build:    ▲ Next.js 15.5.0
+server:build:    - Environments: .env
+server:build: 
+server:build:    Creating an optimized production build ...
+web:build: Failed to compile.
+web:build: 
+web:build: ./src/components/forms/admin-book-form.tsx
+web:build: Error:   [31mx[0m Expected ',', got 'assurer'
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\components\forms\admin-book-form.tsx[0m:129:1]
+web:build:  [2m126[0m | 
+web:build:  [2m127[0m |   const handleSubmit = async (data: BookFormDataWithSaga) => {
+web:build:  [2m128[0m |     if (book) {
+web:build:  [2m129[0m |       // Mode édition - s`assurer que les données ont un ID
+web:build:      : [35;1m                          ^^^^^^^[0m
+web:build:  [2m130[0m |       const updateData = { ...data, id: book.id };
+web:build:  [2m131[0m |       await updateBookMutation.mutateAsync(updateData);
+web:build:  [2m131[0m |     } else {
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/components/forms/admin-book-form.tsx
+web:build: ./src/app/admin/books/new/page.tsx
+web:build: 
+web:build: ./src/hooks/useFavorites.ts
+web:build: Error:   [31mx[0m Unexpected eof
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\hooks\useFavorites.ts[0m:261:1]
+web:build:  [2m258[0m |     refreshFavorites,
+web:build:  [2m259[0m |     forceSync
+web:build:  [2m260[0m |   };
+web:build:  [2m261[0m | }
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/hooks/useFavorites.ts
+web:build: ./src/components/test/FavoritesTest.tsx
+web:build: ./src/app/test-favorites/page.tsx
+web:build: 
+web:build: ./src/lib/api-client.ts
+web:build: Error:   [31mx[0m Unexpected eof
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\lib\api-client.ts[0m:176:1]
+web:build:  [2m173[0m | export type { ApiResponse, ApiClientOptions };
+web:build:  [2m174[0m | 
+web:build:  [2m175[0m | // Export de la classe pour les cas d'usage avancés
+web:build:  [2m176[0m | export { ApiClient };
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/lib/api-client.ts
+web:build: ./src/app/admin/lists/[id]/edit/page.tsx
+web:build: 
+web:build: ./src/utils/orpc.ts
+web:build: Error:   [31mx[0m Unexpected eof
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\utils\orpc.ts[0m:612:56]
+web:build:  [2m610[0m | export const orpcClient = client;
+web:build:  [2m611[0m | 
+web:build:  [2m612[0m | export const orpc = createTanstackQueryUtils(client);
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/utils/orpc.ts
+web:build: ./src/components/admin/books-manager.tsx
+web:build: ./src/app/admin/books/page.tsx
+web:build: 
+web:build: ./src/app/admin/books/[id]/edit/page.tsx
+web:build: Error:   [31mx[0m Unexpected eof
+web:build:      ,-[[36;1;4mC:\Datas\Projects\Booky\booky\apps\web\src\app\admin\books\[id]\edit\page.tsx[0m:240:1]
+web:build:  [2m237[0m |       </div>
+web:build:  [2m238[0m |     </AdminGuard>
+web:build:  [2m239[0m |   );
+web:build:  [2m240[0m | }
+web:build:      `----
+web:build: 
+web:build: Caused by:
+web:build:     Syntax Error
+web:build: 
+web:build: Import trace for requested module:
+web:build: ./src/app/admin/books/[id]/edit/page.tsx
+web:build: 
+web:build: 
+web:build: > Build failed because of webpack errors
+web:build: error: script "build" exited with code 1
+web:build: ERROR: command finished with error: command (C:\Datas\Projects\Booky\booky\apps\web) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+web#build: command (C:\Datas\Projects\Booky\booky\apps\web) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+
+ Tasks:    0 successful, 2 total
+Cached:    0 cached, 2 total
+  Time:    5.38s 
+Failed:    web#build
+
+ ERROR  run failed: command  exited (1)
+error: script "build" exited with code 1

@@ -78,7 +78,7 @@ export function useSagaBySlug(slug: string, enabled: boolean = true) {
 }
 
 /**
- * Hook pour récupérer les livres d`une saga
+ * Hook pour récupérer les livres d'une saga
  */
 export function useSagaBooks(id: string, options: UseSagaBooksOptions = {}) {
   const { enabled = true, ...filters } = options;
@@ -92,7 +92,7 @@ export function useSagaBooks(id: string, options: UseSagaBooksOptions = {}) {
 }
 
 /**
- * Hook pour récupérer les voisins d`un livre dans sa saga
+ * Hook pour récupérer les voisins d'un livre dans sa saga
  */
 export function useSagaNeighbors(bookId: string, enabled: boolean = true) {
   return useQuery({
@@ -159,7 +159,7 @@ export function useCreateSaga() {
       queryClient.invalidateQueries({ queryKey: sagaKeys.lists() });
       
       toast.success("Saga créée avec succès", {
-        description: "La saga "${response.data.name}` a été créée`});
+        description: `La saga ${response.data.name} a été créée`});
     },
     onError: (error: any) => {
       toast.error("Erreur lors de la création", {
@@ -247,20 +247,20 @@ export function useAssignBookToSaga() {
       queryClient.invalidateQueries({ queryKey: sagaKeys.detail(data.sagaId) });
       
       toast.success("Livre assigné à la saga", {
-        description: `Le livre a été assigné à l`ordre ${data.sagaOrder}`
+        description: `Le livre a été assigné à l'ordre ${data.sagaOrder}`
       });
     },
     onError: (error: any) => {
-      // Gestion spéciale pour les conflits d`ordre
+      // Gestion spéciale pour les conflits d'ordre
       if (error.statusCode === 409) {
-        toast.error(`Conflit d\`ordre", {
+        toast.error("Conflit d'ordre", {
           description: error.error || 'Cet ordre est déjà occupé dans cette saga'
         });
         return;
       }
       
-      toast.error("Erreur lors de l\"assignation", {
-        description: error.error || 'Une erreur inattendue s\'est produite'
+      toast.error("Erreur lors de l'assignation", {
+        description: error.error || "Une erreur inattendue s'est produite"
       });
     }
   });

@@ -55,7 +55,7 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
       const question = stats?.recent_questions?.find(q => q.id === questionId);
       const bookId = question?.book_id || 'cmey654ee0010qtwccb4f20pl'; // Fallback vers l'ancien ID
       
-      if (action === `ANSWERED" && !response?.trim()) {
+      if (action === 'ANSWERED' && !response?.trim()) {
         toast({
           title: "Erreur",
           description: "Veuillez saisir une réponse",
@@ -75,8 +75,8 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
 
       if (action === "ANSWERED") {
         // Répondre à la question via le proxy (pour garder les cookies)
-        const res = await apiClient.get(`/api/books/${bookId}/questions/${questionId}`, {
-          method: `PUT',
+        const res = await apiClient.get('/api/books/${bookId}/questions/${questionId}', {
+          method: 'PUT',
           headers: {
             'Content-Type' : 'application/json',
           },
@@ -87,24 +87,24 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
           
-          // Extraire le message d`erreur de validation si disponible
+          // Extraire le message d'erreur de validation si disponible
           if (errorData.details && Array.isArray(errorData.details) && errorData.details[0]?.message) {
             throw new Error(errorData.details[0].message);
           } else if (errorData.error) {
             throw new Error(errorData.error);
           } else {
-            throw new Error(`Erreur lors de la réponse à la question");
+            throw new Error('Erreur lors de la réponse à la question');
           }
         }
 
         toast({
           title: "Réponse envoyée",
-          description: `Votre réponse a été publiée avec succès`,
+          description: 'Votre réponse a été publiée avec succès',
         });
       } else {
         // Rejeter la question via le proxy (pour garder les cookies)
-        const res = await apiClient.get(`/api/books/${bookId}/questions/${questionId}`, {
-          method: `PATCH',
+        const res = await apiClient.get('/api/books/${bookId}/questions/${questionId}', {
+          method: 'PATCH',
           headers: {
             'Content-Type' : 'application/json',
           },
@@ -281,7 +281,7 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
                     className="bg-violet-600 hover:bg-violet-700 text-white"
                   >
                     <Send className="h-4 w-4 mr-2" />
-                    {isSubmitting[question.id] ? "Envoi..." : "Envoyer`}
+                    {isSubmitting[question.id] ? "Envoi..." : "Envoyer"}
                   </Button>
                 </div>
               </div>

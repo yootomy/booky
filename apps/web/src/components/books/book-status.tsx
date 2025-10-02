@@ -64,7 +64,7 @@ const STATUS_CONFIG: Record<BookStatusType, {
     label: "Abandonné",
     shortLabel: "Abandonné",
     icon: XCircle,
-    color: "#EF4444`, // Red
+    color: "#EF4444', // Red
     bgColor: "#EF4444",
     description: "Lecture arrêtée, livre abandonné"
   }
@@ -235,15 +235,15 @@ export function ReadingProgress({
       <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-300"
-          style={{ width: `${Math.min(progress, 100)}%` }}
+          style={{ width: '${Math.min(progress, 100)}%' }}
         />
       </div>
       {showText && (
-        <div className=`flex justify-between text-xs text-muted-foreground`>
+        <div className='flex justify-between text-xs text-muted-foreground'>
           <span>
             {currentPage && totalPages 
-              ? `Page ${currentPage}/${totalPages}`
-              : `${progress}% lu`
+              ? 'Page ${currentPage}/${totalPages}'
+              : '${progress}% lu'
             }
           </span>
           <span>{progress}%</span>
@@ -268,7 +268,7 @@ export function ReadingStats({
   className
 }: ReadingStatsProps) {
   return (
-    <div className={cn(`flex flex-wrap gap-2", className)}>
+    <div className={cn('flex flex-wrap gap-2", className)}>
       {dateStarted && (
         <Badge variant="outline" className="text-xs">
           <Calendar className="w-3 h-3 mr-1" />

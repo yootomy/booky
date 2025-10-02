@@ -87,7 +87,7 @@ export default function AdminConseilsPage() {
   const { data: booksData } = useQuery({
     queryKey: ['books'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/books`);
+      const response = await apiClient.get('/api/books');
       if (!response.ok) throw new Error("Failed to fetch books");
       return response.json();
     }
@@ -101,8 +101,8 @@ export default function AdminConseilsPage() {
       livres_recommandes: string[];
       status: string;
     }) => {
-      const response = await apiClient.get(`/api/conseil-requests/${id}`, {
-        method: `PATCH`,
+      const response = await apiClient.get('/api/conseil-requests/${id}', {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reponse_bruna, livres_recommandes, status })
       });
@@ -129,8 +129,8 @@ export default function AdminConseilsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'EN_ATTENTE':
-        return <Clock className="w-4 h-4" style={{ color: "#F59E0B' }} />;
-      case 'TRAITE":
+        return <Clock className="w-4 h-4" style={{ color: "#F59E0B" }} />;
+      case 'TRAITE':
         return <CheckCircle className="w-4 h-4" style={{ color: "#10B981" }} />;
       default:
         return <Clock className="w-4 h-4" style={{ color: "#6B7280" }} />;
@@ -192,8 +192,8 @@ export default function AdminConseilsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FAF8F5' }}>
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-2 border-current border-t-transparent rounded-full mx-auto mb-4" style={{ color: "#8B1538' }}></div>
-          <p style={{ color: "#6B4C7B', fontFamily: 'Inter, sans-serif' }}>Chargement des demandes...</p>
+          <div className="animate-spin w-8 h-8 border-2 border-current border-t-transparent rounded-full mx-auto mb-4" style={{ color: "#8B1538" }}></div>
+          <p style={{ color: "#6B4C7B", fontFamily: 'Inter, sans-serif' }}>Chargement des demandes...</p>
         </div>
       </div>
     );
@@ -205,7 +205,7 @@ export default function AdminConseilsPage() {
       <div
         className="absolute inset-0 opacity-20 mix-blend-multiply"
         style={{
-          backgroundImage: "url("data:image/svg+xml,%3Csvg viewBox=\"0 0 256 256\" xmlns=\'http://www.w3.org/2000/svg\"%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")"
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\\"0 0 256 256\\" xmlns=\\"http://www.w3.org/2000/svg\\"%3E%3Cfilter id=\\"noiseFilter\\"%3E%3CfeTurbulence type=\\"fractalNoise\\" baseFrequency=\\"0.9\\" numOctaves=\\"4\\" stitchTiles=\\"stitch\\"/%3E%3C/filter%3E%3Crect width=\\"100%25\\" height=\\"100%25\\" filter=\\"url(%23noiseFilter)\\"/%3E%3C/svg%3E")'
         }}
       />
 
@@ -264,7 +264,7 @@ export default function AdminConseilsPage() {
                 Demandes en attente ({pendingConseils.length})
               </h2>
 
-              <div className=`space-y-4`>
+              <div className='space-y-4'>
                 {pendingConseils.map((conseil: ConseilRequest) => (
                   <motion.div
                     key={conseil.id}
@@ -272,12 +272,12 @@ export default function AdminConseilsPage() {
                     animate={{ opacity: 1, y: 0 }}
                   >
                     <Card
-                      className={`cursor-pointer transition-all duration-300 ${
+                      className={'cursor-pointer transition-all duration-300 ${
                         selectedRequest?.id === conseil.id ? 'ring-2 ring-offset-2 ring-purple-500' : ''
-                      }`}
+                      }'}
                       style={{
                         background: selectedRequest?.id === conseil.id
-                          ? `linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
+                          ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
                           : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
                         backdropFilter: 'blur(20px)',
                         border: '1px solid rgba(139, 21, 56, 0.1)',
@@ -292,14 +292,14 @@ export default function AdminConseilsPage() {
                             <h3 className="font-bold text-lg" style={{ color: '#2C1810', fontFamily: 'Inter, sans-serif' }}>
                               {conseil.nom_utilisateur}
                             </h3>
-                            <div className="flex items-center gap-2 text-sm" style={{ color: "#6B4C7B` }}>
-                              <Calendar className=`w-4 h-4` />
-                              {new Date(conseil.date_creation).toLocaleDateString(`fr-FR`)}
+                            <div className="flex items-center gap-2 text-sm" style={{ color: "#6B4C7B' }}>
+                              <Calendar className='w-4 h-4' />
+                              {new Date(conseil.date_creation).toLocaleDateString('fr-FR')}
                             </div>
                           </div>
                           <Badge
-                            className={`flex items-center gap-1 px-3 py-1 text-xs ${getStatusStyle(conseil.status)}`}
-                            style={{ borderRadius: `12px` }}
+                            className={'flex items-center gap-1 px-3 py-1 text-xs ${getStatusStyle(conseil.status)}'}
+                            style={{ borderRadius: '12px' }}
                           >
                             {getStatusIcon(conseil.status)}
                             En attente
@@ -471,23 +471,23 @@ export default function AdminConseilsPage() {
                           onChange={(e) => setResponseText(e.target.value)}
                           placeholder="Chère [nom], voici mes recommandations personnalisées pour vous..."
                           className="min-h-32"
-                          style={{ borderRadius: "12px", fontFamily: "Inter, sans-serif` }}
+                          style={{ borderRadius: "12px", fontFamily: "Inter, sans-serif' }}
                         />
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810` }}>Livres recommandés (optionnel) :</h4>
+                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810' }}>Livres recommandés (optionnel) :</h4>
                         <div className="max-h-40 overflow-y-auto space-y-2">
                           {books.slice(0, 20).map((book: Book) => (
                             <div
                               key={book.id}
-                              className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all ${
+                              className={'flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all ${
                                 selectedBooks.includes(book.id) ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
-                              }`}
+                              }'}
                               onClick={() => handleBookToggle(book.id)}
                             >
                               <input
-                                type=`checkbox"
+                                type='checkbox"
                                 checked={selectedBooks.includes(book.id)}
                                 onChange={() => handleBookToggle(book.id)}
                                 className="rounded"

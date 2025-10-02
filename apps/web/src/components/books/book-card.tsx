@@ -140,7 +140,7 @@ export function BookCard({
         <div className="flex gap-3">
           <BookCover
             src={book.image_couverture}
-            alt={`Couverture de ${book.titre}`}
+            alt={'Couverture de ${book.titre}'}
             title={book.titre}
             author={book.auteur}
             size="xs"
@@ -183,10 +183,10 @@ export function BookCard({
           {...hoverProps}
         >
         <CardContent className="p-3">
-          <div className="flex gap-3`>
+          <div className="flex gap-3'>
             <BookCover
               src={book.image_couverture}
-              alt={`Couverture de ${book.titre}`}
+              alt={'Couverture de ${book.titre}'}
               title={book.titre}
               author={book.auteur}
               size="sm"
@@ -276,10 +276,10 @@ export function BookCard({
       <CardContent className="p-0">
         {/* Image et actions */}
         <div className="relative">
-          <div className="flex justify-center p-4 pb-2`>
+          <div className="flex justify-center p-4 pb-2'>
             <BookCover
               src={book.image_couverture}
-              alt={`Couverture de ${book.titre}`}
+              alt={'Couverture de ${book.titre}'}
               title={book.titre}
               author={book.auteur}
               size={coverSize}
@@ -443,7 +443,7 @@ export function BookCard({
                     variant="secondary"
                     className="text-xs px-2 py-0.5"
                     style={{
-                      backgroundColor: `${cat.category.couleur}20`,
+                      backgroundColor: '${cat.category.couleur}20',
                       color: cat.category.couleur,
                       borderColor: cat.category.couleur
                     }}
@@ -452,7 +452,7 @@ export function BookCard({
                   </Badge>
                 ))}
                 {book.categories.length > 3 && (
-                  <Badge variant=`outline" className="text-xs px-2 py-0.5">
+                  <Badge variant='outline" className="text-xs px-2 py-0.5">
                     +{book.categories.length - 3}
                   </Badge>
                 )}

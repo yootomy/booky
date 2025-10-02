@@ -491,7 +491,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                         </h3>
                         <Badge 
                           variant="outline" 
-                          className={`text-xs ${TAG_TYPE_COLORS[tag.type]} mt-1`}
+                          className={'text-xs ${TAG_TYPE_COLORS[tag.type]} mt-1'}
                         >
                           {TAG_TYPE_LABELS[tag.type]}
                         </Badge>
@@ -523,7 +523,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                             )}
                             {tag.est_favori ? "Retirer favori" : "Marquer favori"}
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => router.push(`/tags/${tag.id}` as any)}>
+                          <DropdownMenuItem onClick={() => router.push('/tags/${tag.id}' as any)}>
                             <Eye className="h-4 w-4 mr-2" />
                             Voir les livres
                           </DropdownMenuItem>

@@ -234,11 +234,11 @@ export function BookList({
           />
         );
 
-      case `cover`:
+      case 'cover':
         return (
           <BookCover
             src={book.image_couverture}
-            alt={`Couverture de ${book.titre}`}
+            alt={'Couverture de ${book.titre}'}
             title={book.titre}
             author={book.auteur}
             size="xs"
@@ -327,7 +327,7 @@ export function BookList({
                 variant="secondary"
                 className="text-xs px-1.5 py-0.5"
                 style={{
-                  backgroundColor: `${cat.category.couleur}20`,
+                  backgroundColor: '${cat.category.couleur}20',
                   color: cat.category.couleur
                 }}
               >
@@ -335,7 +335,7 @@ export function BookList({
               </Badge>
             ))}
             {(book.categories?.length || 0) > 2 && (
-              <Badge variant=`outline" className="text-xs px-1.5 py-0.5">
+              <Badge variant='outline" className="text-xs px-1.5 py-0.5">
                 +{(book.categories?.length || 0) - 2}
               </Badge>
             )}

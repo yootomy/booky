@@ -173,9 +173,9 @@ export default function BookDetailPage() {
   const bookQuery = useQuery({
     queryKey: ['book', bookId],
     queryFn: async () => {
-      const response = await apiClient.get(`/api/books/${bookId}`);
+      const response = await apiClient.get('/api/books/${bookId}');
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('HTTP error! status: ${response.status}');
       }
       const data = await response.json();
       return data.data as Book;
@@ -184,11 +184,11 @@ export default function BookDetailPage() {
   });
 
   const questionsQuery = useQuery({
-    queryKey: [`questions`, bookId],
+    queryKey: ['questions', bookId],
     queryFn: async () => {
-      const response = await apiClient.get(`/api/books/${bookId}/questions`);
+      const response = await apiClient.get('/api/books/${bookId}/questions');
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('HTTP error! status: ${response.status}');
       }
       const data = await response.json();
       return (data.data || []) as BookQuestion[];
@@ -198,27 +198,27 @@ export default function BookDetailPage() {
 
   const submitQuestionMutation = useMutation({
     mutationFn: async (question: string) => {
-      const response = await apiClient.get(`/api/books/${bookId}/questions`, {
-        method: `POST',
+      const response = await apiClient.get('/api/books/${bookId}/questions', {
+        method: 'POST',
         headers: {
           'Content-Type' : 'application/json',
         },
         body: JSON.stringify({ question: question }),
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('HTTP error! status: ${response.status}');
       }
       const data = await response.json();
-      if (!data.data) throw new Error(`Erreur lors de l\`envoi');
+      if (!data.data) throw new Error('Erreur lors de l\'envoi');
       return data.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['questions', bookId] });
-      setNewQuestion('`);
+      setNewQuestion('');
       toast.success("Question envoyée !");
     },
     onError: () => {
-      toast.error("Erreur lors de l\`envoi de la question`);
+      toast.error("Erreur lors de l\'envoi de la question');
     },
     onSettled: () => {
       setIsSubmittingQuestion(false);
@@ -227,20 +227,20 @@ export default function BookDetailPage() {
 
   const likeQuestionMutation = useMutation({
     mutationFn: async (questionId: string) => {
-      const response = await apiClient.get(`/api/books/${bookId}/questions/${questionId}/like`, {
-        method: `POST',
+      const response = await apiClient.get('/api/books/${bookId}/questions/${questionId}/like', {
+        method: 'POST',
         headers: {
           'Content-Type' : 'application/json',
         },
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error('HTTP error! status: ${response.status}');
       }
       return response.json();
     },
     onMutate: async (questionId: string) => {
       // Annuler les requêtes en cours pour éviter les conflits
-      await queryClient.cancelQueries({ queryKey: [`questions`, bookId] });
+      await queryClient.cancelQueries({ queryKey: ['questions', bookId] });
 
       // Sauvegarder les données actuelles pour le rollback
       const previousQuestions = queryClient.getQueryData(['questions', bookId]);
@@ -501,26 +501,26 @@ export default function BookDetailPage() {
                     ].map((metric, index) => (
                       <div key={index} className="p-4 sm:p-5 rounded-xl bg-card/50 border border-border">
                         <div className="flex items-center justify-between mb-3">
-                          <span className=`text-sm sm:text-base font-medium text-foreground'
+                          <span className='text-sm sm:text-base font-medium text-foreground'
                             style={{
                               fontFamily: 'Inter, sans-serif'
                             }}
                           >
                             {metric.label}
                           </span>
-                          <span className={`text-2xl font-bold ${metric.colorClass}`}
+                          <span className={'text-2xl font-bold ${metric.colorClass}'}
                             style={{
-                              fontFamily: `Playfair Display, serif`
+                              fontFamily: 'Playfair Display, serif'
                             }}
                           >
                             {metric.value}/10
                           </span>
                         </div>
-                        <div className=`w-full rounded-full h-3 bg-muted`>
+                        <div className='w-full rounded-full h-3 bg-muted'>
                           <div
-                            className={`h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
+                            className={'h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
                             style={{
-                              width: `${(metric.value / 10) * 100}%`
+                              width: '${(metric.value / 10) * 100}%'
                             }}
                           />
                         </div>
@@ -546,16 +546,16 @@ export default function BookDetailPage() {
           <div className="mb-3 sm:mb-4 md:mb-8 rounded-2xl overflow-hidden shadow-lg bg-card/95 backdrop-blur-xl border border-border"
           >
             <div className="p-2 sm:p-3 md:p-6">
-              <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3`>
+              <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3'>
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all duration-200 cursor-pointer border-2 relative ${
+                    className={'flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all duration-200 cursor-pointer border-2 relative ${
                       activeTab === tab.id
-                        ? `text-primary-foreground shadow-lg border-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90"
+                        ? 'text-primary-foreground shadow-lg border-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90"
                         : 'hover:bg-muted/50 border-transparent hover:border-border text-muted-foreground hover:text-foreground'
-                    }`}
+                    }'}
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       ...(activeTab === tab.id
@@ -567,12 +567,12 @@ export default function BookDetailPage() {
                     }}
                   >
                     <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="hidden xs:inline sm:inline`>{tab.label}</span>
+                    <span className="hidden xs:inline sm:inline'>{tab.label}</span>
                     {tab.count !== null && (
-                      <span className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-200 ${
+                      <span className={'px-2 py-1 rounded-full text-xs font-bold transition-all duration-200 ${
                         activeTab === tab.id
                           ? 'bg-primary-foreground/20 text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'
-                      }`}>
+                      }'}>
                         {tab.count}
                       </span>
                     )}
@@ -745,21 +745,21 @@ export default function BookDetailPage() {
                 >
                   <div className="text-xl md:text-4xl font-bold mb-2 md:mb-3 text-yellow-700 dark:text-yellow-300"
                     style={{
-                      fontFamily: "Playfair Display, serif`
+                      fontFamily: "Playfair Display, serif'
                     }}
                   >
                     {book.note_generale}/10
                   </div>
 
                   {/* Affichage correct: 10 étoiles pour /10 */}
-                  <div className=`flex justify-center gap-0.5 md:gap-1 mb-2 md:mb-3`>
+                  <div className='flex justify-center gap-0.5 md:gap-1 mb-2 md:mb-3'>
                     {Array.from({ length: 10 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-2.5 h-2.5 md:w-5 md:h-5 ${
+                        className={'w-2.5 h-2.5 md:w-5 md:h-5 ${
                           i < book.note_generale
                             ? 'fill-yellow-400 text-yellow-400' : 'fill-muted text-muted'
-                        }`}
+                        }'}
                       />
                     ))}
                   </div>
@@ -787,26 +787,26 @@ export default function BookDetailPage() {
                     <div key={index} className="p-3 md:p-6 rounded-xl md:rounded-2xl bg-card/90 backdrop-blur-lg border border-border shadow-lg"
                     >
                       <div className="flex items-center justify-between mb-2 md:mb-4">
-                        <span className=`text-sm md:text-lg font-medium'
+                        <span className='text-sm md:text-lg font-medium'
                           style={{
                               fontFamily: 'Inter, sans-serif'
                           }}
                         >
                           {metric.label}
                         </span>
-                        <span className={`text-lg md:text-2xl font-bold ${metric.colorClass}`}
+                        <span className={'text-lg md:text-2xl font-bold ${metric.colorClass}'}
                           style={{
-                            fontFamily: `Playfair Display, serif`
+                            fontFamily: 'Playfair Display, serif'
                           }}
                         >
                           {metric.value}/10
                         </span>
                       </div>
-                      <div className=`w-full rounded-full h-2 md:h-3 bg-muted`>
+                      <div className='w-full rounded-full h-2 md:h-3 bg-muted'>
                         <div
-                          className={`h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
+                          className={'h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
                           style={{
-                            width: `${(metric.value / 10) * 100}%`
+                            width: '${(metric.value / 10) * 100}%'
                           }}
                         />
                       </div>
@@ -817,7 +817,7 @@ export default function BookDetailPage() {
             )}
 
             {/* Onglet Genres & Tropes */}
-            {activeTab === `genres" && (
+            {activeTab === 'genres" && (
               <div className="space-y-4 sm:space-y-6 md:space-y-8">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
                   style={{
@@ -1094,12 +1094,12 @@ export default function BookDetailPage() {
                               >
                                 {question.user.nom_complet}
                               </h4>
-                              <p className=`text-xs text-muted-foreground`
+                              <p className='text-xs text-muted-foreground'
                                 style={{
                                   fontFamily: 'Inter, sans-serif'
                                 }}
                               >
-                                {new Date(question.date_question).toLocaleDateString('fr-FR`)}
+                                {new Date(question.date_question).toLocaleDateString('fr-FR')}
                               </p>
                             </div>
                           </div>
@@ -1107,14 +1107,14 @@ export default function BookDetailPage() {
                           {/* Like button */}
                           <button
                             onClick={() => handleLikeQuestion(question.id)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 active:scale-95 ${
+                            className={'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 active:scale-95 ${
                               question.is_liked
-                                ? `}bg-primary/15 text-primary border border-primary/20` : `bg-background/50 text-muted-foreground border border-border/30 hover:bg-primary/10 hover:text-primary hover:border-primary/20`
-                            }`}
+                                ? '}bg-primary/15 text-primary border border-primary/20' : 'bg-background/50 text-muted-foreground border border-border/30 hover:bg-primary/10 hover:text-primary hover:border-primary/20'
+                            }'}
                           >
-                            <ThumbsUp className={`w-3.5 h-3.5 transition-all duration-200 ${
-                              question.is_liked ? `fill-current` : ""
-                            }`} />
+                            <ThumbsUp className={'w-3.5 h-3.5 transition-all duration-200 ${
+                              question.is_liked ? 'fill-current' : ""
+                            }'} />
                             <span className="font-medium">{question.likes_count}</span>
                           </button>
                         </div>

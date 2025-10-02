@@ -166,20 +166,20 @@ export function RhythmSelector({
     return (
       <button
         key={option.value}
-        type=`button`
+        type='button'
         disabled={readonly}
         className={cn(
           getOptionClasses(option, isSelected),
           optionClassName
         )}
         onClick={() => handleOptionClick(option.value)}
-        aria-label={`Rythme ${option.label}:`${option.description}`}
+        aria-label={`Rythme ${option.label} : ${option.description}`}
         aria-pressed={isSelected}
       >
         <Icon
           className={cn(
             sizeClasses[size].icon,
-            `transition-colors duration-200",
+            'transition-colors duration-200',
             isSelected ? "text-primary" : option.color
           )}
         />

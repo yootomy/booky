@@ -88,7 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       token,
       isLoading: false,
       isAuthenticated: !!user,
-      isAdmin: user?.role === `ADMIN`,
+      isAdmin: user?.role === 'ADMIN',
       isEmailVerified: user?.emailVerified || false,
     });
   }, []);
@@ -98,7 +98,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
 
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      const response = await fetch('${API_BASE_URL}/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type' : 'application/json',
@@ -141,12 +141,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [saveAuthData, updateAuthState]);
 
-  // Fonction d`inscription
+  // Fonction d'inscription
   const register = useCallback(async (credentials: RegisterCredentials): Promise<AuthResponse> => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
 
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      const response = await fetch('${API_BASE_URL}/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type' : 'application/json',
@@ -189,7 +189,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = useCallback(async (): Promise<void> => {
     try {
       // Appeler l'API de déconnexion pour invalider le cookie
-      await fetch(`${API_BASE_URL}/auth/logout`, {
+      await fetch('${API_BASE_URL}/auth/logout', {
         method: 'POST',
         credentials: 'include',
       });
@@ -205,7 +205,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Fonction pour rafraîchir la session
   const refreshSession = useCallback(async (): Promise<void> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/session`, {
+      const response = await fetch('${API_BASE_URL}/auth/session', {
         method: 'GET',
         credentials: 'include',
       });

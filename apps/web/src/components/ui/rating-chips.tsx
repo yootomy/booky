@@ -144,8 +144,8 @@ export function RatingBars({
         <span className="text-sm text-ash-300">{label}</span>
       </div>
       <div className="flex-1 h-2 bg-ink-700 rounded-full overflow-hidden">
-        <div 
-          className={cn(`h-full rounded-full transition-all duration-500`, colorClass)}
+        <div
+          className={cn('h-full rounded-full transition-all duration-500', colorClass)}
           style={{ width: `${(value / 10) * 100}%` }}
         />
       </div>

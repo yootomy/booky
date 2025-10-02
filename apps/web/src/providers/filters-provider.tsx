@@ -226,10 +226,10 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     if (newState.selectedStatuses.length > 0) params.set('statuses', newState.selectedStatuses.join(','));
     if (newState.selectedGenres.length > 0) params.set('genres', newState.selectedGenres.join(','));
     if (newState.selectedTags.length > 0) params.set('tags', newState.selectedTags.join(','));
-    if (newState.viewMode !== 'grid`) params.set(`view`, newState.viewMode);
+    if (newState.viewMode !== 'grid') params.set('view', newState.viewMode);
     
     const queryString = params.toString();
-    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+    const newUrl = queryString ? '${pathname}?${queryString}' : pathname;
     
     router.replace(newUrl as any, { scroll: false });
   }, [syncWithUrl, pathname, router]);
@@ -242,7 +242,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
   }, [state, updateUrl]);
 
   const clearSearchQuery = React.useCallback(() => {
-    const newState = { ...state, searchQuery: `', page: 1 };
+    const newState = { ...state, searchQuery: '', page: 1 };
     setState(newState);
     updateUrl(newState);
   }, [state, updateUrl]);
@@ -284,7 +284,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
   }, [state, updateUrl]);
 
   // Actions pour les notes
-  const setRatingFilter = React.useCallback((type: keyof FiltersState[`ratingFilters",], value: number | null) => {
+  const setRatingFilter = React.useCallback((type: keyof FiltersState['ratingFilters",], value: number | null) => {
     const newState = {
       ...state,
       ratingFilters: { ...state.ratingFilters, [type]: value },

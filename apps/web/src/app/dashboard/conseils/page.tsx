@@ -305,7 +305,7 @@ export default function ConseilsPage() {
                 {/* Results count */}
                 <div className="text-sm text-muted-foreground whitespace-nowrap">
                   <strong className="text-foreground">{filteredConseils.length}</strong> conseil{filteredConseils.length > 1 ? "s" : "'}
-                  {searchTerm && ' trouvé${filteredConseils.length > 1 ? 's' : ''}`}
+                  {searchTerm && ' trouvé${filteredConseils.length > 1 ? 's' : ''}'}
                 </div>
               </div>
             </motion.div>

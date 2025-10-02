@@ -436,7 +436,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
                       <Edit2 className="h-4 w-4 mr-2" />
                       Modifier
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/categories/${category.id}` as any)}>
+                    <DropdownMenuItem onClick={() => router.push('/categories/${category.id}' as any)}>
                       <Eye className="h-4 w-4 mr-2" />
                       Voir les livres
                     </DropdownMenuItem>
@@ -457,7 +457,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
                   variant="secondary"
                   className="text-xs"
                   style={{
-                    backgroundColor: `${category.couleur}20`,
+                    backgroundColor: '${category.couleur}20',
                     color: category.couleur
                   }}
                 >
@@ -482,7 +482,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
             <h3 className="text-lg font-semibold mb-2">Aucune catégorie trouvée</h3>
             <p className="text-muted-foreground mb-4">
               {searchQuery
-                ? `Aucune catégorie ne correspond à votre recherche ${searchQuery}`
+                ? 'Aucune catégorie ne correspond à votre recherche ${searchQuery}'
                 : "Commencez par créer votre première catégorie"
               }
             </p>

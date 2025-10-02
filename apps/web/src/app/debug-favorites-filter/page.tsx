@@ -191,14 +191,14 @@ export default function DebugFavoritesFilterPage() {
           </CardHeader>
           <CardContent className="max-h-96 overflow-y-auto">
             {comparison.length > 0 ? (
-              <div className="space-y-2`>
+              <div className="space-y-2'>
                 {comparison.slice(0, 20).map((result, index) => (
                   <div 
                     key={index}
-                    className={`p-3 rounded border text-xs ${
+                    className={'p-3 rounded border text-xs ${
                       result.inFavorites 
                         ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
-                    }`}
+                    }'}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">

@@ -312,12 +312,12 @@ class Media {
         ctx.font = 'bold 18px Arial, sans-serif';
         ctx.fillStyle = '#ffd700';
         const stars = '★'.repeat(Math.floor(this.book.note_generale / 2)) + 
-                     (this.book.note_generale % 2 >= 1 ? '☆' : `);
-        ctx.fillText(`${stars}`${this.book.note_generale}/10`, 200, startY + (lines.length * 30) + 60);
+                     (this.book.note_generale % 2 >= 1 ? '☆' : ');
+        ctx.fillText('${stars}'${this.book.note_generale}/10', 200, startY + (lines.length * 30) + 60);
       }
       
       // Icône livre
-      ctx.font = `40px Arial, sans-serif';
+      ctx.font = '40px Arial, sans-serif';
       ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
       ctx.fillText('📖', 200, 120);
 
@@ -652,7 +652,7 @@ interface CircularGalleryProps {
 export default function CircularGallery({
   books,
   onBookClick,
-  className = `
+  className = '
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<GalleryApp | null>(null);
@@ -666,7 +666,7 @@ export default function CircularGallery({
   useEffect(() => {
     if (!isClient || !containerRef.current || !books?.length) return;
     
-    // Nettoyer l`ancienne instance
+    // Nettoyer l'ancienne instance
     if (appRef.current) {
       appRef.current.destroy();
       appRef.current = null;
@@ -676,7 +676,7 @@ export default function CircularGallery({
     try {
       appRef.current = new GalleryApp(containerRef.current, books, onBookClick);
     } catch (error) {
-      console.error(`Gallery creation error:`, error);
+      console.error('Gallery creation error:', error);
     }
 
     return () => {
@@ -689,7 +689,7 @@ export default function CircularGallery({
 
   if (!isClient) {
     return (
-      <div className={`w-full h-full flex items-center justify-center ${className}`}>
+      <div className={'w-full h-full flex items-center justify-center ${className}'}>
         <div className="animate-pulse">
           <div className="flex gap-4">
             {[...Array(5)].map((_, i) => (
@@ -706,7 +706,7 @@ export default function CircularGallery({
 
   if (!books || books.length === 0) {
     return (
-      <div className={`w-full h-full flex items-center justify-center ${className}`}>
+      <div className={'w-full h-full flex items-center justify-center ${className}'}>
         <div className="text-center space-y-4">
           <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
             <BookOpen className="w-10 h-10 text-purple-500" />
@@ -719,9 +719,9 @@ export default function CircularGallery({
 
   return (
     <div 
-      className={`w-full h-full cursor-grab active:cursor-grabbing ${className}`} 
+      className={'w-full h-full cursor-grab active:cursor-grabbing ${className}'} 
       ref={containerRef}
-      style={{ touchAction: `none` }}
+      style={{ touchAction: 'none' }}
     />
   );
 }

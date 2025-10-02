@@ -130,7 +130,7 @@ export default function QuestionsPage() {
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.PENDING;
     const IconComponent = config.icon;
     return (
-      <Badge className={`${config.color}text-xs font-medium gap-1`}>
+      <Badge className={'${config.color}text-xs font-medium gap-1'}>
         <IconComponent className="w-3 h-3" />
         {config.label}
       </Badge>
@@ -245,8 +245,8 @@ export default function QuestionsPage() {
 
               {/* Results count */}
               <div className="text-sm text-muted-foreground whitespace-nowrap">
-                <strong className="text-foreground">{filteredQuestions.length}</strong> question{filteredQuestions.length > 1 ? 's` : '`}
-                {searchTerm && ` trouvée${filteredQuestions.length > 1 ? 's' : ''}`}
+                <strong className="text-foreground">{filteredQuestions.length}</strong> question{filteredQuestions.length > 1 ? 's' : ''}
+                {searchTerm && ' trouvée${filteredQuestions.length > 1 ? 's' : ''}'}
               </div>
             </div>
           </motion.div>
@@ -316,13 +316,13 @@ export default function QuestionsPage() {
               <Card className="bg-card/90 backdrop-blur border border-border/50 text-center py-16">
                 <CardContent>
                   <MessageCircle className="w-20 h-20 text-muted-foreground/60 mx-auto mb-6" />
-                  <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: "Playfair Display, serif` }}>
+                  <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: "Playfair Display, serif' }}>
                     {searchTerm
                       ? "Aucune question trouvée"
                       : "Vous n"avez encore posé aucune question'
                     }
                   </h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: "Inter, sans-serif` }}>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: "Inter, sans-serif' }}>
                     {searchTerm
                       ? "Essayez de modifier vos critères de recherche."
                       : "Commencez à explorer notre bibliothèque et posez vos premières questions sur les livres qui vous intéressent."
@@ -363,8 +363,8 @@ export default function QuestionsPage() {
                     >
                       <Card className="bg-card/90 backdrop-blur border border-border/50 hover:border-primary/40 overflow-hidden hover:shadow-xl transition-all duration-300 group">
                         <CardHeader className="pb-3">
-                          <div className="flex justify-between items-start mb-3`>
-                            <Link href={`/books/${question.book.id}`} className="flex items-center gap-3 flex-1 min-w-0 group-hover:text-primary transition-colors duration-200">
+                          <div className="flex justify-between items-start mb-3'>
+                            <Link href={'/books/${question.book.id}'} className="flex items-center gap-3 flex-1 min-w-0 group-hover:text-primary transition-colors duration-200">
                               {/* Book cover */}
                               <div className="w-12 h-16 relative flex-shrink-0 rounded overflow-hidden">
                                 {question.book.image_couverture ? (
@@ -433,11 +433,11 @@ export default function QuestionsPage() {
 
                                 {expandedQuestions.has(question.id) && (
                                   <motion.div
-                                    key={`responses-${question.id}`}
+                                    key={'responses-${question.id}'}
                                     initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: `auto` }}
+                                    animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    transition={{ duration: 0.3, ease: `easeInOut` }}
+                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
                                     className="space-y-3 overflow-hidden"
                                   >
                                     {question.responses.map((response) => (

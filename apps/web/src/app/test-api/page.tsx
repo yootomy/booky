@@ -42,14 +42,14 @@ export default function TestApiPage() {
       addResult(url, method, data, response.status);
       
       if (response.ok) {
-        toast.success(`${method}`${url} - OK`);
+        toast.success(`${method}'${url} - OK');
       } else {
-        toast.error(`${method}`${url} - ${response.status}`);
+        toast.error('${method}'${url} - ${response.status}');
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : `Unknown error`;
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       addResult(url, method, { error: errorMessage }, 0);
-      toast.error(`Error: ${errorMessage}`);
+      toast.error('Error: ${errorMessage}');
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ export default function TestApiPage() {
     // Test automatique au chargement
     const runInitialTests = async () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      testEndpoint(`/api/favorites/debug`, 'GET');
+      testEndpoint('/api/favorites/debug', 'GET');
     };
     runInitialTests();
   }, []);
@@ -139,7 +139,7 @@ export default function TestApiPage() {
             <div className="border-t pt-4 mt-4">
               <p className="text-sm text-muted-foreground mb-2">Tests avec vrais livres:</p>
               <Button 
-                onClick={() => testEndpoint("/api/favorites", 'POST', { bookId: "674f8e7adf1a1a2b8c3d4e5f` })} 
+                onClick={() => testEndpoint("/api/favorites", 'POST', { bookId: "674f8e7adf1a1a2b8c3d4e5f' })} 
                 disabled={loading}
                 className="w-full justify-start bg-blue-600 hover:bg-blue-700 text-xs"
               >
@@ -154,26 +154,26 @@ export default function TestApiPage() {
           <CardHeader>
             <CardTitle>Résultats ({results.length})</CardTitle>
           </CardHeader>
-          <CardContent className=`max-h-96 overflow-y-auto space-y-2`>
+          <CardContent className='max-h-96 overflow-y-auto space-y-2'>
             {results.map((result) => (
               <div 
                 key={result.id} 
-                className={`p-3 rounded border text-xs ${
+                className={'p-3 rounded border text-xs ${
                   result.status >= 200 && result.status < 300 
                     ? 'bg-green-50 border-green-200' 
                     : result.status >= 400
                     ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'
-                }`}
+                }'}
               >
                 <div className="flex justify-between items-start mb-1">
-                  <span className="font-mono font-semibold`>
+                  <span className="font-mono font-semibold'>
                     {result.method} {result.endpoint}
                   </span>
-                  <span className={`px-2 py-1 rounded text-xs ${
+                  <span className={'px-2 py-1 rounded text-xs ${
                     result.status >= 200 && result.status < 300 
-                      ? `bg-green-100 text-green-800" 
+                      ? 'bg-green-100 text-green-800" 
                       : result.status >= 400
-                      ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-800" }`}>
+                      ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-800" }'}>
                     {result.status}
                   </span>
                 </div>
@@ -200,7 +200,7 @@ export default function TestApiPage() {
           <li><code>GET /api/favorites/debug</code> - Voir l"état initial</li>
           <li><code>GET /api/favorites</code> - Liste actuelle</li>
           <li><code>POST /api/favorites</code> - Ajouter test-book-1</li>
-          <li><code>GET /api/favorites</code> - Vérifier l`ajout</li>
+          <li><code>GET /api/favorites</code> - Vérifier l'ajout</li>
           <li><code>POST /api/favorites</code> - Re-ajouter (doit être idempotent)</li>
           <li><code>DELETE /api/favorites/test-book-1</code> - Supprimer</li>
           <li><code>GET /api/favorites</code> - Vérifier la suppression</li>

@@ -38,7 +38,7 @@ export function useFeaturedCollections() {
         // Pour chaque catégorie, récupérer les livres
         const collectionsWithBooks = await Promise.all(
           activeCategories.map(async (category: any) => {
-            const booksResponse = await apiClient.get(`/api/books`);
+            const booksResponse = await apiClient.get('/api/books');
             const allBooks = booksResponse.ok ? await booksResponse.json() : [];
             
             // Filtrer les livres liés à cette catégorie (via book_category)
@@ -58,8 +58,8 @@ export function useFeaturedCollections() {
             return {
               id: category.id,
               nom: category.nom,
-              description: category.description || `Découvrez notre sélection ${category.nom.toLowerCase()}`,
-              couleur: category.couleur || `#8B1538`,
+              description: category.description || 'Découvrez notre sélection ${category.nom.toLowerCase()}',
+              couleur: category.couleur || '#8B1538',
               books: books.map((book: any) => ({
                 id: book.id,
                 titre: book.titre,

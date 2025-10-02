@@ -79,7 +79,7 @@ export const queryClient = new QueryClient({
       }
       
       // Erreur générique
-      toast.error(`Erreur: ${apiError.error || (error as Error).message}`, {
+      toast.error('Erreur: ${apiError.error || (error as Error).message}', {
         action: {
           label: "Réessayer",
           onClick: () => {
@@ -115,7 +115,7 @@ class ApiClient {
   
   constructor() {
     // Option 2: Utiliser les routes proxy du frontend
-    this.baseURL = process.env.NEXT_PUBLIC_BASE_URL || `http://localhost:3001`;
+    this.baseURL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
   }
 
   private async request<T>(
@@ -124,14 +124,14 @@ class ApiClient {
   ): Promise<T> {
     // Appel via proxy frontend
     let cleanEndpoint = endpoint;
-    // Supprimer le /api s`il est au début pour éviter les doublons
-    if (cleanEndpoint.startsWith(`/api/`)) {
+    // Supprimer le /api s'il est au début pour éviter les doublons
+    if (cleanEndpoint.startsWith('/api/')) {
       cleanEndpoint = cleanEndpoint.substring(4);
     }
     const url = `${this.baseURL}${cleanEndpoint.startsWith('/proxy') ? `/api${cleanEndpoint}` : `/api/proxy${cleanEndpoint}`}`;
 
     const config: RequestInit = {
-      credentials: `include`,
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
         ...options.headers
@@ -158,7 +158,7 @@ class ApiClient {
       if (error instanceof TypeError) {
         throw {
           success: false,
-          error: `Erreur de connexion réseau`,
+          error: 'Erreur de connexion réseau',
           statusCode: 0,
           timestamp: new Date().toISOString()
         } as ApiError;
@@ -185,8 +185,8 @@ class ApiClient {
     
     const queryString = searchParams.toString();
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-    
-    return this.request<T>(url, { method: `GET" });
+
+    return this.request<T>(url, { method: 'GET' });
   }
   
   async post<T>(endpoint: string, data?: unknown): Promise<T> {

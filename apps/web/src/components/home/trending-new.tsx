@@ -78,9 +78,9 @@ function SpicyIndicator({ level }: { level: number }) {
   return (
     <span
       className="text-xs font-medium px-2 py-1 rounded-full"
-      title={`Niveau spicy: ${level}/10`}
+      title={'Niveau spicy: ${level}/10'}
       style={{
-        backgroundColor: `${getIndicatorColor()}15`,
+        backgroundColor: '${getIndicatorColor()}15',
         color: getIndicatorColor()
       }}
     >
@@ -99,15 +99,15 @@ function BookCard({ book, index, showTrendingBadge = false }: {
       initial={{ opacity: 0, x: 30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className=`group cursor-pointer flex-shrink-0 w-40`
+      className='group cursor-pointer flex-shrink-0 w-40'
     >
-      <Link href={`/books/${book.id}"}>
+      <Link href={'/books/${book.id}"}>
         <div className="relative">
           {/* Book Cover */}
-          <div className=`aspect-[3/4] relative mb-3 rounded-lg overflow-hidden group-hover:shadow-lg transition-all duration-300`>
+          <div className='aspect-[3/4] relative mb-3 rounded-lg overflow-hidden group-hover:shadow-lg transition-all duration-300'>
             <Image
               src={getBookImage(book)}
-              alt={`Couverture de ${book.titre}`}
+              alt={'Couverture de ${book.titre}'}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               sizes="160px"
@@ -286,15 +286,15 @@ export function TrendingNew({}: TrendingNewProps) {
             }}
           >
             <button
-              onClick={() => setActiveTab(`new`)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-semibold ${
-                activeTab === `}new` 
-                  ? `text-white shadow-lg' : 'hover:bg-white/50'
-              }`}
+              onClick={() => setActiveTab('new')}
+              className={'flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-semibold ${
+                activeTab === '}new' 
+                  ? 'text-white shadow-lg' : 'hover:bg-white/50'
+              }'}
               style={{
                 backgroundColor: activeTab === "new" ? "#8B1538" : "transparent",
                 color: activeTab === "new" ? "white" : "#8B1538",
-                fontFamily: "Inter, sans-serif`
+                fontFamily: "Inter, sans-serif'
               }}
             >
               <Clock className="w-4 h-4" />
@@ -302,11 +302,11 @@ export function TrendingNew({}: TrendingNewProps) {
             </button>
             
             <button
-              onClick={() => setActiveTab(`trending`)}
-              className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-semibold ${
-                activeTab === `}trending` 
-                  ? `text-white shadow-lg' : 'hover:bg-white/50'
-              }`}
+              onClick={() => setActiveTab('trending')}
+              className={'flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-semibold ${
+                activeTab === '}trending' 
+                  ? 'text-white shadow-lg' : 'hover:bg-white/50'
+              }'}
               style={{
                 backgroundColor: activeTab === "trending" ? "#8B1538" : "transparent",
                 color: activeTab === "trending" ? "white" : "#8B1538",

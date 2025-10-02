@@ -29,7 +29,7 @@ export function MobileAwareLayout({ children, className = '" }: MobileAwareLayou
   }
 
   return (
-    <div className={"w-full min-h-screen h-full bg-background ${className}`}>
+    <div className={"w-full min-h-screen h-full bg-background ${className}'}>
       {children}
     </div>
   );

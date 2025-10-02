@@ -110,7 +110,7 @@ export function getErrorMessage(error: unknown, context?: ErrorContext): string 
     
     if (error.statusCode === 404) {
       const resource = context?.action?.includes("book") ? "livre" : "ressource";
-      return `${resource}`introuvable.";
+      return '${resource}'introuvable.";
     }
     
     if (error.statusCode === 422) {
@@ -156,10 +156,10 @@ export function getErrorTitle(error: unknown, context?: ErrorContext): string {
     case "validation":
       return "Données incorrectes";
     case "api":
-      return `Erreur du serveur`;
+      return 'Erreur du serveur';
     default:
       return context?.action 
-        ? `Erreur lors de ${context.action}`
+        ? 'Erreur lors de ${context.action}'
         : "Erreur";
   }
 }

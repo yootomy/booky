@@ -101,19 +101,19 @@ export function StarRating({
         className={cn(
           "relative transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-sm",
           !readonly && "cursor-pointer",
-          readonly && "cursor-default`,
+          readonly && "cursor-default",
           starClassName
         )}
         onClick={() => handleStarClick(starValue)}
         onMouseEnter={() => handleStarHover(starValue)}
         onFocus={() => handleStarHover(starValue)}
-        aria-label={`Noter ${starValue}`sur ${max}`}
+        aria-label={`Noter ${starValue} sur ${max}`}
       >
         {/* Étoile de base (vide) */}
         <Star
           className={cn(
             sizeClasses[size],
-            `transition-all duration-200",
+            'transition-all duration-200',
             ratingDarkRomanceStyles.starEmpty,
             emptyStarClassName
           )}
@@ -162,8 +162,8 @@ export function StarRating({
       <div
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
-        role="radiogroup`
-        aria-label={`Notation sur ${max}`étoiles`}
+        role="radiogroup"
+        aria-label={`Notation sur ${max} étoiles`}
       >
         {Array.from({ length: max }, (_, index) => renderStar(index))}
       </div>

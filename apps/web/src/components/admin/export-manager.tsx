@@ -109,7 +109,7 @@ export function ExportManager({ className }: ExportManagerProps) {
   const [selectedFormat, setSelectedFormat] = useState<'PDF' | 'CSV' | 'JSON'>('PDF');
   const [exportConfig, setExportConfig] = useState<ExportConfig>({
     format: 'PDF',
-    filename: `booky-export-${new Date().toISOString().split("T")[0]}`,
+    filename: 'booky-export-${new Date().toISOString().split("T")[0]}',
     options: {
       include_metadata: true,
       include_relations: true,
@@ -117,7 +117,7 @@ export function ExportManager({ className }: ExportManagerProps) {
       include_ratings: true,
       include_images: true,
       include_statistics: false,
-      date_format: `french',
+      date_format: 'french',
       sort_by: 'date_creation',
       sort_order: 'desc',
       pdf_layout: 'cards',
@@ -152,7 +152,7 @@ export function ExportManager({ className }: ExportManagerProps) {
         template: config.template,
       }),
     onSuccess: (response) => {
-      toast.success(`Export créé avec succès", {
+      toast.success('Export créé avec succès", {
         description: "Votre export est en cours de génération",
         action: {
           label: "Télécharger",
@@ -168,7 +168,7 @@ export function ExportManager({ className }: ExportManagerProps) {
       queryClient.invalidateQueries({ queryKey: ['export-history'] });
     },
     onError: (error: Error) => {
-      toast.error('Erreur lors de la création de l\`export', {
+      toast.error('Erreur lors de la création de l\'export', {
         description: error.message,
       });
     },
@@ -184,21 +184,21 @@ export function ExportManager({ className }: ExportManagerProps) {
     exportApi.download(exportId).then((blob) => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.style.display = `none`;
+      a.style.display = 'none';
       a.href = url;
-      a.download = `export-${exportId}`;
+      a.download = 'export-${exportId}';
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
     }).catch((error) => {
-      toast.error(`Erreur lors du téléchargement`, {
+      toast.error('Erreur lors du téléchargement', {
         description: error.message,
       });
     });
   }, []);
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={'space-y-6 ${className}'}>
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
@@ -403,7 +403,7 @@ export function ExportManager({ className }: ExportManagerProps) {
 }
 
 // =============================================================================
-// 🎴 COMPOSANT CARTE TYPE D`EXPORT
+// 🎴 COMPOSANT CARTE TYPE D'EXPORT
 // =============================================================================
 
 interface ExportTypeCardProps {
@@ -421,8 +421,8 @@ function ExportTypeCard({ icon, title, description, format, isSelected, onSelect
       className="cursor-pointer transition-all hover:shadow-md"
       onClick={onSelect}
     >
-      <CardContent className="p-6 text-center`>
-        <div className={`mx-auto mb-4 p-3 rounded-lg w-fit ${isSelected ? `}bg-primary/10 text-primary` : `bg-muted'}'}>
+      <CardContent className="p-6 text-center'>
+        <div className={'mx-auto mb-4 p-3 rounded-lg w-fit ${isSelected ? '}bg-primary/10 text-primary' : 'bg-muted'}'}>
           {icon}
         </div>
         <h3 className='font-semibold mb-2'>{title}</h3>
@@ -793,16 +793,16 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
 
   const getStatusText = () => {
     switch (exportItem.status) {
-      case `completed': return 'Terminé';
+      case 'completed': return 'Terminé';
       case 'processing': return 'En cours';
-      case 'failed`: return `Échoué`;
+      case 'failed': return 'Échoué';
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return `${bytes}`B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    if (bytes < 1024) return '${bytes}'B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toFixed(1)} KB';
+    return '${(bytes / (1024 * 1024)).toFixed(1)} MB';
   };
 
   return (
@@ -834,7 +834,7 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
           
           <div className="text-sm text-muted-foreground">
             {new Date(exportItem.created_at).toLocaleDateString("fr-FR", {
-              day: `2-digit',
+              day: '2-digit',
               month: '2-digit',
               year: 'numeric',
               hour: '2-digit',

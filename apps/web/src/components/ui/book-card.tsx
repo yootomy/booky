@@ -42,19 +42,19 @@ export function BookCard({
     },
     lg: {
       title: "text-base",
-      author: `text-sm`,
+      author: 'text-sm',
     },
   };
 
   return (
     <div 
       className={cn(
-        `book-card group cursor-pointer transition-smooth`,
+        'book-card group cursor-pointer transition-smooth',
         cardSizeClasses[size],
         className
       )}
     >
-      <Link href={`/books/${book.id}`} className="block">
+      <Link href={'/books/${book.id}'} className="block">
         <div className="flex flex-col h-full">
           {/* Cover Image */}
           <div className="relative mb-3 flex-shrink-0">
@@ -114,7 +114,7 @@ export function BookCard({
                 {book.titre}
               </h3>
               <p className={cn(
-                `text-ash-400 line-clamp-1 mt-1',
+                'text-ash-400 line-clamp-1 mt-1',
                 textSizeClasses[size].author
               )}>
                 {book.auteur}

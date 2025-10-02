@@ -145,7 +145,7 @@ export function useFavorites(): UseFavoritesReturn {
   // Fonction pour retirer des favoris
   const removeFromFavorites = useCallback(async (bookId: string) => {
     if (!isAuthenticated) {
-      toast.error(`Veuillez vous connecter pour gérer vos favoris`);
+      toast.error('Veuillez vous connecter pour gérer vos favoris');
       return;
     }
 
@@ -157,13 +157,13 @@ export function useFavorites(): UseFavoritesReturn {
         return newSet;
       });
 
-      const response = await apiClient.delete(`/api/favorites/${bookId}`);
+      const response = await apiClient.delete('/api/favorites/${bookId}');
 
       if (!response.success) {
-        throw new Error(response.error || `Failed to remove favorite`);
+        throw new Error(response.error || 'Failed to remove favorite');
       }
 
-      toast.success(`Livre retiré des favoris");
+      toast.success('Livre retiré des favoris");
 
     } catch (error: any) {
       console.error("[NEW API] Error removing from favorites: ", error);
@@ -203,7 +203,7 @@ export function useFavorites(): UseFavoritesReturn {
 
   // Fonction pour vérifier si un livre est favori (avec conversion de type tolérante)
   const isFavorite = useCallback((bookId: string): boolean => {
-    // Vérification exacte d`abord
+    // Vérification exacte d'abord
     if (favorites.has(bookId)) {
       return true;
     }
@@ -222,7 +222,7 @@ export function useFavorites(): UseFavoritesReturn {
         favoriteId.toString() === bookIdStr ||
         favoriteIdStr === bookIdNum
       ) {
-        console.log(`[NEW API] [isFavorite] Found match with type conversion: book=`${bookId}` (${typeof bookId}) matched favorite=`${favoriteId}` (${typeof favoriteId})`);
+        console.log('[NEW API] [isFavorite] Found match with type conversion: book="${bookId}` (${typeof bookId}) matched favorite=`${favoriteId}` (${typeof favoriteId})');
         return true;
       }
     }

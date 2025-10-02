@@ -65,7 +65,7 @@ export function useSearchSuggestions(
     }
 
     // Vérifier le cache
-    const cacheKey = `suggestions_${query.toLowerCase()}`;
+    const cacheKey = 'suggestions_${query.toLowerCase()}';
     const cached = cache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       setSuggestions(cached.data);
@@ -85,13 +85,13 @@ export function useSearchSuggestions(
     setError(null);
 
     try {
-      const response = await apiClient.get(`/api/search/suggest?q=${encodeURIComponent(query)}&limit=${maxSuggestions}`, {
+      const response = await apiClient.get('/api/search/suggest?q=${encodeURIComponent(query)}&limit=${maxSuggestions}', {
           signal: abortControllerRef.current.signal,
         }
       );
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch suggestions`);
+        throw new Error('Failed to fetch suggestions');
       }
 
       const data = await response.json();

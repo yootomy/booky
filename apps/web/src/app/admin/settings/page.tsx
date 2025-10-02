@@ -79,7 +79,7 @@ export default function AdminSettings() {
     queryKey: ['book-search', bookSearchQuery],
     queryFn: async () => {
       if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
-      const response = await apiClient.get('/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10`);
+      const response = await apiClient.get('/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10');
       if (!response.ok) throw new Error("Failed to search books");
       return response.json();
     },
@@ -90,7 +90,7 @@ export default function AdminSettings() {
   const setFeaturedBook = async (bookId: string) => {
     try {
       setFeaturedBookLoading(true);
-      const response = await apiClient.get(`/api/featured-book', {
+      const response = await apiClient.get('/api/featured-book', {
         method: 'POST',
         headers: { 'Content-Type' : 'application/json' },
         body: JSON.stringify({ bookId })

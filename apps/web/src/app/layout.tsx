@@ -58,12 +58,12 @@ export default function RootLayout({
 								setTimeout(fixViewport, 1000);
 							}
 						})();
-						`,
+						',
 					}}
 				/>
 			</head>
 			<body
-				className={`${inter.variable}`${playfair.variable} antialiased bg-background text-foreground` }
+				className={'${inter.variable}"${playfair.variable} antialiased bg-background text-foreground' }
 			>
 				<Providers>
 					<div className="min-h-svh bg-background transition-colors duration-300 w-full overflow-x-hidden">

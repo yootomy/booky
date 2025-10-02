@@ -316,7 +316,7 @@ export default function TagDetailPage() {
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {stats.tendances.tags_souvent_associes.slice(0, 6).map((tagAssoc: any, index: number) => (
-                        <Link key={index} href={`/tags/${tagAssoc.tag.id}`}>
+                        <Link key={index} href={'/tags/${tagAssoc.tag.id}'}>
                           <Badge 
                             variant="outline" 
                             className="hover:bg-gray-700 cursor-pointer"
@@ -336,7 +336,7 @@ export default function TagDetailPage() {
                     <h4 className="font-medium text-white mb-2">Catégories associées</h4>
                     <div className="flex flex-wrap gap-2">
                       {stats.tendances.categories_associees.slice(0, 6).map((category: any, index: number) => (
-                        <Link key={index} href={`/categories/${category.id}` }>
+                        <Link key={index} href={'/categories/${category.id}' }>
                           <Badge 
                             variant="outline" 
                             className="hover:bg-gray-700 cursor-pointer"
@@ -404,8 +404,8 @@ export default function TagDetailPage() {
             <h3 className="text-lg font-medium text-white mb-2">Aucun livre avec ce tag</h3>
             <p className="text-gray-400 mb-6">
               {bookFilters.statut 
-                ? `Aucun livre avec le statut `${bookFilters.statut}` pour ce tag`
-                : `Ce tag n\"est associé à aucun livre pour le moment"
+                ? 'Aucun livre avec le statut '${bookFilters.statut}' pour ce tag'
+                : 'Ce tag n\"est associé à aucun livre pour le moment"
               }
             </p>
             {bookFilters.statut && (
