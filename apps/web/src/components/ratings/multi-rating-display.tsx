@@ -35,13 +35,13 @@ export interface MultiRatingDisplayProps {
 
 export function MultiRatingDisplay({
   data,
-  layout = "horizontal",
-  size = "md",
+  layout="horizontal",
+  size="md",
   showLabels = false,
   showValues = true,
   showEmpty = false,
   className,
-  variant = "default",
+  variant="default",
 }: MultiRatingDisplayProps) {
   const { star, spicy, dark, romance, rhythm, maxRating = 10 } = data;
 

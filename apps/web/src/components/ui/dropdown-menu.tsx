@@ -62,7 +62,7 @@ function DropdownMenuGroup({
 function DropdownMenuItem({
 	className,
 	inset,
-	variant = "default",
+	variant="default",
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
 	inset?: boolean;

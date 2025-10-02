@@ -82,7 +82,7 @@ function SagaOption({ saga, onSelect, isSelected }: SagaOptionProps) {
         {saga.bookCount !== undefined && (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Book className="w-3 h-3" />
-            <span>{saga.bookCount} tome{saga.bookCount > 1 ? 's' : ''}</span>
+            <span>{saga.bookCount} tome{saga.bookCount > 1 ? "s" : ""}</span>
           </div>
         )}
       </div>
@@ -93,7 +93,7 @@ function SagaOption({ saga, onSelect, isSelected }: SagaOptionProps) {
 export function SagaSelect({
   value,
   onChange,
-  placeholder = "Sélectionner une saga...",
+  placeholder="Sélectionner une saga...",
   disabled = false,
   error,
   required = false,
@@ -167,7 +167,7 @@ export function SagaSelect({
                 {selectedSaga.bookCount !== undefined && (
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Book className="w-3 h-3" />
-                    <span>{selectedSaga.bookCount} tome{selectedSaga.bookCount > 1 ? 's' : ''}</span>
+                    <span>{selectedSaga.bookCount} tome{selectedSaga.bookCount > 1 ? "s" : ""}</span>
                   </div>
                 )}
               </div>

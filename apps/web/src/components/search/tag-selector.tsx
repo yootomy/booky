@@ -81,7 +81,7 @@ export function TagSelector({
   selectedTags,
   onSelectionChange,
   availableTags = [],
-  placeholder = "Sélectionner des tags...",
+  placeholder="Sélectionner des tags...",
   maxSelection,
   allowMultiple = true,
   showSearch = true,
@@ -89,8 +89,8 @@ export function TagSelector({
   onCreateNew,
   groupByType = true,
   className,
-  size = "default",
-  variant = "default"
+  size="default",
+  variant="default"
 }: TagSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -188,7 +188,7 @@ export function TagSelector({
           <div className="flex flex-wrap gap-1 flex-1">
             {variant === "compact" ? (
               <span className="text-sm">
-                {selectedTags.length} tag{selectedTags.length > 1 ? 's' : ''} sélectionné{selectedTags.length > 1 ? 's' : ''}
+                {selectedTags.length} tag{selectedTags.length > 1 ? "s" : "'} sélectionné{selectedTags.length > 1 ? 's' : '`}
               </span>
             ) : (
               <>
@@ -197,13 +197,13 @@ export function TagSelector({
                     key={tag.id} 
                     variant="secondary"
                     className="text-xs"
-                    style={{ backgroundColor: '${tag.color}20', color: tag.color }}
+                    style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
                   >
                     {tag.name}
                   </Badge>
                 ))}
                 {selectedTagObjects.length > 3 && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant=`secondary" className="text-xs">
                     +{selectedTagObjects.length - 3}
                   </Badge>
                 )}
@@ -245,7 +245,7 @@ export function TagSelector({
                     key={tag.id}
                     variant="secondary"
                     className="text-xs cursor-pointer"
-                    style={{ backgroundColor: '${tag.color}20`, color: tag.color }}
+                    style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
                     onClick={() => handleToggleTag(tag.id)}
                   >
                     {tag.name}
@@ -445,7 +445,7 @@ export function QuickTagSelector({
           className="cursor-pointer text-xs"
           style={selectedTags.includes(tag.id) ? {
             backgroundColor: tag.color,
-            color: "white"
+            color: "white`
           } : {
             borderColor: tag.color,
             color: tag.color
@@ -460,7 +460,7 @@ export function QuickTagSelector({
         >
           {getTagTypeIcon(tag.type)}
           {tag.name}
-          {tag.count && " (${tag.count})' }
+          {tag.count && ` (${tag.count})`}
         </Badge>
       ))}
     </div>

@@ -37,7 +37,7 @@ const AdminUnauthorizedMessage: React.FC = () => (
         </Button>
         
         <Button
-          onClick={() => window.location.href = '/'}
+          onClick={() => window.location.href="/"}
           className="w-full"
         >
           Accueil

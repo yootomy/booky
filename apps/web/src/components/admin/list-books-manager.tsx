@@ -93,9 +93,9 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
       setLoading(true);
       const params = new URLSearchParams();
       if (searchQuery) params.append('search', searchQuery);
-      params.append('limit', '50');
+      params.append('limit', '50`);
 
-      const response = await apiClient.get('/api/lists/${listId}/books?${params.toString()}');
+      const response = await apiClient.get(`/api/lists/${listId}/books?${params.toString()}`);
       const data = await response.json();
 
       if (data.success) {
@@ -111,7 +111,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
       toast({
         title: "Erreur",
         description: "Erreur lors du chargement des livres",
-        variant: "destructive"
+        variant: "destructive`
       });
     } finally {
       setLoading(false);
@@ -123,8 +123,8 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
 
     try {
       setRemoving(true);
-      const response = await apiClient.get('/api/lists/${listId}/books/${bookToRemove.id}', {
-        method: 'DELETE',
+      const response = await apiClient.get(`/api/lists/${listId}/books/${bookToRemove.id}`, {
+        method: `DELETE",
       });
 
       const data = await response.json();
@@ -137,7 +137,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
         setBooks(prev => prev.filter(book => book.id !== bookToRemove.id));
         onBookRemoved();
       } else {
-        throw new Error(data.error || 'Erreur lors de la suppression');
+        throw new Error(data.error || "Erreur lors de la suppression");
       }
     } catch (error) {
       toast({
@@ -264,7 +264,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
                   {book.image_couverture ? (
                     <img
                       src={book.image_couverture}
-                      alt={'Couverture de ${book.titre}'}
+                      alt={`Couverture de ${book.titre}`}
                       className="w-16 h-20 object-cover rounded border"
                     />
                   ) : (
@@ -292,9 +292,9 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align=`end`>
                         <DropdownMenuItem
-                          onClick={() => router.push('/books/${book.id}')}
+                          onClick={() => router.push(`/books/${book.id}`)}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Voir le livre
@@ -330,12 +330,12 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
                     {book.date_lecture && (
                       <Badge variant="outline" className="text-xs">
                         <Calendar className="h-3 w-3 mr-1" />
-                        {new Date(book.date_lecture).toLocaleDateString('fr-FR')}
+                        {new Date(book.date_lecture).toLocaleDateString("fr-FR")}
                       </Badge>
                     )}
 
                     <span className="text-xs text-muted-foreground">
-                      Ajouté le {new Date(book.date_ajout).toLocaleDateString('fr-FR')}
+                      Ajouté le {new Date(book.date_ajout).toLocaleDateString("fr-FR")}
                     </span>
                   </div>
 

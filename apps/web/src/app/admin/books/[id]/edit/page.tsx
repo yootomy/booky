@@ -22,13 +22,13 @@ export default function EditBookPage() {
   if (!bookId || typeof bookId !== 'string') {
     return (
       <AdminGuard>
-        <div className="min-h-screen bg-gradient-to-br from-background to-muted">
+        <div className='min-h-screen bg-gradient-to-br from-background to-muted'>
           <div className="container mx-auto py-8 px-4">
             <Card className="border-destructive">
               <CardContent className="pt-6">
                 <p className="text-destructive">ID de livre invalide</p>
                 <Button 
-                  onClick={() => router.push('/admin/books')} 
+                  onClick={() => router.push("/admin/books")} 
                   className="mt-4"
                   variant="outline"
                 >
@@ -48,11 +48,11 @@ export default function EditBookPage() {
     error,
     refetch
   } = useQuery({
-    queryKey: ['book', bookId],
+    queryKey: ["book", bookId],
     queryFn: async () => {
-      console.log('🔍 Fetching book:', bookId);
+      console.log("🔍 Fetching book:", bookId);
       const response = await booksApi.getById(bookId);
-      console.log('📚 Book response:', response);
+      console.log("📚 Book response:", response);
       return response;
     },
     enabled: !!bookId,
@@ -69,7 +69,7 @@ export default function EditBookPage() {
   useEffect(() => {
     if (!book && !isLoading && !error) {
       const timer = setTimeout(() => {
-        console.log('🔄 Auto-retry: refetching book data...');
+        console.log("🔄 Auto-retry: refetching book data...");
         refetch();
       }, 3000);
       
@@ -78,7 +78,7 @@ export default function EditBookPage() {
   }, [book, isLoading, error, refetch]);
 
   const handleDelete = async () => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce livre définitivement ?')) {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce livre définitivement ?")) {
       return;
     }
 
@@ -88,7 +88,7 @@ export default function EditBookPage() {
         title: "Livre supprimé",
         description: "Le livre a été supprimé avec succès",
       });
-      router.push('/admin/books');
+      router.push("/admin/books");
     } catch (error) {
       toast({
         title: "Erreur",
@@ -128,7 +128,7 @@ export default function EditBookPage() {
               <CardContent className="pt-6 space-y-4">
                 <p className="text-destructive">Livre non trouvé ou erreur lors du chargement</p>
                 <p className="text-sm text-muted-foreground">
-                  Erreur: {error.message || 'Impossible de charger le livre'}
+                  Erreur: {error.message || "Impossible de charger le livre"}
                 </p>
                 <div className="flex gap-2">
                   <Button 
@@ -139,7 +139,7 @@ export default function EditBookPage() {
                     Réessayer
                   </Button>
                   <Button 
-                    onClick={() => router.push('/admin/books')} 
+                    onClick={() => router.push("/admin/books")} 
                     variant="outline"
                     size="sm"
                   >
@@ -204,7 +204,7 @@ export default function EditBookPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => window.open('/books/${bookId}', '_blank')}
+                onClick={() => window.open(`/books/${bookId}`, `_blank")}
               >
                 <Eye className="h-4 w-4 mr-2" />
                 Prévisualiser

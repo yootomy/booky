@@ -113,7 +113,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
       toast({
         title: "Erreur",
         description: "Erreur lors du chargement des listes",
-        variant: "destructive"
+        variant: `destructive`
       });
     } finally {
       setLoading(false);
@@ -126,7 +126,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
     try {
       setDeleting(true);
       const response = await apiClient.delete(`/api/lists/${listToDelete.id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       const data = await response.json();
@@ -138,7 +138,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
         });
         setLists(prev => prev.filter(list => list.id !== listToDelete.id));
       } else {
-        throw new Error(data.error || 'Erreur lors de la suppression');
+        throw new Error(data.error || "Erreur lors de la suppression");
       }
     } catch (error) {
       toast({
@@ -189,7 +189,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
               </p>
             </div>
             {!searchQuery && (
-              <Button onClick={() => router.push('/admin/lists/new')}>
+              <Button onClick={() => router.push("/admin/lists/new")}>
                 <Plus className="h-4 w-4 mr-2" />
                 Créer ma première liste
               </Button>
@@ -208,10 +208,10 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
             <div
               className="relative rounded-2xl p-6 overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(139, 21, 56, 0.1)',
-                boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
+                background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(139, 21, 56, 0.1)",
+                boxShadow: "0 8px 32px rgba(139, 21, 56, 0.08)"
               }}
             >
               {/* Admin actions dropdown - moved to bottom right */}
@@ -268,8 +268,8 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
               <div
                 className="absolute top-0 right-0 w-16 h-16 opacity-5"
                 style={{
-                  background: 'radial-gradient(circle, ${list.couleur} 0%, transparent 70%)',
-                  transform: 'translate(50%, -50%)'
+                  background: `radial-gradient(circle, ${list.couleur} 0%, transparent 70%)`,
+                  transform: `translate(50%, -50%)`
                 }}
               />
 
@@ -344,7 +344,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                             <div
                               className="w-full h-full flex items-center justify-center"
                               style={{
-                                background: 'linear-gradient(135deg, #6B4C7B, #8B1538)',
+                                background: "linear-gradient(135deg, #6B4C7B, #8B1538)",
                               }}
                             >
                               <BookOpen className="w-4 h-4 text-white/70" />
@@ -378,7 +378,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                       ))}
                   </div>
                 ) : (
-                  <div className="mb-6 p-6 rounded-lg text-center" style={{ backgroundColor: 'rgba(139, 21, 56, 0.05)' }}>
+                  <div className="mb-6 p-6 rounded-lg text-center" style={{ backgroundColor: "rgba(139, 21, 56, 0.05)" }}>
                     <BookOpen className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
                     <p className="text-sm text-muted-foreground mb-3">Cette liste ne contient aucun livre</p>
                     <Button
@@ -400,7 +400,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                   <span
                     className="text-sm font-medium opacity-60"
                     style={{
-                      fontFamily: 'Inter, sans-serif',
+                      fontFamily: "Inter, sans-serif",
                       color: '#2C1810'
                     }}
                   >
@@ -415,14 +415,14 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                   >
                     {list.user.nom_complet}
                   </span>
-                  <span className="text-xs opacity-40" style={{ color: '#2C1810' }}>
+                  <span className="text-xs opacity-40" style={{ color: "#2C1810" }}>
                     •
                   </span>
                   <span
                     className="text-xs opacity-50"
                     style={{
                       fontFamily: 'Inter, sans-serif',
-                      color: `#2C1810`
+                      color: '#2C1810'
                     }}
                   >
                     {new Date(list.date_creation).toLocaleDateString('fr-FR')}

@@ -113,7 +113,7 @@ export function QuotesSection() {
             ) : (
               <div className="text-center py-8 text-gray-500">
                 <Sparkles size={48} className="mx-auto mb-4 opacity-50" />
-                <p className="mb-2">Aucune raison d'aimer trouvée</p>
+                <p className="mb-2">Aucune raison d"aimer trouvée</p>
                 <p className="text-sm">Partagez vos coups de cœur pour les voir ici</p>
               </div>
             )}

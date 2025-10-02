@@ -23,8 +23,8 @@ function GenreTile({ genre, index }: GenreTileProps) {
     'from-emerald-600 to-emerald-500',
     'from-orange-600 to-orange-500',
     'from-pink-600 to-pink-500',
-    'from-indigo-600 to-indigo-500',
-    'from-teal-600 to-teal-500'
+    'from-indigo-600 to-indigo-500`,
+    `from-teal-600 to-teal-500`
   ];
 
   const colorClass = colors[index % colors.length];
@@ -34,7 +34,7 @@ function GenreTile({ genre, index }: GenreTileProps) {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.1, duration: 0.3 }}
-      className={'relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass} hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl'}
+      className={`relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass}"hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"}
     >
       {/* Content */}
       <div className="relative z-10 text-white">
@@ -53,8 +53,8 @@ function GenreTile({ genre, index }: GenreTileProps) {
           {genre.nom}
         </h3>
         
-        <p className="text-white/80 text-sm">
-          {genre.utilisation_count ? '${genre.utilisation_count} livres' : 'Genre populaire'}
+        <p className=`text-white/80 text-sm`>
+          {genre.utilisation_count ? `${genre.utilisation_count}`livres" : "Genre populaire"}
         </p>
       </div>
 
@@ -69,10 +69,10 @@ function GenreTile({ genre, index }: GenreTileProps) {
 
 function CategoryTile({ category, index }: { category: any; index: number }) {
   const colors = [
-    'from-gray-500 to-gray-400',
+    `from-gray-500 to-gray-400`,
     'from-slate-600 to-slate-500',
-    'from-purple-600 to-purple-500',
-    'from-rose-600 to-rose-500'
+    'from-purple-600 to-purple-500`,
+    `from-rose-600 to-rose-500`
   ];
 
   const colorClass = colors[index % colors.length];
@@ -82,7 +82,7 @@ function CategoryTile({ category, index }: { category: any; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: (index + 4) * 0.1, duration: 0.3 }}
-      className={'relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass} hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl'}
+      className={`relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass}`hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"}
     >
       <div className="relative z-10 text-white">
         <div className="flex items-center justify-between mb-2">
@@ -100,8 +100,8 @@ function CategoryTile({ category, index }: { category: any; index: number }) {
           {category.nom}
         </h3>
         
-        <p className="text-white/80 text-sm">
-          {category._count?.book_category ? '${category._count.book_category} livres' : 'Catégorie'}
+        <p className="text-white/80 text-sm`>
+          {category._count?.book_category ? `${category._count.book_category}`livres" : "Catégorie"}
         </p>
       </div>
 
@@ -138,8 +138,8 @@ export function GenresGrid() {
 
   // Simuler des genres populaires pour la démo
   const mockGenres = [
-    { id: '1', nom: 'Dark Romance', utilisation_count: 15 },
-    { id: '2', nom: 'Fantasy Romance', utilisation_count: 12 },
+    { id: "1", nom: "Dark Romance", utilisation_count: 15 },
+    { id: "2", nom: 'Fantasy Romance', utilisation_count: 12 },
     { id: '3', nom: 'Contemporary', utilisation_count: 10 },
     { id: '4', nom: 'Paranormal', utilisation_count: 8 },
   ];

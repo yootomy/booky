@@ -105,12 +105,12 @@ export function getErrorMessage(error: unknown, context?: ErrorContext): string 
     }
     
     if (error.statusCode === 403) {
-      return "Vous n'avez pas les permissions nécessaires pour cette action.";
+      return "Vous n"avez pas les permissions nécessaires pour cette action.';
     }
     
     if (error.statusCode === 404) {
       const resource = context?.action?.includes("book") ? "livre" : "ressource";
-      return '${resource} introuvable.';
+      return `${resource}`introuvable.";
     }
     
     if (error.statusCode === 422) {
@@ -122,7 +122,7 @@ export function getErrorMessage(error: unknown, context?: ErrorContext): string 
     }
     
     // Message de l'API ou message générique
-    return error.error || "Une erreur inattendue s'est produite.";
+    return error.error || "Une erreur inattendue s"est produite.';
   }
   
   if (error instanceof Error) {
@@ -142,7 +142,7 @@ export function getErrorMessage(error: unknown, context?: ErrorContext): string 
     return error.message;
   }
   
-  return "Une erreur inattendue s'est produite.";
+  return "Une erreur inattendue s"est produite.';
 }
 
 export function getErrorTitle(error: unknown, context?: ErrorContext): string {
@@ -150,16 +150,16 @@ export function getErrorTitle(error: unknown, context?: ErrorContext): string {
   
   switch (classification.type) {
     case "auth":
-      return "Problème d'authentification";
+      return "Problème d"authentification';
     case "network":
       return "Problème de connexion";
     case "validation":
       return "Données incorrectes";
     case "api":
-      return "Erreur du serveur";
+      return `Erreur du serveur`;
     default:
       return context?.action 
-        ? 'Erreur lors de ${context.action}'
+        ? `Erreur lors de ${context.action}`
         : "Erreur";
   }
 }
@@ -188,7 +188,7 @@ export function getRecoveryActions(error: unknown, context?: ErrorContext) {
     actions.push({
       label: "Se reconnecter",
       action: () => {
-        window.location.href = "/login";
+        window.location.href="/login";
       }
     });
   }
@@ -286,7 +286,7 @@ export function handleError(
     if (typeof window !== "undefined") {
       localStorage.clear();
       setTimeout(() => {
-        window.location.href = "/login";
+        window.location.href="/login";
       }, 1000);
     }
   }

@@ -45,7 +45,7 @@ export function FloatingActionButtons({
       onShare();
     } else {
       navigator.clipboard.writeText(window.location.href);
-      toast.success('Lien copié !');
+      toast.success("Lien copié !");
     }
   };
 
@@ -59,7 +59,7 @@ export function FloatingActionButtons({
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 flex items-center gap-3 px-4 py-3 bg-background/95 backdrop-blur-lg border border-border rounded-full shadow-xl"
           style={{
-            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)'
+            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.15)"
           }}
         >
           {/* Bouton Retour */}

@@ -30,7 +30,7 @@ export function SpicyRating({
   value,
   onChange,
   max = 10,
-  size = "md",
+  size="md",
   readonly = false,
   showValue = false,
   showLabel = false,
@@ -112,19 +112,19 @@ export function SpicyRating({
         className={cn(
           "relative transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-sm",
           !readonly && "cursor-pointer hover:scale-110",
-          readonly && "cursor-default",
+          readonly && `cursor-default`,
           spicyClassName
         )}
         onClick={() => handleSpicyClick(spicyValue)}
         onMouseEnter={() => handleSpicyHover(spicyValue)}
         onFocus={() => handleSpicyHover(spicyValue)}
-        aria-label={'Niveau spicy ${spicyValue} sur ${max}'}
+        aria-label={`Niveau spicy ${spicyValue}`sur ${max}`}
       >
         {/* Piment de base (vide) */}
         <Flame
           className={cn(
             sizeClasses[size],
-            "transition-all duration-200",
+            `transition-all duration-200",
             "text-gray-300 dark:text-gray-600",
             emptySpicyClassName
           )}
@@ -185,8 +185,8 @@ export function SpicyRating({
       <div
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
-        role="radiogroup"
-        aria-label={'Niveau spicy sur ${max}'}
+        role="radiogroup`
+        aria-label={`Niveau spicy sur ${max}`}
       >
         {Array.from({ length: max }, (_, index) => renderSpicy(index))}
       </div>
@@ -215,7 +215,7 @@ export function SpicyRating({
 export function SpicyDisplay({
   value,
   max = 10,
-  size = "md",
+  size="md",
   showValue = true,
   className,
 }: Pick<SpicyRatingProps, "value" | "max" | "size" | "showValue" | "className">) {

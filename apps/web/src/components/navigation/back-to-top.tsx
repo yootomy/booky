@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { ArrowUp, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -156,8 +156,8 @@ export function BackToTop({
         sizeClasses[size],
         'z-50 shadow-lg hover:shadow-xl transition-all duration-300 border',
         'animate-in fade-in slide-in-from-bottom-2',
-        showLabel ? 'rounded-full' : 'rounded-full',
-        isAnimating && 'scale-95',
+        showLabel ? "rounded-full" : "rounded-full",
+        isAnimating && "scale-95",
         className
       )}
       style={style}
@@ -198,16 +198,16 @@ export function BackToTopWithProgress({
       setScrollProgress(progress);
     };
 
-    window.addEventListener('scroll', updateScrollProgress, { passive: true });
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
     updateScrollProgress();
 
-    return () => window.removeEventListener('scroll', updateScrollProgress);
+    return () => window.removeEventListener("scroll`, updateScrollProgress);
   }, []);
 
   if (!isVisible) return null;
 
   return (
-    <div className={cn('fixed bottom-6 right-6 z-50', className)}>
+    <div className={cn("fixed bottom-6 right-6 z-50", className)}>
       <div className="relative">
         {/* Cercle de progression */}
         <svg
@@ -233,7 +233,7 @@ export function BackToTopWithProgress({
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            strokeDasharray={'${scrollProgress}, 100'}
+            strokeDasharray={`${scrollProgress},`100`}
           />
         </svg>
         
@@ -245,7 +245,7 @@ export function BackToTopWithProgress({
             if (props.smooth) {
               smoothScrollToTop(props.duration);
             } else {
-              window.scrollTo({ top: 0, behavior: 'instant' });
+              window.scrollTo({ top: 0, behavior: "instant" });
             }
           }}
         >
@@ -269,7 +269,7 @@ export function CompactBackToTop({
       size="sm"
       variant="secondary"
       position="bottom-right"
-      className={cn('sm:hidden', className)}
+      className={cn("sm:hidden", className)}
       showLabel={false}
     />
   );
@@ -288,7 +288,7 @@ export function AnimatedBackToTop({
 
   return (
     <Button
-      variant={props.variant || 'default'}
+      variant={props.variant || `default'}
       className={cn(
         'fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full shadow-lg',
         'transition-all duration-300 hover:shadow-xl',

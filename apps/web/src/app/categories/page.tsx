@@ -62,17 +62,17 @@ export default function CategoriesPage() {
         
         <div className="flex gap-2">
           <Button
-            variant={view === 'grid' ? 'default' : 'outline'}
+            variant={view === "grid" ? "default" : "outline"}
             size="sm"
-            onClick={() => setView('grid')}
+            onClick={() => setView("grid")}
           >
             <Grid3X3 className="h-4 w-4 mr-2" />
             Grille
           </Button>
           <Button
-            variant={view === 'stats' ? 'default' : 'outline'}
+            variant={view === "stats" ? "default" : "outline"}
             size="sm"
-            onClick={() => setView('stats')}
+            onClick={() => setView("stats")}
           >
             <BarChart3 className="h-4 w-4 mr-2" />
             Statistiques
@@ -81,7 +81,7 @@ export default function CategoriesPage() {
       </div>
 
       {/* Vue Grille */}
-      {view === 'grid' && (
+      {view === "grid" && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {isLoading ? (
             // Skeleton loading
@@ -101,7 +101,7 @@ export default function CategoriesPage() {
             ))
           ) : (
             categories.map((category) => (
-              <Link key={category.id} href={'/categories/${category.id}'}>
+              <Link key={category.id} href={`/categories/${category.id}`}>
                 <Card className="h-full hover:bg-gray-800/50 transition-colors cursor-pointer group">
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-3 mb-4">
@@ -147,7 +147,7 @@ export default function CategoriesPage() {
       )}
 
       {/* Vue Statistiques */}
-      {view === 'stats' && (
+      {view === "stats" && (
         <div className="space-y-6">
           {/* Stats globales */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -195,7 +195,7 @@ export default function CategoriesPage() {
             {categories
               .sort((a, b) => (b.book_count || 0) - (a.book_count || 0))
               .map((category) => (
-                <Link key={category.id} href={'/categories/${category.id}'}>
+                <Link key={category.id} href={`/categories/${category.id}`}>
                   <Card className="hover:bg-gray-800/50 transition-colors cursor-pointer">
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
@@ -239,10 +239,10 @@ export default function CategoriesPage() {
           <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-white mb-2">Aucune catégorie trouvée</h3>
           <p className="text-gray-400 mb-6">
-            {search ? 'Essayez avec des termes différents' : 'Aucune catégorie disponible pour le moment'}
+            {search ? "Essayez avec des termes différents" : "Aucune catégorie disponible pour le moment"}
           </p>
           {search && (
-            <Button variant="outline" onClick={() => setSearch('')}>
+            <Button variant="outline" onClick={() => setSearch(`')}>
               Effacer la recherche
             </Button>
           )}

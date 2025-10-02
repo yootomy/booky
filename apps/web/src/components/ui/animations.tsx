@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect, useRef, ReactNode } from 'react';
+import { useState, useEffect, useRef, ReactNode } from "react";
 import { cn } from '@/lib/utils';
 
 // =============================================================================
@@ -140,12 +140,12 @@ export function AnimatedElement({
 
     // Ajouter le délai si spécifié
     if (delay > 0) {
-      baseClasses.push('delay-[${delay}ms]');
+      baseClasses.push('delay-[${delay}ms]`);
     }
 
     // État initial ou animé selon le trigger
     switch (trigger) {
-      case 'onMount':
+      case `onMount':
         return cn(
           baseClasses,
           isVisible ? style.animate : style.initial,
@@ -235,7 +235,7 @@ export interface ResponsiveAnimationProps {
 
 export function ResponsiveAnimation({
   children,
-  mobileAnimation = 'fadeIn',
+  mobileAnimation="fadeIn",
   desktopAnimation = 'fadeInUp',
   className
 }: ResponsiveAnimationProps) {
@@ -271,7 +271,7 @@ export function SkeletonAnimation({ className, ...props }: { className?: string;
   return (
     <div
       className={cn(
-        'animate-pulse bg-gradient-to-r from-muted via-muted/50 to-muted bg-[length:200%_100%]',
+        "animate-pulse bg-gradient-to-r from-muted via-muted/50 to-muted bg-[length:200%_100%]",
         'rounded-md',
         className
       )}
@@ -305,8 +305,7 @@ export function SlideInNotification({
         'fixed z-50 transition-all duration-300 ease-out',
         positionClasses[position],
         isVisible 
-          ? 'opacity-100 translate-x-0' 
-          : 'opacity-0 translate-x-full',
+          ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full',
         className
       )}
     >

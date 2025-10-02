@@ -38,10 +38,10 @@ export function FavoritesTest({ testBookId = 'test-book-1' }: FavoritesTestProps
         {/* Statut d'authentification */}
         <div>
           <p className="text-sm text-muted-foreground">
-            Utilisateur: {isAuthenticated ? user?.email : 'Non connecté'}
+            Utilisateur: {isAuthenticated ? user?.email : "Non connecté"}
           </p>
-          <Badge variant={isAuthenticated ? 'default' : 'secondary'}>
-            {isAuthenticated ? 'Connecté' : 'Déconnecté'}
+          <Badge variant={isAuthenticated ? "default" : "secondary"}>
+            {isAuthenticated ? "Connecté" : "Déconnecté"}
           </Badge>
         </div>
 
@@ -67,8 +67,8 @@ export function FavoritesTest({ testBookId = 'test-book-1' }: FavoritesTestProps
             Test Book ID: {testBookId}
           </p>
           <div className="flex items-center justify-between">
-            <Badge variant={bookIsFavorite ? 'default' : 'outline'}>
-              {bookIsFavorite ? 'Favoris ❤️' : 'Pas en favoris'}
+            <Badge variant={bookIsFavorite ? "default" : "outline"}>
+              {bookIsFavorite ? "Favoris ❤️" : "Pas en favoris"}
             </Badge>
             <Button
               variant="outline"
@@ -76,8 +76,8 @@ export function FavoritesTest({ testBookId = 'test-book-1' }: FavoritesTestProps
               onClick={() => toggleFavorite(testBookId)}
               className="flex items-center gap-1"
             >
-              <Heart className={`h-4 w-4 ${bookIsFavorite ? 'fill-current' : ''}'} />
-              {bookIsFavorite ? 'Retirer' : 'Ajouter'}
+              <Heart className={`h-4 w-4 ${bookIsFavorite ? 'fill-current' : ''}`} />
+              {bookIsFavorite ? "Retirer" : "Ajouter"}
             </Button>
           </div>
         </div>
@@ -108,7 +108,7 @@ export function FavoritesTest({ testBookId = 'test-book-1' }: FavoritesTestProps
           <div className="text-xs">
             <p className="font-medium mb-1">IDs en favoris:</p>
             <div className="bg-muted p-2 rounded text-xs font-mono">
-              {Array.from(favorites).join(', ')}
+              {Array.from(favorites).join(", ")}
             </div>
           </div>
         )}

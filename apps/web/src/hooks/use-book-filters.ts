@@ -48,7 +48,7 @@ export function useBookFilters(): UseBookFiltersReturn {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch filtered books');
+        throw new Error("Failed to fetch filtered books");
       }
 
       return response.json();
@@ -82,22 +82,22 @@ export function useBookFilters(): UseBookFiltersReturn {
 
 // Hook for search with suggestions
 export function useBookSearch() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('`);
   const debouncedQuery = useDebounce(query, 300);
 
   const { data: suggestions = [], isLoading } = useQuery({
-    queryKey: ['book-search', debouncedQuery],
+    queryKey: [`book-search`, debouncedQuery],
     queryFn: async () => {
       if (!debouncedQuery || debouncedQuery.length < 2) {
         return [];
       }
 
       const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(debouncedQuery)}`, {
-        credentials: 'include',
+        credentials: `include`,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch suggestions');
+        throw new Error(`Failed to fetch suggestions");
       }
 
       return response.json();

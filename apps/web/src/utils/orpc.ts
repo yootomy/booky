@@ -51,7 +51,7 @@ export const queryClient = new QueryClient({
           action: {
             label: "Se reconnecter",
             onClick: () => {
-              window.location.href = "/login";
+              window.location.href="/login";
             }
           }
         });
@@ -60,14 +60,14 @@ export const queryClient = new QueryClient({
       
       if (apiError.statusCode === 403) {
         toast.error("Accès refusé", {
-          description: "Vous n`avez pas les permissions nécessaires"
+          description: "Vous n'avez pas les permissions nécessaires"
         });
         return;
       }
       
       if (apiError.statusCode >= 500) {
         toast.error("Erreur serveur", {
-          description: "Une erreur inattendue s`est produite",
+          description: "Une erreur inattendue s'est produite",
           action: {
             label: "Réessayer",
             onClick: () => {
@@ -79,7 +79,7 @@ export const queryClient = new QueryClient({
       }
       
       // Erreur générique
-      toast.error('Erreur: ${apiError.error || (error as Error).message}', {
+      toast.error(`Erreur: ${apiError.error || (error as Error).message}`, {
         action: {
           label: "Réessayer",
           onClick: () => {
@@ -115,7 +115,7 @@ class ApiClient {
   
   constructor() {
     // Option 2: Utiliser les routes proxy du frontend
-    this.baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001";
+    this.baseURL = process.env.NEXT_PUBLIC_BASE_URL || `http://localhost:3001`;
   }
 
   private async request<T>(
@@ -124,14 +124,14 @@ class ApiClient {
   ): Promise<T> {
     // Appel via proxy frontend
     let cleanEndpoint = endpoint;
-    // Supprimer le /api s'il est au début pour éviter les doublons
-    if (cleanEndpoint.startsWith('/api/')) {
+    // Supprimer le /api s`il est au début pour éviter les doublons
+    if (cleanEndpoint.startsWith(`/api/`)) {
       cleanEndpoint = cleanEndpoint.substring(4);
     }
-    const url = '${this.baseURL}${cleanEndpoint.startsWith('/proxy') ? '/api${cleanEndpoint}' : '/api/proxy${cleanEndpoint}'}';
+    const url = `${this.baseURL}${cleanEndpoint.startsWith('/proxy') ? `/api${cleanEndpoint}` : `/api/proxy${cleanEndpoint}`}`;
 
     const config: RequestInit = {
-      credentials: "include",
+      credentials: `include`,
       headers: {
         "Content-Type": "application/json",
         ...options.headers
@@ -158,7 +158,7 @@ class ApiClient {
       if (error instanceof TypeError) {
         throw {
           success: false,
-          error: "Erreur de connexion réseau",
+          error: `Erreur de connexion réseau`,
           statusCode: 0,
           timestamp: new Date().toISOString()
         } as ApiError;
@@ -184,9 +184,9 @@ class ApiClient {
     }
     
     const queryString = searchParams.toString();
-    const url = queryString ? '${endpoint}?${queryString}' : endpoint;
+    const url = queryString ? `${endpoint}?${queryString}` : endpoint;
     
-    return this.request<T>(url, { method: "GET" });
+    return this.request<T>(url, { method: `GET" });
   }
   
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
@@ -252,53 +252,53 @@ export const booksApi = {
     apiClient.get<PaginatedResponse<Book>>("/books", filters),
   
   getById: (id: string) =>
-    apiClient.get<ApiResponse<Book>>('/books/${id}'),
+    apiClient.get<ApiResponse<Book>>('/books/' + id),
   
   create: (data: BookCreateInput) =>
-    apiClient.post<ApiResponse<Book>>("/books", data),
+    apiClient.post<ApiResponse<Book>>('/books', data),
   
   update: (id: string, data: BookUpdateInput) =>
-    apiClient.put<ApiResponse<Book>>('/books/${id}', data),
+    apiClient.put<ApiResponse<Book>>('/books/' + id, data),
   
   delete: (id: string) =>
-    apiClient.delete<{ success: boolean }>('/books/${id}'),
+    apiClient.delete<{ success: boolean }>('/books/' + id),
   
   search: (query: string, filters?: Partial<BookFilters>) =>
-    apiClient.get<PaginatedResponse<Book>>("/books/search", { query, ...filters }),
+    apiClient.get<PaginatedResponse<Book>>('/books/search', { query, ...filters }),
   
   getRecommendations: (bookId: string) =>
-    apiClient.get<ApiResponse<Book[]>>('/books/${bookId}/recommendations'),
+    apiClient.get<ApiResponse<Book[]>>('/books/' + bookId + '/recommendations'),
   
   bulkUpdate: (ids: string[], data: Partial<BookUpdateInput>) =>
-    apiClient.patch<{ success: boolean; updated: number }>("/books/bulk", { ids, data }),
-  
+    apiClient.patch<{ success: boolean; updated: number }>('/books/bulk', { ids, data }),
+
   bulkDelete: (ids: string[]) =>
-    apiClient.post<{ success: boolean; deleted: number }>("/books/bulk/delete", { ids }),
+    apiClient.post<{ success: boolean; deleted: number }>('/books/bulk/delete', { ids }),
 
   // ===== QUESTIONS FAQ =====
   getQuestions: (bookId: string) =>
-    apiClient.get<ApiResponse<any[]>>('/books/${bookId}/questions'),
+    apiClient.get<ApiResponse<any[]>>('/books/' + bookId + '/questions'),
 
   createQuestion: (bookId: string, question: string) =>
-    apiClient.post<ApiResponse<any>>('/books/${bookId}/questions', { question }),
+    apiClient.post<ApiResponse<any>>('/books/' + bookId + '/questions', { question }),
   
   answerQuestion: (bookId: string, questionId: string, reponse: string) =>
-    apiClient.put<ApiResponse<any>>('/books/${bookId}/questions/${questionId}', { reponse }),
-  
+    apiClient.put<ApiResponse<any>>('/books/' + bookId + '/questions/' + questionId, { reponse }),
+
   moderateQuestion: (bookId: string, questionId: string, status: 'PENDING' | 'ANSWERED' | 'REJECTED') =>
-    apiClient.patch<ApiResponse<any>>('/books/${bookId}/questions/${questionId}', { status }),
+    apiClient.patch<ApiResponse<any>>('/books/' + bookId + '/questions/' + questionId, { status }),
 
   getUserQuestions: (userId: string) =>
-    apiClient.get<ApiResponse<any[]>>('/users/${userId}/questions'),
-  
+    apiClient.get<ApiResponse<any[]>>('/users/' + userId + '/questions'),
+
   deleteQuestion: (bookId: string, questionId: string) =>
-    apiClient.delete<{ success: boolean }>('/books/${bookId}/questions/${questionId}'),
-  
+    apiClient.delete<{ success: boolean }>('/books/' + bookId + '/questions/' + questionId),
+
   toggleQuestionLike: (bookId: string, questionId: string) =>
-    apiClient.post<ApiResponse<{ questionId: string; isLiked: boolean; likesCount: number }>>('/books/${bookId}/questions/${questionId}/like'),
-  
+    apiClient.post<ApiResponse<{ questionId: string; isLiked: boolean; likesCount: number }>>('/books/' + bookId + '/questions/' + questionId + '/like'),
+
   getQuestionLikeStatus: (bookId: string, questionId: string) =>
-    apiClient.get<ApiResponse<{ questionId: string; isLiked: boolean; likesCount: number }>>('/books/${bookId}/questions/${questionId}/like'),
+    apiClient.get<ApiResponse<{ questionId: string; isLiked: boolean; likesCount: number }>>('/books/' + bookId + '/questions/' + questionId + '/like'),
 };
 
 // ===== API METHODS - FAVORIS =====
@@ -310,33 +310,33 @@ export const favoritesApi = {
 
   // Ajoute un livre aux favoris (idempotent)
   add: (bookId: string) =>
-    apiClient.post<ApiResponse<{ success: boolean; message: string }>>("/favorites", { bookId }),
+    apiClient.post<ApiResponse<{ success: boolean; message: string }>>('/favorites', { bookId }),
 
   // Retire un livre des favoris
   remove: (bookId: string) =>
-    apiClient.delete<ApiResponse<{ success: boolean; message: string }>>('/favorites/${bookId}'),
+    apiClient.delete<ApiResponse<{ success: boolean; message: string }>>('/favorites/' + bookId),
 };
 
 // ===== API METHODS - CATÉGORIES =====
 
 export const categoriesApi = {
   getAll: (filters?: CategoryFilters) =>
-    apiClient.get<PaginatedResponse<Category>>("/categories", filters),
+    apiClient.get<PaginatedResponse<Category>>('/categories', filters),
 
   getById: (id: string) =>
-    apiClient.get<ApiResponse<Category>>('/categories/${id}'),
+    apiClient.get<ApiResponse<Category>>('/categories/' + id),
 
   create: (data: CategoryCreateInput) =>
-    apiClient.post<ApiResponse<Category>>("/categories", data),
+    apiClient.post<ApiResponse<Category>>('/categories', data),
 
   update: (id: string, data: CategoryUpdateInput) =>
-    apiClient.put<ApiResponse<Category>>('/categories/${id}', data),
+    apiClient.put<ApiResponse<Category>>('/categories/' + id, data),
 
   delete: (id: string) =>
-    apiClient.delete<{ success: boolean }>('/categories/${id}'),
-  
+    apiClient.delete<{ success: boolean }>('/categories/' + id),
+
   getStats: (id: string) =>
-    apiClient.get<ApiResponse<any>>('/categories/${id}/stats'),
+    apiClient.get<ApiResponse<any>>('/categories/' + id + '/stats'),
   
   merge: (sourceIds: string[], targetId: string) =>
     apiClient.post<{ success: boolean; merged: number }>("/categories/merge", { sourceIds, targetId }),
@@ -346,52 +346,52 @@ export const categoriesApi = {
 
 export const sagasApi = {
   getAll: (filters?: SagaFilters) =>
-    apiClient.get<SagaListResponse>("/sagas", filters),
+    apiClient.get<SagaListResponse>('/sagas', filters),
 
   getById: (id: string) =>
-    apiClient.get<SagaDetailResponse>('/sagas/${id}'),
+    apiClient.get<SagaDetailResponse>('/sagas/' + id),
 
   getBySlug: (slug: string) =>
-    apiClient.get<SagaDetailResponse>('/sagas/by-slug/${slug}'),
+    apiClient.get<SagaDetailResponse>('/sagas/by-slug/' + slug),
 
   create: (data: SagaCreateInput) =>
-    apiClient.post<SagaDetailResponse>("/sagas", data),
+    apiClient.post<SagaDetailResponse>('/sagas', data),
 
   update: (id: string, data: Partial<SagaUpdateInput>) =>
-    apiClient.patch<SagaDetailResponse>("/sagas", { id, data }),
+    apiClient.patch<SagaDetailResponse>('/sagas', { id, data }),
 
   delete: (id: string) =>
-    apiClient.delete<{ success: boolean; message: string }>('/sagas/${id}'),
-  
+    apiClient.delete<{ success: boolean; message: string }>('/sagas/' + id),
+
   // Gestion des livres dans une saga
   getBooks: (id: string, filters?: SagaBooksFilters) =>
-    apiClient.get<SagaBooksResponse>('/sagas/${id}/books', filters),
+    apiClient.get<SagaBooksResponse>('/sagas/' + id + '/books', filters),
   
   assignBook: (bookId: string, data: AssignBookToSagaInput) =>
-    apiClient.patch<{ success: boolean; data: Book; message: string }>('/books/${bookId}/saga', data),
+    apiClient.patch<{ success: boolean; data: Book; message: string }>('/books/' + bookId + '/saga', data),
 
   removeBook: (bookId: string) =>
-    apiClient.delete<{ success: boolean; data: Book; message: string }>('/books/${bookId}/saga'),
+    apiClient.delete<{ success: boolean; data: Book; message: string }>('/books/' + bookId + '/saga'),
 
   reorderBooks: (id: string, data: ReorderSagaInput) =>
-    apiClient.patch<{ success: boolean; data: Book[]; message: string }>('/sagas/${id}/reorder', data),
+    apiClient.patch<{ success: boolean; data: Book[]; message: string }>('/sagas/' + id + '/reorder', data),
 
   // Utilitaires
   getBookNeighbors: (bookId: string) =>
-    apiClient.get<SagaNeighborsResponse>('/books/${bookId}/saga/neighbors'),
+    apiClient.get<SagaNeighborsResponse>('/books/' + bookId + '/saga/neighbors'),
 
   getNextOrder: (id: string) =>
-    apiClient.get<{ success: boolean; data: { nextOrder: number } }>('/sagas/${id}/next-order'),
+    apiClient.get<{ success: boolean; data: { nextOrder: number } }>('/sagas/' + id + '/next-order'),
 
   checkOrderAvailable: (id: string, order: number, excludeBookId?: string) =>
-    apiClient.get<{ success: boolean; available: boolean; suggestedNextOrder: number }>('/sagas/${id}/check-order', {
+    apiClient.get<{ success: boolean; available: boolean; suggestedNextOrder: number }>('/sagas/' + id + '/check-order', {
       order: order.toString(),
       excludeBookId
     }),
 
   // Recherche pour autocomplete
   search: (search: string, limit: number = 10) =>
-    apiClient.get<SagaListResponse>("/sagas", {
+    apiClient.get<SagaListResponse>('/sagas', {
       search,
       pageSize: limit,
       page: 1
@@ -402,63 +402,63 @@ export const sagasApi = {
 
 export const tagsApi = {
   getAll: (filters?: TagFilters) =>
-    apiClient.get<PaginatedResponse<Tag>>("/tags", filters),
+    apiClient.get<PaginatedResponse<Tag>>('/tags', filters),
 
   getById: (id: string) =>
-    apiClient.get<ApiResponse<Tag>>('/tags/${id}'),
+    apiClient.get<ApiResponse<Tag>>('/tags/' + id),
 
   create: (data: TagCreateInput) =>
-    apiClient.post<ApiResponse<Tag>>("/tags", data),
+    apiClient.post<ApiResponse<Tag>>('/tags', data),
 
   update: (id: string, data: TagUpdateInput) =>
-    apiClient.put<ApiResponse<Tag>>('/tags/${id}', data),
+    apiClient.put<ApiResponse<Tag>>('/tags/' + id, data),
 
   delete: (id: string) =>
-    apiClient.delete<{ success: boolean }>('/tags/${id}'),
+    apiClient.delete<{ success: boolean }>('/tags/' + id),
 
   getByType: (type: TagType) =>
-    apiClient.get<ApiResponse<Tag[]>>('/tags/type/${type}'),
+    apiClient.get<ApiResponse<Tag[]>>('/tags/type/' + type),
 
   getStats: (id: string) =>
-    apiClient.get<ApiResponse<any>>('/tags/${id}/stats'),
+    apiClient.get<ApiResponse<any>>('/tags/' + id + '/stats'),
 
   merge: (sourceIds: string[], targetId: string) =>
-    apiClient.post<{ success: boolean; merged: number }>("/tags/merge", { sourceIds, targetId }),
+    apiClient.post<{ success: boolean; merged: number }>('/tags/merge', { sourceIds, targetId }),
 
   bulkUpdate: (ids: string[], data: Partial<TagUpdateInput>) =>
-    apiClient.patch<{ success: boolean; updated: number }>("/tags/bulk", { ids, data }),
+    apiClient.patch<{ success: boolean; updated: number }>('/tags/bulk', { ids, data }),
 };
 
 // ===== API METHODS - USERS =====
 
 export const usersApi = {
   getAll: (filters?: { page?: number; limit?: number; search?: string; role?: string }) =>
-    apiClient.get<PaginatedResponse<any>>("/users", filters),
+    apiClient.get<PaginatedResponse<any>>('/users', filters),
 
   getById: (id: string) =>
-    apiClient.get<ApiResponse<any>>('/users/${id}'),
+    apiClient.get<ApiResponse<any>>('/users/' + id),
 };
 
 // ===== API METHODS - DASHBOARD =====
 
 export const dashboardApi = {
   getData: () =>
-    apiClient.get<ApiResponse<DashboardData>>("/dashboard"),
+    apiClient.get<ApiResponse<DashboardData>>('/dashboard'),
 
   getStats: (filters?: Record<string, unknown>) =>
-    apiClient.get<ApiResponse<any>>("/dashboard/stats", filters),
+    apiClient.get<ApiResponse<any>>('/dashboard/stats', filters),
 
   getActivity: (limit?: number) =>
-    apiClient.get<ApiResponse<any>>("/dashboard/activity", { limit }),
+    apiClient.get<ApiResponse<any>>('/dashboard/activity', { limit }),
 
   getCurrentReading: () =>
-    apiClient.get<ApiResponse<any>>("/dashboard/current-reading"),
+    apiClient.get<ApiResponse<any>>('/dashboard/current-reading'),
 
   getWishlist: () =>
-    apiClient.get<ApiResponse<any>>("/dashboard/wishlist"),
+    apiClient.get<ApiResponse<any>>('/dashboard/wishlist'),
 
   getTopBooks: () =>
-    apiClient.get<ApiResponse<any>>("/dashboard/top-books"),
+    apiClient.get<ApiResponse<any>>('/dashboard/top-books'),
 };
 
 // ===== API METHODS - STATISTIQUES =====
@@ -490,38 +490,38 @@ export const statsApi = {
 
 export const goalsApi = {
   getAll: () =>
-    apiClient.get<ApiResponse<ReadingGoal[]>>("/goals"),
+    apiClient.get<ApiResponse<ReadingGoal[]>>('/goals'),
 
   getById: (id: string) =>
-    apiClient.get<ApiResponse<ReadingGoal>>('/goals/${id}'),
+    apiClient.get<ApiResponse<ReadingGoal>>('/goals/' + id),
 
   create: (data: Partial<ReadingGoal>) =>
-    apiClient.post<ApiResponse<ReadingGoal>>("/goals", data),
+    apiClient.post<ApiResponse<ReadingGoal>>('/goals', data),
 
   update: (id: string, data: Partial<ReadingGoal>) =>
-    apiClient.put<ApiResponse<ReadingGoal>>('/goals/${id}', data),
+    apiClient.put<ApiResponse<ReadingGoal>>('/goals/' + id, data),
 
   delete: (id: string) =>
-    apiClient.delete<{ success: boolean }>('/goals/${id}'),
+    apiClient.delete<{ success: boolean }>('/goals/' + id),
 
   getProgress: (id: string) =>
-    apiClient.get<ApiResponse<any>>('/goals/${id}/progress'),
+    apiClient.get<ApiResponse<any>>('/goals/' + id + '/progress'),
 };
 
 // ===== API METHODS - EXPORT =====
 
 export const exportApi = {
   create: (type: string, format: string, filters?: Record<string, unknown>) =>
-    apiClient.post<ApiResponse<{ download_url: string }>>("/export", { type, format, filters }),
+    apiClient.post<ApiResponse<{ download_url: string }>>('/export', { type, format, filters }),
 
   getHistory: () =>
-    apiClient.get<ApiResponse<any[]>>("/export/history"),
+    apiClient.get<ApiResponse<any[]>>('/export/history'),
 
   download: (exportId: string) =>
-    apiClient.get<Blob>('/export/${exportId}/download'),
+    apiClient.get<Blob>('/export/' + exportId + '/download'),
 
   delete: (exportId: string) =>
-    apiClient.delete<{ success: boolean }>('/export/${exportId}`),
+    apiClient.delete<{ success: boolean }>('/export/' + exportId),
 };
 
 // ===== API METHODS - UPLOAD =====
@@ -529,20 +529,20 @@ export const exportApi = {
 export const uploadApi = {
   image: (file: File) => {
     const formData = new FormData();
-    formData.append("image", file);
-    return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/api/upload/image`, {
-      method: "POST",
-      credentials: "include",
+    formData.append('image', file);
+    return fetch((process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000') + '/api/upload/image', {
+      method: 'POST',
+      credentials: 'include',
       body: formData
     }).then(res => res.json());
   },
   
   bulk: (files: File[]) => {
     const formData = new FormData();
-    files.forEach(file => formData.append("files", file));
-    return fetch(`${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/api/upload/bulk`, {
-      method: "POST",
-      credentials: "include",
+    files.forEach(file => formData.append('files', file));
+    return fetch((process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000') + '/api/upload/bulk', {
+      method: 'POST',
+      credentials: 'include',
       body: formData
     }).then(res => res.json());
   },
@@ -552,16 +552,16 @@ export const uploadApi = {
 
 export const importApi = {
   books: (data: any[]) =>
-    apiClient.post<ApiResponse<{ imported: number; errors: any[] }>>("/import/books", { books: data }),
+    apiClient.post<ApiResponse<{ imported: number; errors: any[] }>>('/import/books', { books: data }),
 
   categories: (data: any[]) =>
-    apiClient.post<ApiResponse<{ imported: number; errors: any[] }>>("/import/categories", { categories: data }),
+    apiClient.post<ApiResponse<{ imported: number; errors: any[] }>>('/import/categories', { categories: data }),
 
   tags: (data: any[]) =>
-    apiClient.post<ApiResponse<{ imported: number; errors: any[] }>>("/import/tags", { tags: data }),
+    apiClient.post<ApiResponse<{ imported: number; errors: any[] }>>('/import/tags', { tags: data }),
 
   validate: (type: string, data: any[]) =>
-    apiClient.post<ApiResponse<{ valid: any[]; errors: any[] }>>("/import/validate", { type, data }),
+    apiClient.post<ApiResponse<{ valid: any[]; errors: any[] }>>('/import/validate', { type, data }),
 };
 
 // ===== API METHODS - EXTERNES =====
@@ -569,37 +569,37 @@ export const importApi = {
 export const externalApi = {
   // Google Books
   googleBooksSearch: (params: Record<string, unknown>) =>
-    apiClient.get<ApiResponse<any>>("/external/google-books/search", params),
+    apiClient.get<ApiResponse<any>>('/external/google-books/search', params),
 
   googleBooksBook: (id: string) =>
-    apiClient.get<ApiResponse<any>>('/external/google-books/book/${id}'),
+    apiClient.get<ApiResponse<any>>('/external/google-books/book/' + id),
 
   googleBooksImport: (data: any) =>
-    apiClient.post<ApiResponse<any>>("/external/google-books/import", data),
+    apiClient.post<ApiResponse<any>>('/external/google-books/import', data),
 
   // Open Library
   openLibrarySearch: (params: Record<string, unknown>) =>
-    apiClient.get<ApiResponse<any>>("/external/open-library/search", params),
+    apiClient.get<ApiResponse<any>>('/external/open-library/search', params),
 
   openLibraryBook: (id: string) =>
-    apiClient.get<ApiResponse<any>>('/external/open-library/book/${id}`),
+    apiClient.get<ApiResponse<any>>('/external/open-library/book/' + id),
 
   openLibraryImport: (data: any) =>
-    apiClient.post<ApiResponse<any>>("/external/open-library/import", data),
+    apiClient.post<ApiResponse<any>>('/external/open-library/import', data),
 
   // Recherche combinée
   combinedSearch: (params: Record<string, unknown>) =>
-    apiClient.get<ApiResponse<any>>("/external/search", params),
+    apiClient.get<ApiResponse<any>>('/external/search', params),
 };
 
 // ===== CONFIGURATION ORPC (LEGACY) =====
 
 export const link = new RPCLink({
-  url: `${process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000"}/rpc`,
+  url: (process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000') + '/rpc',
   fetch(url, options) {
     return fetch(url, {
       ...options,
-      credentials: "include",
+      credentials: 'include',
     });
   },
 });

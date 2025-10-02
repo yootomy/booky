@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from "react";
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -78,7 +78,7 @@ function useInfiniteScroll({
       try {
         await onLoadMore();
       } catch (error) {
-        console.error('Erreur lors du chargement:', error);
+        console.error("Erreur lors du chargement:", error);
       } finally {
         setIsLoading(false);
       }
@@ -325,7 +325,7 @@ export function Pagination({
   hasPreviousPage = false,
   onLoadMore,
   onRefresh,
-  variant = 'default',
+  variant="default",
   showInfo = true,
   showItemsPerPage = true,
   showRefresh = false,
@@ -369,7 +369,7 @@ export function Pagination({
             </p>
             {showInfo && totalItems && (
               <p className="text-xs text-muted-foreground mt-1">
-                {totalItems} élément{totalItems > 1 ? 's' : ''} au total
+                {totalItems} élément{totalItems > 1 ? "s" : ""} au total
               </p>
             )}
           </div>
@@ -394,7 +394,7 @@ export function Pagination({
   }
 
   // Pagination load more
-  if (variant === 'loadmore') {
+  if (variant === "loadmore") {
     return (
       <div className={cn('space-y-4', className)}>
         {showInfo && totalItems && (
@@ -434,7 +434,7 @@ export function Pagination({
   }
 
   // Pagination compacte
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div className={cn('flex items-center justify-between', className)}>
         <div className="flex items-center gap-2">
@@ -476,7 +476,7 @@ export function Pagination({
 
   // Pagination par défaut
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Informations et contrôles */}
       <div className="flex items-center justify-between">
         {showInfo && totalItems ? (
@@ -500,7 +500,7 @@ export function Pagination({
               disabled={loading}
               title="Actualiser"
             >
-              <RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} />
+              <RefreshCw className={cn("h-4 w-4", loading && 'animate-spin')} />
             </Button>
           )}
 
@@ -540,7 +540,7 @@ export function Pagination({
 
 // Composant skeleton pour le loading
 export function PaginationSkeleton({
-  variant = 'default',
+  variant="default",
   className
 }: {
   variant?: 'default' | 'compact';
@@ -560,7 +560,7 @@ export function PaginationSkeleton({
   }
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
         <Skeleton className="h-4 w-48" />
         <Skeleton className="h-8 w-24" />

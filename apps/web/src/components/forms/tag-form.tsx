@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import { 
   Save, 
@@ -107,10 +107,10 @@ function TagColorPicker({
               key={color}
               type="button"
               className={cn(
-                'w-full h-8 rounded border-2 transition-all hover:scale-105',
+                "w-full h-8 rounded border-2 transition-all hover:scale-105",
                 value === color 
                   ? 'border-foreground shadow-lg' 
-                  : 'border-muted-foreground/20'
+                  : "border-muted-foreground/20"
               )}
               style={{ backgroundColor: color }}
               onClick={() => onChange(color)}
@@ -136,7 +136,7 @@ function TagColorPicker({
                   'w-6 h-6 rounded-full border-2 transition-all hover:scale-110',
                   value === color 
                     ? 'border-foreground shadow-lg' 
-                    : 'border-muted-foreground/20'
+                    : "border-muted-foreground/20"
                 )}
                 style={{ backgroundColor: color }}
                 onClick={() => onChange(color)}
@@ -208,7 +208,7 @@ function TypeSelector({
   className?: string;
 }) {
   return (
-    <div className={cn('grid grid-cols-2 gap-2', className)}>
+    <div className={cn("grid grid-cols-2 gap-2", className)}>
       {Object.values(TagType).map((type) => (
         <Button
           key={type}
@@ -304,7 +304,7 @@ export function TagForm({
         await onSubmit({ ...data, id: initialData!.id });
       }
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
+      console.error("Erreur lors de la soumission: ", error);
     }
   };
 
@@ -316,17 +316,17 @@ export function TagForm({
   }, {} as Record<TagType, typeof PREDEFINED_TAGS>);
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn('space-y-6', className)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn("space-y-6", className)}>
       {/* Header avec actions */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-xl font-semibold">
-            {mode === 'create' ? 'Nouveau tag' : 'Modifier le tag'}
+            {mode === "create" ? 'Nouveau tag' : "Modifier le tag"}
           </h2>
           <p className="text-sm text-muted-foreground">
-            {mode === 'create' 
+            {mode === "create" 
               ? 'Créer un nouveau tag pour étiqueter vos livres'
-              : 'Modifier les informations du tag'
+              : "Modifier les informations du tag"
             }
           </p>
         </div>
@@ -342,7 +342,7 @@ export function TagForm({
             Aperçu
           </Button>
           
-          {mode === 'create' && (
+          {mode === "create" && (
             <Button
               type="button"
               variant="outline"
@@ -370,7 +370,7 @@ export function TagForm({
               {...register('nom', { 
                 required: 'Le nom est obligatoire',
                 minLength: { value: 1, message: 'Le nom ne peut pas être vide' },
-                maxLength: { value: 50, message: 'Le nom ne peut pas dépasser 50 caractères' }
+                maxLength: { value: 50, message: "Le nom ne peut pas dépasser 50 caractères" }
               })}
               placeholder="ex: Enemies to Lovers"
               className={errors.nom ? 'border-destructive' : ''}
@@ -398,7 +398,7 @@ export function TagForm({
             <Checkbox
               id="est_favori"
               checked={watchedValues.est_favori}
-              onCheckedChange={(checked) => setValue('est_favori', checked as boolean)}
+              onCheckedChange={(checked) => setValue("est_favori", checked as boolean)}
             />
             <Label htmlFor="est_favori" className="flex items-center gap-2">
               {watchedValues.est_favori ? (
@@ -417,7 +417,7 @@ export function TagForm({
             <Label>Couleur du tag</Label>
             <TagColorPicker
               value={watchedValues.couleur}
-              onChange={(color) => setValue('couleur', color)}
+              onChange={(color) => setValue("couleur", color)}
               type={watchedValues.type}
             />
           </div>
@@ -525,13 +525,13 @@ export function TagForm({
                   variant="secondary"
                   className="px-2 py-1"
                   style={{
-                    backgroundColor: '${watchedValues.couleur}20',
+                    backgroundColor: `${watchedValues.couleur}20`,
                     color: watchedValues.couleur,
                     borderColor: watchedValues.couleur
                   }}
                 >
                   <span className="mr-1">{TAG_TYPE_ICONS[watchedValues.type]}</span>
-                  {watchedValues.nom || 'Nom du tag'}
+                  {watchedValues.nom || "Nom du tag"}
                 </Badge>
                 
                 {watchedValues.est_favori && (
@@ -560,7 +560,7 @@ export function TagForm({
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t">
         <div className="text-xs text-muted-foreground">
-          {isDirty && '• Modifications non sauvegardées'}
+          {isDirty && "• Modifications non sauvegardées"}
         </div>
         
         <div className="flex items-center gap-2">
@@ -580,7 +580,7 @@ export function TagForm({
           >
             {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             <Save className="w-4 h-4 mr-2" />
-            {mode === 'create' ? 'Créer' : 'Sauvegarder'}
+            {mode === "create" ? "Créer" : "Sauvegarder"}
           </Button>
         </div>
       </div>

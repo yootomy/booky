@@ -36,7 +36,7 @@ interface BookSearchSectionProps {
 
 export function BookSearchSection({ onBookSelect, className }: BookSearchSectionProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchType, setSearchType] = useState<'general' | 'title' | 'author' | 'isbn'>('general');
+  const [searchType, setSearchType] = useState<"general" | 'title' | 'author' | 'isbn'>('general');
   const [isExpanded, setIsExpanded] = useState(false);
   
   // Hook de recherche externe (avec debounce intégré)
@@ -50,7 +50,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
     refetch: performSearch
   } = useSmartExternalSearch('', {
     maxResults: 8, // Limiter les résultats pour la recherche intégrée
-    preferredSource: 'combined', // Recherche combinée
+    preferredSource: "combined", // Recherche combinée
     searchType: searchType,
     debounceMs: 500
   });
@@ -66,11 +66,11 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
     updateQuery(searchQuery);
   };
 
-  // Gérer la sélection d`un livre
+  // Gérer la sélection d'un livre
   const handleBookSelect = (book: ExternalBookResult) => {
     onBookSelect(book);
     setIsExpanded(false);
-    toast.success(`Livre sélectionné : "${book.titre}"`);
+    toast.success('Livre sélectionné : ' + book.titre);
   };
 
   // Gérer l'appui sur Entrée
@@ -123,45 +123,41 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setSearchType('general')}
+                  onClick={() => setSearchType("general`)}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    searchType === 'general' 
-                      ? 'bg-blue-100 text-blue-700 border border-blue-300' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }'}
+                    searchType === `}general` 
+                      ? `bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
                 >
                   🔍 Général
                 </button>
                 <button
-                  type="button"
-                  onClick={() => setSearchType('title')}
+                  type= `button`
+                  onClick={() => setSearchType(`title`)}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    searchType === 'title' 
-                      ? 'bg-blue-100 text-blue-700 border border-blue-300' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }'}
+                    searchType === "title" 
+                      ? 'bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
                 >
                   📖 Titre
                 </button>
                 <button
-                  type="button"
-                  onClick={() => setSearchType('author')}
+                  type=`button`
+                  onClick={() => setSearchType(`author`)}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                    searchType === 'author' 
-                      ? 'bg-blue-100 text-blue-700 border border-blue-300' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    searchType === `}author` 
+                      ? `bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }'}
                 >
                   ✍️ Auteur
                 </button>
                 <button
-                  type="button"
-                  onClick={() => setSearchType('isbn')}
+                  type='button'
+                  onClick={() => setSearchType('isbn`)}
                   className={`px-3 py-1 text-xs rounded-full transition-colors ${
                     searchType === 'isbn' 
-                      ? 'bg-blue-100 text-blue-700 border border-blue-300' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }'}
+                      ? 'bg-blue-100 text-blue-700 border border-blue-300' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
                 >
                   🔢 ISBN
                 </button>
@@ -174,9 +170,9 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                 <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
                   placeholder={
-                    searchType === 'general' ? "Rechercher un livre..." :
-                    searchType === 'title' ? "Titre du livre..." :
-                    searchType === 'author' ? "Nom de l'auteur..." :
+                    searchType === "general" ? "Rechercher un livre..." :
+                    searchType === "title" ? "Titre du livre..." :
+                    searchType === "author" ? "Nom de l"auteur...' :
                     "Code ISBN (978-...)..."
                   }
                   value={searchQuery}
@@ -204,17 +200,17 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
             {isError && error && (
               <Alert className="border-red-200 bg-red-50">
                 <AlertDescription className="text-red-700">
-                  Erreur lors de la recherche : {error instanceof Error ? error.message : 'Erreur inconnue'}
+                  Erreur lors de la recherche : {error instanceof Error ? error.message : "Erreur inconnue"}
                 </AlertDescription>
               </Alert>
             )}
 
             {/* Résultats de recherche */}
-            {searchResults && ('totalResults' in searchResults ? searchResults.totalResults > 0 : searchResults.totalItems > 0) && (
+            {searchResults && ("totalResults" in searchResults ? searchResults.totalResults > 0 : searchResults.totalItems > 0) && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium text-gray-900">
-                    {('totalResults' in searchResults ? searchResults.totalResults : searchResults.totalItems)} résultat{(('totalResults' in searchResults ? searchResults.totalResults : searchResults.totalItems) > 1) ? 's' : ''} trouvé{(('totalResults' in searchResults ? searchResults.totalResults : searchResults.totalItems) > 1) ? 's' : ''}
+                    {("totalResults" in searchResults ? searchResults.totalResults : searchResults.totalItems)} résultat{(('totalResults' in searchResults ? searchResults.totalResults : searchResults.totalItems) > 1) ? 's' : ''} trouvé{(('totalResults' in searchResults ? searchResults.totalResults : searchResults.totalItems) > 1) ? 's' : ''}
                   </h4>
                   <Badge variant="secondary" className="text-xs">
                     {searchResults.executionTime}ms
@@ -222,9 +218,9 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                 </div>
                 
                 <ScrollArea className="h-96 pr-4">
-                  <div className="grid gap-3">
-                    {('combinedResults' in searchResults ? searchResults.combinedResults : searchResults.items).map((book, index) => (
-                      <Card key={'${book.source}-${book.identifiant_externe || book.id}'} className="hover:shadow-md transition-shadow">
+                  <div className=`grid gap-3`>
+                    {(`combinedResults` in searchResults ? searchResults.combinedResults : searchResults.items).map((book, index) => (
+                      <Card key={`${book.source}-${book.identifiant_externe`|| book.id}`} className="hover:shadow-md transition-shadow">
                         <CardContent className="p-4">
                           <div className="flex space-x-4">
                             {/* Image de couverture */}
@@ -236,10 +232,10 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                                   className="w-full h-full object-cover"
                                   onError={(e) => {
                                     const target = e.target as HTMLImageElement;
-                                    target.style.display = 'none';
+                                    target.style.display="none";
                                     const parent = target.parentElement;
                                     if (parent) {
-                                      parent.innerHTML = '<div class="text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></div>';
+                                      parent.innerHTML="<div class="text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></div>";
                                     }
                                   }}
                                 />
@@ -261,12 +257,12 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                                 </div>
                                 <Badge 
                                   variant="outline"
-                                  className={book.source === 'google_books' 
+                                  className={book.source === "google_books" 
                                     ? "border-blue-200 text-blue-700 bg-blue-50" 
                                     : "border-green-200 text-green-700 bg-green-50"
                                   }
                                 >
-                                  {book.source === 'google_books' ? 'Google Books' : 'Open Library'}
+                                  {book.source === "google_books" ? "Google Books" : "Open Library"}
                                 </Badge>
                               </div>
 
@@ -285,7 +281,7 @@ export function BookSearchSection({ onBookSelect, className }: BookSearchSection
                                     <span>🌍 {(() => {
                                       const langNames: { [key: string]: string } = {
                                         'en': 'Anglais', 'fr': 'Français', 'es': 'Espagnol',
-                                        'de': 'Allemand', 'it': 'Italien', 'pt': 'Portugais'
+                                        'de': 'Allemand', 'it': 'Italien', 'pt' : 'Portugais'
                                       };
                                       return langNames[book.langue.toLowerCase()] || book.langue.toUpperCase();
                                     })()}</span>

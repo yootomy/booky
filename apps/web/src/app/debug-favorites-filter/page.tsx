@@ -41,7 +41,7 @@ export default function DebugFavoritesFilterPage() {
       const booksData = response.data || [];
       setBooks(booksData);
     } catch (error) {
-      console.error('Error loading books:', error);
+      console.error("Error loading books: ", error);
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function DebugFavoritesFilterPage() {
           return (
             fId === book.id.toString() || // string vs number
             fId.toString() === book.id ||
-            fId === book.id.replace(/^0+/, '') || // suppression des zéros en début
+            fId === book.id.replace(/^0+/, "") || // suppression des zéros en début
             book.id === fId.replace(/^0+/, '') ||
             fId.toLowerCase() === book.id.toLowerCase() // case insensitive
           );
@@ -78,7 +78,7 @@ export default function DebugFavoritesFilterPage() {
         favoriteIdMatch,
         exactMatch,
         bookIdType: typeof book.id,
-        favoriteIdType: favoriteIds.length > 0 ? typeof favoriteIds[0] : 'unknown'
+        favoriteIdType: favoriteIds.length > 0 ? typeof favoriteIds[0] : "unknown"
       };
     });
 
@@ -110,7 +110,7 @@ export default function DebugFavoritesFilterPage() {
               <Badge variant={isAuthenticated ? "default" : "secondary"}>
                 {isAuthenticated ? "Connecté" : "Déconnecté"}
               </Badge>
-              <span className="text-sm">{user?.email || 'N/A'}</span>
+              <span className="text-sm">{user?.email || "N/A"}</span>
             </div>
           </CardContent>
         </Card>
@@ -164,7 +164,7 @@ export default function DebugFavoritesFilterPage() {
               <div className="text-sm space-y-2">
                 <div><strong>Livres chargés:</strong> {books.length}</div>
                 <div><strong>Favoris dans le hook:</strong> {favorites.size}</div>
-                <div><strong>Hook initialisé:</strong> {hasInitialLoad ? 'Oui' : 'Non'}</div>
+                <div><strong>Hook initialisé:</strong> {hasInitialLoad ? "Oui" : "Non"}</div>
                 <div><strong>Correspondances trouvées:</strong> {favoriteBooks.length}</div>
               </div>
 
@@ -191,15 +191,14 @@ export default function DebugFavoritesFilterPage() {
           </CardHeader>
           <CardContent className="max-h-96 overflow-y-auto">
             {comparison.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-2`>
                 {comparison.slice(0, 20).map((result, index) => (
                   <div 
                     key={index}
                     className={`p-3 rounded border text-xs ${
                       result.inFavorites 
-                        ? 'bg-green-50 border-green-200' 
-                        : 'bg-gray-50 border-gray-200'
-                    }'}
+                        ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
+                    }`}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -222,7 +221,7 @@ export default function DebugFavoritesFilterPage() {
                           <XCircle className="h-4 w-4 text-gray-400" />
                         )}
                         <Badge variant={result.inFavorites ? "default" : "outline"} className="text-xs">
-                          {result.inFavorites ? 'Favori' : 'Non'}
+                          {result.inFavorites ? "Favori" : "Non"}
                         </Badge>
                       </div>
                     </div>
@@ -237,9 +236,8 @@ export default function DebugFavoritesFilterPage() {
               </div>
             ) : (
               <div className="text-center text-muted-foreground py-8">
-                {!hasInitialLoad ? 'En attente du chargement des favoris...' :
-                 books.length === 0 ? 'Aucun livre chargé' :
-                 'Aucune comparaison disponible'}
+                {!hasInitialLoad ? "En attente du chargement des favoris..." :
+                 books.length === 0 ? "Aucun livre chargé" : 'Aucune comparaison disponible'}
               </div>
             )}
           </CardContent>

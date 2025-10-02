@@ -34,7 +34,7 @@ export function MobileProvider({ children }: MobileProviderProps) {
 export function useMobileContext() {
   const context = useContext(MobileContext);
   if (context === undefined) {
-    throw new Error('useMobileContext must be used within a MobileProvider');
+    throw new Error("useMobileContext must be used within a MobileProvider");
   }
   return context;
 }

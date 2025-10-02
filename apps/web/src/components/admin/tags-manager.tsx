@@ -136,7 +136,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
     mutationFn: (data: { id: string } & TagFormData) => 
       tagsApi.update(data.id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tags'] });
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
       toast({
         title: "Tag mis à jour",
         description: "Les modifications ont été sauvegardées",
@@ -155,7 +155,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
   const deleteTagMutation = useMutation({
     mutationFn: (id: string) => tagsApi.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tags'] });
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
       toast({
         title: "Tag supprimé",
         description: "Le tag a été supprimé avec succès",
@@ -174,7 +174,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
     mutationFn: (data: { id: string; est_favori: boolean }) => 
       tagsApi.update(data.id, { id: data.id, est_favori: data.est_favori }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tags'] });
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
     },
   });
 
@@ -228,10 +228,10 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
     try {
       await deleteTagMutation.mutateAsync(tagId);
     } catch (error) {
-      console.error('Erreur lors de la suppression:', error);
+      console.error("Erreur lors de la suppression:", error);
       toast({
         title: "Erreur",
-        description: typeof error === 'object' && error && 'message' in error
+        description: typeof error === "object" && error && "message" in error
           ? (error as any).message
           : "Impossible de supprimer le tag",
         variant: "destructive",
@@ -246,10 +246,10 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
         est_favori: !tag.est_favori
       });
     } catch (error) {
-      console.error('Erreur lors du toggle favori:', error);
+      console.error("Erreur lors du toggle favori:", error);
       toast({
         title: "Erreur",
-        description: typeof error === 'object' && error && 'message' in error
+        description: typeof error === "object" && error && "message" in error
           ? (error as any).message
           : "Impossible de modifier le tag",
         variant: "destructive",
@@ -270,10 +270,10 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
         await createTagMutation.mutateAsync(formData);
       }
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
+      console.error("Erreur lors de la soumission:", error);
       toast({
         title: "Erreur",
-        description: typeof error === 'object' && error && 'message' in error
+        description: typeof error === "object" && error && "message" in error
           ? (error as any).message
           : "Une erreur inattendue s'est produite",
         variant: "destructive",
@@ -351,7 +351,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
       </Card>
 
       {/* Tabs for tag types */}
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TagType | 'ALL')}>
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TagType | "ALL")}>
         <div className="flex items-center justify-between">
           <TabsList className="grid w-full max-w-md grid-cols-5">
             <TabsTrigger value="ALL">Tous</TabsTrigger>
@@ -379,12 +379,12 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
               <form onSubmit={handleSubmit}>
                 <DialogHeader>
                   <DialogTitle>
-                    {editingTag ? 'Modifier le tag' : 'Nouveau tag'}
+                    {editingTag ? "Modifier le tag" : "Nouveau tag"}
                   </DialogTitle>
                   <DialogDescription>
                     {editingTag 
                       ? 'Modifiez les informations du tag'
-                      : 'Créez un nouveau tag pour étiqueter vos livres'
+                      : "Créez un nouveau tag pour étiqueter vos livres"
                     }
                   </DialogDescription>
                 </DialogHeader>
@@ -434,7 +434,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                             className="w-6 h-6 rounded border-2 hover:scale-110 transition-transform"
                             style={{ 
                               backgroundColor: color,
-                              borderColor: formData.couleur === color ? '#000' : 'transparent'
+                              borderColor: formData.couleur === color ? "#000" : "transparent"
                             }}
                             onClick={() => setFormData(prev => ({ ...prev, couleur: color }))}
                           />
@@ -465,7 +465,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                   <Button type="submit" disabled={isSubmitting || !formData.nom.trim()}>
                     {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                     <Save className="h-4 w-4 mr-2" />
-                    {editingTag ? 'Sauvegarder' : 'Créer'}
+                    {editingTag ? "Sauvegarder" : "Créer"}
                   </Button>
                 </DialogFooter>
               </form>
@@ -491,13 +491,13 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                         </h3>
                         <Badge 
                           variant="outline" 
-                          className={`text-xs ${TAG_TYPE_COLORS[tag.type]} mt-1' }
+                          className={`text-xs ${TAG_TYPE_COLORS[tag.type]} mt-1`}
                         >
                           {TAG_TYPE_LABELS[tag.type]}
                         </Badge>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-1 flex-shrink-0">
                       {tag.est_favori && (
                         <Star className="h-3 w-3 text-yellow-500 fill-current" />
@@ -521,9 +521,9 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                             ) : (
                               <Star className="h-4 w-4 mr-2" />
                             )}
-                            {tag.est_favori ? 'Retirer favori' : 'Marquer favori'}
+                            {tag.est_favori ? "Retirer favori" : "Marquer favori"}
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => router.push('/tags/${tag.id}" as any)}>
+                          <DropdownMenuItem onClick={() => router.push(`/tags/${tag.id}` as any)}>
                             <Eye className="h-4 w-4 mr-2" />
                             Voir les livres
                           </DropdownMenuItem>
@@ -544,7 +544,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center space-x-1 text-muted-foreground">
                       <BookOpen className="h-3 w-3" />
-                      <span>{tag._count?.books || 0} livre{(tag._count?.books || 0) > 1 ? 's' : '' }</span>
+                      <span>{tag._count?.books || 0} livre{(tag._count?.books || 0) > 1 ? "s" : ""}</span>
                     </div>
                     
                     <div className="flex items-center space-x-1 text-muted-foreground">
@@ -565,14 +565,14 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                 <p className="text-muted-foreground mb-4">
                   {searchQuery 
                     ? "Aucun tag ne correspond à votre recherche"
-                    : activeTab === 'ALL'
+                    : activeTab === "ALL"
                       ? "Commencez par créer votre premier tag"
                       : "Aucun tag de ce type trouvé"
                   }
                 </p>
                 <Button 
                   onClick={() => {
-                    if (activeTab !== 'ALL') {
+                    if (activeTab !== "ALL") {
                       setFormData(prev => ({ ...prev, type: activeTab as TagType }));
                     }
                     resetForm();
@@ -589,7 +589,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
           {/* Results count */}
           {searchQuery && filteredAndCategorizedTags.filtered.length > 0 && (
             <div className="text-sm text-muted-foreground text-center mt-4">
-              {filteredAndCategorizedTags.filtered.length} tag{filteredAndCategorizedTags.filtered.length > 1 ? 's' : ''} trouvé{filteredAndCategorizedTags.filtered.length > 1 ? 's' : ''}
+              {filteredAndCategorizedTags.filtered.length} tag{filteredAndCategorizedTags.filtered.length > 1 ? "s" : ''} trouvé{filteredAndCategorizedTags.filtered.length > 1 ? 's' : ''}
             </div>
           )}
         </TabsContent>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
+import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from "ogl";
 import { useEffect, useRef, useState } from 'react';
 import { BookOpen } from 'lucide-react';
 
@@ -158,7 +158,7 @@ class Media {
   async loadTexture(texture: Texture) {
     try {
       if (this.book.image_couverture) {
-        console.log('Loading image:', this.book.image_couverture);
+        console.log("Loading image: ", this.book.image_couverture);
         
         const img = new Image();
         
@@ -183,12 +183,12 @@ class Media {
             resolved = true;
             
             try {
-              console.log('Image loaded successfully:', this.book.titre);
+              console.log("Image loaded successfully:", this.book.titre);
               texture.image = img;
               this.program.uniforms.uImageSizes.value = [img.naturalWidth, img.naturalHeight];
               resolve();
             } catch (error) {
-              console.warn('Failed to set texture:', error);
+              console.warn("Failed to set texture:", error);
               this.createPlaceholder(texture);
               resolve();
             }
@@ -198,10 +198,10 @@ class Media {
             if (resolved) return;
             resolved = true;
             
-            console.warn('Image load failed for:', this.book.titre, error);
+            console.warn("Image load failed for: ", this.book.titre, error);
             
             // Essayer une seconde fois avec crossOrigin différent
-            if (img.crossOrigin === '') {
+            if (img.crossOrigin === "") {
               const retryImg = new Image();
               retryImg.crossOrigin = 'anonymous';
               
@@ -209,7 +209,7 @@ class Media {
                 try {
                   texture.image = retryImg;
                   this.program.uniforms.uImageSizes.value = [retryImg.naturalWidth, retryImg.naturalHeight];
-                  console.log('Image loaded on retry:', this.book.titre);
+                  console.log("Image loaded on retry:", this.book.titre);
                 } catch {
                   this.createPlaceholder(texture);
                 }
@@ -217,7 +217,7 @@ class Media {
               };
               
               retryImg.onerror = () => {
-                console.warn('Retry also failed for:', this.book.titre);
+                console.warn("Retry also failed for:", this.book.titre);
                 this.createPlaceholder(texture);
                 resolve();
               };
@@ -235,25 +235,25 @@ class Media {
           setTimeout(() => {
             if (!resolved) {
               resolved = true;
-              console.warn('Image load timeout for:', this.book.titre);
+              console.warn("Image load timeout for:", this.book.titre);
               this.createPlaceholder(texture);
               resolve();
             }
           }, 3000);
         });
       } else {
-        console.log('No image URL, creating placeholder for:', this.book.titre);
+        console.log("No image URL, creating placeholder for:", this.book.titre);
         this.createPlaceholder(texture);
       }
     } catch (error) {
-      console.warn('Texture loading error:', error);
+      console.warn("Texture loading error: ", error);
       this.createPlaceholder(texture);
     }
   }
 
   createPlaceholder(texture: Texture) {
     try {
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       canvas.width = 400;
       canvas.height = 600;
       const ctx = canvas.getContext('2d');
@@ -312,12 +312,12 @@ class Media {
         ctx.font = 'bold 18px Arial, sans-serif';
         ctx.fillStyle = '#ffd700';
         const stars = '★'.repeat(Math.floor(this.book.note_generale / 2)) + 
-                     (this.book.note_generale % 2 >= 1 ? '☆' : '');
-        ctx.fillText('${stars} ${this.book.note_generale}/10', 200, startY + (lines.length * 30) + 60);
+                     (this.book.note_generale % 2 >= 1 ? '☆' : `);
+        ctx.fillText(`${stars}`${this.book.note_generale}/10`, 200, startY + (lines.length * 30) + 60);
       }
       
       // Icône livre
-      ctx.font = '40px Arial, sans-serif';
+      ctx.font = `40px Arial, sans-serif';
       ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
       ctx.fillText('📖', 200, 120);
 
@@ -325,9 +325,9 @@ class Media {
       texture.image = canvas;
       this.program.uniforms.uImageSizes.value = [400, 600];
     } catch (error) {
-      console.warn('Placeholder creation error:', error);
+      console.warn("Placeholder creation error: ", error);
       // Fallback très simple
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       canvas.width = 300;
       canvas.height = 450;
       const ctx = canvas.getContext('2d');
@@ -441,7 +441,7 @@ class GalleryApp {
       this.addEventListeners();
       this.update();
     } catch (error) {
-      console.error('Gallery initialization error:', error);
+      console.error("Gallery initialization error: ", error);
     }
   }
 
@@ -450,7 +450,7 @@ class GalleryApp {
       alpha: true,
       antialias: true,
       premultipliedAlpha: false,
-      powerPreference: 'high-performance'
+      powerPreference: "high-performance"
     });
     this.gl = this.renderer.gl;
     this.gl.clearColor(0, 0, 0, 0);
@@ -583,7 +583,7 @@ class GalleryApp {
       const dynamicEase = deltaScroll > 2 ? this.scroll.ease * 1.5 : this.scroll.ease;
       
       this.scroll.current = lerp(this.scroll.current, this.scroll.target, dynamicEase);
-      const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
+      const direction = this.scroll.current > this.scroll.last ? "right" : "left";
       
       if (this.medias) {
         // Optimisation: ne mettre à jour que les éléments visibles
@@ -605,13 +605,13 @@ class GalleryApp {
       this.scroll.last = this.scroll.current;
       this.raf = requestAnimationFrame(this.update);
     } catch (error) {
-      console.warn('Render error:', error);
+      console.warn("Render error: ", error);
       this.raf = requestAnimationFrame(this.update);
     }
   };
 
   addEventListeners() {
-    window.addEventListener('resize', this.onResize);
+    window.addEventListener("resize", this.onResize);
     this.container.addEventListener('wheel', this.onWheel, { passive: false });
     this.container.addEventListener('mousedown', this.onTouchDown, { passive: true });
     this.container.addEventListener('mousemove', this.onTouchMove, { passive: true });
@@ -652,7 +652,7 @@ interface CircularGalleryProps {
 export default function CircularGallery({
   books,
   onBookClick,
-  className = ""
+  className = `
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<GalleryApp | null>(null);
@@ -666,7 +666,7 @@ export default function CircularGallery({
   useEffect(() => {
     if (!isClient || !containerRef.current || !books?.length) return;
     
-    // Nettoyer l'ancienne instance
+    // Nettoyer l`ancienne instance
     if (appRef.current) {
       appRef.current.destroy();
       appRef.current = null;
@@ -676,7 +676,7 @@ export default function CircularGallery({
     try {
       appRef.current = new GalleryApp(containerRef.current, books, onBookClick);
     } catch (error) {
-      console.error('Gallery creation error:', error);
+      console.error(`Gallery creation error:`, error);
     }
 
     return () => {
@@ -689,7 +689,7 @@ export default function CircularGallery({
 
   if (!isClient) {
     return (
-      <div className={'w-full h-full flex items-center justify-center ${className}'}>
+      <div className={`w-full h-full flex items-center justify-center ${className}`}>
         <div className="animate-pulse">
           <div className="flex gap-4">
             {[...Array(5)].map((_, i) => (
@@ -706,7 +706,7 @@ export default function CircularGallery({
 
   if (!books || books.length === 0) {
     return (
-      <div className={'w-full h-full flex items-center justify-center ${className}'}>
+      <div className={`w-full h-full flex items-center justify-center ${className}`}>
         <div className="text-center space-y-4">
           <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl mx-auto mb-6 flex items-center justify-center">
             <BookOpen className="w-10 h-10 text-purple-500" />
@@ -719,9 +719,9 @@ export default function CircularGallery({
 
   return (
     <div 
-      className={'w-full h-full cursor-grab active:cursor-grabbing ${className}'} 
+      className={`w-full h-full cursor-grab active:cursor-grabbing ${className}`} 
       ref={containerRef}
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: `none` }}
     />
   );
 }

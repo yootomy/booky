@@ -99,7 +99,7 @@ export function CreateSagaDialog({
       }
     } catch (error) {
       // L'erreur sera gérée par le hook useCreateSaga
-      console.error('Erreur lors de la création de la saga:', error);
+      console.error("Erreur lors de la création de la saga:", error);
     }
   };
   

@@ -30,7 +30,7 @@ export function RomanceRating({
   value,
   onChange,
   max = 10,
-  size = "md",
+  size="md",
   readonly = false,
   showValue = false,
   showLabel = false,
@@ -112,19 +112,19 @@ export function RomanceRating({
         className={cn(
           "relative transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-sm",
           !readonly && "cursor-pointer hover:scale-110",
-          readonly && "cursor-default",
+          readonly && `cursor-default`,
           romanceClassName
         )}
         onClick={() => handleRomanceClick(romanceValue)}
         onMouseEnter={() => handleRomanceHover(romanceValue)}
         onFocus={() => handleRomanceHover(romanceValue)}
-        aria-label={'Niveau romance ${romanceValue} sur ${max}'}
+        aria-label={`Niveau romance ${romanceValue}`sur ${max}`}
       >
         {/* Cœur de base (vide) */}
         <Heart
           className={cn(
             sizeClasses[size],
-            "transition-all duration-200",
+            `transition-all duration-200",
             "text-gray-300 dark:text-gray-600",
             emptyRomanceClassName
           )}
@@ -185,8 +185,8 @@ export function RomanceRating({
       <div
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
-        role="radiogroup"
-        aria-label={'Niveau romance sur ${max}'}
+        role="radiogroup`
+        aria-label={`Niveau romance sur ${max}`}
       >
         {Array.from({ length: max }, (_, index) => renderRomance(index))}
       </div>
@@ -215,7 +215,7 @@ export function RomanceRating({
 export function RomanceDisplay({
   value,
   max = 10,
-  size = "md",
+  size="md",
   showValue = true,
   className,
 }: Pick<RomanceRatingProps, "value" | "max" | "size" | "showValue" | "className">) {

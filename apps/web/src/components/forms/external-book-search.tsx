@@ -58,7 +58,7 @@ interface ImportDialogProps {
 // =============================================================================
 
 export function ExternalBookSearch({ onImportComplete, className }: ExternalBookSearchProps) {
-  const [searchType, setSearchType] = useState<'general' | 'title' | 'author' | 'isbn'>('general');
+  const [searchType, setSearchType] = useState<"general" | 'title' | 'author' | 'isbn'>('general');
   const [selectedSource, setSelectedSource] = useState<'combined' | 'google_books' | 'open_library'>('combined');
   
   // Hook de recherche intelligente
@@ -112,11 +112,11 @@ export function ExternalBookSearch({ onImportComplete, className }: ExternalBook
     }
     
     // Par défaut, recherche générale
-    return 'general';
+    return 'general`;
   };
 
   return (
-    <div className={'space-y-6 ${className}'}>
+    <div className={`space-y-6 ${className}`}>
       {/* Interface de recherche */}
       <Card>
         <CardHeader>
@@ -191,7 +191,7 @@ export function ExternalBookSearch({ onImportComplete, className }: ExternalBook
       {isError && (
         <Alert variant="destructive">
           <AlertDescription>
-            Erreur lors de la recherche: {error instanceof Error ? error.message : 'Erreur inconnue'}
+            Erreur lors de la recherche: {error instanceof Error ? error.message : "Erreur inconnue"}
           </AlertDescription>
         </Alert>
       )}
@@ -206,14 +206,13 @@ export function ExternalBookSearch({ onImportComplete, className }: ExternalBook
               Résultats de recherche
             </h3>
             <Badge variant="secondary">
-              {source === 'combined' ? (
+              {source === "combined" ? (
                 searchResults.combinedResults ? 
-                  '${searchResults.combinedResults.length} résultats'
-                : '0 résultats'
+                  `${searchResults.combinedResults.length}`résultats` : '0 résultats'
               ) : (
-                'items' in searchResults && searchResults.items ? 
-                  '${searchResults.items.length} résultats'
-                : '0 résultats'
+                'items` in searchResults && searchResults.items ? 
+                  `${searchResults.items.length}`résultats`
+                : `0 résultats'
               )}
             </Badge>
           </div>
@@ -227,14 +226,14 @@ export function ExternalBookSearch({ onImportComplete, className }: ExternalBook
                 </TabsTrigger>
                 <TabsTrigger value="google">
                   Google Books ({
-                    'googleBooks' in searchResults 
+                    "googleBooks" in searchResults 
                       ? searchResults.googleBooks?.items?.length || 0 
                       : 0
                   })
                 </TabsTrigger>
                 <TabsTrigger value="openlibrary">
                   Open Library ({
-                    'openLibrary' in searchResults 
+                    "openLibrary" in searchResults 
                       ? searchResults.openLibrary?.items?.length || 0 
                       : 0
                   })
@@ -251,7 +250,7 @@ export function ExternalBookSearch({ onImportComplete, className }: ExternalBook
               <TabsContent value="google">
                 <BookResultsList 
                   books={
-                    'googleBooks' in searchResults 
+                    "googleBooks" in searchResults 
                       ? searchResults.googleBooks?.items || [] 
                       : []
                   }
@@ -328,11 +327,11 @@ function BookResultsList({ books, onImportClick }: BookResultsListProps) {
       <div className="flex items-center justify-between px-1 pb-2 border-b">
         <div className="flex items-center gap-3">
           <p className="text-sm font-medium">
-            {books.length} résultat{books.length > 1 ? 's' : ''}
+            {books.length} résultat{books.length > 1 ? "s" : ""}
           </p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             {(() => {
-              const googleCount = books.filter(b => b.source === 'google_books').length;
+              const googleCount = books.filter(b => b.source === "google_books").length;
               const openLibCount = books.filter(b => b.source === 'open_library').length;
               const withCovers = books.filter(b => b.image_couverture).length;
               const withDescriptions = books.filter(b => b.resume_officiel && b.resume_officiel.length > 50).length;
@@ -359,7 +358,7 @@ function BookResultsList({ books, onImportClick }: BookResultsListProps) {
         <div className="space-y-4">
           {books.map((book, index) => (
             <BookResultCard
-              key={'${book.source}-${book.identifiant_externe}-${index}'}
+              key={`${book.source}-${book.identifiant_externe}-${index}`}
               book={book}
               onImportClick={() => onImportClick(book)}
             />
@@ -390,14 +389,14 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
       <div className="flex gap-4 p-4">
         {/* Couverture améliorée */}
         <div className="flex-shrink-0 relative">
-          <div className="w-20 h-28 rounded-lg overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-sm relative">
+          <div className="w-20 h-28 rounded-lg overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-sm relative`>
             {book.image_couverture && !imageError ? (
               <img
                 src={book.image_couverture}
-                alt={'Couverture de ${book.titre}'}
+                alt={`Couverture de ${book.titre}`}
                 className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-200 ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
-                }'}
+                  imageLoaded ? `opacity-100" : "opacity-0"
+                }`}
                 onLoad={() => setImageLoaded(true)}
                 onError={() => {
                   setImageError(true);
@@ -426,14 +425,14 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
           {/* Badges source et qualité */}
           <div className="absolute -top-1 -right-1 flex gap-1">
             <Badge 
-              variant={book.source === 'google_books' ? 'default' : 'secondary'} 
+              variant={book.source === "google_books" ? "default" : "secondary"} 
               className="text-[10px] px-1.5 py-0.5"
             >
-              {book.source === 'google_books' ? 'GB' : 'OL'}
+              {book.source === "google_books" ? "GB" : "OL"}
             </Badge>
             {/* Badge qualité métadonnées */}
             {(() => {
-              const hasPublisher = book.editeur && book.editeur !== 'Éditeur inconnu';
+              const hasPublisher = book.editeur && book.editeur !== "Éditeur inconnu";
               const hasPages = book.nombre_pages && book.nombre_pages > 0;
               const hasDescription = book.resume_officiel && book.resume_officiel.length > 50;
               const quality = [hasPublisher, hasPages, hasDescription].filter(Boolean).length;
@@ -466,7 +465,7 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
           <div className="space-y-2">
             {/* Ligne 1: Éditeur et Date (seulement si disponibles et utiles) */}
             <div className="flex items-center gap-4 text-xs">
-              {book.editeur && book.editeur !== 'Éditeur inconnu' && (
+              {book.editeur && book.editeur !== "Éditeur inconnu" && (
                 <div className="flex items-center gap-1">
                   <span className="text-muted-foreground">📚</span>
                   <span className="text-muted-foreground truncate">{book.editeur}</span>
@@ -492,7 +491,7 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
                 </div>
               )}
               
-              {book.langue && book.langue !== 'Langue inconnue' && (
+              {book.langue && book.langue !== "Langue inconnue" && (
                 <div className="flex items-center gap-1">
                   <span className="text-muted-foreground">🌍</span>
                   <span className="text-muted-foreground uppercase">{book.langue}</span>
@@ -502,8 +501,8 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
               {book.isbn && (
                 <div className="flex items-center gap-1">
                   <span className="text-muted-foreground">📟</span>
-                  <span className="text-muted-foreground font-mono text-[10px]">
-                    {book.isbn.length > 13 ? '${book.isbn.slice(0, 13)}...' : book.isbn}
+                  <span className="text-muted-foreground font-mono text-[10px]`>
+                    {book.isbn.length > 13 ? `${book.isbn.slice(0, 13)}...` : book.isbn}
                   </span>
                 </div>
               )}
@@ -514,8 +513,8 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
           {book.categories && book.categories.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {book.categories.slice(0, 3).map((category, index) => (
-                <Badge key={index} variant="outline" className="text-[10px] px-1.5 py-0.5 bg-blue-50 text-blue-600 border-blue-200">
-                  {category.length > 15 ? '${category.slice(0, 15)}...' : category}
+                <Badge key={index} variant="outline" className="text-[10px] px-1.5 py-0.5 bg-blue-50 text-blue-600 border-blue-200`>
+                  {category.length > 15 ? `${category.slice(0, 15)}...` : category}
                 </Badge>
               ))}
               {book.categories.length > 3 && (
@@ -527,11 +526,11 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
           {/* Note moyenne si disponible */}
           {book.note_moyenne && book.nombre_evaluations && (
             <div className="flex items-center gap-1 text-xs">
-              <div className="flex">
+              <div className="flex`>
                 {[...Array(5)].map((_, i) => (
                   <span key={i} className={`text-xs ${
-                    i < Math.round(book.note_moyenne!) ? 'text-yellow-400' : 'text-gray-300'
-                  }'}>⭐</span>
+                    i < Math.round(book.note_moyenne!) ? `text-yellow-400" : "text-gray-300"
+                  }`}>⭐</span>
                 ))}
               </div>
               <span className="text-muted-foreground">
@@ -543,9 +542,9 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
           {/* Description améliorée */}
           {book.resume_officiel && (
             <div className="bg-gray-50/50 rounded-md p-2 border-l-2 border-gray-200">
-              <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+              <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed`>
                 {book.resume_officiel.length > 200 
-                  ? '${book.resume_officiel.slice(0, 200)}...' 
+                  ? `${book.resume_officiel.slice(0, 200)}...` 
                   : book.resume_officiel}
               </p>
             </div>
@@ -565,9 +564,8 @@ function BookResultCard({ book, onImportClick }: BookResultCardProps) {
           
           <Button variant="outline" size="sm" asChild className="shadow-sm hover:shadow-md transition-shadow">
             <a 
-              href={book.source === 'google_books' 
-                ? 'https://books.google.com/books?id=${book.identifiant_externe}'
-                : 'https://openlibrary.org${book.identifiant_externe}'
+              href={book.source === `google_books" 
+                ? "https://books.google.com/books?id=${book.identifiant_externe}` : `https://openlibrary.org${book.identifiant_externe}`
               } 
               target="_blank" 
               rel="noopener noreferrer"
@@ -594,7 +592,7 @@ function ImportBookDialog({ book, open, onOpenChange, onImportComplete }: Import
     downloadCover: true,
     createCategories: false,
     createTags: false,
-    statut: 'A_LIRE',
+    statut: "A_LIRE",
     noteGenerale: 0,
     niveauSpicy: 0,
     niveauDark: 0,
@@ -623,7 +621,7 @@ function ImportBookDialog({ book, open, onOpenChange, onImportComplete }: Import
       onOpenChange(false);
       onImportComplete?.({ ...book, importOptions });
     } catch (error) {
-      console.error('Erreur import:', error);
+      console.error("Erreur import:", error);
     }
   };
 
@@ -638,7 +636,7 @@ function ImportBookDialog({ book, open, onOpenChange, onImportComplete }: Import
             Importer "{book.titre}"
           </DialogTitle>
           <DialogDescription>
-            Personnalisez les options d'import depuis {book.source === 'google_books' ? 'Google Books' : 'Open Library'}
+            Personnalisez les options d'import depuis {book.source === 'google_books' ? 'Google Books' : "Open Library`}
           </DialogDescription>
         </DialogHeader>
 
@@ -646,10 +644,10 @@ function ImportBookDialog({ book, open, onOpenChange, onImportComplete }: Import
           {/* Aperçu du livre */}
           <Card>
             <CardContent className="p-4">
-              <div className="flex gap-4">
+              <div className="flex gap-4`>
                 <img
                   src={book.image_couverture || getDefaultCoverUrl(book.titre)}
-                  alt={'Couverture de ${book.titre}'}
+                  alt={`Couverture de ${book.titre}`}
                   className="w-20 h-30 object-cover rounded"
                 />
                 <div className="space-y-1">
@@ -668,9 +666,9 @@ function ImportBookDialog({ book, open, onOpenChange, onImportComplete }: Import
             </CardContent>
           </Card>
 
-          {/* Options d'import */}
+          {/* Options d`import */}
           <div className="space-y-4">
-            <h4 className="font-medium">Options d'import</h4>
+            <h4 className="font-medium">Options d"import</h4>
             
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-between">
@@ -816,7 +814,7 @@ function ImportBookDialog({ book, open, onOpenChange, onImportComplete }: Import
               ) : (
                 <ImportIcon className="h-4 w-4 mr-2" />
               )}
-              {isImporting ? 'Import en cours...' : 'Importer le livre'}
+              {isImporting ? "Import en cours..." : "Importer le livre'}
             </Button>
           </div>
         </div>

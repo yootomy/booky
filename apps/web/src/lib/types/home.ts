@@ -212,8 +212,8 @@ export interface MoodPreset {
 export const MOOD_PRESETS: MoodPreset[] = [
   {
     id: 'very-dark-slow',
-    label: 'Very Dark + Slow Burn',
-    description: 'Sombre et intense, développement lent',
+    label: "Very Dark + Slow Burn",
+    description: "Sombre et intense, développement lent",
     filters: {
       minDark: 7,
       rhythms: ['SLOW_BURN']
@@ -221,16 +221,16 @@ export const MOOD_PRESETS: MoodPreset[] = [
   },
   {
     id: 'enemies-to-lovers',
-    label: 'Enemies to Lovers',
-    description: 'De la haine à l\'amour',
+    label: "Enemies to Lovers",
+    description: "De la haine à l\"amour",
     filters: {
       tropes: ['enemies-to-lovers']
     }
   },
   {
     id: 'gothic-romance',
-    label: 'Gothic Romance',
-    description: 'Romance gothique mystérieuse',
+    label: "Gothic Romance",
+    description: "Romance gothique mystérieuse",
     filters: {
       genres: ['gothic'],
       minDark: 5,
@@ -239,8 +239,8 @@ export const MOOD_PRESETS: MoodPreset[] = [
   },
   {
     id: 'spicy-fast',
-    label: 'Hot & Fast',
-    description: 'Sensuel et rythmé',
+    label: "Hot & Fast",
+    description: "Sensuel et rythmé",
     filters: {
       minSpicy: 7,
       rhythms: ['FAST_PACE']

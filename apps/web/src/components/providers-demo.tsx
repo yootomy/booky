@@ -201,7 +201,7 @@ export function ProvidersDemo() {
                   <option value="auteur">Auteur</option>
                   <option value="note_generale">Note générale</option>
                   <option value="date_lecture">Date de lecture</option>
-                  <option value="date_creation">Date d'ajout</option>
+                  <option value="date_creation">Date d"ajout</option>
                 </select>
                 
                 {sortBy && (
@@ -210,7 +210,7 @@ export function ProvidersDemo() {
                     size="sm"
                     onClick={toggleSortOrder}
                   >
-                    {sortOrder === 'asc' ? '↑ Croissant' : '↓ Décroissant'}
+                    {sortOrder === "asc" ? '↑ Croissant' : "↓ Décroissant"}
                   </ButtonDarkRomance>
                 )}
               </div>

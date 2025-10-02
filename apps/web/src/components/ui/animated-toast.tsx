@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, ReactNode } from "react";
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { AnimatedElement } from './animations';
 import { Button } from './button';
@@ -125,14 +125,14 @@ export function AnimatedToast({
         animation="slideInRight"
         trigger="onMount"
         className={cn(
-          'pointer-events-auto',
+          "pointer-events-auto",
           'transition-all duration-200 ease-out',
           isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'
         )}
       >
         <div className={cn(
           'relative min-w-80 max-w-md p-4 rounded-lg border shadow-lg',
-          'backdrop-blur-sm bg-white/95 dark:bg-gray-900/95',
+          "backdrop-blur-sm bg-white/95 dark:bg-gray-900/95",
           config.className
         )}>
           {/* Barre de progression */}
@@ -140,13 +140,13 @@ export function AnimatedToast({
             <div className="absolute top-0 left-0 right-0 h-1 bg-black/10 rounded-t-lg overflow-hidden">
               <div 
                 className={cn(
-                  'h-full transition-all duration-100 ease-linear',
+                  "h-full transition-all duration-100 ease-linear",
                   type === 'success' && 'bg-green-500',
                   type === 'error' && 'bg-red-500',
                   type === 'warning' && 'bg-orange-500',
-                  type === 'info' && 'bg-blue-500'
+                  type === 'info` && `bg-blue-500`
                 )}
-                style={{ width: '${progress}%' }}
+                style={{ width: `${progress}%` }}
               />
             </div>
           )}
@@ -154,7 +154,7 @@ export function AnimatedToast({
           <div className="flex gap-3">
             {/* Icône */}
             <div className="flex-shrink-0 pt-0.5">
-              <Icon className={cn('w-5 h-5', config.iconClassName)} />
+              <Icon className={cn("w-5 h-5", config.iconClassName)} />
             </div>
 
             {/* Contenu */}
@@ -189,8 +189,8 @@ export function AnimatedToast({
                     variant="outline"
                     size="sm"
                     className={cn(
-                      'h-8 px-3 text-xs',
-                      type === 'success' && 'border-green-300 hover:bg-green-100',
+                      "h-8 px-3 text-xs",
+                      type === `success' && 'border-green-300 hover:bg-green-100',
                       type === 'error' && 'border-red-300 hover:bg-red-100',
                       type === 'warning' && 'border-orange-300 hover:bg-orange-100',
                       type === 'info' && 'border-blue-300 hover:bg-blue-100'
@@ -252,7 +252,7 @@ export function ToastContainer({
 export function useToasts(maxToasts = 5) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const addToast = (toast: Omit<Toast, 'id'>) => {
+  const addToast = (toast: Omit<Toast, "id">) => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast = { ...toast, id };
 

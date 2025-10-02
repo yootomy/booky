@@ -3,9 +3,9 @@
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-export type Theme = "light" | "dark" | "system";
+export type Theme="light" | "dark" | "system";
 
-export interface ThemeProviderProps extends Omit<React.ComponentProps<typeof NextThemesProvider>, 'themes'> {
+export interface ThemeProviderProps extends Omit<React.ComponentProps<typeof NextThemesProvider>, "themes"> {
   children: React.ReactNode;
   themes?: Theme[];
 }
@@ -13,8 +13,8 @@ export interface ThemeProviderProps extends Omit<React.ComponentProps<typeof Nex
 export function ThemeProvider({
   children,
   themes = ["light", "dark", "system"],
-  defaultTheme = "light",
-  attribute = "class",
+  defaultTheme="light",
+  attribute="class",
   enableSystem = true,
   disableTransitionOnChange = false,
   ...props

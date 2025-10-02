@@ -55,7 +55,7 @@ export function ThemeShowcase() {
           <div className="space-y-2">
             <div 
               className="h-16 w-full rounded-lg" 
-              style={{ background: "var(--gradient-dark-romance)" }}
+              style={{ background: 'var(--gradient-dark-romance)' }}
             ></div>
             <p className="text-sm font-medium">Dark Romance</p>
             <p className="text-xs text-muted-foreground">Gradient</p>

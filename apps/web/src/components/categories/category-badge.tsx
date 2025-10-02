@@ -19,9 +19,9 @@ export interface CategoryBadgeProps {
 
 export function CategoryBadge({
   category,
-  size = "md",
+  size="md",
   showIcon = false,
-  variant = "default",
+  variant="default",
   className,
   onClick
 }: CategoryBadgeProps) {

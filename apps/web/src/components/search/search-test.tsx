@@ -138,16 +138,16 @@ export function SearchTest() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Types TagOption:</span>
-              <Badge style={{ backgroundColor: "#8B0000", color: "white" }}>
+              <Badge style={{ backgroundColor: '#8B0000', color: 'white' }}>
                 GENRE
               </Badge>
-              <Badge style={{ backgroundColor: "#DC143C", color: "white" }}>
+              <Badge style={{ backgroundColor: '#DC143C', color: 'white' }}>
                 TROPE  
               </Badge>
-              <Badge style={{ backgroundColor: "#B22222", color: "white" }}>
+              <Badge style={{ backgroundColor: '#B22222', color: 'white' }}>
                 TRIGGER
               </Badge>
-              <Badge style={{ backgroundColor: "#6A0DAD", color: "white" }}>
+              <Badge style={{ backgroundColor: '#6A0DAD', color: 'white' }}>
                 PERSONNALISE
               </Badge>
             </div>

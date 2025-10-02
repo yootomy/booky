@@ -26,7 +26,7 @@ class ApiClient {
    * Construit l'URL complète avec les paramètres de requête
    */
   private buildUrl(endpoint: string, params?: Record<string, string | number | boolean>): string {
-    const url = '${this.baseUrl}${endpoint}';
+    const url = `${this.baseUrl}${endpoint}`;
 
     if (!params || Object.keys(params).length === 0) {
       return url;
@@ -40,7 +40,7 @@ class ApiClient {
     });
 
     const queryString = searchParams.toString();
-    return queryString ? '${url}?${queryString}' : url;
+    return queryString ? `${url}?${queryString}` : url;
   }
 
   /**
@@ -55,9 +55,9 @@ class ApiClient {
     const url = this.buildUrl(endpoint, params);
 
     const defaultOptions: RequestInit = {
-      credentials: 'include', // Inclut automatiquement les cookies d'auth
+      credentials: `include', // Inclut automatiquement les cookies d'auth
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type' : 'application/json',
       },
     };
 
@@ -71,7 +71,7 @@ class ApiClient {
     };
 
     try {
-      console.log(`[API] ${finalOptions.method || 'GET'} ${url}');
+      console.log('[API] ' + (finalOptions.method || 'GET') + ' ' + url);
 
       const response = await fetch(url, finalOptions);
 
@@ -80,21 +80,21 @@ class ApiClient {
         try {
           errorData = await response.json();
         } catch {
-          errorData = { error: 'HTTP ${response.status}: ${response.statusText}' };
+          errorData = { error: 'HTTP ' + response.status + ': ' + response.statusText };
         }
 
-        console.error('[API Error] ${response.status}:', errorData);
+        console.error('[API Error] ' + response.status + ':', errorData);
 
         // Retourne une réponse d'erreur standardisée
         return {
           success: false,
-          error: errorData.error || errorData.message || 'HTTP ${response.status}',
+          error: errorData.error || errorData.message || ('HTTP ' + response.status),
           data: undefined
         };
       }
 
       const data = await response.json();
-      console.log(`[API Success] ${url}:`, data);
+      console.log('[API Success] ' + url + ':', data);
 
       // Si la réponse a déjà le format attendu
       if (typeof data === 'object' && 'success' in data) {
@@ -108,7 +108,7 @@ class ApiClient {
       };
 
     } catch (error) {
-      console.error('[API Network Error] ${url}:', error);
+      console.error('[API Network Error] ' + url + ':', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Erreur de réseau'

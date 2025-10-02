@@ -10,7 +10,7 @@ export function useHomeStats() {
     queryFn: async () => {
       const response = await apiClient.get('/api/stats/general');
       if (!response.success) {
-        throw new Error('Failed to fetch stats');
+        throw new Error("Failed to fetch stats");
       }
       return response.json();
     },
@@ -26,7 +26,7 @@ export function useSpotlightBook() {
     queryFn: async () => {
       const response = await apiClient.get('/api/featured-book');
       if (!response.success) {
-        throw new Error('Failed to fetch featured book');
+        throw new Error("Failed to fetch featured book");
       }
       const data = response.data;
       return data.data || null;
@@ -44,7 +44,7 @@ export function useRecentReads() {
       // date_lecture non null, orderBy date_lecture desc, max 10
       const response = await apiClient.get('/api/books?limit=10&sortBy=date_lecture&sortOrder=desc&hasDateLecture=true');
       if (!response.success) {
-        throw new Error('Failed to fetch recent reads');
+        throw new Error("Failed to fetch recent reads");
       }
       const data = response.data;
       return data.data || [];
@@ -86,7 +86,7 @@ export function usePopularCategories() {
     queryFn: async () => {
       const response = await apiClient.get('/api/categories?page=1&pageSize=10');
       if (!response.success) {
-        throw new Error('Failed to fetch categories');
+        throw new Error("Failed to fetch categories");
       }
       return response.json();
     },
@@ -102,7 +102,7 @@ export function useFeaturedQuote() {
     queryFn: async () => {
       const response = await apiClient.get('/api/books?limit=5&sortBy=note_generale&sortOrder=desc');
       if (!response.success) {
-        throw new Error('Failed to fetch books for quotes');
+        throw new Error("Failed to fetch books for quotes");
       }
       const data = response.data;
       
@@ -146,7 +146,7 @@ export function usePersonalizedBooks() {
       // Pour l'instant, retourner les mieux notés
       const response = await apiClient.get('/api/books?limit=10&sortBy=note_generale&sortOrder=desc');
       if (!response.success) {
-        throw new Error('Failed to fetch personalized books');
+        throw new Error("Failed to fetch personalized books");
       }
       const data = response.data;
       return data.data || [];

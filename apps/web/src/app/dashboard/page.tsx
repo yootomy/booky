@@ -11,7 +11,7 @@ import { useRoleCheck } from "@/hooks/useRoleCheck";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { apiClient } from '@/lib/api-client';
+import { apiClient } from "@/lib/api-client";
 import {
   BookOpen,
   MessageCircle,
@@ -35,7 +35,7 @@ export default function Dashboard() {
   // Rediriger les admins vers leur dashboard dédié
   useEffect(() => {
     if (isAdmin) {
-      router.push('/admin/dashboard');
+      router.push("/admin/dashboard");
     }
   }, [isAdmin, router]);
 
@@ -76,9 +76,9 @@ export default function Dashboard() {
   // Cards de navigation principales
   const navigationCards = [
     {
-      id: 'questions',
-      title: 'Mes questions',
-      description: 'Questions et réponses de Bruna',
+      id: "questions",
+      title: "Mes questions",
+      description: "Questions et réponses de Bruna",
       icon: MessageCircle,
       href: '/dashboard/questions',
       color: 'from-purple-600 to-purple-700',
@@ -88,16 +88,16 @@ export default function Dashboard() {
       countLabel: 'questions'
     },
     {
-      id: 'conseils',
-      title: 'Demandes de conseils',
-      description: 'Échanges personnalisés avec Bruna',
+      id: "conseils",
+      title: "Demandes de conseils",
+      description: "Échanges personnalisés avec Bruna",
       icon: Heart,
       href: '/dashboard/conseils',
       color: 'from-pink-600 to-rose-600',
       bgColor: 'bg-pink-50 dark:bg-pink-950/20',
       borderColor: 'border-pink-200 dark:border-pink-800',
       count: userStats?.conseilsCount || 0,
-      countLabel: 'demandes'
+      countLabel: "demandes"
     }
   ];
 
@@ -198,9 +198,9 @@ export default function Dashboard() {
                     <div className="space-y-1">
                       <h3
                         className="font-semibold text-foreground"
-                        style={{ fontFamily: 'Inter, sans-serif' }}
+                        style={{ fontFamily: "Inter, sans-serif` }}
                       >
-                        {user?.nom_complet || user?.username || 'Utilisateur'}
+                        {user?.nom_complet || user?.username || "Utilisateur"}
                       </h3>
                       <p className="text-sm text-muted-foreground">
                         {user?.email}
@@ -244,7 +244,7 @@ export default function Dashboard() {
               >
                 <Link href={card.href as any}>
                   <div className="flex items-center space-x-3 p-3 rounded-lg bg-card/50 border border-border/30 hover:border-primary/40 hover:bg-card/70 transition-all duration-200 cursor-pointer">
-                    <div className={'p-2 rounded-lg ${card.bgColor} flex-shrink-0'}>
+                    <div className={`p-2 rounded-lg ${card.bgColor}flex-shrink-0`}>
                       <card.icon className="w-4 h-4 text-primary" />
                     </div>
 
@@ -252,7 +252,7 @@ export default function Dashboard() {
                       <div className="flex items-center justify-between">
                         <h3
                           className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200"
-                          style={{ fontFamily: 'Inter, sans-serif' }}
+                          style={{ fontFamily: "Inter, sans-serif" }}
                         >
                           {card.title}
                         </h3>

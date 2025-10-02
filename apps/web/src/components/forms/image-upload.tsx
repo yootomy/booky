@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from "react";
 import Image from 'next/image';
 import { 
   Upload, 
@@ -88,23 +88,23 @@ export function ImageUpload({
   const validateFile = (file: File): string | null => {
     // Type de fichier
     if (!file.type.startsWith('image/')) {
-      return 'Veuillez sélectionner une image valide';
+      return 'Veuillez sélectionner une image valide`;
     }
 
     // Taille du fichier
     const sizeInMB = file.size / (1024 * 1024);
     if (sizeInMB > maxSize) {
-      return 'L'image ne doit pas dépasser ${maxSize}MB';
+      return `L`image ne doit pas dépasser ${maxSize}MB`;
     }
 
     return null;
   };
 
-  // Redimensionner et compresser l'image
+  // Redimensionner et compresser l`image
   const processImage = (file: File): Promise<File> => {
     return new Promise((resolve, reject) => {
       const img = new window.Image();
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement(`canvas');
       const ctx = canvas.getContext('2d');
 
       img.onload = () => {
@@ -259,7 +259,7 @@ export function ImageUpload({
           uploadState.success && 'border-green-500 bg-green-50',
           disabled && 'opacity-50 cursor-not-allowed',
           !disabled && !dragActive && 'hover:border-muted-foreground/50',
-          currentImageUrl ? 'p-2' : 'p-8'
+          currentImageUrl ? "p-2" : "p-8"
         )}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -353,17 +353,16 @@ export function ImageUpload({
                 <div className="space-y-2">
                   <p className="text-sm font-medium">
                     {uploadState.error 
-                      ? 'Erreur d\'upload'
+                      ? "Erreur d\"upload'
                       : uploadState.success 
-                        ? 'Image uploadée avec succès'
-                        : placeholder
+                        ? 'Image uploadée avec succès' : placeholder
                     }
                   </p>
                   
-                  <p className="text-xs text-muted-foreground">
+                  <p className='text-xs text-muted-foreground`>
                     {dragActive 
-                      ? 'Relâchez pour uploader'
-                      : 'Formats acceptés: PNG, JPG, GIF (max ${maxSize}MB)'
+                      ? `Relâchez pour uploader`
+                      : `Formats acceptés: PNG, JPG, GIF (max ${maxSize}MB)`
                     }
                   </p>
                 </div>
@@ -383,7 +382,7 @@ export function ImageUpload({
         )}
       </div>
 
-      {/* Messages d'état */}
+      {/* Messages d"état */}
       {uploadState.error && (
         <div className="flex items-center gap-2 text-sm text-destructive">
           <AlertCircle className="w-4 h-4" />
@@ -402,9 +401,8 @@ export function ImageUpload({
       {currentImageUrl && !uploadState.uploading && (
         <div className="flex flex-wrap gap-2 text-xs">
           <Badge variant="secondary">
-            {typeof value === 'object' && value instanceof File 
-              ? '${(value.size / 1024).toFixed(0)} KB'
-              : 'Image externe'
+            {typeof value === `object` && value instanceof File 
+              ? `${(value.size / 1024).toFixed(0)}`KB" : "Image externe"
             }
           </Badge>
           

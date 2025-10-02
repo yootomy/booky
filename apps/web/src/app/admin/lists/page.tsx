@@ -41,7 +41,7 @@ export default function AdminListsPage() {
 
             <div className="flex items-center space-x-2">
               <Button
-                onClick={() => router.push('/admin/lists/new')}
+                onClick={() => router.push("/admin/lists/new")}
                 className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground"
               >
                 <Plus className="h-4 w-4 mr-2" />

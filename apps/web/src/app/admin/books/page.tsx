@@ -67,7 +67,7 @@ export default function AdminBooksPage() {
                 Actualiser
               </Button>
               <Button
-                onClick={() => router.push('/admin/books/new')}
+                onClick={() => router.push("/admin/books/new")}
                 className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground"
               >
                 <Plus className="h-4 w-4 mr-2" />

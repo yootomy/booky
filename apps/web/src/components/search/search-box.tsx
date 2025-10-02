@@ -25,11 +25,11 @@ interface SearchBoxProps {
   variant?: 'default' | 'compact';
 }
 
-export function SearchBox({ 
-  className, 
-  placeholder = "Rechercher un livre, un auteur...",
+export function SearchBox({
+  className,
+  placeholder="Rechercher un livre, un auteur...",
   onSearchComplete,
-  variant = 'default'
+  variant="default"
 }: SearchBoxProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,14 +52,14 @@ export function SearchBox({
     maxSuggestions: 8,
   });
 
-  // Afficher les suggestions si on a du texte, qu'on est focus et qu'on a des résultats
+  // Afficher les suggestions si on a du texte, qu`on est focus et qu`on a des résultats
   const shouldShowSuggestions = isFocused && searchTerm.length >= 2 && (suggestions.length > 0 || isLoading);
 
   // Fonction pour surligner les termes qui matchent
   const highlightMatch = useCallback((text: string, query: string) => {
     if (!query) return text;
 
-    const regex = new RegExp('(${query})', 'gi');
+    const regex = new RegExp(`(${query})`, 'gi');
     const parts = text.split(regex);
 
     return parts.map((part, index) =>
@@ -72,7 +72,7 @@ export function SearchBox({
             "dark:bg-primary/30 dark:text-primary-foreground"
           )}
           style={{
-            backgroundColor: 'rgba(139, 21, 56, 0.15)',
+            backgroundColor: "rgba(139, 21, 56, 0.15)",
             color: 'rgb(139, 21, 56)'
           }}
         >
@@ -84,15 +84,15 @@ export function SearchBox({
 
   // Fonction pour obtenir l'icône selon le type
   const getTypeIcon = (type: string) => {
-    const iconClass = "h-4 w-4 transition-colors";
+    const iconClass="h-4 w-4 transition-colors";
     switch (type) {
-      case 'book':
+      case "book":
         return <Book className={cn(iconClass, "text-blue-600 dark:text-blue-400")} />;
-      case 'author':
+      case "author":
         return <User className={cn(iconClass, "text-emerald-600 dark:text-emerald-400")} />;
-      case 'tag':
+      case "tag":
         return <Tag className={cn(iconClass, "text-amber-600 dark:text-amber-400")} />;
-      case 'category':
+      case "category":
         return <Folder className={cn(iconClass, "text-violet-600 dark:text-violet-400")} />;
       default:
         return <Search className={cn(iconClass, "text-muted-foreground")} />;
@@ -161,20 +161,20 @@ export function SearchBox({
     setSelectedIndex(-1);
 
     switch (suggestion.type) {
-      case 'book':
-        router.push('/books/${suggestion.id}');
+      case "book":
+        router.push(`/books/${suggestion.id}`);
         break;
-      
-      case 'author':
-        router.push(`/books?author=${encodeURIComponent(suggestion.name || '')}');
+
+      case "author":
+        router.push(`/books?author=${encodeURIComponent(suggestion.name || '')}`);
         break;
-      
-      case 'tag':
-        router.push('/books?tag=${suggestion.id}');
+
+      case "tag":
+        router.push(`/books?tag=${suggestion.id}`);
         break;
-      
-      case 'category':
-        router.push('/books?category=${suggestion.id}');
+
+      case "category":
+        router.push(`/books?category=${suggestion.id}`);
         break;
     }
 
@@ -187,7 +187,7 @@ export function SearchBox({
     
     setShowSuggestions(false);
     setSelectedIndex(-1);
-    router.push('/books?q=${encodeURIComponent(query.trim())}');
+    router.push(`/books?q=${encodeURIComponent(query.trim())}`);
     onSearchComplete?.(query);
   }, [router, onSearchComplete]);
 
@@ -234,15 +234,15 @@ export function SearchBox({
   }, [selectedIndex]);
 
   return (
-    <div className={cn("relative w-full max-w-lg", className)}>
+    <div className={cn('relative w-full max-w-lg', className)}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative group">
           <Search className={cn(
             "absolute left-3 top-1/2 transform -translate-y-1/2 transition-all duration-200",
-            variant === 'compact' ? 'h-3.5 w-3.5' : 'h-4 w-4',
+            variant === "compact" ? 'h-3.5 w-3.5' : 'h-4 w-4',
             isFocused
               ? 'text-primary scale-110'
-              : 'text-muted-foreground group-hover:text-foreground'
+              : "text-muted-foreground group-hover:text-foreground"
           )} />
 
           <Input
@@ -262,24 +262,23 @@ export function SearchBox({
               "placeholder:text-muted-foreground/70",
               "dark:bg-background/60 dark:focus:bg-background/90",
               "dark:border-border dark:hover:border-primary/30",
-              variant === 'compact'
-                ? 'h-9 text-sm'
-                : 'h-11 text-base',
+              variant === "compact"
+                ? "h-9 text-sm" : "h-11 text-base",
               // Mobile optimizations
               "text-base md:text-sm", // Prevent zoom on iOS
               "min-w-0" // Allow shrinking
             )}
             style={{
-              WebkitAppearance: 'none', // Remove iOS styling
-              fontSize: '16px', // Prevent iOS zoom
+              WebkitAppearance: "none", // Remove iOS styling
+              fontSize: "16px", // Prevent iOS zoom
             }}
             role="combobox"
             aria-expanded={shouldShowSuggestions}
             aria-haspopup="listbox"
             aria-autocomplete="list"
-            aria-owns={shouldShowSuggestions ? 'search-suggestions' : undefined}
+            aria-owns={shouldShowSuggestions ? `search-suggestions` : undefined}
             aria-activedescendant={
-              selectedIndex >= 0 ? 'suggestion-${selectedIndex}' : undefined
+              selectedIndex >= 0 ? `suggestion-${selectedIndex}` : undefined
             }
           />
 
@@ -293,12 +292,12 @@ export function SearchBox({
                 className={cn(
                   "p-0 hover:bg-destructive/10 hover:text-destructive transition-all duration-200",
                   "rounded-full opacity-70 hover:opacity-100",
-                  variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'
+                  variant === "compact" ? "h-5 w-5" : "h-6 w-6"
                 )}
                 aria-label="Effacer la recherche"
               >
                 <X className={cn(
-                  variant === 'compact' ? 'h-2.5 w-2.5' : 'h-3 w-3'
+                  variant === "compact" ? "h-2.5 w-2.5" : "h-3 w-3"
                 )} />
               </Button>
             )}
@@ -311,19 +310,19 @@ export function SearchBox({
                 "p-0 transition-all duration-200 rounded-full",
                 "hover:bg-primary/10 hover:text-primary",
                 "active:scale-95",
-                variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'
+                variant === "compact" ? "h-5 w-5" : "h-6 w-6"
               )}
               aria-label="Rechercher"
             >
               {isLoading ? (
                 <Loader2 className={cn(
                   "animate-spin text-primary",
-                  variant === 'compact' ? 'h-2.5 w-2.5' : 'h-3 w-3'
+                  variant === "compact" ? "h-2.5 w-2.5" : "h-3 w-3"
                 )} />
               ) : (
                 <ChevronRight className={cn(
                   "group-hover:translate-x-0.5 transition-transform duration-200",
-                  variant === 'compact' ? 'h-2.5 w-2.5' : 'h-3 w-3'
+                  variant === "compact" ? "h-2.5 w-2.5" : "h-3 w-3"
                 )} />
               )}
             </Button>
@@ -346,7 +345,7 @@ export function SearchBox({
             "mx-2 md:mx-0", // Add margin on mobile
           )}
           style={{
-            boxShadow: '0 20px 60px rgba(139, 21, 56, 0.15), 0 8px 25px rgba(0, 0, 0, 0.08)',
+            boxShadow: "0 20px 60px rgba(139, 21, 56, 0.15), 0 8px 25px rgba(0, 0, 0, 0.08)",
           }}
           role="listbox"
           aria-label="Suggestions de recherche"
@@ -373,7 +372,7 @@ export function SearchBox({
                 Aucun résultat pour "<span className="text-primary">{searchTerm}</span>"
               </p>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Essayez avec d'autres termes ou<br className="hidden sm:inline" />
+                Essayez avec d'autres termes ou<br className='hidden sm:inline' />
                 parcourez les catégories
               </p>
             </div>
@@ -381,8 +380,8 @@ export function SearchBox({
 
           {suggestions.map((suggestion, index) => (
             <div
-              key={'${suggestion.type}-${suggestion.id}'}
-              id={'suggestion-${index}'}
+              key={`${suggestion.type}-${suggestion.id}`}
+              id={`suggestion-${index}`}
               role="option"
               aria-selected={index === selectedIndex}
               className={cn(
@@ -405,10 +404,10 @@ export function SearchBox({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-semibold text-sm md:text-base truncate leading-tight">
-                    {suggestion.type === 'book' && suggestion.title &&
+                    {suggestion.type === "book" && suggestion.title &&
                       highlightMatch(suggestion.title, searchTerm)
                     }
-                    {(suggestion.type === 'author' || suggestion.type === 'tag' || suggestion.type === 'category') &&
+                    {(suggestion.type === "author" || suggestion.type === "tag" || suggestion.type === "category") &&
                       (suggestion.name || suggestion.label) &&
                       highlightMatch(suggestion.name || suggestion.label || '', searchTerm)
                     }
@@ -425,14 +424,14 @@ export function SearchBox({
                   </Badge>
                 </div>
 
-                {suggestion.type === 'book' && suggestion.author && (
+                {suggestion.type === "book" && suggestion.author && (
                   <p className="text-xs md:text-sm text-muted-foreground truncate leading-tight">
                     par {highlightMatch(suggestion.author, searchTerm)}
                   </p>
                 )}
               </div>
 
-              {suggestion.type === 'book' && suggestion.cover && (
+              {suggestion.type === "book" && suggestion.cover && (
                 <div className="flex-shrink-0">
                   <img
                     src={suggestion.cover}

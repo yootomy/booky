@@ -27,7 +27,7 @@ export function useFeaturedCollections() {
         
         // Récupérer les catégories actives triées par ordre_affichage 
         const categoriesResponse = await apiClient.get('/api/categories');
-        if (!categoriesResponse.ok) throw new Error('Failed to fetch categories');
+        if (!categoriesResponse.ok) throw new Error("Failed to fetch categories");
         
         const allCategories = await categoriesResponse.json();
         const activeCategories = allCategories
@@ -38,7 +38,7 @@ export function useFeaturedCollections() {
         // Pour chaque catégorie, récupérer les livres
         const collectionsWithBooks = await Promise.all(
           activeCategories.map(async (category: any) => {
-            const booksResponse = await apiClient.get('/api/books');
+            const booksResponse = await apiClient.get(`/api/books`);
             const allBooks = booksResponse.ok ? await booksResponse.json() : [];
             
             // Filtrer les livres liés à cette catégorie (via book_category)
@@ -59,7 +59,7 @@ export function useFeaturedCollections() {
               id: category.id,
               nom: category.nom,
               description: category.description || `Découvrez notre sélection ${category.nom.toLowerCase()}`,
-              couleur: category.couleur || '#8B1538',
+              couleur: category.couleur || `#8B1538`,
               books: books.map((book: any) => ({
                 id: book.id,
                 titre: book.titre,

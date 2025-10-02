@@ -58,7 +58,7 @@ export const UserMenu: React.FC = () => {
 
   // Menu pour utilisateur connecté
   const userInitials = user.nom_complet
-    ? user.nom_complet.split(' ').map(n => n[0]).join('').substring(0, 2)
+    ? user.nom_complet.split(" ").map(n => n[0]).join('').substring(0, 2)
     : user.email.substring(0, 2).toUpperCase();
 
   return (
@@ -81,7 +81,7 @@ export const UserMenu: React.FC = () => {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm font-medium leading-none">
-                {user.nom_complet || user.username || 'Utilisateur'}
+                {user.nom_complet || user.username || "Utilisateur"}
               </p>
               <p className="text-xs leading-none text-muted-foreground">
                 {user.email}

@@ -20,7 +20,7 @@ interface HauntingQuotesProps {}
 // Fonction utilitaire pour extraire et tronquer une citation
 function extractQuote(citationsText: string) {
   const firstQuote = citationsText.split('\n')[0].trim();
-  return firstQuote.length > 160 ? firstQuote.substring(0, 160) + '...' : firstQuote;
+  return firstQuote.length > 160 ? firstQuote.substring(0, 160) + "..." : firstQuote;
 }
 
 function QuoteCard({ quote, index }: { quote: HauntingQuote; index: number }) {
@@ -31,14 +31,14 @@ function QuoteCard({ quote, index }: { quote: HauntingQuote; index: number }) {
       transition={{ duration: 0.6, delay: index * 0.15 }}
       className="group cursor-pointer"
     >
-      <Link href={'/books/${quote.book_id}'}>
+      <Link href={`/books/${quote.book_id}`}>
         <div 
           className="relative p-8 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-            backdropFilter: 'blur(10px)',
+            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)",
+            backdropFilter: 'blur(10px)",
             border: '1px solid rgba(139, 21, 56, 0.1)',
-            boxShadow: '0 8px 32px rgba(139, 21, 56, 0.05)'
+            boxShadow: "0 8px 32px rgba(139, 21, 56, 0.05)"
           }}
         >
           {/* Decorative quote mark */}
@@ -54,7 +54,7 @@ function QuoteCard({ quote, index }: { quote: HauntingQuote; index: number }) {
             style={{
               fontFamily: 'Playfair Display, serif',
               color: '#2C1810',
-              fontStyle: 'italic'
+              fontStyle: "italic"
             }}
           >
             "{extractQuote(quote.text)}"
@@ -99,7 +99,7 @@ function QuoteCard({ quote, index }: { quote: HauntingQuote; index: number }) {
             className="absolute bottom-0 right-0 w-24 h-24 opacity-0 group-hover:opacity-5 transition-opacity duration-500"
             style={{
               background: 'radial-gradient(circle, #8B1538 0%, transparent 70%)',
-              transform: 'translate(50%, 50%)'
+              transform: "translate(50%, 50%)"
             }}
           />
         </div>
@@ -121,7 +121,7 @@ export function HauntingQuotes({}: HauntingQuotesProps) {
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "#FAF8F5" }}>
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div

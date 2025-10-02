@@ -16,7 +16,7 @@ export function useRandomPick() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch random book');
+        throw new Error("Failed to fetch random book");
       }
 
       return response.json();

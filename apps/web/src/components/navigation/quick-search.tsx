@@ -31,7 +31,7 @@ interface QuickSearchProps {
 
 export function QuickSearch({ 
   className, 
-  variant = "compact",
+  variant="compact",
   showShortcut = true 
 }: QuickSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +40,7 @@ export function QuickSearch({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd/Ctrl + K pour ouvrir la recherche
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setIsOpen(true);
       }

@@ -47,8 +47,8 @@ export const useRegister = (): UseRegisterReturn => {
         return false;
       }
     } catch (error) {
-      console.error('Registration hook error:', error);
-      setError('Une erreur inattendue s\'est produite');
+      console.error("Registration hook error: ", error);
+      setError("Une erreur inattendue s\"est produite');
       return false;
     } finally {
       setIsLoading(false);

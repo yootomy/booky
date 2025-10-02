@@ -23,7 +23,7 @@ function Carousel({ title, subtitle, books, icon: Icon, isLoading }: CarouselPro
       const newScrollLeft = scrollRef.current.scrollLeft + (direction === 'right' ? scrollAmount : -scrollAmount);
       scrollRef.current.scrollTo({
         left: newScrollLeft,
-        behavior: 'smooth'
+        behavior: "smooth"
       });
     }
   };
@@ -50,14 +50,14 @@ function Carousel({ title, subtitle, books, icon: Icon, isLoading }: CarouselPro
         {!isLoading && books.length > 0 && (
           <div className="flex gap-2">
             <button
-              onClick={() => scroll('left')}
+              onClick={() => scroll("left")}
               className="p-2 rounded-lg border border-ash-300 hover:border-violet-500 hover:bg-violet-50 transition-all"
               aria-label="Défiler vers la gauche"
             >
               <ChevronLeft size={20} className="text-ash-600" />
             </button>
             <button
-              onClick={() => scroll('right')}
+              onClick={() => scroll("right")}
               className="p-2 rounded-lg border border-ash-300 hover:border-violet-500 hover:bg-violet-50 transition-all"
               aria-label="Défiler vers la droite"
             >
@@ -175,7 +175,7 @@ export function DiscoveryCarousels() {
           {/* Dark & Spicy */}
           <Carousel
             title="Dark & Spicy"
-            subtitle="Pour les âmes en quête d'intensité"
+            subtitle="Pour les âmes en quête d"intensité'
             books={darkSpicy}
             icon={Flame}
             isLoading={isLoading}
@@ -199,7 +199,7 @@ export function DiscoveryCarousels() {
 }
 
 /* Hide scrollbars */
-const styles = '
+const styles="
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;

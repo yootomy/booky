@@ -36,7 +36,7 @@ function BookCard({ book, variant }: { book: PersonalizedBook; variant: 'suggest
       case 'next':
         return {
           borderColor: 'rgba(59, 130, 246, 0.2)',
-          bgGradient: 'from-blue-50 to-indigo-50'
+          bgGradient: "from-blue-50 to-indigo-50"
         };
     }
   };
@@ -45,17 +45,17 @@ function BookCard({ book, variant }: { book: PersonalizedBook; variant: 'suggest
 
   return (
     <div className="group cursor-pointer">
-      <Link href={'/books/${book.id}'}>
+      <Link href={"/books/${book.id}`}>
         <div className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border bg-gradient-to-r"
              style={{ 
                borderColor: style.borderColor,
-               background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)'
+               background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)`
              }}>
           
           <div className="w-12 h-16 relative flex-shrink-0">
             <Image
-              src={book.image_couverture || '/placeholder-book.svg'}
-              alt={'Couverture de ${book.titre}'}
+              src={book.image_couverture || "/placeholder-book.svg"}
+              alt={"Couverture de ${book.titre}`}
               fill
               className="object-cover rounded"
               sizes="48px"
@@ -66,8 +66,8 @@ function BookCard({ book, variant }: { book: PersonalizedBook; variant: 'suggest
             <h4 
               className="font-semibold text-sm mb-1 truncate group-hover:text-[#8B1538] transition-colors"
               style={{
-                fontFamily: 'Playfair Display, serif',
-                color: '#2C1810'
+                fontFamily: "Playfair Display, serif",
+                color: '#2C1810"
               }}
               title={book.titre}
             >
@@ -88,7 +88,7 @@ function BookCard({ book, variant }: { book: PersonalizedBook; variant: 'suggest
               {book.note_generale > 0 && (
                 <div className="flex items-center gap-1">
                   <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                  <span className="text-xs font-medium" style={{ color: '#2C1810' }}>
+                  <span className="text-xs font-medium" style={{ color: "#2C1810" }}>
                     {book.note_generale}/10
                   </span>
                 </div>
@@ -97,12 +97,12 @@ function BookCard({ book, variant }: { book: PersonalizedBook; variant: 'suggest
               {book.statut && (
                 <div className="text-xs px-2 py-1 rounded-full"
                      style={{
-                       backgroundColor: book.statut === 'EN_COURS' ? '#FEF3C7' : 
-                                      book.statut === 'LU' ? '#D1FAE5' : '#DBEAFE',
-                       color: book.statut === 'EN_COURS' ? '#92400E' :
-                             book.statut === 'LU' ? '#065F46' : '#1E40AF'
+                       backgroundColor: book.statut === "EN_COURS" ? "#FEF3C7" : 
+                                      book.statut === 'LU' ? "#D1FAE5" : "#DBEAFE",
+                       color: book.statut === "EN_COURS" ? '#92400E' :
+                             book.statut === 'LU' ? "#065F46" : "#1E40AF"
                      }}>
-                  {book.statut === 'EN_COURS' ? 'En cours' :
+                  {book.statut === "EN_COURS" ? 'En cours' :
                    book.statut === 'LU' ? 'Lu' : 'À lire'}
                 </div>
               )}
@@ -181,7 +181,7 @@ function PersonalizedSubSection({
       {books.length > 3 && (
         <div className="mt-4 text-center">
           <Link
-            href={'/dashboard/books?filter=${variant}' as any}
+            href={`/dashboard/books?filter=${variant}` as any}
             className="text-sm font-medium hover:text-[#8B1538] transition-colors"
             style={{
               fontFamily: 'Inter, sans-serif',
@@ -211,7 +211,7 @@ export function PersonalizedSection({}: PersonalizedSectionProps) {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "#FAF8F5" }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <div className="h-10 bg-gray-200 rounded-lg w-80 mx-auto mb-4 animate-pulse"></div>
@@ -243,7 +243,7 @@ export function PersonalizedSection({}: PersonalizedSectionProps) {
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "#FAF8F5" }}>
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -253,7 +253,7 @@ export function PersonalizedSection({}: PersonalizedSectionProps) {
           className="text-center mb-12"
         >
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="w-6 h-6" style={{ color: '#8B1538' }} />
+            <Sparkles className="w-6 h-6" style={{ color: "#8B1538" }} />
             <h2 
               className="text-4xl font-bold"
               style={{
@@ -263,7 +263,7 @@ export function PersonalizedSection({}: PersonalizedSectionProps) {
             >
               Vos lectures personnelles
             </h2>
-            <Sparkles className="w-6 h-6" style={{ color: '#8B1538' }} />
+            <Sparkles className="w-6 h-6" style={{ color: "#8B1538" }} />
           </div>
           <p 
             className="text-lg opacity-75 max-w-2xl mx-auto"

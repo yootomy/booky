@@ -18,7 +18,7 @@ export function AboutBruna() {
             className="text-foreground"
             style={{
               fontFamily: 'Playfair Display, serif',
-              fontSize: 'clamp(2rem, 4vw, 2.5rem)',
+              fontSize: "clamp(2rem, 4vw, 2.5rem)",
               fontWeight: 700
             }}
           >
@@ -28,10 +28,10 @@ export function AboutBruna() {
             className="text-foreground/70"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: '1.1rem',
+              fontSize: "1.1rem",
               maxWidth: '600px',
               margin: '0 auto',
-              lineHeight: '1.6'
+              lineHeight: "1.6"
             }}
           >
             La passionnée derrière cette collection de dark romance
@@ -73,18 +73,18 @@ export function AboutBruna() {
                 className="italic text-foreground/80"
                 style={{
                   fontFamily: 'Playfair Display, serif',
-                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
-                  lineHeight: '1.5'
+                  fontSize: "clamp(1rem, 2.5vw, 1.2rem)",
+                  lineHeight: "1.5"
                 }}
               >
-                "Chaque livre est une promesse d'évasion, un voyage vers des émotions intenses où passion et mystère se rencontrent."
+                "Chaque livre est une promesse d"évasion, un voyage vers des émotions intenses où passion et mystère se rencontrent."
               </blockquote>
 
               <p
                 className="text-foreground/80 leading-relaxed"
                 style={{
                   fontFamily: 'Inter, sans-serif',
-                  fontSize: '1rem',
+                  fontSize: "1rem",
                   lineHeight: '1.6'
                 }}
               >

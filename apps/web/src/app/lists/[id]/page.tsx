@@ -95,7 +95,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       setLoading(true);
 
       // Récupérer les détails de la liste
-      const listResponse = await apiClient.get('/api/lists/${resolvedParams.id}?include_books=false');
+      const listResponse = await apiClient.get(`/api/lists/${resolvedParams.id}?include_books=false`);
       const listResult = await listResponse.json();
 
       if (!listResult.success) {
@@ -104,15 +104,15 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
 
       // Vérifier que la liste est publique
       if (!listResult.data.est_publique) {
-        throw new Error('Cette liste n\'est pas publique');
+        throw new Error('Cette liste n\'est pas publique`);
       }
 
       // Récupérer les livres de la liste
-      const booksResponse = await apiClient.get('/api/lists/${resolvedParams.id}/books');
+      const booksResponse = await apiClient.get(`/api/lists/${resolvedParams.id}/books`);
       const booksResult = await booksResponse.json();
 
       if (!booksResult.success) {
-        throw new Error('Erreur lors du chargement des livres');
+        throw new Error(`Erreur lors du chargement des livres`);
       }
 
       setListData({
@@ -121,7 +121,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       });
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur inconnue`);
+      setError(err instanceof Error ? err.message : `Erreur inconnue`);
       toast({
         title: "Erreur",
         description: "Impossible de charger la liste",
@@ -188,14 +188,14 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       try {
         await navigator.share({
           title: listData.list.nom,
-          text: listData.list.description || `Découvrez la liste "${listData.list.nom}" de ${listData.list.user.nom_complet}`,
+          text: listData.list.description || `Découvrez la liste `${listData.list.nom}` de ${listData.list.user.nom_complet}`,
           url: window.location.href,
         });
       } catch (err) {
-        // Fallback pour les navigateurs qui ne supportent pas l'API Share
+        // Fallback pour les navigateurs qui ne supportent pas l`API Share
         navigator.clipboard.writeText(window.location.href);
         toast({
-          title: "Lien copié",
+          title: `Lien copié",
           description: "Le lien de la liste a été copié dans le presse-papiers",
         });
       }
@@ -257,7 +257,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center space-y-4">
               <p className="text-destructive">Erreur: {error}</p>
-              <Button onClick={() => router.push('/lists')}>
+              <Button onClick={() => router.push("/lists")}>
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Retour aux listes
               </Button>
@@ -278,7 +278,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
           <Button
             variant="outline"
             size="sm"
-            onClick={() => router.push('/lists')}
+            onClick={() => router.push("/lists")}
             className="hover:bg-muted"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -327,11 +327,11 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                 </div>
                 <div className="flex items-center space-x-2">
                   <BookOpen className="h-4 w-4" />
-                  <span>{list._count.list_books} livre{list._count.list_books !== 1 ? 's' : ''}</span>
+                  <span>{list._count.list_books} livre{list._count.list_books !== 1 ? "s" : ""}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4" />
-                  <span>Créée le {new Date(list.date_creation).toLocaleDateString('fr-FR')}</span>
+                  <span>Créée le {new Date(list.date_creation).toLocaleDateString("fr-FR")}</span>
                 </div>
               </div>
             </div>
@@ -376,7 +376,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                         {book.image_couverture ? (
                           <img
                             src={book.image_couverture}
-                            alt={'Couverture de ${book.titre}'}
+                            alt={'Couverture de ${book.titre}`}
                             className="w-16 h-20 object-cover rounded border"
                           />
                         ) : (
@@ -414,7 +414,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                           {book.date_lecture && (
                             <Badge variant="outline" className="text-xs">
                               <Calendar className="h-3 w-3 mr-1" />
-                              {new Date(book.date_lecture).toLocaleDateString('fr-FR')}
+                              {new Date(book.date_lecture).toLocaleDateString("fr-FR")}
                             </Badge>
                           )}
                         </div>
@@ -439,8 +439,8 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                         <Button
                           variant="outline"
                           size="sm"
-                          className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                          onClick={() => router.push('/books/${book.id}')}
+                          className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors`
+                          onClick={() => router.push(`/books/${book.id}`)}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Voir les détails
@@ -467,10 +467,10 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                   </p>
                 </div>
                 <div className="flex gap-3 justify-center">
-                  <Button onClick={() => router.push('/lists')}>
+                  <Button onClick={() => router.push("/lists")}>
                     Voir toutes les listes
                   </Button>
-                  <Button variant="outline" onClick={() => router.push('/books')}>
+                  <Button variant="outline" onClick={() => router.push("/books")}>
                     <BookOpen className="h-4 w-4 mr-2" />
                     Tous les livres
                   </Button>

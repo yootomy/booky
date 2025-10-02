@@ -62,7 +62,7 @@ export function useDiscoveryCarousels() {
   return useQuery({
     queryKey: ['discovery-carousels'],
     queryFn: async () => {
-      console.log('[NEW API] Loading discovery carousels...');
+      console.log("[NEW API] Loading discovery carousels...");
 
       // Récupérer plusieurs listes en parallèle
       const [nouveautesRes, meilleuresNotesRes, darkSpicyRes] = await Promise.all([
@@ -150,7 +150,7 @@ export function useRecentQuestions() {
       // mais elle existe dans le backend (/api/questions)
       const response = await apiClient.get('/api/questions');
       if (!response.success) {
-        console.warn('[NEW API] Questions API not available yet:', response.error);
+        console.warn("[NEW API] Questions API not available yet: ", response.error);
         return [];
       }
       return response.data?.data || response.data || [];
@@ -164,7 +164,7 @@ export function useRecentQuestions() {
 // Hook pour les livres personnalisés (recommandations)
 export function usePersonalizedBooks() {
   return useQuery({
-    queryKey: ['personalized-books'],
+    queryKey: ["personalized-books"],
     queryFn: async () => {
       // Pour l'instant, retourner les mieux notés
       const response = await apiClient.get('/api/books', {

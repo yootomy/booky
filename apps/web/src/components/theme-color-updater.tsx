@@ -19,7 +19,7 @@ export default function ThemeColorUpdater() {
     if (!mounted) return;
 
     // Trouver ou créer la balise meta theme-color
-    let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    let meta = document.querySelector<HTMLMetaElement>("meta[name="theme-color"]");
 
     if (!meta) {
       meta = document.createElement('meta');
@@ -33,11 +33,11 @@ export default function ThemeColorUpdater() {
     // Mettre à jour la couleur Safari
     meta.content = currentTheme === 'dark' ? COLOR_DARK : COLOR_LIGHT;
 
-    // Renforcer le fond pour éviter l'effet "gris" translucide de Safari
+    // Renforcer le fond pour éviter l'effet 'gris' translucide de Safari
     const html = document.documentElement;
     const body = document.body;
 
-    if (currentTheme === 'dark') {
+    if (currentTheme === "dark") {
       html.style.backgroundColor = COLOR_DARK;
       body.style.backgroundColor = COLOR_DARK;
     } else {
@@ -45,7 +45,7 @@ export default function ThemeColorUpdater() {
       body.style.backgroundColor = COLOR_LIGHT;
     }
 
-    console.log('Safari theme-color updated (real-time):', currentTheme, meta.content);
+    console.log("Safari theme-color updated (real-time):", currentTheme, meta.content);
   }, [theme, systemTheme, resolvedTheme, mounted]);
 
   return null;

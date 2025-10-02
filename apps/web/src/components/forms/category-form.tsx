@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import { 
   Save, 
@@ -81,10 +81,10 @@ function ColorPicker({
             key={color}
             type="button"
             className={cn(
-              'w-8 h-8 rounded-full border-2 transition-all hover:scale-110',
+              "w-8 h-8 rounded-full border-2 transition-all hover:scale-110",
               value === color 
                 ? 'border-foreground shadow-lg' 
-                : 'border-muted-foreground/20'
+                : "border-muted-foreground/20"
             )}
             style={{ backgroundColor: color }}
             onClick={() => onChange(color)}
@@ -161,10 +161,10 @@ function IconPicker({
         <button
           type="button"
           className={cn(
-            'w-8 h-8 rounded border-2 flex items-center justify-center text-lg transition-all hover:scale-110',
+            "w-8 h-8 rounded border-2 flex items-center justify-center text-lg transition-all hover:scale-110",
             !value 
               ? 'border-foreground bg-muted' 
-              : 'border-muted-foreground/20'
+              : "border-muted-foreground/20"
           )}
           onClick={() => onChange(undefined)}
           title="Aucune icône"
@@ -180,7 +180,7 @@ function IconPicker({
               'w-8 h-8 rounded border-2 flex items-center justify-center text-lg transition-all hover:scale-110',
               value === icon 
                 ? 'border-foreground bg-muted' 
-                : 'border-muted-foreground/20'
+                : "border-muted-foreground/20"
             )}
             onClick={() => onChange(icon)}
             title={icon}
@@ -194,8 +194,8 @@ function IconPicker({
       <div className="flex gap-2">
         <Input
           type="text"
-          placeholder="🔥 ou nom d'icône"
-          value={value || ''}
+          placeholder="🔥 ou nom d"icône'
+          value={value || ""}
           onChange={(e) => onChange(e.target.value || undefined)}
           className="flex-1"
         />
@@ -272,22 +272,22 @@ export function CategoryForm({
         await onSubmit({ ...data, id: initialData!.id });
       }
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
+      console.error("Erreur lors de la soumission: ", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn('space-y-6', className)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn("space-y-6", className)}>
       {/* Header avec actions rapides */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-xl font-semibold">
-            {mode === 'create' ? 'Nouvelle catégorie' : 'Modifier la catégorie'}
+            {mode === "create" ? 'Nouvelle catégorie' : "Modifier la catégorie"}
           </h2>
           <p className="text-sm text-muted-foreground">
-            {mode === 'create' 
+            {mode === "create" 
               ? 'Créer une nouvelle catégorie pour organiser vos livres'
-              : 'Modifier les informations de la catégorie'
+              : "Modifier les informations de la catégorie"
             }
           </p>
         </div>
@@ -303,7 +303,7 @@ export function CategoryForm({
             Aperçu
           </Button>
           
-          {mode === 'create' && (
+          {mode === "create" && (
             <Button
               type="button"
               variant="outline"
@@ -319,7 +319,7 @@ export function CategoryForm({
       </div>
 
       {/* Presets de catégories (mode création uniquement) */}
-      {mode === 'create' && (
+      {mode === "create" && (
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -372,10 +372,10 @@ export function CategoryForm({
             </Label>
             <Input
               id="nom"
-              {...register('nom', { 
+              {...register("nom", { 
                 required: 'Le nom est obligatoire',
                 minLength: { value: 1, message: 'Le nom ne peut pas être vide' },
-                maxLength: { value: 100, message: 'Le nom ne peut pas dépasser 100 caractères' }
+                maxLength: { value: 100, message: "Le nom ne peut pas dépasser 100 caractères" }
               })}
               placeholder="ex: Dark Romance"
               className={errors.nom ? 'border-destructive' : ''}
@@ -391,7 +391,7 @@ export function CategoryForm({
             <Textarea
               id="description"
               {...register('description', {
-                maxLength: { value: 500, message: 'La description ne peut pas dépasser 500 caractères' }
+                maxLength: { value: 500, message: "La description ne peut pas dépasser 500 caractères" }
               })}
               placeholder="Description de la catégorie..."
               rows={3}
@@ -446,7 +446,7 @@ export function CategoryForm({
             <Label>Couleur</Label>
             <ColorPicker
               value={watchedValues.couleur}
-              onChange={(color) => setValue('couleur', color)}
+              onChange={(color) => setValue("couleur", color)}
             />
           </div>
 
@@ -457,7 +457,7 @@ export function CategoryForm({
             <Label>Icône</Label>
             <IconPicker
               value={watchedValues.icone}
-              onChange={(icon) => setValue('icone', icon)}
+              onChange={(icon) => setValue("icone", icon)}
             />
           </div>
         </div>
@@ -480,7 +480,7 @@ export function CategoryForm({
                   variant="secondary"
                   className="px-3 py-1"
                   style={{
-                    backgroundColor: '${watchedValues.couleur}20',
+                    backgroundColor: `${watchedValues.couleur}20`,
                     color: watchedValues.couleur,
                     borderColor: watchedValues.couleur
                   }}
@@ -488,7 +488,7 @@ export function CategoryForm({
                   {watchedValues.icone && (
                     <span className="mr-1">{watchedValues.icone}</span>
                   )}
-                  {watchedValues.nom || 'Nom de la catégorie'}
+                  {watchedValues.nom || "Nom de la catégorie"}
                 </Badge>
                 
                 {!watchedValues.est_actif && (
@@ -525,7 +525,7 @@ export function CategoryForm({
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t">
         <div className="text-xs text-muted-foreground">
-          {isDirty && '• Modifications non sauvegardées'}
+          {isDirty && "• Modifications non sauvegardées"}
         </div>
         
         <div className="flex items-center gap-2">
@@ -545,7 +545,7 @@ export function CategoryForm({
           >
             {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             <Save className="w-4 h-4 mr-2" />
-            {mode === 'create' ? 'Créer' : 'Sauvegarder'}
+            {mode === "create" ? "Créer" : "Sauvegarder"}
           </Button>
         </div>
       </div>

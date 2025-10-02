@@ -19,7 +19,7 @@ export function RatingChips({
 
   const iconSizeClasses = {
     sm: 'w-3 h-3',
-    md: 'w-3.5 h-3.5',
+    md: "w-3.5 h-3.5",
   };
 
   const formatRating = (value: number) => value.toString();
@@ -29,7 +29,7 @@ export function RatingChips({
       {/* Spicy Level */}
       {spicy > 0 && (
         <div className={cn(
-          'rating-spicy flex items-center gap-1 rounded-full font-medium transition-all hover:scale-105',
+          "rating-spicy flex items-center gap-1 rounded-full font-medium transition-all hover:scale-105",
           sizeClasses[size]
         )}>
           <Flame className={iconSizeClasses[size]} />
@@ -41,7 +41,7 @@ export function RatingChips({
       {/* Dark Level */}
       {dark > 0 && (
         <div className={cn(
-          'rating-dark flex items-center gap-1 rounded-full font-medium transition-all hover:scale-105',
+          "rating-dark flex items-center gap-1 rounded-full font-medium transition-all hover:scale-105",
           sizeClasses[size]
         )}>
           <Moon className={iconSizeClasses[size]} />
@@ -53,7 +53,7 @@ export function RatingChips({
       {/* Romance Level */}
       {romance > 0 && (
         <div className={cn(
-          'rating-romance flex items-center gap-1 rounded-full font-medium transition-all hover:scale-105',
+          "rating-romance flex items-center gap-1 rounded-full font-medium transition-all hover:scale-105",
           sizeClasses[size]
         )}>
           <Heart className={iconSizeClasses[size]} />
@@ -78,7 +78,7 @@ export function RatingChipsLarge({
   className?: string; 
 }) {
   return (
-    <div className={cn('flex gap-3', className)}>
+    <div className={cn("flex gap-3", className)}>
       {/* Spicy Level */}
       <div className="flex flex-col items-center gap-1">
         <div className="rating-spicy h-10 w-10 rounded-full flex items-center justify-center transition-all hover:scale-105">
@@ -145,8 +145,8 @@ export function RatingBars({
       </div>
       <div className="flex-1 h-2 bg-ink-700 rounded-full overflow-hidden">
         <div 
-          className={cn('h-full rounded-full transition-all duration-500', colorClass)}
-          style={{ width: '${(value / 10) * 100}%' }}
+          className={cn(`h-full rounded-full transition-all duration-500`, colorClass)}
+          style={{ width: `${(value / 10) * 100}%` }}
         />
       </div>
       <span className="text-sm font-semibold text-ash-200 w-8 text-right">{value}</span>
@@ -154,7 +154,7 @@ export function RatingBars({
   );
 
   return (
-    <div className={cn('space-y-3', className)}>
+    <div className={cn("space-y-3", className)}>
       <RatingBar 
         label="Spicy" 
         value={spicy} 

@@ -58,8 +58,8 @@ export default function ConseilsPage() {
     queryFn: async () => {
       if (!user?.id) return { data: [] };
 
-      const response = await apiClient.get('/api/conseil-requests?userId=${user.id}');
-      if (!response.ok) throw new Error('Failed to fetch conseil requests');
+      const response = await apiClient.get('/api/conseil-requests?userId=${user.id}");
+      if (!response.ok) throw new Error("Failed to fetch conseil requests");
       return response.json();
     },
     enabled: !!user?.id
@@ -67,10 +67,10 @@ export default function ConseilsPage() {
 
   // Fetch categories and tags for display
   const { data: categoriesData } = useQuery({
-    queryKey: ['categories'],
+    queryKey: ["categories"],
     queryFn: async () => {
       const response = await apiClient.get('/api/categories');
-      if (!response.ok) throw new Error('Failed to fetch categories');
+      if (!response.ok) throw new Error("Failed to fetch categories");
       return response.json();
     }
   });
@@ -79,7 +79,7 @@ export default function ConseilsPage() {
     queryKey: ['tags'],
     queryFn: async () => {
       const response = await apiClient.get('/api/tags');
-      if (!response.ok) throw new Error('Failed to fetch tags');
+      if (!response.ok) throw new Error("Failed to fetch tags");
       return response.json();
     }
   });
@@ -89,7 +89,7 @@ export default function ConseilsPage() {
     queryKey: ['books'],
     queryFn: async () => {
       const response = await apiClient.get('/api/books');
-      if (!response.ok) throw new Error('Failed to fetch books');
+      if (!response.ok) throw new Error("Failed to fetch books");
       return response.json();
     }
   });
@@ -126,13 +126,13 @@ export default function ConseilsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'EN_ATTENTE':
-        return <Clock className="w-4 h-4" style={{ color: '#F59E0B' }} />;
-      case 'TRAITE':
-        return <CheckCircle className="w-4 h-4" style={{ color: '#10B981' }} />;
-      case 'REJETE':
-        return <MessageCircle className="w-4 h-4" style={{ color: '#EF4444' }} />;
+        return <Clock className="w-4 h-4" style={{ color: "#F59E0B' }} />;
+      case 'TRAITE":
+        return <CheckCircle className="w-4 h-4" style={{ color: "#10B981' }} />;
+      case 'REJETE":
+        return <MessageCircle className="w-4 h-4" style={{ color: "#EF4444" }} />;
       default:
-        return <Clock className="w-4 h-4" style={{ color: '#6B7280' }} />;
+        return <Clock className="w-4 h-4" style={{ color: "#6B7280" }} />;
     }
   };
 
@@ -187,7 +187,7 @@ export default function ConseilsPage() {
             className="text-center"
           >
             <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-6"></div>
-            <p className="text-lg font-medium text-foreground/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-lg font-medium text-foreground/80" style={{ fontFamily: "Inter, sans-serif" }}>
               Chargement de vos demandes de conseils...
             </p>
           </motion.div>
@@ -208,10 +208,10 @@ export default function ConseilsPage() {
             <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <MessageCircle className="w-8 h-8 text-destructive" />
             </div>
-            <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+            <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: "Playfair Display, serif" }}>
               Erreur de chargement
             </h3>
-            <p className="text-foreground/70 mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-foreground/70 mb-6" style={{ fontFamily: "Inter, sans-serif" }}>
               Impossible de charger vos demandes de conseils. Veuillez réessayer.
             </p>
             <Button
@@ -252,11 +252,11 @@ export default function ConseilsPage() {
               </Button>
 
               <div className="flex-1">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-3 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-3 mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
                   <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                   Mes Conseils
                 </h1>
-                <p className="text-sm sm:text-base text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-sm sm:text-base text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                   Vos échanges personnalisés avec Bruna
                 </p>
               </div>
@@ -304,8 +304,8 @@ export default function ConseilsPage() {
 
                 {/* Results count */}
                 <div className="text-sm text-muted-foreground whitespace-nowrap">
-                  <strong className="text-foreground">{filteredConseils.length}</strong> conseil{filteredConseils.length > 1 ? 's' : ''}
-                  {searchTerm && " trouvé${filteredConseils.length > 1 ? 's' : ''}'}
+                  <strong className="text-foreground">{filteredConseils.length}</strong> conseil{filteredConseils.length > 1 ? "s" : "'}
+                  {searchTerm && ' trouvé${filteredConseils.length > 1 ? 's' : ''}`}
                 </div>
               </div>
             </motion.div>
@@ -322,19 +322,19 @@ export default function ConseilsPage() {
                     <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                       <Sparkles className="w-10 h-10 text-primary" />
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: "Playfair Display, serif" }}>
                       {searchTerm || statusFilter !== 'all'
                         ? "Aucun conseil trouvé"
                         : "Aucune demande de conseil"
                       }
                     </h3>
-                    <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: "Inter, sans-serif" }}>
                       {searchTerm || statusFilter !== 'all'
                         ? "Essayez de modifier vos critères de recherche."
-                        : "Vous n'avez pas encore fait de demande de conseil à Bruna. Laissez-la vous surprendre !"
+                        : "Vous n"avez pas encore fait de demande de conseil à Bruna. Laissez-la vous surprendre !'
                       }
                     </p>
-                    {!searchTerm && statusFilter === 'all' && (
+                    {!searchTerm && statusFilter === "all" && (
                       <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
                         <Link href="/">
                           <Sparkles className="w-4 h-4 mr-2" />
@@ -365,20 +365,20 @@ export default function ConseilsPage() {
                                 <User className="w-5 h-5 text-primary" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-foreground line-clamp-1 mb-1" style={{ fontFamily: 'Playfair Display, serif' }}>
+                                <h3 className="font-semibold text-foreground line-clamp-1 mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
                                   Demande de {conseil.nom_utilisateur}
                                 </h3>
                                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                   <Calendar className="w-3 h-3" />
-                                  {new Date(conseil.date_creation).toLocaleDateString('fr-FR')}
+                                  {new Date(conseil.date_creation).toLocaleDateString("fr-FR")}
                                 </div>
                               </div>
                             </div>
                             <Badge className={cn(
                               "flex items-center gap-1 px-2 py-1 text-xs font-medium border",
-                              conseil.status === 'EN_ATTENTE' && "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800",
-                              conseil.status === 'TRAITE' && "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",
-                              conseil.status === 'REJETE' && "bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"
+                              conseil.status === "EN_ATTENTE" && "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800",
+                              conseil.status === "TRAITE" && "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",
+                              conseil.status === "REJETE" && "bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"
                             )}>
                               {getStatusIcon(conseil.status)}
                               {getStatusLabel(conseil.status)}
@@ -391,7 +391,7 @@ export default function ConseilsPage() {
                           <div>
                             <div className="flex items-center gap-2 mb-3">
                               <Tag className="w-4 h-4 text-muted-foreground" />
-                              <h4 className="text-sm font-medium text-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              <h4 className="text-sm font-medium text-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                                 Genres
                               </h4>
                             </div>
@@ -418,7 +418,7 @@ export default function ConseilsPage() {
                             <div>
                               <div className="flex items-center gap-2 mb-3">
                                 <Star className="w-4 h-4 text-muted-foreground" />
-                                <h4 className="text-sm font-medium text-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                <h4 className="text-sm font-medium text-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                                   Tropes
                                 </h4>
                               </div>
@@ -446,12 +446,12 @@ export default function ConseilsPage() {
                             <div>
                               <div className="flex items-center gap-2 mb-3">
                                 <MessageCircle className="w-4 h-4 text-muted-foreground" />
-                                <h4 className="text-sm font-medium text-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                <h4 className="text-sm font-medium text-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                                   Votre message
                                 </h4>
                               </div>
                               <div className="bg-muted/50 rounded-lg p-3">
-                                <p className="text-sm text-foreground/80 line-clamp-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                <p className="text-sm text-foreground/80 line-clamp-2" style={{ fontFamily: "Inter, sans-serif" }}>
                                   "{conseil.commentaires}"
                                 </p>
                               </div>
@@ -467,7 +467,7 @@ export default function ConseilsPage() {
                               className="w-full justify-between hover:bg-primary/5"
                             >
                               <span className="text-sm font-medium">
-                                {expandedCards.has(conseil.id) ? 'Voir moins' : 'Voir les détails'}
+                                {expandedCards.has(conseil.id) ? "Voir moins" : "Voir les détails"}
                               </span>
                               {expandedCards.has(conseil.id) ?
                                 <ChevronUp className="w-4 h-4" /> :
@@ -502,7 +502,7 @@ export default function ConseilsPage() {
                                 {/* Full Tags List */}
                                 {conseil.tags.length > 6 && (
                                   <div>
-                                    <h4 className="text-sm font-medium text-foreground mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    <h4 className="text-sm font-medium text-foreground mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                                       Tous les tropes préférés
                                     </h4>
                                     <div className="flex flex-wrap gap-2">
@@ -522,11 +522,11 @@ export default function ConseilsPage() {
                                 {/* Full Comments */}
                                 {conseil.commentaires && (
                                   <div>
-                                    <h4 className="text-sm font-medium text-foreground mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    <h4 className="text-sm font-medium text-foreground mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
                                       Votre message complet
                                     </h4>
                                     <div className="bg-muted/50 rounded-lg p-4">
-                                      <p className="text-sm text-foreground leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                      <p className="text-sm text-foreground leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                                         "{conseil.commentaires}"
                                       </p>
                                     </div>
@@ -543,11 +543,11 @@ export default function ConseilsPage() {
                                       </h4>
                                       {conseil.date_reponse && (
                                         <span className="text-xs text-muted-foreground ml-auto">
-                                          {new Date(conseil.date_reponse).toLocaleDateString('fr-FR')}
+                                          {new Date(conseil.date_reponse).toLocaleDateString("fr-FR")}
                                         </span>
                                       )}
                                     </div>
-                                    <p className="text-sm leading-relaxed text-foreground mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                    <p className="text-sm leading-relaxed text-foreground mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                                       {conseil.reponse_bruna}
                                     </p>
 
@@ -564,7 +564,7 @@ export default function ConseilsPage() {
                                               className="flex items-center gap-2 p-3 bg-background/50 rounded-lg border border-border/50"
                                             >
                                               <BookOpen className="w-4 h-4 text-primary flex-shrink-0" />
-                                              <span className="text-sm text-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                              <span className="text-sm text-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                                                 {getBookTitle(bookId)}
                                               </span>
                                             </div>

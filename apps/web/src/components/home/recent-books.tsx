@@ -29,7 +29,7 @@ export function RecentBooks() {
           setBooks(data.data || []);
         }
       } catch (error) {
-        console.error('Erreur lors du chargement des derniers livres:', error);
+        console.error("Erreur lors du chargement des derniers livres:", error);
       } finally {
         setIsLoading(false);
       }
@@ -90,7 +90,7 @@ export function RecentBooks() {
 
   const getStatusColor = (statut: string) => {
     switch (statut) {
-      case 'lu': return '#10B981';
+      case "lu": return '#10B981';
       case 'en_cours': return '#F59E0B';
       case 'a_lire': return '#8B1538';
       default: return '#6B7280';
@@ -122,7 +122,7 @@ export function RecentBooks() {
               className="text-foreground"
               style={{
                 fontFamily: 'Playfair Display, serif',
-                fontSize: 'clamp(2rem, 4vw, 2.5rem)',
+                fontSize: "clamp(2rem, 4vw, 2.5rem)",
                 fontWeight: 700
               }}
             >
@@ -133,10 +133,10 @@ export function RecentBooks() {
             className="text-foreground/70"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: '1.1rem',
+              fontSize: "1.1rem",
               maxWidth: '600px',
               margin: '0 auto',
-              lineHeight: '1.6'
+              lineHeight: "1.6"
             }}
           >
             Les récentes additions à cette collection intime de passions secrètes
@@ -153,11 +153,11 @@ export function RecentBooks() {
               transition={{
                 duration: 0.6,
                 delay: index * 0.1,
-                ease: 'easeOut'
+                ease: "easeOut"
               }}
               whileHover={{ y: -2 }}
               className="group cursor-pointer"
-              onClick={() => window.location.href = '/books/${book.id}'}
+              onClick={() => window.location.href = `/books/${book.id}`}
             >
               <div className="relative rounded-xl overflow-hidden transition-all duration-200 group-hover:shadow-lg bg-card/60 backdrop-blur-xl border border-border shadow-md">
                 {/* Book Cover */}
@@ -201,7 +201,7 @@ export function RecentBooks() {
                   <div className="flex items-center justify-between">
                     <span className="text-foreground/50 text-xs">
                       {(book as any).date_creation && !isNaN(new Date((book as any).date_creation).getTime())
-                        ? new Date((book as any).date_creation).toLocaleDateString('fr-FR', {
+                        ? new Date((book as any).date_creation).toLocaleDateString("fr-FR", {
                             day: 'numeric',
                             month: 'short'
                           })
@@ -210,7 +210,7 @@ export function RecentBooks() {
                             day: 'numeric',
                             month: 'short'
                           })
-                        : 'Récent'
+                        : "Récent"
                       }
                     </span>
                     <ChevronRight className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-opacity duration-200 text-primary" />
@@ -229,15 +229,15 @@ export function RecentBooks() {
           className="text-center"
         >
           <button
-            onClick={() => window.location.href = '/books'}
+            onClick={() => window.location.href="/books"}
             className="group inline-flex items-center gap-3 px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2"
             style={{
               background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
               color: 'white',
               fontFamily: 'Inter, sans-serif',
-              fontSize: '1rem',
+              fontSize: "1rem",
               fontWeight: 600,
-              boxShadow: '0 8px 25px rgba(139, 21, 56, 0.3)',
+              boxShadow: "0 8px 25px rgba(139, 21, 56, 0.3)",
             }}
           >
             <Heart className="w-5 h-5 group-hover:fill-current transition-all" />

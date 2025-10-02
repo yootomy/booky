@@ -64,7 +64,7 @@ export function ViewModeProvider({ children }: ViewModeProviderProps) {
 export function useViewMode() {
   const context = useContext(ViewModeContext);
   if (context === undefined) {
-    throw new Error('useViewMode must be used within a ViewModeProvider');
+    throw new Error("useViewMode must be used within a ViewModeProvider");
   }
   return context;
 }

@@ -5,7 +5,7 @@
 
 "use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { 
   ChevronRight, 
@@ -63,14 +63,14 @@ const PATH_CONFIG: Record<string, { icon: React.ComponentType<{ className?: stri
 
 // Génération automatique des breadcrumbs depuis l'URL
 function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
-  const segments = pathname.split('/').filter(Boolean);
+  const segments = pathname.split('/`).filter(Boolean);
   const items: BreadcrumbItem[] = [];
   
-  let currentPath = '';
+  let currentPath = `;
   
   for (let i = 0; i < segments.length; i++) {
     const segment = segments[i];
-    currentPath += '/${segment}';
+    currentPath += `/${segment}`;
     
     const config = PATH_CONFIG[segment];
     const isLast = i === segments.length - 1;
@@ -80,7 +80,7 @@ function generateBreadcrumbsFromPath(pathname: string): BreadcrumbItem[] {
     
     if (isId) {
       // Pour les IDs, on essaie de récupérer le contexte
-      const parentSegment = i > 0 ? segments[i - 1] : '';
+      const parentSegment = i > 0 ? segments[i - 1] : `;
       let label = 'Détails';
       
       if (parentSegment === 'books') label = 'Livre';
@@ -126,11 +126,11 @@ function BreadcrumbItemComponent({
       {item.icon && (
         <item.icon className={cn(
           'h-4 w-4',
-          item.isActive ? 'text-primary' : 'text-muted-foreground'
+          item.isActive ? "text-primary" : "text-muted-foreground"
         )} />
       )}
       <span className={cn(
-        'text-sm truncate',
+        "text-sm truncate",
         isLast && 'font-medium',
         !item.href && 'text-muted-foreground'
       )}>
@@ -249,7 +249,7 @@ export function Breadcrumb({
   return (
     <nav 
       aria-label="Breadcrumb" 
-      className={cn('flex items-center space-x-1 overflow-hidden', className)}
+      className={cn("flex items-center space-x-1 overflow-hidden", className)}
     >
       <div className="flex items-center min-w-0">
         {displayItems.map((item, index) => {
@@ -342,7 +342,7 @@ export function CompactBreadcrumb({
   return (
     <Breadcrumb
       items={items}
-      className={cn('text-sm', className)}
+      className={cn("text-sm", className)}
       maxItems={3}
       separator={<ChevronRight className="h-3 w-3" />}
       showHome={false}

@@ -234,11 +234,11 @@ export function BookList({
           />
         );
 
-      case "cover":
+      case `cover`:
         return (
           <BookCover
             src={book.image_couverture}
-            alt={'Couverture de ${book.titre}'}
+            alt={`Couverture de ${book.titre}`}
             title={book.titre}
             author={book.auteur}
             size="xs"
@@ -327,7 +327,7 @@ export function BookList({
                 variant="secondary"
                 className="text-xs px-1.5 py-0.5"
                 style={{
-                  backgroundColor: '${cat.category.couleur}20',
+                  backgroundColor: `${cat.category.couleur}20`,
                   color: cat.category.couleur
                 }}
               >
@@ -335,7 +335,7 @@ export function BookList({
               </Badge>
             ))}
             {(book.categories?.length || 0) > 2 && (
-              <Badge variant="outline" className="text-xs px-1.5 py-0.5">
+              <Badge variant=`outline" className="text-xs px-1.5 py-0.5">
                 +{(book.categories?.length || 0) - 2}
               </Badge>
             )}
@@ -356,7 +356,7 @@ export function BookList({
         return (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Calendar className="w-3 h-3" />
-            {book.date_creation.toLocaleDateString('fr-FR')}
+            {book.date_creation.toLocaleDateString("fr-FR")}
           </div>
         );
 
@@ -364,7 +364,7 @@ export function BookList({
         return book.date_lecture ? (
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <BookOpen className="w-3 h-3" />
-            {book.date_lecture.toLocaleDateString('fr-FR')}
+            {book.date_lecture.toLocaleDateString("fr-FR")}
           </div>
         ) : (
           <span className="text-muted-foreground text-xs">-</span>
@@ -420,7 +420,7 @@ export function BookList({
         <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">
-              {selectedBooks.length} livre{selectedBooks.length > 1 ? 's' : ''} sélectionné{selectedBooks.length > 1 ? 's' : ''}
+              {selectedBooks.length} livre{selectedBooks.length > 1 ? "s" : "'} sélectionné{selectedBooks.length > 1 ? 's' : "'}
             </span>
           </div>
           

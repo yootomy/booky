@@ -16,12 +16,12 @@ export default function DebugFavoritesPage() {
     try {
       const response = await fetch('/api/favorites');
       const data = await response.json();
-      console.log('GET /api/favorites:', data);
-      setDebugData({ endpoint: 'GET /api/favorites', response: data });
-      toast.success('GET Favorites OK');
+      console.log("GET /api/favorites: ", data);
+      setDebugData({ endpoint: "GET /api/favorites", response: data });
+      toast.success("GET Favorites OK");
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erreur GET Favorites');
+      console.error("Error:", error);
+      toast.error("Erreur GET Favorites");
     } finally {
       setLoading(false);
     }
@@ -36,12 +36,12 @@ export default function DebugFavoritesPage() {
         body: JSON.stringify({ bookId })
       });
       const data = await response.json();
-      console.log('POST /api/favorites:', data);
-      setDebugData({ endpoint: 'POST /api/favorites', response: data });
-      toast.success('POST Favorite OK');
+      console.log("POST /api/favorites: ", data);
+      setDebugData({ endpoint: "POST /api/favorites", response: data });
+      toast.success("POST Favorite OK");
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erreur POST Favorite');
+      console.error("Error:", error);
+      toast.error("Erreur POST Favorite");
     } finally {
       setLoading(false);
     }
@@ -51,15 +51,15 @@ export default function DebugFavoritesPage() {
     setLoading(true);
     try {
       const response = await fetch(`/api/favorites/${bookId}`, {
-        method: 'DELETE'
+        method: `DELETE"
       });
       const data = await response.json();
-      console.log('DELETE /api/favorites:', data);
-      setDebugData({ endpoint: 'DELETE /api/favorites', response: data });
-      toast.success('DELETE Favorite OK');
+      console.log("DELETE /api/favorites: ", data);
+      setDebugData({ endpoint: "DELETE /api/favorites", response: data });
+      toast.success("DELETE Favorite OK");
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erreur DELETE Favorite');
+      console.error("Error:", error);
+      toast.error("Erreur DELETE Favorite");
     } finally {
       setLoading(false);
     }
@@ -68,14 +68,14 @@ export default function DebugFavoritesPage() {
   const testDebugEndpoint = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/favorites/debug');
+      const response = await fetch("/api/favorites/debug");
       const data = await response.json();
-      console.log('GET /api/favorites/debug:', data);
-      setDebugData({ endpoint: 'GET /api/favorites/debug', response: data });
-      toast.success('Debug Endpoint OK');
+      console.log("GET /api/favorites/debug: ", data);
+      setDebugData({ endpoint: "GET /api/favorites/debug", response: data });
+      toast.success("Debug Endpoint OK");
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erreur Debug Endpoint');
+      console.error("Error:", error);
+      toast.error("Erreur Debug Endpoint");
     } finally {
       setLoading(false);
     }
@@ -88,12 +88,12 @@ export default function DebugFavoritesPage() {
         method: 'POST'
       });
       const data = await response.json();
-      console.log('POST /api/favorites/reset:', data);
-      setDebugData({ endpoint: 'POST /api/favorites/reset', response: data });
-      toast.success('Reset Favorites OK');
+      console.log("POST /api/favorites/reset: ", data);
+      setDebugData({ endpoint: "POST /api/favorites/reset", response: data });
+      toast.success("Reset Favorites OK");
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erreur Reset Favorites');
+      console.error("Error:", error);
+      toast.error("Erreur Reset Favorites");
     } finally {
       setLoading(false);
     }

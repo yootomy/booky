@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   🎨 CUSTOM CSS VARIABLES ET THÈMES
+   ============================================================================= */
+
+@theme {
+  /* Couleurs système */
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.145 0 0);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.145 0 0);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.145 0 0);
+  --color-primary: oklch(0.205 0 0);
+  --color-primary-foreground: oklch(0.985 0 0);
+  --color-secondary: oklch(0.97 0 0);
+  --color-secondary-foreground: oklch(0.205 0 0);
+  --color-muted: oklch(0.97 0 0);
+  --color-muted-foreground: oklch(0.556 0 0);
+  --color-accent: oklch(0.97 0 0);
+  --color-accent-foreground: oklch(0.205 0 0);
+  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.985 0 0);
+  --color-border: oklch(0.922 0 0);
+  --color-input: oklch(0.922 0 0);
+  --color-ring: oklch(0.708 0 0);
+
+  /* Couleurs personnalisées Dark Romance */
+  --color-deep-black: #0a0a0a;
+  --color-charcoal: #1a1a1a;
+  --color-crimson: #8b1538;
+  --color-blood-red: #9c1b2b;
+  --color-royal-purple: #4b0082;
+  --color-deep-purple: #301934;
+  --color-indigo: #3c1d5b;
+
+  /* Border radius */
+  --radius: 0.625rem;
+
+  /* Keyframes pour animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-star-movement-top: star-movement-top 6s linear infinite;
+  --animate-star-movement-bottom: star-movement-bottom 6s linear infinite;
+}
+
+/* =============================================================================
+   🌙 DARK MODE
+   ============================================================================= */
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: oklch(0.145 0 0);
+    --color-foreground: oklch(0.985 0 0);
+    --color-card: oklch(0.205 0 0);
+    --color-card-foreground: oklch(0.985 0 0);
+    --color-popover: oklch(0.205 0 0);
+    --color-popover-foreground: oklch(0.985 0 0);
+    --color-primary: oklch(0.922 0 0);
+    --color-primary-foreground: oklch(0.205 0 0);
+    --color-secondary: oklch(0.269 0 0);
+    --color-secondary-foreground: oklch(0.985 0 0);
+    --color-muted: oklch(0.269 0 0);
+    --color-muted-foreground: oklch(0.708 0 0);
+    --color-accent: oklch(0.269 0 0);
+    --color-accent-foreground: oklch(0.985 0 0);
+    --color-destructive: oklch(0.704 0.191 22.216);
+    --color-border: oklch(1 0 0 / 10%);
+    --color-input: oklch(1 0 0 / 15%);
+    --color-ring: oklch(0.556 0 0);
+    --color-chart-1: oklch(0.488 0.243 264.376);
+    --color-chart-2: oklch(0.696 0.17 162.48);
+    --color-chart-3: oklch(0.769 0.188 70.08);
+    --color-chart-4: oklch(0.627 0.265 303.9);
+    --color-chart-5: oklch(0.645 0.246 16.439);
+    --color-sidebar: oklch(0.205 0 0);
+    --color-sidebar-foreground: oklch(0.985 0 0);
+    --color-sidebar-primary: oklch(0.488 0.243 264.376);
+    --color-sidebar-primary-foreground: oklch(0.985 0 0);
+    --color-sidebar-accent: oklch(0.269 0 0);
+    --color-sidebar-accent-foreground: oklch(0.985 0 0);
+    --color-sidebar-border: oklch(1 0 0 / 10%);
+    --color-sidebar-ring: oklch(0.556 0 0);
+  }
+}
+
+/* =============================================================================
+   🎭 DARK ROMANCE THEME
+   ============================================================================= */
+
+.dark-romance {
+  @theme {
+    --color-background: var(--color-deep-black);
+    --color-foreground: oklch(0.985 0 0);
+    --color-card: var(--color-charcoal);
+    --color-card-foreground: oklch(0.985 0 0);
+    --color-popover: var(--color-charcoal);
+    --color-popover-foreground: oklch(0.985 0 0);
+    --color-primary: var(--color-crimson);
+    --color-primary-foreground: oklch(0.985 0 0);
+    --color-secondary: var(--color-deep-purple);
+    --color-secondary-foreground: oklch(0.985 0 0);
+    --color-muted: oklch(0.15 0 0);
+    --color-muted-foreground: oklch(0.708 0 0);
+    --color-accent: var(--color-royal-purple);
+    --color-accent-foreground: oklch(0.985 0 0);
+    --color-destructive: var(--color-blood-red);
+    --color-border: oklch(1 0 0 / 15%);
+    --color-input: oklch(1 0 0 / 10%);
+    --color-ring: var(--color-crimson);
+    --color-chart-1: var(--color-crimson);
+    --color-chart-2: var(--color-royal-purple);
+    --color-chart-3: var(--color-indigo);
+    --color-chart-4: var(--color-deep-purple);
+    --color-chart-5: var(--color-blood-red);
+    --color-sidebar: var(--color-charcoal);
+    --color-sidebar-foreground: oklch(0.985 0 0);
+    --color-sidebar-primary: var(--color-crimson);
+    --color-sidebar-primary-foreground: oklch(0.985 0 0);
+    --color-sidebar-accent: var(--color-deep-purple);
+    --color-sidebar-accent-foreground: oklch(0.985 0 0);
+    --color-sidebar-border: oklch(1 0 0 / 15%);
+    --color-sidebar-ring: var(--color-crimson);
+  }
+}
+
+/* =============================================================================
+   📱 SUPPORT DES APPAREILS ET ACCESSIBILITÉ
+   ============================================================================= */
+
+@supports (min-height: 100dvh) {
+  html, body {
+    min-height: 100dvh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

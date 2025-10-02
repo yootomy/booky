@@ -122,7 +122,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
     mutationFn: (data: { id: string } & CategoryFormData) => 
       categoriesApi.update(data.id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({
         title: "Catégorie mise à jour",
         description: "Les modifications ont été sauvegardées",
@@ -141,7 +141,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
   const deleteCategoryMutation = useMutation({
     mutationFn: (id: string) => categoriesApi.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({
         title: "Catégorie supprimée",
         description: "La catégorie a été supprimée avec succès",
@@ -195,10 +195,10 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
     try {
       await deleteCategoryMutation.mutateAsync(categoryId);
     } catch (error) {
-      console.error('Erreur lors de la suppression:', error);
+      console.error("Erreur lors de la suppression:", error);
       toast({
         title: "Erreur",
-        description: typeof error === 'object' && error && 'message' in error
+        description: typeof error === "object" && error && "message" in error
           ? (error as any).message
           : "Impossible de supprimer la catégorie",
         variant: "destructive",
@@ -219,10 +219,10 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
         await createCategoryMutation.mutateAsync(formData);
       }
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
+      console.error("Erreur lors de la soumission:", error);
       toast({
         title: "Erreur",
-        description: typeof error === 'object' && error && 'message' in error
+        description: typeof error === "object" && error && "message" in error
           ? (error as any).message
           : "Une erreur inattendue s'est produite",
         variant: "destructive",
@@ -312,12 +312,12 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
             <form onSubmit={handleSubmit}>
               <DialogHeader>
                 <DialogTitle>
-                  {editingCategory ? 'Modifier la catégorie' : 'Nouvelle catégorie'}
+                  {editingCategory ? "Modifier la catégorie" : "Nouvelle catégorie"}
                 </DialogTitle>
                 <DialogDescription>
                   {editingCategory 
                     ? 'Modifiez les informations de la catégorie'
-                    : 'Créez une nouvelle catégorie pour organiser vos livres'
+                    : "Créez une nouvelle catégorie pour organiser vos livres"
                   }
                 </DialogDescription>
               </DialogHeader>
@@ -352,7 +352,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
                           className="w-6 h-6 rounded border-2 hover:scale-110 transition-transform"
                           style={{ 
                             backgroundColor: color,
-                            borderColor: formData.couleur === color ? '#000' : 'transparent'
+                            borderColor: formData.couleur === color ? "#000" : "transparent"
                           }}
                           onClick={() => setFormData(prev => ({ ...prev, couleur: color }))}
                         />
@@ -392,7 +392,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
                 <Button type="submit" disabled={isSubmitting || !formData.nom.trim()}>
                   {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                   <Save className="h-4 w-4 mr-2" />
-                  {editingCategory ? 'Sauvegarder' : 'Créer'}
+                  {editingCategory ? "Sauvegarder" : "Créer"}
                 </Button>
               </DialogFooter>
             </form>
@@ -453,16 +453,16 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
               </div>
 
               <div className="flex items-center justify-between">
-                <Badge 
-                  variant="secondary" 
+                <Badge
+                  variant="secondary"
                   className="text-xs"
                   style={{
-                    backgroundColor: '${category.couleur}20',
+                    backgroundColor: `${category.couleur}20`,
                     color: category.couleur
                   }}
                 >
                   <BookOpen className="h-3 w-3 mr-1" />
-                  {category.book_count || 0} livre{(category.book_count || 0) > 1 ? 's' : ''}
+                  {category.book_count || 0} livre{(category.book_count || 0) > 1 ? "s" : ""}
                 </Badge>
                 
                 <div className="flex items-center space-x-1 text-xs text-muted-foreground">
@@ -481,8 +481,8 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
             <Folder className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">Aucune catégorie trouvée</h3>
             <p className="text-muted-foreground mb-4">
-              {searchQuery 
-                ? `Aucune catégorie ne correspond à votre recherche "${searchQuery}"`
+              {searchQuery
+                ? `Aucune catégorie ne correspond à votre recherche ${searchQuery}`
                 : "Commencez par créer votre première catégorie"
               }
             </p>
@@ -502,7 +502,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
       {/* Results count */}
       {searchQuery && (
         <div className="text-sm text-muted-foreground text-center">
-          {filteredCategories.length} catégorie{filteredCategories.length > 1 ? 's' : ''} trouvée{filteredCategories.length > 1 ? 's' : ''}
+          {filteredCategories.length} catégorie{filteredCategories.length > 1 ? "s" : ''} trouvée{filteredCategories.length > 1 ? 's' : ''}
         </div>
       )}
     </div>

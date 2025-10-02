@@ -20,7 +20,7 @@ export function useMoodExplorer() {
         setIsLoading(true);
         
         const response = await apiClient.get('/api/categories'); // Utiliser categories comme tags
-        if (!response.ok) throw new Error('Failed to fetch tags');
+        if (!response.ok) throw new Error("Failed to fetch tags");
         
         const tags = await response.json();
         

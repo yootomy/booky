@@ -70,7 +70,7 @@ export default function AdminSettings() {
     queryKey: ['featured-book'],
     queryFn: async () => {
       const response = await apiClient.get('/api/featured-book');
-      if (!response.ok) throw new Error('Failed to fetch featured book');
+      if (!response.ok) throw new Error("Failed to fetch featured book");
       return response.json();
     }
   });
@@ -79,8 +79,8 @@ export default function AdminSettings() {
     queryKey: ['book-search', bookSearchQuery],
     queryFn: async () => {
       if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
-      const response = await apiClient.get('/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10');
-      if (!response.ok) throw new Error('Failed to search books');
+      const response = await apiClient.get('/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10`);
+      if (!response.ok) throw new Error("Failed to search books");
       return response.json();
     },
     enabled: bookSearchQuery.length >= 2
@@ -90,9 +90,9 @@ export default function AdminSettings() {
   const setFeaturedBook = async (bookId: string) => {
     try {
       setFeaturedBookLoading(true);
-      const response = await apiClient.get('/api/featured-book', {
+      const response = await apiClient.get(`/api/featured-book', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type' : 'application/json' },
         body: JSON.stringify({ bookId })
       });
 
@@ -107,7 +107,7 @@ export default function AdminSettings() {
       });
 
       // Refresh the featured book data
-      queryClient.invalidateQueries({ queryKey: ['featured-book'] });
+      queryClient.invalidateQueries({ queryKey: ["featured-book"] });
       queryClient.invalidateQueries({ queryKey: ['spotlight-book'] });
       setShowBookSearch(false);
       setBookSearchQuery('');
@@ -126,7 +126,7 @@ export default function AdminSettings() {
   const clearFeaturedBook = async () => {
     try {
       setFeaturedBookLoading(true);
-      const response = await apiClient.get('/api/featured-book', {
+      const response = await apiClient.get("/api/featured-book", {
         method: 'DELETE'
       });
 
@@ -141,7 +141,7 @@ export default function AdminSettings() {
       });
 
       // Refresh the featured book data
-      queryClient.invalidateQueries({ queryKey: ['featured-book'] });
+      queryClient.invalidateQueries({ queryKey: ["featured-book"] });
       queryClient.invalidateQueries({ queryKey: ['spotlight-book'] });
 
     } catch (error) {
@@ -310,7 +310,7 @@ export default function AdminSettings() {
                         size="sm"
                         onClick={() => {
                           setShowBookSearch(false);
-                          setBookSearchQuery('');
+                          setBookSearchQuery("");
                         }}
                       >
                         <X className="h-4 w-4" />
@@ -320,7 +320,7 @@ export default function AdminSettings() {
                     <div className="relative">
                       <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Tapez le titre ou l'auteur du livre..."
+                        placeholder="Tapez le titre ou l"auteur du livre...'
                         value={bookSearchQuery}
                         onChange={(e) => setBookSearchQuery(e.target.value)}
                         className="pl-10"

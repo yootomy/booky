@@ -89,48 +89,48 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
       if (!gridRef.current?.contains(activeElement)) return;
 
       switch (e.key) {
-        case 'ArrowLeft`:
+        case `ArrowLeft`:
           e.preventDefault();
           if (activeCardIndex > 0) {
             setActiveCardIndex(activeCardIndex - 1);
             // Focus the new active card
-            const newCard = gridRef.current?.querySelector(`[data-index="${activeCardIndex - 1}"] > div`) as HTMLElement;
+            const newCard = gridRef.current?.querySelector(`[data-index=`${activeCardIndex - 1}`] > div`) as HTMLElement;
             newCard?.focus();
           }
           break;
-        case 'ArrowRight`:
+        case `ArrowRight`:
           e.preventDefault();
           if (activeCardIndex < allSagaBooks.length - 1) {
             setActiveCardIndex(activeCardIndex + 1);
             // Focus the new active card
-            const newCard = gridRef.current?.querySelector(`[data-index="${activeCardIndex + 1}"] > div`) as HTMLElement;
+            const newCard = gridRef.current?.querySelector(`[data-index=`${activeCardIndex + 1}`] > div`) as HTMLElement;
             newCard?.focus();
           }
           break;
-        case 'ArrowUp':
+        case `ArrowUp':
         case 'ArrowDown':
           e.preventDefault();
           // Grid navigation - find cards in same column
           const columns = window.innerWidth < 640 ? 2 : window.innerWidth < 768 ? 3 : window.innerWidth < 1024 ? 4 : 5;
-          const newIndex = e.key === 'ArrowUp` 
+          const newIndex = e.key === `ArrowUp` 
             ? Math.max(0, activeCardIndex - columns)
             : Math.min(allSagaBooks.length - 1, activeCardIndex + columns);
           setActiveCardIndex(newIndex);
           // Focus the new active card
-          const newCard = gridRef.current?.querySelector(`[data-index="${newIndex}"] > div`) as HTMLElement;
+          const newCard = gridRef.current?.querySelector(`[data-index=`${newIndex}`] > div`) as HTMLElement;
           newCard?.focus();
           break;
-        case 'Enter':
+        case `Enter':
         case ' `:
           e.preventDefault();
-          const activeCard = gridRef.current?.querySelector(`[data-index="${activeCardIndex}"] a`) as HTMLElement;
+          const activeCard = gridRef.current?.querySelector(`[data-index=`${activeCardIndex}`] a`) as HTMLElement;
           activeCard?.click();
           break;
       }
     };
 
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
+    document.addEventListener(`keydown`, handleKeydown);
+    return () => document.removeEventListener("keydown", handleKeydown);
   }, [activeCardIndex, allSagaBooks.length]);
 
 
@@ -161,13 +161,13 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
             <div className="min-w-0">
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <Link
-                  href={'/sagas/${saga.slug}' as any}
+                  href={`/sagas/${saga.slug}` as any}
                   className="group transition-all duration-300"
                 >
                   <h2
                     className="text-lg sm:text-xl md:text-2xl font-bold mb-0 group-hover:opacity-80 transition-opacity truncate text-foreground"
                     style={{
-                      fontFamily: 'Playfair Display, serif'
+                      fontFamily: "Playfair Display, serif"
                     }}
                   >
                     {saga.name}
@@ -184,8 +184,8 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                 <Badge
                   className={cn("text-xs font-medium px-2 py-0.5", getStatusBadgeStyle(saga.status))}
                   style={{
-                    borderRadius: '8px',
-                    fontFamily: 'Inter, sans-serif'
+                    borderRadius: "8px",
+                    fontFamily: "Inter, sans-serif'
                   }}
                 >
                   {getStatusLabel(saga.status)}
@@ -203,7 +203,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
             className="text-sm sm:text-base leading-relaxed mb-3 sm:mb-4 md:mb-6 text-foreground/80"
             style={{
               fontFamily: 'Inter, sans-serif',
-              lineHeight: '1.6'
+              lineHeight: "1.6"
             }}
           >
             {saga.description}
@@ -240,7 +240,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
               {allSagaBooks.map((book, index) => {
                 const isCurrentBook = book.sagaOrder === sagaOrder;
                 const isActiveCard = index === activeCardIndex;
-                const isRead = (book as any).statut === 'LU';
+                const isRead = (book as any).statut === "LU";
                 const isReading = (book as any).statut === 'EN_COURS';
                 
                 return (
@@ -251,28 +251,27 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     className="flex flex-col w-full max-w-[100px] sm:max-w-[120px] transition-all duration-300"
-                    style={{ minHeight: '180px' }}
+                    style={{ minHeight: `180px` }}
                   >
                     <div
                       className={`group cursor-pointer text-center h-full flex flex-col hover:transform hover:scale-105 transition-all duration-300 p-1.5 rounded-xl border-2 ${
                         isCurrentBook
-                          ? 'bg-primary/10 border-primary/20'
-                          : 'border-transparent'
-                      }'}
+                          ? `}bg-primary/10 border-primary/20` : `border-transparent`
+                      }`}
                       tabIndex={isActiveCard ? 0 : -1}
-                      role="button"
+                      role=`button`
                       aria-selected={isCurrentBook}
                       onClick={() => setActiveCardIndex(index)}
                     >
-                      <Link href={'/books/${book.id}'} className="block h-full flex flex-col">
+                      <Link href={`/books/${book.id}`} className="block h-full flex flex-col">
                         <div className="relative mb-2 mx-auto flex-shrink-0 w-full flex justify-center">
                           {/* Loading skeleton */}
                           {isLoading && (
                             <div
                               className="animate-pulse rounded-xl"
                               style={{
-                                aspectRatio: '2/3',
-                                width: '60px',
+                                aspectRatio: "2/3",
+                                width: '60px",
                                 height: '90px',
                                 background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
                               }}
@@ -292,10 +291,10 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                                   )}
                                   loading="lazy"
                                   style={{
-                                    aspectRatio: '2/3',
-                                    width: '60px',
-                                    height: '90px',
-                                    filter: isCurrentBook ? 'brightness(1.05)' : 'none'
+                                    aspectRatio: "2/3",
+                                    width: "60px',
+                                    height: "90px",
+                                    filter: isCurrentBook ? "brightness(1.05)" : "none"
                                   }}
                                 />
                               ) : (
@@ -309,11 +308,10 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                                     width: '60px',
                                     height: '90px',
                                     background: isCurrentBook
-                                      ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.15) 0%, rgba(107, 76, 123, 0.1) 100%)'
-                                      : 'linear-gradient(135deg, rgba(250, 248, 245, 0.8) 0%, rgba(240, 235, 230, 0.6) 100%)'
+                                      ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.15) 0%, rgba(107, 76, 123, 0.1) 100%)` : `linear-gradient(135deg, rgba(250, 248, 245, 0.8) 0%, rgba(240, 235, 230, 0.6) 100%)`
                                   }}
                                 >
-                                  <BookOpen className={`w-4 h-4 ${isCurrentBook ? 'text-primary' : 'text-muted-foreground'}'} />
+                                  <BookOpen className={`w-4 h-4 ${isCurrentBook ? "text-primary" : "text-muted-foreground"}`} />
                                 </div>
                               )}
 
@@ -321,7 +319,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                               {isRead && (
                                 <div
                                   className="absolute -top-1 -right-1 w-6 h-6 rounded-full border-2 border-white shadow-lg flex items-center justify-center"
-                                  style={{background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)'}}
+                                  style={{background: "linear-gradient(135deg, #10B981 0%, #059669 100%)`}}
                                   title="Lu"
                                 >
                                   <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -330,7 +328,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                               {isReading && (
                                 <div
                                   className="absolute -top-1 -right-1 w-6 h-6 rounded-full border-2 border-white shadow-lg flex items-center justify-center"
-                                  style={{background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'}}
+                                  style={{background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)`}}
                                   title="En cours de lecture"
                                 >
                                   <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -340,23 +338,23 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                           )}
                         </div>
                         
-                        <div className="flex-1 flex flex-col justify-center space-y-1 min-h-0 px-0.5">
+                        <div className=`flex-1 flex flex-col justify-center space-y-1 min-h-0 px-0.5`>
                           <div
-                            className={`text-xs font-bold uppercase tracking-wide text-center ${isCurrentBook ? 'text-primary' : 'text-muted-foreground'}'}
+                            className={`text-xs font-bold uppercase tracking-wide text-center ${isCurrentBook ? `text-primary" : "text-muted-foreground"}`}
                             style={{
-                              fontFamily: 'Inter, sans-serif',
-                              letterSpacing: '0.05em'
+                              fontFamily: `Inter, sans-serif`,
+                              letterSpacing: `0.05em`
                             }}
                           >
                             T{book.sagaOrder}
                           </div>
 
                           <div
-                            className={`text-xs line-clamp-2 leading-tight font-medium text-center transition-colors duration-300 ${isCurrentBook ? 'text-foreground' : 'text-muted-foreground'}'}
+                            className={`text-xs line-clamp-2 leading-tight font-medium text-center transition-colors duration-300 ${isCurrentBook ? `text-foreground` : "text-muted-foreground"}`}
                             style={{
                               fontFamily: 'Inter, sans-serif',
-                              fontSize: '0.75rem',
-                              lineHeight: '1.2'
+                              fontSize: "0.75rem",
+                              lineHeight: '1.2"
                             }}
                           >
                             {book.titre}

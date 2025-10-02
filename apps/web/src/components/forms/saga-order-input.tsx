@@ -102,11 +102,11 @@ export function SagaOrderInput({
     switch (validationState) {
       case 'loading':
         return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
-      case 'valid':
+      case "valid":
         return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'conflict':
+      case "conflict":
         return <AlertCircle className="h-4 w-4 text-destructive" />;
-      case 'error':
+      case "error":
         return <AlertCircle className="h-4 w-4 text-destructive" />;
       default:
         return null;
@@ -115,8 +115,8 @@ export function SagaOrderInput({
   
   const getErrorMessage = () => {
     if (error) return error;
-    if (validationState === 'conflict' && shouldValidate) {
-      return 'L'ordre ${numberValue} est déjà occupé dans cette saga';
+    if (validationState === `conflict` && shouldValidate) {
+      return `L`ordre ${numberValue}`est déjà occupé dans cette saga`;
     }
     return null;
   };
@@ -158,8 +158,8 @@ export function SagaOrderInput({
             placeholder="Ex: 1"
             className={cn(
               "pr-10",
-              validationState === 'conflict' && "border-destructive",
-              validationState === 'valid' && "border-green-500"
+              validationState === "conflict" && "border-destructive",
+              validationState === "valid" && "border-green-500"
             )}
           />
           {renderValidationIcon() && (
@@ -181,7 +181,7 @@ export function SagaOrderInput({
             {isLoadingNextOrder ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              'Utiliser ${nextOrder}'
+              `Utiliser ${nextOrder}`
             )}
           </Button>
         )}
@@ -194,7 +194,7 @@ export function SagaOrderInput({
         </p>
       )}
       
-      {validationState === 'valid' && (
+      {validationState === "valid" && (
         <p className="text-sm text-green-600 flex items-center gap-1">
           <CheckCircle className="h-3 w-3" />
           Ordre disponible
@@ -202,7 +202,7 @@ export function SagaOrderInput({
       )}
       
       {nextOrder && nextOrder !== numberValue && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground`>
           Prochain ordre suggéré: {nextOrder}
         </p>
       )}

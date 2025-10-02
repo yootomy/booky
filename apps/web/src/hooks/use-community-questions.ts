@@ -39,8 +39,8 @@ export function useCommunityQuestions() {
           // Fallback: utiliser des données simulées si l'API n'existe pas encore
           const simulatedQuestions: CommunityQuestion[] = [
             {
-              id: '1',
-              title: 'Pourquoi les anti-héros m\'attirent-ils autant ?',
+              id: "1",
+              title: "Pourquoi les anti-héros m\"attirent-ils autant ?",
               excerpt: 'Je me retrouve toujours à tomber pour les personnages les plus sombres. Est-ce que quelqu\'un d\'autre ressent ça ?',
               author: { nom: 'Sarah M.' },
               book: {
@@ -56,8 +56,8 @@ export function useCommunityQuestions() {
               is_public: true
             },
             {
-              id: '2',
-              title: 'Comment gérer l\'intensité émotionnelle ?',
+              id: "2",
+              title: "Comment gérer l\"intensité émotionnelle ?",
               excerpt: 'Certains livres me bouleversent tellement que j\'ai du mal à passer à autre chose. Des conseils ?',
               author: { nom: 'Emma L.' },
               book: {
@@ -73,8 +73,8 @@ export function useCommunityQuestions() {
               is_public: true
             },
             {
-              id: '3',
-              title: 'Vos tropes favoris en dark romance ?',
+              id: "3",
+              title: "Vos tropes favoris en dark romance ?",
               excerpt: 'Je cherche de nouvelles lectures, quels sont vos tropes préférés et pourquoi ?',
               author: { nom: 'Lisa K.' },
               book: {
@@ -90,8 +90,8 @@ export function useCommunityQuestions() {
               is_public: true
             },
             {
-              id: '4',
-              title: 'Gestion des triggers en lecture',
+              id: "4",
+              title: "Gestion des triggers en lecture",
               excerpt: 'Comment abordez-vous les contenus sensibles ? Des stratégies pour continuer à lire tout en se protégeant ?',
               author: { nom: 'Marie D.' },
               book: {
@@ -130,7 +130,7 @@ export function useCommunityQuestions() {
             auteur: question.book?.auteur || question.livre?.auteur || 'Auteur inconnu',
             image_couverture: question.book?.image_couverture || question.livre?.image_couverture
           },
-          status: question.status || (question.answers_count > 0 ? 'ANSWERED' : 'PENDING'),
+          status: question.status || (question.answers_count > 0 ? "ANSWERED" : "PENDING"),
           likes_count: question._count?.likes || question.likes_count || 0,
           answers_count: question._count?.answers || question.answers_count || 0,
           date_question: question.date_creation || question.date_question || new Date().toISOString(),
@@ -140,7 +140,7 @@ export function useCommunityQuestions() {
         setData(processedQuestions);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(err instanceof Error ? err.message : "Unknown error");
         setData([]);
       } finally {
         setIsLoading(false);

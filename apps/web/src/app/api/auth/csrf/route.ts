@@ -58,9 +58,9 @@ export async function GET(request: NextRequest) {
     return responseNext;
     
   } catch (error) {
-    console.error('CSRF proxy error:', error);
+    console.error("CSRF proxy error: ", error);
     return NextResponse.json(
-      { error: 'Failed to generate CSRF token' },
+      { error: "Failed to generate CSRF token" },
       { status: 500 }
     );
   }

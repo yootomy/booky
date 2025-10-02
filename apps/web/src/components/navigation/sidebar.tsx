@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
@@ -39,7 +39,7 @@ import { BookStatus } from '@/components/books/book-status';
 import { type Category } from '@/types/category';
 import { type Tag } from '@/types/tag';
 import { BookStatus as BookStatusType, TagType } from '@/types/api';
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 export interface SidebarFilters {
   search?: string;
@@ -146,10 +146,10 @@ function CategoryItem({
       <Checkbox
         checked={isSelected}
         onCheckedChange={onToggle}
-        id={'category-${category.id}'}
+        id={`category-${category.id}`}
       />
       <label
-        htmlFor={'category-${category.id}'}
+        htmlFor={`category-${category.id}`}
         className="flex-1 flex items-center gap-2 cursor-pointer text-sm"
       >
         <div
@@ -181,14 +181,14 @@ function TagItem({
   showCount?: boolean;
 }) {
   return (
-    <div className="flex items-center space-x-2 py-1">
+    <div className=`flex items-center space-x-2 py-1`>
       <Checkbox
         checked={isSelected}
         onCheckedChange={onToggle}
-        id={'tag-${tag.id}'}
+        id={`tag-${tag.id}`}
       />
       <label
-        htmlFor={'tag-${tag.id}'}
+        htmlFor={`tag-${tag.id}`}
         className="flex-1 flex items-center gap-2 cursor-pointer text-sm"
       >
         <div
@@ -261,8 +261,8 @@ export function Sidebar({
   quickStats
 }: SidebarProps) {
   const pathname = usePathname();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [tagSearchTerm, setTagSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [tagSearchTerm, setTagSearchTerm] = useState("');
 
   // Filtrer les catégories selon la recherche
   const filteredCategories = categories.filter(cat =>
@@ -347,7 +347,7 @@ export function Sidebar({
   }
 
   return (
-    <aside className={cn('w-80 border-r bg-muted/30', className)}>
+    <aside className={cn("w-80 border-r bg-muted/30", className)}>
       <ScrollArea className="h-full">
         <div className="p-4 space-y-4">
           {/* Header */}
@@ -424,8 +424,8 @@ export function Sidebar({
                 <div className="space-y-2">
                   <Input
                     placeholder="Rechercher..."
-                    value={filters.search || ''}
-                    onChange={(e) => handleFilterChange('search', e.target.value)}
+                    value={filters.search || ""}
+                    onChange={(e) => handleFilterChange("search", e.target.value)}
                   />
                 </div>
               </SidebarSection>
@@ -436,14 +436,14 @@ export function Sidebar({
               <SidebarSection title="Statut de lecture">
                 <div className="space-y-1">
                   {Object.values(BookStatusType).map((status) => (
-                    <div key={status} className="flex items-center space-x-2">
+                    <div key={status} className="flex items-center space-x-2`>
                       <Checkbox
                         checked={filters.status?.includes(status) || false}
                         onCheckedChange={() => toggleStatus(status)}
-                        id={'status-${status}'}
+                        id={`status-${status}`}
                       />
                       <label
-                        htmlFor={'status-${status}'}
+                        htmlFor={`status-${status}`}
                         className="flex-1 cursor-pointer text-sm"
                       >
                         <BookStatus status={status} size="xs" variant="minimal" />
@@ -462,8 +462,8 @@ export function Sidebar({
                     label="Note générale"
                     value={[filters.ratingMin || 1, filters.ratingMax || 10]}
                     onChange={(value) => {
-                      handleFilterChange('ratingMin', value[0]);
-                      handleFilterChange('ratingMax', value[1]);
+                      handleFilterChange("ratingMin", value[0]);
+                      handleFilterChange("ratingMax", value[1]);
                     }}
                     icon="⭐"
                   />
@@ -472,8 +472,8 @@ export function Sidebar({
                     label="Niveau Spicy"
                     value={[filters.spicyMin || 1, filters.spicyMax || 10]}
                     onChange={(value) => {
-                      handleFilterChange('spicyMin', value[0]);
-                      handleFilterChange('spicyMax', value[1]);
+                      handleFilterChange("spicyMin", value[0]);
+                      handleFilterChange("spicyMax", value[1]);
                     }}
                     icon="🌶️"
                   />
@@ -482,7 +482,7 @@ export function Sidebar({
                     label="Niveau Dark"
                     value={[filters.darkMin || 1, filters.darkMax || 10]}
                     onChange={(value) => {
-                      handleFilterChange('darkMin', value[0]);
+                      handleFilterChange("darkMin", value[0]);
                       handleFilterChange('darkMax', value[1]);
                     }}
                     icon="💀"
@@ -492,7 +492,7 @@ export function Sidebar({
                     label="Niveau Romance"
                     value={[filters.romanceMin || 1, filters.romanceMax || 10]}
                     onChange={(value) => {
-                      handleFilterChange('romanceMin', value[0]);
+                      handleFilterChange("romanceMin", value[0]);
                       handleFilterChange('romanceMax', value[1]);
                     }}
                     icon="❤️"
@@ -511,7 +511,7 @@ export function Sidebar({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleFilterChange('categories', [])}
+                    onClick={() => handleFilterChange("categories", [])}
                     disabled={!filters.categories?.length}
                     className="h-6 px-2"
                   >
@@ -550,7 +550,7 @@ export function Sidebar({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleFilterChange('tags', [])}
+                    onClick={() => handleFilterChange("tags", [])}
                     disabled={!filters.tags?.length}
                     className="h-6 px-2"
                   >
@@ -569,7 +569,7 @@ export function Sidebar({
                     {Object.entries(groupedTags).map(([type, typeTags]) => (
                       <div key={type} className="mb-3">
                         <Label className="text-xs font-medium text-muted-foreground mb-1 block">
-                          {type === TagType.GENRE && '🎭 Genres'}
+                          {type === TagType.GENRE && "🎭 Genres"}
                           {type === TagType.TROPE && '💫 Tropes'}
                           {type === TagType.TRIGGER && '⚠️ Triggers'}
                           {type === TagType.PERSONNALISE && '🏷️ Personnalisés'}
@@ -598,7 +598,7 @@ export function Sidebar({
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       checked={filters.favorites || false}
-                      onCheckedChange={(checked) => handleFilterChange('favorites', checked)}
+                      onCheckedChange={(checked) => handleFilterChange("favorites", checked)}
                       id="favorites-filter"
                     />
                     <label htmlFor="favorites-filter" className="text-sm cursor-pointer">
@@ -609,7 +609,7 @@ export function Sidebar({
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       checked={filters.hasReview || false}
-                      onCheckedChange={(checked) => handleFilterChange('hasReview', checked)}
+                      onCheckedChange={(checked) => handleFilterChange("hasReview", checked)}
                       id="review-filter"
                     />
                     <label htmlFor="review-filter" className="text-sm cursor-pointer">
@@ -631,7 +631,7 @@ export function Sidebar({
                     <Input
                       id="date-from"
                       type="date"
-                      value={filters.dateFrom || ''}
+                      value={filters.dateFrom || ""}
                       onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
                       className="h-8"
                     />
@@ -644,7 +644,7 @@ export function Sidebar({
                     <Input
                       id="date-to"
                       type="date"
-                      value={filters.dateTo || ''}
+                      value={filters.dateTo || ""}
                       onChange={(e) => handleFilterChange('dateTo', e.target.value)}
                       className="h-8"
                     />

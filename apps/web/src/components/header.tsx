@@ -72,11 +72,11 @@ export default function Header() {
       animate={{ y: isVisible ? 0 : -100 }}
       transition={{ duration: 0.08, ease: "easeOut" }}
       style={{
-        pointerEvents: isVisible ? 'auto' : 'none'
+        pointerEvents: isVisible ? "auto" : "none"
       }}
     >
       <div className="w-full px-3 sm:px-4 lg:px-8 xl:px-20">
-        <div className="flex h-16 sm:h-20 items-center justify-between" style={{ fontFamily: 'Inter, sans-serif' }}>
+        <div className="flex h-16 sm:h-20 items-center justify-between" style={{ fontFamily: "Inter, sans-serif" }}>
           
           {/* ZONE GAUCHE : Logo + Navigation groupés */}
           <div className="flex items-center space-x-3 sm:space-x-6 flex-1 min-w-0">
@@ -87,7 +87,7 @@ export default function Header() {
                 style={{
                   fontFamily: 'Playfair Display, serif',
                   fontWeight: 700,
-                  letterSpacing: '0.1em'
+                  letterSpacing: "0.1em"
                 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -150,8 +150,8 @@ export default function Header() {
                 style={{
                   background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
                   color: 'white',
-                  fontSize: '0.875rem',
-                  boxShadow: '0 4px 12px rgba(139, 21, 56, 0.25)'
+                  fontSize: "0.875rem",
+                  boxShadow: "0 4px 12px rgba(139, 21, 56, 0.25)"
                 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -200,13 +200,13 @@ export default function Header() {
                           <AvatarImage src={user.avatar} alt={user.nom_complet || user.email} />
                           <AvatarFallback className="bg-primary text-primary-foreground">
                             {user.nom_complet
-                              ? user.nom_complet.split(' ').map(n => n[0]).join('').substring(0, 2)
+                              ? user.nom_complet.split(" ").map(n => n[0]).join('').substring(0, 2)
                               : user.email.substring(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">
-                            {user.nom_complet || user.username || 'Utilisateur'}
+                            {user.nom_complet || user.username || "Utilisateur"}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
                             {user.email}
@@ -221,7 +221,7 @@ export default function Header() {
                           className="w-full justify-start h-10"
                           onClick={() => {
                             setMobileUserMenuOpen(false);
-                            router.push('/dashboard');
+                            router.push("/dashboard");
                           }}
                         >
                           <LayoutDashboard className="mr-3 h-4 w-4" />
@@ -234,7 +234,7 @@ export default function Header() {
                             className="w-full justify-start h-10"
                             onClick={() => {
                               setMobileUserMenuOpen(false);
-                              router.push('/admin/dashboard');
+                              router.push("/admin/dashboard");
                             }}
                           >
                             <Crown className="mr-3 h-4 w-4" />
@@ -314,7 +314,7 @@ export default function Header() {
                         <div className="flex-1">
                           <div className="font-semibold">{link.label}</div>
                           <div className="text-sm opacity-60 mt-0.5">
-                            {link.to === "/" ? "Page d'accueil" :
+                            {link.to === "/" ? "Page d"accueil' :
                              link.to === "/books" ? "Explorez nos livres" :
                              "Sélections spéciales"}
                           </div>

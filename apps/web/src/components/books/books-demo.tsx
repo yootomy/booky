@@ -30,7 +30,7 @@ const mockBooks: BookData[] = [
     niveau_spicy: 7,
     niveau_dark: 5,
     niveau_romance: 9,
-    resume_personnel: "Une histoire d'amour intense avec des personnages complexes et une tension sexuelle incroyable.",
+    resume_personnel: "Une histoire d"amour intense avec des personnages complexes et une tension sexuelle incroyable.',
     date_creation: new Date("2024-01-15"),
     date_lecture: new Date("2024-02-01"),
     nombre_pages: 320,
@@ -88,7 +88,7 @@ const mockBooks: BookData[] = [
     niveau_spicy: 9,
     niveau_dark: 10,
     niveau_romance: 6,
-    resume_personnel: "Trop dark pour moi, j'ai abandonné à la moitié.",
+    resume_personnel: "Trop dark pour moi, j"ai abandonné à la moitié.',
     date_creation: new Date("2024-01-20"),
     nombre_pages: 592,
     categories: [
@@ -104,7 +104,7 @@ const mockBooks: BookData[] = [
     statut: "LU" as BookStatusType,
     note_generale: 10,
     niveau_romance: 8,
-    resume_personnel: "Un chef-d'œuvre absolu ! L'histoire d`Evelyn est captivante du début à la fin.",
+    resume_personnel: "Un chef-d"œuvre absolu ! L'histoire d'Evelyn est captivante du début à la fin.',
     date_creation: new Date("2023-12-01"),
     date_lecture: new Date("2023-12-15"),
     nombre_pages: 400,
@@ -117,16 +117,16 @@ const mockBooks: BookData[] = [
 
 export function BooksDemo() {
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
-  const [statusFilter, setStatusFilter] = useState<BookStatusType>("LU");
+  const [statusFilter, setStatusFilter] = useState<BookStatusType>("LU`);
 
   const handleStatusChange = (book: BookData, newStatus: BookStatusType) => {
-    console.log(`Changing status of "${book.titre}" to ${newStatus}`);
+    console.log(`Changing status of `${book.titre}` to ${newStatus}`);
   };
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-8">
       <div className="text-center">
-        <h1 className="text-3xl font-bold mb-2">Composants d'Affichage de Livres</h1>
+        <h1 className="text-3xl font-bold mb-2">Composants d"Affichage de Livres</h1>
         <p className="text-muted-foreground">
           Démonstration complète des composants BookCover, BookStatus, BookCard, BookGrid et BookList
         </p>
@@ -277,7 +277,7 @@ export function BooksDemo() {
                     key={book.id}
                     book={book}
                     variant="minimal"
-                    onView={() => console.log('View:', book.titre)}
+                    onView={() => console.log("View:", book.titre)}
                   />
                 ))}
               </CardContent>
@@ -292,9 +292,9 @@ export function BooksDemo() {
                 <BookCard
                   book={mockBooks[0]}
                   variant="compact"
-                  onView={() => console.log('View')}
-                  onEdit={() => console.log('Edit')}
-                  onFavoriteToggle={() => console.log('Favorite')}
+                  onView={() => console.log("View")}
+                  onEdit={() => console.log("Edit")}
+                  onFavoriteToggle={() => console.log("Favorite")}
                 />
               </CardContent>
             </Card>
@@ -311,10 +311,10 @@ export function BooksDemo() {
                   showRatings
                   showCategories
                   showDescription
-                  onView={() => console.log('View')}
-                  onEdit={() => console.log('Edit')}
-                  onDelete={() => console.log('Delete')}
-                  onFavoriteToggle={() => console.log('Favorite')}
+                  onView={() => console.log("View")}
+                  onEdit={() => console.log("Edit")}
+                  onDelete={() => console.log("Delete")}
+                  onFavoriteToggle={() => console.log("Favorite")}
                   onStatusChange={handleStatusChange}
                 />
               </CardContent>
@@ -335,10 +335,10 @@ export function BooksDemo() {
                   showCategories
                   showTags
                   showDescription
-                  onView={() => console.log('View')}
-                  onEdit={() => console.log('Edit')}
-                  onDelete={() => console.log('Delete')}
-                  onFavoriteToggle={() => console.log('Favorite')}
+                  onView={() => console.log("View")}
+                  onEdit={() => console.log("Edit")}
+                  onDelete={() => console.log("Delete")}
+                  onFavoriteToggle={() => console.log("Favorite")}
                   onStatusChange={handleStatusChange}
                 />
               </div>
@@ -356,10 +356,10 @@ export function BooksDemo() {
             showFilters
             showViewToggle
             showSort
-            onBookView={(book) => console.log('View:', book.titre)}
-            onBookEdit={(book) => console.log('Edit:', book.titre)}
-            onBookDelete={(book) => console.log('Delete:', book.titre)}
-            onBookFavorite={(book) => console.log('Favorite:', book.titre)}
+            onBookView={(book) => console.log("View:", book.titre)}
+            onBookEdit={(book) => console.log("Edit:", book.titre)}
+            onBookDelete={(book) => console.log("Delete:", book.titre)}
+            onBookFavorite={(book) => console.log("Favorite:", book.titre)}
             onBookStatusChange={handleStatusChange}
           />
         </TabsContent>
@@ -373,11 +373,11 @@ export function BooksDemo() {
             selectedBooks={selectedBooks}
             onSelectionChange={setSelectedBooks}
             sortable
-            onBookView={(book) => console.log('View:', book.titre)}
-            onBookEdit={(book) => console.log('Edit:', book.titre)}
-            onBookDelete={(book) => console.log('Delete:', book.titre)}
+            onBookView={(book) => console.log("View:", book.titre)}
+            onBookEdit={(book) => console.log("Edit:", book.titre)}
+            onBookDelete={(book) => console.log("Delete:", book.titre)}
             onBookStatusChange={handleStatusChange}
-            onBulkAction={(action, ids) => console.log('Bulk action:', action, ids)}
+            onBulkAction={(action, ids) => console.log("Bulk action:", action, ids)}
           />
         </TabsContent>
       </Tabs>

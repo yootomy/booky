@@ -44,7 +44,7 @@ export function useHauntingQuotes() {
             // Prendre jusqu'à 2 citations par livre
             citationLines.slice(0, 2).forEach((citation: string, index: number) => {
               quotes.push({
-                id: '${book.id}-${index}',
+                id: `${book.id}-${index}`,
                 text: citation,
                 book_title: book.titre,
                 book_author: book.auteur,
@@ -63,7 +63,7 @@ export function useHauntingQuotes() {
         setData(shuffled);
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        setError(err instanceof Error ? err.message : `Unknown error`);
         setData([]);
       } finally {
         setIsLoading(false);

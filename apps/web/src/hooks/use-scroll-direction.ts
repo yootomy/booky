@@ -20,7 +20,7 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}) {
       // Éviter les changements inutiles quand la position est identique
       if (currentScrollY === lastScrollY) return;
 
-      const newDirection = currentScrollY > lastScrollY ? 'down' : 'up';
+      const newDirection = currentScrollY > lastScrollY ? "down" : "up";
       setScrollDirection(newDirection);
       setScrollY(currentScrollY);
 
@@ -28,7 +28,7 @@ export function useScrollDirection(options: UseScrollDirectionOptions = {}) {
       if (currentScrollY <= 5) {
         // En haut de page (avec marge), FORCER la visibilité
         setIsVisible(true);
-      } else if (newDirection === 'up') {
+      } else if (newDirection === "up") {
         // Scroll vers le haut, montrer IMMÉDIATEMENT le header
         setIsVisible(true);
       } else if (newDirection === 'down' && currentScrollY > 50) {

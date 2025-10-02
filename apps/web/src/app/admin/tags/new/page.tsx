@@ -47,7 +47,7 @@ export default function NewTagPage() {
                 <p className="text-sm text-muted-foreground">
                   Pour créer un nouveau tag, utilisez le formulaire disponible sur la page principale de gestion des tags.
                 </p>
-                <Button onClick={() => router.push('/admin/tags')}>
+                <Button onClick={() => router.push("/admin/tags")}>
                   Aller à la gestion des tags
                 </Button>
               </div>

@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
@@ -83,97 +83,97 @@ export interface NavbarProps {
 const PUBLIC_NAV_ITEMS: NavItem[] = [
   {
     href: '/',
-    label: 'Accueil',
+    label: "Accueil",
     icon: Home,
-    description: 'Page d\'accueil'
+    description: "Page d\"accueil"
   },
   {
     href: '/books',
-    label: 'Catalogue',
+    label: "Catalogue",
     icon: BookOpen,
-    description: 'Catalogue des livres'
+    description: "Catalogue des livres"
   },
   {
     href: '/categories',
-    label: 'Catégories',
+    label: "Catégories",
     icon: Folder,
-    description: 'Explorez par genres'
+    description: "Explorez par genres"
   },
   {
     href: '/tags',
-    label: 'Tags',
+    label: "Tags",
     icon: Tag,
-    description: 'Tropes et avertissements'
+    description: "Tropes et avertissements"
   },
   {
     href: '/lists',
-    label: 'Collections',
+    label: "Collections",
     icon: List,
-    description: 'Collections de Bruna'
+    description: "Collections de Bruna"
   },
   {
     href: '/search',
-    label: 'Recherche',
+    label: "Recherche",
     icon: Search,
-    description: 'Recherche globale'
+    description: "Recherche globale"
   },
   {
     href: '/lists',
-    label: 'Listes',
+    label: "Listes",
     icon: List,
-    description: 'Listes personnalisées de Bruna'
+    description: "Listes personnalisées de Bruna"
   }
 ];
 
 const ADMIN_NAV_ITEMS: NavItem[] = [
   {
     href: '/admin/dashboard',
-    label: 'Dashboard',
+    label: "Dashboard",
     icon: BarChart3,
     adminOnly: true,
-    description: 'Tableau de bord admin'
+    description: "Tableau de bord admin"
   },
   {
     href: '/admin/books',
-    label: 'Gestion Livres',
+    label: "Gestion Livres",
     icon: BookOpen,
     adminOnly: true,
-    description: 'Gestion des livres'
+    description: "Gestion des livres"
   },
   {
     href: '/admin/categories',
-    label: 'Catégories',
+    label: "Catégories",
     icon: Folder,
     adminOnly: true,
-    description: 'Gestion des catégories'
+    description: "Gestion des catégories"
   },
   {
     href: '/admin/tags',
-    label: 'Tags',
+    label: "Tags",
     icon: Tag,
     adminOnly: true,
-    description: 'Gestion des tags'
+    description: "Gestion des tags"
   },
   {
     href: '/admin/lists',
-    label: 'Listes',
+    label: "Listes",
     icon: List,
     adminOnly: true,
-    description: 'Gestion des listes personnalisées'
+    description: "Gestion des listes personnalisées"
   },
   {
     href: '/admin/users',
-    label: 'Utilisateurs',
+    label: "Utilisateurs",
     icon: Users,
     adminOnly: true,
-    description: 'Gestion des utilisateurs'
+    description: "Gestion des utilisateurs"
   },
   {
     href: '/admin/settings',
-    label: 'Paramètres',
+    label: "Paramètres",
     icon: Settings,
     adminOnly: true,
-    description: 'Configuration du site'
+    description: "Configuration du site"
   }
 ];
 
@@ -187,7 +187,7 @@ function NavLink({
   pathname: string;
   onClick?: () => void;
 }) {
-  const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+  const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
   
   return (
     <Link
@@ -224,7 +224,7 @@ function MobileMenu({
   pathname,
   onLogout 
 }: {
-  user?: NavbarProps['user'];
+  user?: NavbarProps["user"];
   navItems: NavItem[];
   pathname: string;
   onLogout?: () => void;
@@ -323,7 +323,7 @@ function UserMenu({
   onLogout,
   notifications
 }: {
-  user: NavbarProps['user'];
+  user: NavbarProps["user"];
   onLogout?: () => void;
   notifications?: number;
 }) {
@@ -338,7 +338,7 @@ function UserMenu({
               variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
             >
-              {notifications > 99 ? '99+' : notifications}
+              {notifications > 99 ? "99+" : notifications}
             </Badge>
           )}
         </Button>
@@ -366,7 +366,7 @@ function UserMenu({
               <p className="text-xs leading-none text-muted-foreground">
                 {user?.email}
               </p>
-              {user?.role === 'ADMIN' && (
+              {user?.role === "ADMIN" && (
                 <Badge variant="secondary" className="w-fit mt-1">
                   <Shield className="w-3 h-3 mr-1" />
                   Admin
@@ -427,7 +427,7 @@ export function Navbar({
   onLogin,
   onLogout,
   className,
-  brandName = 'Booky',
+  brandName="Booky",
   brandLogo,
   notifications = 0
 }: NavbarProps) {
@@ -445,7 +445,7 @@ export function Navbar({
       className
     )}>
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between" style={{ fontFamily: 'Inter, sans-serif' }}>
+        <div className="flex h-16 items-center justify-between" style={{ fontFamily: "Inter, sans-serif" }}>
           {/* Logo et navigation mobile */}
           <div className="flex items-center gap-4">
             <MobileMenu 
@@ -483,7 +483,7 @@ export function Navbar({
               />
             ))}
             
-            {user?.role === 'ADMIN' && (
+            {user?.role === "ADMIN" && (
               <>
                 <div className="mx-2 h-4 w-px bg-border" />
                 <DropdownMenu>

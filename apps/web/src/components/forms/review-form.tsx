@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from 'react-hook-form';
 import { 
   Save, 
@@ -148,19 +148,19 @@ function CitationsSection({
                 <Textarea
                   placeholder="Citation..."
                   value={citation.texte}
-                  onChange={(e) => onUpdate(index, 'texte', e.target.value)}
+                  onChange={(e) => onUpdate(index, "texte", e.target.value)}
                   rows={2}
                 />
                 <div className="grid grid-cols-2 gap-2">
                   <Input
                     type="number"
                     placeholder="Page (optionnel)"
-                    value={citation.page || ''}
+                    value={citation.page || ""}
                     onChange={(e) => onUpdate(index, 'page', parseInt(e.target.value) || 0)}
                   />
                   <Input
                     placeholder="Contexte (optionnel)"
-                    value={citation.contexte || ''}
+                    value={citation.contexte || ""}
                     onChange={(e) => onUpdate(index, 'contexte', e.target.value)}
                   />
                 </div>
@@ -229,18 +229,18 @@ function MomentsForts({
                   <Input
                     placeholder="Titre du moment"
                     value={moment.titre}
-                    onChange={(e) => onUpdate(index, 'titre', e.target.value)}
+                    onChange={(e) => onUpdate(index, "titre", e.target.value)}
                   />
                   <Input
                     placeholder="Chapitre (optionnel)"
-                    value={moment.chapitre || ''}
+                    value={moment.chapitre || ""}
                     onChange={(e) => onUpdate(index, 'chapitre', e.target.value)}
                   />
                 </div>
                 <Textarea
                   placeholder="Description du moment..."
                   value={moment.description}
-                  onChange={(e) => onUpdate(index, 'description', e.target.value)}
+                  onChange={(e) => onUpdate(index, "description", e.target.value)}
                   rows={2}
                 />
               </div>
@@ -289,7 +289,7 @@ export function ReviewForm({
     reset
   } = useForm<ReviewFormData>({
     defaultValues: {
-      resume_personnel: initialData?.resume_personnel || '',
+      resume_personnel: initialData?.resume_personnel || "",
       critique_detaillee: initialData?.critique_detaillee || '',
       citations_favorites: initialData?.citations_favorites || '',
       pourquoi_aimer: initialData?.pourquoi_aimer || '',
@@ -351,12 +351,12 @@ export function ReviewForm({
       
       await onSubmit(completeData);
     } catch (error) {
-      console.error('Erreur lors de la soumission:', error);
+      console.error("Erreur lors de la soumission: ", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn('space-y-6', className)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn("space-y-6", className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
@@ -408,7 +408,7 @@ export function ReviewForm({
               <Label htmlFor="resume_personnel">Résumé personnel</Label>
               <Textarea
                 id="resume_personnel"
-                {...register('resume_personnel')}
+                {...register("resume_personnel")}
                 placeholder="Votre résumé du livre en quelques mots..."
                 rows={3}
               />
@@ -419,7 +419,7 @@ export function ReviewForm({
               <Label htmlFor="critique_detaillee">Critique détaillée</Label>
               <Textarea
                 id="critique_detaillee"
-                {...register('critique_detaillee')}
+                {...register("critique_detaillee")}
                 placeholder="Votre critique complète du livre..."
                 rows={6}
               />
@@ -436,7 +436,7 @@ export function ReviewForm({
                 <Label>Note générale</Label>
                 <StarRating
                   value={watchedValues.note_generale}
-                  onChange={(value) => setValue('note_generale', value)}
+                  onChange={(value) => setValue("note_generale", value)}
                   size="lg"
                 />
               </div>
@@ -446,7 +446,7 @@ export function ReviewForm({
                 <Label>Niveau Spicy 🌶️</Label>
                 <SpicyRating
                   value={watchedValues.niveau_spicy}
-                  onChange={(value) => setValue('niveau_spicy', value)}
+                  onChange={(value) => setValue("niveau_spicy", value)}
                   size="lg"
                 />
               </div>
@@ -456,7 +456,7 @@ export function ReviewForm({
                 <Label>Niveau Dark 💀</Label>
                 <DarkRating
                   value={watchedValues.niveau_dark}
-                  onChange={(value) => setValue('niveau_dark', value)}
+                  onChange={(value) => setValue("niveau_dark", value)}
                   size="lg"
                 />
               </div>
@@ -466,7 +466,7 @@ export function ReviewForm({
                 <Label>Niveau Romance ❤️</Label>
                 <RomanceRating
                   value={watchedValues.niveau_romance}
-                  onChange={(value) => setValue('niveau_romance', value)}
+                  onChange={(value) => setValue("niveau_romance", value)}
                   size="lg"
                 />
               </div>
@@ -478,7 +478,7 @@ export function ReviewForm({
                 <Label>Intensité émotionnelle</Label>
                 <StarRating
                   value={watchedValues.intensite_emotionnelle}
-                  onChange={(value) => setValue('intensite_emotionnelle', value)}
+                  onChange={(value) => setValue("intensite_emotionnelle", value)}
                   size="lg"
                 />
               </div>
@@ -488,7 +488,7 @@ export function ReviewForm({
                 <Label>Niveau de danger</Label>
                 <StarRating
                   value={watchedValues.danger}
-                  onChange={(value) => setValue('danger', value)}
+                  onChange={(value) => setValue("danger", value)}
                   size="lg"
                 />
               </div>
@@ -498,7 +498,7 @@ export function ReviewForm({
                 <Label>Niveau de violence</Label>
                 <StarRating
                   value={watchedValues.violence}
-                  onChange={(value) => setValue('violence', value)}
+                  onChange={(value) => setValue("violence", value)}
                   size="lg"
                 />
               </div>
@@ -508,7 +508,7 @@ export function ReviewForm({
                 <Label>Originalité</Label>
                 <StarRating
                   value={watchedValues.originalite}
-                  onChange={(value) => setValue('originalite', value)}
+                  onChange={(value) => setValue("originalite", value)}
                   size="lg"
                 />
               </div>
@@ -518,7 +518,7 @@ export function ReviewForm({
                 <Label>Rythme de lecture</Label>
                 <RhythmSelector
                   value={bookRhythmToRhythmValue(watchedValues.rythme)}
-                  onChange={(value) => setValue('rythme', rhythmValueToBookRhythm(value))}
+                  onChange={(value) => setValue("rythme", rhythmValueToBookRhythm(value))}
                 />
               </div>
             </div>
@@ -559,7 +559,7 @@ export function ReviewForm({
               </Label>
               <Textarea
                 id="pourquoi_aimer"
-                {...register('pourquoi_aimer')}
+                {...register("pourquoi_aimer")}
                 placeholder="Les raisons qui rendent ce livre spécial..."
                 rows={4}
               />
@@ -573,7 +573,7 @@ export function ReviewForm({
               </Label>
               <Textarea
                 id="questions_sur_le_livre"
-                {...register('questions_sur_le_livre')}
+                {...register("questions_sur_le_livre")}
                 placeholder="Questions que les lecteurs peuvent se poser..."
                 rows={4}
               />
@@ -587,7 +587,7 @@ export function ReviewForm({
               </Label>
               <Textarea
                 id="recommandation_personnalisee"
-                {...register('recommandation_personnalisee')}
+                {...register("recommandation_personnalisee")}
                 placeholder="Type de lecteur qui appréciera ce livre..."
                 rows={4}
               />
@@ -661,7 +661,7 @@ export function ReviewForm({
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t">
         <div className="text-xs text-muted-foreground">
-          {isDirty && '• Modifications non sauvegardées'}
+          {isDirty && "• Modifications non sauvegardées"}
         </div>
         
         <div className="flex items-center gap-2">

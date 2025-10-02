@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from "react";
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -44,11 +44,11 @@ export function PageTransition({
       case 'fade':
         return cn(
           baseClasses,
-          isVisible ? 'opacity-100' : 'opacity-0',
+          isVisible ? "opacity-100" : "opacity-0",
           className
         );
       
-      case 'slide':
+      case "slide":
         return cn(
           baseClasses,
           isVisible 

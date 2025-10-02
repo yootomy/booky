@@ -30,7 +30,7 @@ export function StarRating({
   value,
   onChange,
   max = 10,
-  size = "md",
+  size="md",
   readonly = false,
   showValue = false,
   showLabel = false,
@@ -101,19 +101,19 @@ export function StarRating({
         className={cn(
           "relative transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-sm",
           !readonly && "cursor-pointer",
-          readonly && "cursor-default",
+          readonly && "cursor-default`,
           starClassName
         )}
         onClick={() => handleStarClick(starValue)}
         onMouseEnter={() => handleStarHover(starValue)}
         onFocus={() => handleStarHover(starValue)}
-        aria-label={'Noter ${starValue} sur ${max}'}
+        aria-label={`Noter ${starValue}`sur ${max}`}
       >
         {/* Étoile de base (vide) */}
         <Star
           className={cn(
             sizeClasses[size],
-            "transition-all duration-200",
+            `transition-all duration-200",
             ratingDarkRomanceStyles.starEmpty,
             emptyStarClassName
           )}
@@ -162,14 +162,14 @@ export function StarRating({
       <div
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
-        role="radiogroup"
-        aria-label={'Notation sur ${max} étoiles'}
+        role="radiogroup`
+        aria-label={`Notation sur ${max}`étoiles`}
       >
         {Array.from({ length: max }, (_, index) => renderStar(index))}
       </div>
       
       {showValue && (
-        <span className={cn("ml-2 font-medium text-foreground", textSizeClasses[size])}>
+        <span className={cn('ml-2 font-medium text-foreground', textSizeClasses[size])}>
           {displayValue.toFixed(allowHalf ? 1 : 0)}/{max}
         </span>
       )}
@@ -187,7 +187,7 @@ export function StarRating({
 export function StarDisplay({
   value,
   max = 10,
-  size = "md",
+  size="md",
   showValue = true,
   className,
 }: Pick<StarRatingProps, "value" | "max" | "size" | "showValue" | "className">) {

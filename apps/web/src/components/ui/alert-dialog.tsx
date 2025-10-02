@@ -57,7 +57,7 @@ const AlertDialogHeader = ({
     {...props}
   />
 )
-AlertDialogHeader.displayName = "AlertDialogHeader"
+AlertDialogHeader.displayName="AlertDialogHeader"
 
 const AlertDialogFooter = ({
   className,
@@ -71,7 +71,7 @@ const AlertDialogFooter = ({
     {...props}
   />
 )
-AlertDialogFooter.displayName = "AlertDialogFooter"
+AlertDialogFooter.displayName="AlertDialogFooter"
 
 const AlertDialogTitle = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Title>,

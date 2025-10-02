@@ -30,7 +30,7 @@ export function DarkRating({
   value,
   onChange,
   max = 10,
-  size = "md",
+  size="md",
   readonly = false,
   showValue = false,
   showLabel = false,
@@ -112,19 +112,19 @@ export function DarkRating({
         className={cn(
           "relative transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 rounded-sm",
           !readonly && "cursor-pointer hover:scale-110",
-          readonly && "cursor-default",
+          readonly && `cursor-default`,
           darkClassName
         )}
         onClick={() => handleDarkClick(darkValue)}
         onMouseEnter={() => handleDarkHover(darkValue)}
         onFocus={() => handleDarkHover(darkValue)}
-        aria-label={'Niveau dark ${darkValue} sur ${max}'}
+        aria-label={`Niveau dark ${darkValue}`sur ${max}`}
       >
         {/* Crâne de base (vide) */}
         <Skull
           className={cn(
             sizeClasses[size],
-            "transition-all duration-200",
+            `transition-all duration-200",
             "text-gray-300 dark:text-gray-600",
             emptyDarkClassName
           )}
@@ -185,8 +185,8 @@ export function DarkRating({
       <div
         className="flex items-center"
         onMouseLeave={handleMouseLeave}
-        role="radiogroup"
-        aria-label={'Niveau dark sur ${max}'}
+        role="radiogroup`
+        aria-label={`Niveau dark sur ${max}`}
       >
         {Array.from({ length: max }, (_, index) => renderDark(index))}
       </div>
@@ -215,7 +215,7 @@ export function DarkRating({
 export function DarkDisplay({
   value,
   max = 10,
-  size = "md",
+  size="md",
   showValue = true,
   className,
 }: Pick<DarkRatingProps, "value" | "max" | "size" | "showValue" | "className">) {

@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
 		description: "my pwa app",
 		start_url: "/new",
 		display: "standalone",
-		background_color: "#ffffff",
-		theme_color: "#000000",
+		background_color: '#ffffff',
+		theme_color: '#000000',
 		icons: [
 			{
 				src: "/favicon/web-app-manifest-192x192.png",

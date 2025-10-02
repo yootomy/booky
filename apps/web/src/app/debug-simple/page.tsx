@@ -21,7 +21,7 @@ export default function DebugSimplePage() {
         data: data,
         timestamp: new Date().toISOString()
       });
-      console.log('Direct API test:', data);
+      console.log("Direct API test:", data);
     } catch (error) {
       setApiData({
         error: (error as Error).message,
@@ -47,7 +47,7 @@ export default function DebugSimplePage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Button onClick={testAPI} disabled={loading} className="w-full">
-            {loading ? 'Test en cours...' : 'Tester GET /api/favorites'}
+            {loading ? "Test en cours..." : "Tester GET /api/favorites"}
           </Button>
           
           {apiData && (
@@ -78,7 +78,7 @@ export default function DebugSimplePage() {
         <CardContent>
           <div className="space-y-2">
             <Button 
-              onClick={() => window.location.href = '/debug-favorites-filter'}
+              onClick={() => window.location.href="/debug-favorites-filter"}
               variant="outline" 
               className="w-full"
             >
@@ -86,7 +86,7 @@ export default function DebugSimplePage() {
             </Button>
             
             <Button 
-              onClick={() => window.location.href = '/test-favorites-complete'}
+              onClick={() => window.location.href="/test-favorites-complete"}
               variant="outline" 
               className="w-full"
             >
@@ -94,7 +94,7 @@ export default function DebugSimplePage() {
             </Button>
             
             <Button 
-              onClick={() => window.location.href = '/books'}
+              onClick={() => window.location.href="/books"}
               variant="outline" 
               className="w-full"
             >

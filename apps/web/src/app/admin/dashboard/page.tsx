@@ -94,7 +94,7 @@ export default function AdminDashboard() {
                 Dashboard Administrateur
               </h1>
               <p className="text-sm text-gray-500">
-                Bienvenue, {user?.nom_complet?.split(' ')[0] || user?.email}
+                Bienvenue, {user?.nom_complet?.split(" ")[0] || user?.email}
               </p>
             </div>
             
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
               disabled={isLoading}
               className="border-gray-200 text-gray-700 hover:bg-gray-50 mt-4 sm:mt-0"
             >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}'} />
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? `}animate-spin` : `"}"} />
               Actualiser (r)
             </Button>
           </div>

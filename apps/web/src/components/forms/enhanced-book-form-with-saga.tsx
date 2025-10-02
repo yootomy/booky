@@ -73,7 +73,7 @@ export function EnhancedBookFormWithSaga({
       sagaOrder,
     };
 
-    console.log('🔍 Frontend - Saga data being sent:', {
+    console.log("🔍 Frontend - Saga data being sent: ", {
       sagaId,
       sagaOrder,
       hasSagaId: sagaId !== undefined,

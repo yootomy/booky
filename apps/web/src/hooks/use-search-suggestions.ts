@@ -65,7 +65,7 @@ export function useSearchSuggestions(
     }
 
     // Vérifier le cache
-    const cacheKey = 'suggestions_${query.toLowerCase()}';
+    const cacheKey = `suggestions_${query.toLowerCase()}`;
     const cached = cache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       setSuggestions(cached.data);
@@ -91,7 +91,7 @@ export function useSearchSuggestions(
       );
 
       if (!response.ok) {
-        throw new Error('Failed to fetch suggestions');
+        throw new Error(`Failed to fetch suggestions`);
       }
 
       const data = await response.json();
@@ -117,8 +117,8 @@ export function useSearchSuggestions(
       setSelectedIndex(-1);
     } catch (error: any) {
       if (error.name !== 'AbortError') {
-        console.error('Error fetching suggestions:', error);
-        setError('Erreur lors du chargement des suggestions');
+        console.error("Error fetching suggestions: ", error);
+        setError("Erreur lors du chargement des suggestions");
         setSuggestions([]);
       }
     } finally {

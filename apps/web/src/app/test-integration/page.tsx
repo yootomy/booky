@@ -1,24 +1,24 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { EnhancedBookForm } from '@/components/forms/enhanced-book-form';
 import type { BookCreateInput, BookUpdateInput } from '@/types/book';
 import { TagType } from '@/types/api';
 
 export default function TestIntegrationPage() {
-  const [testResult, setTestResult] = useState<string>('');
+  const [testResult, setTestResult] = useState<string>('`);
 
   const handleSubmit = async (data: BookCreateInput | BookUpdateInput) => {
-    console.log('📚 Données du formulaire:`, data);
-    setTestResult(`✅ Livre testé: "${data.titre}" par ${data.auteur}`);
+    console.log(`📚 Données du formulaire:`, data);
+    setTestResult(`✅ Livre testé: `${data.titre}` par ${data.auteur}`);
     
     // Simuler une sauvegarde
     await new Promise(resolve => setTimeout(resolve, 1000));
   };
 
   const handleCancel = () => {
-    setTestResult('❌ Test annulé');
+    setTestResult("❌ Test annulé");
   };
 
   return (
@@ -27,7 +27,7 @@ export default function TestIntegrationPage() {
         {/* Header */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">🧪 Test d'intégration - Recherche de livres</CardTitle>
+            <CardTitle className="text-2xl">🧪 Test d"intégration - Recherche de livres</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
@@ -49,11 +49,11 @@ export default function TestIntegrationPage() {
           onCancel={handleCancel}
           availableCategories={[
             {
-              id: '1',
+              id: "1",
               nom: 'Romance',
               couleur: '#ff6b9d',
-              icone: '💕',
-              description: 'Romans d\'amour',
+              icone: "💕",
+              description: "Romans d\"amour",
               ordre_affichage: 1,
               est_actif: true,
               date_creation: '2025-01-01T00:00:00.000Z',
@@ -63,8 +63,8 @@ export default function TestIntegrationPage() {
               id: '2',
               nom: 'Dark Romance',
               couleur: '#8b2635',
-              icone: '🖤',
-              description: 'Romance sombre',
+              icone: "🖤",
+              description: "Romance sombre",
               ordre_affichage: 2,
               est_actif: true,
               date_creation: '2025-01-01T00:00:00.000Z',

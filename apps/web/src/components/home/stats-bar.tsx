@@ -33,7 +33,7 @@ function StatChip({ icon: Icon, label, value, colorClass = 'from-violet-600 to-v
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-lg font-semibold text-ash-100 truncate">
-          {typeof value === 'number' ? value.toLocaleString() : value}
+          {typeof value === "number" ? value.toLocaleString() : value}
         </div>
         <div className="text-xs text-ash-400 uppercase tracking-wide truncate">
           {label}
@@ -118,7 +118,7 @@ export function StatsBar() {
               <StatChip
                 icon={Star}
                 label="Note moyenne"
-                value={stats.data?.ratings_summary?.average_rating?.toFixed(1) || 'N/A'}
+                value={stats.data?.ratings_summary?.average_rating?.toFixed(1) || "N/A"}
                 colorClass="from-crimson-600 to-crimson-500"
                 index={4}
               />

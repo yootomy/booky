@@ -15,8 +15,8 @@ jest.mock('next/navigation', () => ({
 const mockSuggestions = [
   {
     type: 'book' as const,
-    id: 'book-1',
-    title: 'Dark Romance Test',
+    id: "book-1",
+    title: "Dark Romance Test",
     author: 'Test Author',
     cover: '/test-cover.jpg'
   },
@@ -63,7 +63,7 @@ describe('SearchBox', () => {
   it('should render search input with placeholder', () => {
     render(<SearchBox placeholder="Test placeholder" />);
     
-    const input = screen.getByPlaceholderText('Test placeholder');
+    const input = screen.getByPlaceholderText("Test placeholder");
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute('role', 'combobox');
   });
@@ -302,14 +302,14 @@ describe('SearchBox', () => {
     fireEvent.focus(input);
     
     // Doit surligner le terme "Dark" dans "Dark Romance Test"
-    const highlightedText = screen.getByText('Dark');
+    const highlightedText = screen.getByText("Dark");
     expect(highlightedText.tagName.toLowerCase()).toBe('mark');
   });
 
   it('should render compact variant', () => {
     render(<SearchBox variant="compact" />);
     
-    const input = screen.getByRole('combobox');
+    const input = screen.getByRole("combobox");
     expect(input).toHaveClass('h-9'); // Compact height
   });
 

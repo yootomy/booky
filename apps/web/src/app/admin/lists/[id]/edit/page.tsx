@@ -39,10 +39,10 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
     const fetchList = async () => {
       try {
         setLoading(true);
-        const response = await apiClient.get('/api/lists/${resolvedParams.id}');
+        const response = await apiClient.get(`/api/lists/${resolvedParams.id}`);
 
         if (!response.ok) {
-          throw new Error('Liste non trouvée');
+          throw new Error("Liste non trouvée");
         }
 
         const data = await response.json();
@@ -142,7 +142,7 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
             <CardContent>
               <ListForm
                 initialData={list}
-                onSuccess={() => router.push('/admin/lists')}
+                onSuccess={() => router.push("/admin/lists")}
                 onCancel={() => router.back()}
                 isEditing={true}
               />

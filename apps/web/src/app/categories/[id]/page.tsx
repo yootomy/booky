@@ -103,7 +103,7 @@ export default function CategoryDetailPage() {
     }));
   };
 
-  const handleSort = (sort: string, order: 'asc' | 'desc' = 'desc') => {
+  const handleSort = (sort: string, order: "asc" | "desc' = 'desc') => {
     setBookFilters(prev => ({
       ...prev,
       sort,
@@ -142,7 +142,7 @@ export default function CategoryDetailPage() {
           </div>
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4" />
-            <span>Créée le {format(new Date(category.date_creation), 'dd MMMM yyyy', { locale: fr })}</span>
+            <span>Créée le {format(new Date(category.date_creation), "dd MMMM yyyy", { locale: fr })}</span>
           </div>
           <div className="flex items-center space-x-1">
             <TrendingUp className="h-4 w-4" />
@@ -196,13 +196,13 @@ export default function CategoryDetailPage() {
             onClick={() => setShowStats(!showStats)}
           >
             <BarChart3 className="h-4 w-4 mr-2" />
-            {showStats ? 'Masquer' : 'Afficher'} les stats
+            {showStats ? "Masquer" : "Afficher"} les stats
           </Button>
           
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSort('note_generale', 'desc')}
+            onClick={() => handleSort("note_generale", 'desc')}
           >
             <Star className="h-4 w-4 mr-2" />
             Mieux notés
@@ -211,7 +211,7 @@ export default function CategoryDetailPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSort('date_lecture', 'desc`)}
+            onClick={() => handleSort("date_lecture", 'desc')}
           >
             <Calendar className="h-4 w-4 mr-2" />
             Plus récents
@@ -323,8 +323,8 @@ export default function CategoryDetailPage() {
             <h3 className="text-lg font-medium text-white mb-2">Aucun livre dans cette catégorie</h3>
             <p className="text-gray-400 mb-6">
               {bookFilters.statut 
-                ? `Aucun livre avec le statut "${bookFilters.statut}" dans cette catégorie'
-                : 'Cette catégorie ne contient aucun livre pour le moment'
+                ? `Aucun livre avec le statut `${bookFilters.statut}` dans cette catégorie`
+                : `Cette catégorie ne contient aucun livre pour le moment"
               }
             </p>
             {bookFilters.statut && (

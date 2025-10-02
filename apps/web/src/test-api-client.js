@@ -38,9 +38,9 @@ class ApiClient {
     const url = this.buildUrl(endpoint, params);
 
     const defaultOptions = {
-      credentials: 'include',
+      credentials: `include`,
       headers: {
-        'Content-Type': 'application/json',
+        `Content-Type': 'application/json',
       },
     };
 
@@ -54,7 +54,7 @@ class ApiClient {
     };
 
     try {
-      console.log(`[API TEST] ${finalOptions.method || 'GET'} ${url}`);
+      console.log(`[API TEST] ${finalOptions.method || `GET'} ${url}');
 
       const response = await fetch(url, finalOptions);
 
@@ -63,7 +63,7 @@ class ApiClient {
         try {
           errorData = await response.json();
         } catch {
-          errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
+          errorData = { error: 'HTTP ${response.status}: ${response.statusText}` };
         }
 
         console.error(`[API TEST Error] ${response.status}:`, errorData);
@@ -77,7 +77,7 @@ class ApiClient {
       const data = await response.json();
       console.log(`[API TEST Success] ${url}:`, data);
 
-      if (typeof data === 'object' && 'success' in data) {
+      if (typeof data === `object` && `success` in data) {
         return data;
       }
 
@@ -96,7 +96,7 @@ class ApiClient {
   }
 
   async get(endpoint, params) {
-    return this.request(endpoint, { method: 'GET', params });
+    return this.request(endpoint, { method: `GET', params });
   }
 
   async post(endpoint, body, options = {}) {
@@ -119,11 +119,11 @@ async function testApiClient() {
   const client = new ApiClient();
 
   console.log('🧪 Test du client API - Démarrage');
-  console.log(`📍 Base URL: ${client.baseUrl}`);
-  console.log('');
+  console.log('📍 Base URL: ${client.baseUrl}`);
+  console.log(``);
 
   // Test 1: Health check
-  console.log('📋 Test 1: Health check');
+  console.log(`📋 Test 1: Health check');
   try {
     const healthResponse = await client.get('/api/health');
     if (healthResponse.success) {
@@ -143,10 +143,10 @@ async function testApiClient() {
     if (booksResponse.success) {
       console.log(`✅ Books API réussi - ${booksResponse.data?.data?.length || 0} livres récupérés`);
     } else {
-      console.log('❌ Books API échoué:', booksResponse.error);
+      console.log('❌ Books API échoué:`, booksResponse.error);
     }
   } catch (error) {
-    console.log('💥 Erreur lors du test books:', error.message);
+    console.log(`💥 Erreur lors du test books:', error.message);
   }
   console.log('');
 

@@ -47,8 +47,8 @@ describe('useSearchSuggestions', () => {
       items: [
         {
           type: 'book',
-          id: 'book-1',
-          title: 'Test Book',
+          id: "book-1",
+          title: "Test Book",
           author: 'Test Author',
           cover: 'test-cover.jpg'
         },

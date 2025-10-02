@@ -103,7 +103,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
     error,
     refetch
   } = useQuery({
-    queryKey: ['admin-books', 'all'], // Clé plus spécifique
+    queryKey: ["admin-books", "all"], // Clé plus spécifique
     queryFn: async () => {
       const response = await booksApi.getAll({
         page: 1,
@@ -142,11 +142,11 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
         staleTime: 5 * 60 * 1000, // 5 minutes
       });
       
-      // Naviguer vers la page d'édition
+      // Naviguer vers la page d`édition
       router.push(`/admin/books/${bookId}/edit`);
     } catch (error) {
-      console.error('Erreur lors du préfetch:', error);
-      // Naviguer quand même, la page d'édition gèrera l'erreur
+      console.error(`Erreur lors du préfetch: `, error);
+      // Naviguer quand même, la page d`édition gèrera l`erreur
       router.push(`/admin/books/${bookId}/edit`);
     }
   };
@@ -156,7 +156,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
   };
 
   const handleDelete = async (bookId: string) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce livre ?')) return;
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer ce livre ?`)) return;
 
     try {
       // 1. Supprimer immédiatement le livre du cache local (mise à jour optimiste)
@@ -178,7 +178,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
       queryClient.invalidateQueries({ queryKey: ['books'], exact: false });
 
       toast({
-        title: "Livre supprimé",
+        title: 'Livre supprimé',
         description: "Le livre a été supprimé avec succès",
       });
     } catch (error) {
@@ -241,19 +241,19 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
             </div>
             <div>
               <div className="text-2xl font-bold text-green-600">
-                {books?.filter(book => book.statut === 'LU').length || 0}
+                {books?.filter(book => book.statut === "LU").length || 0}
               </div>
               <div className="text-sm text-muted-foreground">Lus</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-blue-600">
-                {books?.filter(book => book.statut === 'EN_COURS').length || 0}
+                {books?.filter(book => book.statut === "EN_COURS").length || 0}
               </div>
               <div className="text-sm text-muted-foreground">En cours</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-orange-600">
-                {books?.filter(book => book.statut === 'A_LIRE').length || 0}
+                {books?.filter(book => book.statut === "A_LIRE").length || 0}
               </div>
               <div className="text-sm text-muted-foreground">À lire</div>
             </div>
@@ -270,8 +270,8 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                 {/* Book Cover */}
                 <div className="flex-shrink-0">
                   <Avatar className="h-20 w-16 rounded-lg">
-                    <AvatarImage 
-                      src={book.image_couverture || ''} 
+                    <AvatarImage
+                      src={book.image_couverture || ''}
                       alt={`Couverture de ${book.titre}`}
                       className="object-cover"
                     />
@@ -317,7 +317,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                           <Edit2 className="h-4 w-4 mr-2" />
                           Modifier
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => window.open('/books/${book.id}', `_blank)}>
+                        <DropdownMenuItem onClick={() => window.open(`/books/${book.id}`, '_blank')}>
                           <ExternalLink className="h-4 w-4 mr-2" />
                           Ouvrir dans un nouvel onglet
                         </DropdownMenuItem>
@@ -341,7 +341,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                       </Badge>
                       {book.date_lecture && (
                         <span className="text-sm text-muted-foreground">
-                          {format(new Date(book.date_lecture), 'dd MMM yyyy', { locale: fr })}
+                          {format(new Date(book.date_lecture), "dd MMM yyyy", { locale: fr })}
                         </span>
                       )}
                     </div>
@@ -387,7 +387,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                   : "Commencez par ajouter votre premier livre"
                 }
               </p>
-              <Button onClick={() => router.push('/admin/books/new')}>
+              <Button onClick={() => router.push("/admin/books/new")}>
                 <Plus className="h-4 w-4 mr-2" />
                 Ajouter un livre
               </Button>

@@ -29,7 +29,7 @@ export default function AdminExportPage() {
 
   // Récupérer les statistiques pour les templates
   const { data: dashboardData, isLoading: statsLoading } = useQuery({
-    queryKey: ['dashboard-stats'],
+    queryKey: ["dashboard-stats"],
     queryFn: () => dashboardApi.getData(),
     staleTime: 5 * 60 * 1000,
   });
@@ -138,7 +138,7 @@ function ExportTemplatesManager() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold mb-2">Templates d'export</h2>
+        <h2 className="text-xl font-semibold mb-2">Templates d"export</h2>
         <p className="text-muted-foreground">
           Créez et gérez des templates personnalisés pour vos exports
         </p>
@@ -169,7 +169,7 @@ function ExportTemplatesManager() {
             "Titre et auteur",
             "Statut de lecture",
             "Note générale",
-            "Date d'ajout"
+            "Date d"ajout'
           ]}
         />
         
@@ -222,7 +222,7 @@ function ExportTemplatesManager() {
           
           <Alert className="mt-4">
             <AlertDescription>
-              <strong>Prochainement :</strong> L'éditeur de templates personnalisés sera disponible 
+              <strong>Prochainement :</strong> L"éditeur de templates personnalisés sera disponible 
               dans une prochaine mise à jour. En attendant, utilisez les templates prédéfinis.
             </AlertDescription>
           </Alert>
@@ -244,7 +244,7 @@ function ExportAnalytics({ stats }: ExportAnalyticsProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold mb-2">Statistiques d'export</h2>
+        <h2 className="text-xl font-semibold mb-2">Statistiques d"export</h2>
         <p className="text-muted-foreground">
           Analysez vos habitudes d'export et optimisez votre workflow
         </p>
@@ -268,7 +268,7 @@ function ExportAnalytics({ stats }: ExportAnalyticsProps) {
         
         <StatsCard
           title="Note moyenne"
-          value={stats?.note_moyenne ? '${stats.note_moyenne.toFixed(1)}/10' : "N/A"}
+          value={stats?.note_moyenne ? "${stats.note_moyenne.toFixed(1)}/10` : "N/A"}
           subtitle="Qualité générale de la collection"
           icon={<TrendingUpIcon className="h-4 w-4" />}
         />
@@ -284,7 +284,7 @@ function ExportAnalytics({ stats }: ExportAnalyticsProps) {
       {/* Recommandations d'export */}
       <Card>
         <CardHeader>
-          <CardTitle>Recommandations d'export</CardTitle>
+          <CardTitle>Recommandations d`export</CardTitle>
           <CardDescription>
             Suggestions basées sur votre collection et vos habitudes
           </CardDescription>

@@ -30,7 +30,7 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { apiClient } from '@/lib/api-client';
+import { apiClient } from "@/lib/api-client";
 
 interface Response {
   id: string;
@@ -68,9 +68,9 @@ interface Question {
 }
 
 const statusConfig = {
-  PENDING: { label: "En attente", color: "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800", icon: Clock },
-  APPROVED: { label: "Approuvée", color: "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800", icon: CheckCircle },
-  REJECTED: { label: "Rejetée", color: "bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800", icon: X }
+  PENDING: { label: "En attente", color: "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', icon: Clock },
+  APPROVED: { label: "Approuvée", color: "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', icon: CheckCircle },
+  REJECTED: { label: "Rejetée", color: "bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', icon: X }
 };
 
 export default function QuestionsPage() {
@@ -79,12 +79,12 @@ export default function QuestionsPage() {
   const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set());
 
   const { data: questions, isLoading, error } = useQuery({
-    queryKey: ['questions'],
+    queryKey: ["questions"],
     queryFn: async () => {
       const response = await apiClient.get('/api/questions?include=responses', {
         credentials: 'include'
       });
-      if (!response.ok) throw new Error('Erreur lors du chargement');
+      if (!response.ok) throw new Error("Erreur lors du chargement");
       return response.json();
     },
     retry: false
@@ -93,17 +93,17 @@ export default function QuestionsPage() {
   const questionsArray: Question[] = Array.isArray(questions) ? questions : (questions?.data || []);
 
   const toggleQuestionExpansion = (questionId: string) => {
-    console.log('toggleQuestionExpansion called for:', questionId);
+    console.log("toggleQuestionExpansion called for:", questionId);
     setExpandedQuestions(prev => {
       const newSet = new Set(prev);
       if (newSet.has(questionId)) {
-        console.log('Removing question from expanded set:', questionId);
+        console.log("Removing question from expanded set:", questionId);
         newSet.delete(questionId);
       } else {
-        console.log('Adding question to expanded set:', questionId);
+        console.log("Adding question to expanded set:", questionId);
         newSet.add(questionId);
       }
-      console.log('New expanded questions set:', Array.from(newSet));
+      console.log("New expanded questions set:", Array.from(newSet));
       return newSet;
     });
   };
@@ -117,7 +117,7 @@ export default function QuestionsPage() {
   );
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
+    return new Date(dateString).toLocaleDateString("fr-FR", {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -130,7 +130,7 @@ export default function QuestionsPage() {
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.PENDING;
     const IconComponent = config.icon;
     return (
-      <Badge className={'${config.color} text-xs font-medium gap-1'}>
+      <Badge className={`${config.color}text-xs font-medium gap-1`}>
         <IconComponent className="w-3 h-3" />
         {config.label}
       </Badge>
@@ -158,10 +158,10 @@ export default function QuestionsPage() {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-sm font-medium text-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <span className="text-sm font-medium text-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
               {response.author.nom_complet}
             </span>
-            {response.author.role === 'ADMIN' && (
+            {response.author.role === "ADMIN" && (
               <Badge variant="secondary" className="text-xs">
                 <Shield className="w-3 h-3 mr-1" />
                 Admin
@@ -171,7 +171,7 @@ export default function QuestionsPage() {
               {formatDate(response.date_creation)}
             </span>
           </div>
-          <p className="text-sm text-foreground leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-sm text-foreground leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
             {response.contenu}
           </p>
         </div>
@@ -204,11 +204,11 @@ export default function QuestionsPage() {
             </Button>
 
             <div className="flex-1">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-3 mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground flex items-center gap-3 mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
                 <MessageCircle className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
                 Mes Questions
               </h1>
-              <p className="text-sm sm:text-base text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-sm sm:text-base text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                 Gérez vos questions et suivez leurs réponses
               </p>
             </div>
@@ -245,8 +245,8 @@ export default function QuestionsPage() {
 
               {/* Results count */}
               <div className="text-sm text-muted-foreground whitespace-nowrap">
-                <strong className="text-foreground">{filteredQuestions.length}</strong> question{filteredQuestions.length > 1 ? 's' : ''}
-                {searchTerm && " trouvée${filteredQuestions.length > 1 ? 's' : ''}'}
+                <strong className="text-foreground">{filteredQuestions.length}</strong> question{filteredQuestions.length > 1 ? 's` : '`}
+                {searchTerm && ` trouvée${filteredQuestions.length > 1 ? 's' : ''}`}
               </div>
             </div>
           </motion.div>
@@ -295,10 +295,10 @@ export default function QuestionsPage() {
               <Card className="bg-card/90 backdrop-blur border border-border/50 text-center py-12">
                 <CardContent>
                   <MessageCircle className="w-16 h-16 text-destructive/60 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-foreground mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <h3 className="text-lg font-medium text-foreground mb-2" style={{ fontFamily: "Playfair Display, serif" }}>
                     Erreur de chargement
                   </h3>
-                  <p className="text-muted-foreground mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-muted-foreground mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
                     Impossible de charger vos questions.
                   </p>
                 </CardContent>
@@ -316,13 +316,13 @@ export default function QuestionsPage() {
               <Card className="bg-card/90 backdrop-blur border border-border/50 text-center py-16">
                 <CardContent>
                   <MessageCircle className="w-20 h-20 text-muted-foreground/60 mx-auto mb-6" />
-                  <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: "Playfair Display, serif` }}>
                     {searchTerm
                       ? "Aucune question trouvée"
-                      : "Vous n'avez encore posé aucune question"
+                      : "Vous n"avez encore posé aucune question'
                     }
                   </h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: "Inter, sans-serif` }}>
                     {searchTerm
                       ? "Essayez de modifier vos critères de recherche."
                       : "Commencez à explorer notre bibliothèque et posez vos premières questions sur les livres qui vous intéressent."
@@ -346,7 +346,7 @@ export default function QuestionsPage() {
             <div className="space-y-6">
               <motion.div
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-start"
-                style={{ gridAutoRows: 'auto' }}
+                style={{ gridAutoRows: "auto" }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
@@ -363,8 +363,8 @@ export default function QuestionsPage() {
                     >
                       <Card className="bg-card/90 backdrop-blur border border-border/50 hover:border-primary/40 overflow-hidden hover:shadow-xl transition-all duration-300 group">
                         <CardHeader className="pb-3">
-                          <div className="flex justify-between items-start mb-3">
-                            <Link href={'/books/${question.book.id}'} className="flex items-center gap-3 flex-1 min-w-0 group-hover:text-primary transition-colors duration-200">
+                          <div className="flex justify-between items-start mb-3`>
+                            <Link href={`/books/${question.book.id}`} className="flex items-center gap-3 flex-1 min-w-0 group-hover:text-primary transition-colors duration-200">
                               {/* Book cover */}
                               <div className="w-12 h-16 relative flex-shrink-0 rounded overflow-hidden">
                                 {question.book.image_couverture ? (
@@ -382,10 +382,10 @@ export default function QuestionsPage() {
                               </div>
 
                               <div className="flex-1 min-w-0">
-                                <h4 className="font-medium text-sm text-foreground line-clamp-2 mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                <h4 className="font-medium text-sm text-foreground line-clamp-2 mb-1" style={{ fontFamily: "Inter, sans-serif" }}>
                                   {question.book.titre}
                                 </h4>
-                                <p className="text-xs text-muted-foreground line-clamp-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                                <p className="text-xs text-muted-foreground line-clamp-1" style={{ fontFamily: "Inter, sans-serif" }}>
                                   par {question.book.auteur}
                                 </p>
                               </div>
@@ -399,7 +399,7 @@ export default function QuestionsPage() {
                           <div className="space-y-4">
                             {/* Question content */}
                             <div>
-                              <p className="text-sm text-foreground line-clamp-3 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                              <p className="text-sm text-foreground line-clamp-3 leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
                                 {question.contenu}
                               </p>
                             </div>
@@ -411,9 +411,9 @@ export default function QuestionsPage() {
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    console.log('Clicking responses for question:', question.id);
-                                    console.log('Current expanded questions:', Array.from(expandedQuestions));
-                                    console.log('Is question expanded?', expandedQuestions.has(question.id));
+                                    console.log("Clicking responses for question:", question.id);
+                                    console.log("Current expanded questions:", Array.from(expandedQuestions));
+                                    console.log("Is question expanded?", expandedQuestions.has(question.id));
                                     toggleQuestionExpansion(question.id);
                                   }}
                                   className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 p-2 rounded-lg hover:bg-primary/10"
@@ -433,11 +433,11 @@ export default function QuestionsPage() {
 
                                 {expandedQuestions.has(question.id) && (
                                   <motion.div
-                                    key={'responses-${question.id}'}
+                                    key={`responses-${question.id}`}
                                     initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
+                                    animate={{ opacity: 1, height: `auto` }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                    transition={{ duration: 0.3, ease: `easeInOut` }}
                                     className="space-y-3 overflow-hidden"
                                   >
                                     {question.responses.map((response) => (

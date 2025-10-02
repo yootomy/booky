@@ -46,7 +46,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
       ) : (
         <LogOut className="h-4 w-4 mr-2" />
       )}
-      {isLoading ? 'Déconnexion...' : 'Se déconnecter'}
+      {isLoading ? "Déconnexion..." : "Se déconnecter"}
     </>
   );
 

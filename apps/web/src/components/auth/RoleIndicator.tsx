@@ -63,10 +63,10 @@ export const RoleIndicator: React.FC<RoleIndicatorProps> = ({
   return (
     <Badge
       variant={variant as any}
-      className={`${config.color} ${className || ''}'}
+      className={`${config.color}`${className || `}`}
     >
       {showIcon && (
-        <Icon className={'${sizeClasses[size]} mr-1'} />
+        <Icon className={`${sizeClasses[size]} mr-1`} />
       )}
       {config.label}
     </Badge>

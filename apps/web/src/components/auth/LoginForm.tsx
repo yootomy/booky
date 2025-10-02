@@ -53,7 +53,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     mode: 'onChange',
   });
 
-  const rememberValue = watch('remember');
+  const rememberValue = watch(`remember`);
 
   const onSubmit = async (data: LoginFormData) => {
     clearError();
@@ -72,14 +72,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   };
 
   return (
-    <div className={`w-full space-y-6 ${className || ''}'}>
+    <div className={`w-full space-y-6 ${className || ""}`}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Affichage des erreurs */}
         {error && (
           <div
             className="p-4 rounded-lg text-sm border-l-4 bg-destructive/5 text-destructive border-l-destructive"
             style={{
-              fontFamily: 'Inter, sans-serif'
+              fontFamily: "Inter, sans-serif"
             }}
           >
             {error}
@@ -100,14 +100,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <div className="relative">
             <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
-              {...register('email')}
+              {...register("email")}
               id="email"
               type="email"
               placeholder="votre@email.com"
               className="w-full pl-11 pr-4 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
               style={{
                 fontFamily: 'Inter, sans-serif',
-                fontSize: '16px'
+                fontSize: "16px"
               }}
               aria-invalid={!!errors.email}
             />
@@ -138,14 +138,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <div className="relative">
             <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
-              {...register('password')}
+              {...register("password")}
               id="password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               className="w-full pl-11 pr-12 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
               style={{
                 fontFamily: 'Inter, sans-serif',
-                fontSize: '16px'
+                fontSize: "16px"
               }}
               aria-invalid={!!errors.password}
             />
@@ -179,7 +179,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             type="checkbox"
             id="remember"
             checked={rememberValue}
-            onChange={(e) => setValue('remember', e.target.checked)}
+            onChange={(e) => setValue("remember", e.target.checked)}
             className="w-4 h-4 rounded border-0 focus:ring-2 focus:ring-offset-0 accent-primary bg-card"
           />
           <label
@@ -200,7 +200,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           className="w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 bg-gradient-to-r from-primary to-accent shadow-xl"
           style={{
             fontFamily: 'Inter, sans-serif',
-            fontSize: '16px'
+            fontSize: "16px"
           }}
         >
           {isLoading ? (
@@ -234,3 +234,5 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     </div>
   );
 };
+
+export default LoginForm;

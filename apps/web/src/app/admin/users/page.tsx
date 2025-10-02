@@ -92,7 +92,7 @@ export default function AdminUsersPage() {
     switch (role) {
       case 'ADMIN':
         return <Badge className="bg-red-100 text-red-800"><Shield className="w-3 h-3 mr-1" />Admin</Badge>;
-      case 'USER':
+      case "USER":
         return <Badge className="bg-blue-100 text-blue-800"><User className="w-3 h-3 mr-1" />Utilisateur</Badge>;
       default:
         return <Badge variant="secondary">{role}</Badge>;
@@ -101,7 +101,7 @@ export default function AdminUsersPage() {
 
   const getInitials = (nom: string | null, email: string) => {
     if (nom) {
-      return nom.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      return nom.split(" ").map(n => n[0]).join('').toUpperCase().slice(0, 2);
     }
     return email.slice(0, 2).toUpperCase();
   };
@@ -184,7 +184,7 @@ export default function AdminUsersPage() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Admins</p>
                     <p className="text-2xl font-bold text-red-600">
-                      {users.filter((u: User) => u.role === 'ADMIN').length}
+                      {users.filter((u: User) => u.role === "ADMIN").length}
                     </p>
                   </div>
                   <Shield className="h-8 w-8 text-red-500" />
@@ -197,7 +197,7 @@ export default function AdminUsersPage() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Utilisateurs</p>
                     <p className="text-2xl font-bold text-blue-600">
-                      {users.filter((u: User) => u.role === 'USER').length}
+                      {users.filter((u: User) => u.role === "USER").length}
                     </p>
                   </div>
                   <User className="h-8 w-8 text-blue-500" />
@@ -241,8 +241,7 @@ export default function AdminUsersPage() {
                   </h3>
                   <p className="text-gray-500">
                     {searchQuery || roleFilter 
-                      ? 'Essayez de modifier vos filtres de recherche'
-                      : 'Il n\'y a pas encore d\'utilisateurs dans le système'
+                      ? "Essayez de modifier vos filtres de recherche" : "Il n\'y a pas encore d\'utilisateurs dans le système'
                     }
                   </p>
                 </div>
@@ -265,13 +264,13 @@ export default function AdminUsersPage() {
                           <TableCell>
                             <div className="flex items-center space-x-3">
                               <Avatar className="h-10 w-10">
-                                <AvatarImage src={user.avatar || ''} alt={user.nom_complet || user.email} />
+                                <AvatarImage src={user.avatar || ""} alt={user.nom_complet || user.email} />
                                 <AvatarFallback>
                                   {getInitials(user.nom_complet, user.email)}
                                 </AvatarFallback>
                               </Avatar>
                               <div>
-                                <p className="font-medium">{user.nom_complet || user.username || 'Sans nom'}</p>
+                                <p className="font-medium">{user.nom_complet || user.username || "Sans nom"}</p>
                                 {user.username && user.nom_complet && (
                                   <p className="text-sm text-gray-500">@{user.username}</p>
                                 )}

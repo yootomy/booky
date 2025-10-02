@@ -47,7 +47,7 @@ export default function NewCategoryPage() {
                 <p className="text-sm text-muted-foreground">
                   Pour créer une nouvelle catégorie, utilisez le formulaire disponible sur la page principale de gestion des catégories.
                 </p>
-                <Button onClick={() => router.push('/admin/categories')}>
+                <Button onClick={() => router.push("/admin/categories")}>
                   Aller à la gestion des catégories
                 </Button>
               </div>

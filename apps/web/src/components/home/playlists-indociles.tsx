@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Zap, Moon, Heart, Clock, Star, ArrowRight } from 'lucide-react';
-import { usePlaylistsIndociles } from '@/hooks/use-playlists-indociles';
+import { usePlaylistsIndociles } from "@/hooks/use-playlists-indociles";
 
 interface Playlist {
   id: string;
@@ -35,21 +35,21 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={'/books?playlist=${playlist.id}'}>
+      <Link href={`/books?playlist=${playlist.id}`}>
         <div 
           className="relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid ${playlist.color}20',
-            boxShadow: '0 8px 32px ${playlist.color}08'
+            background: `linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)`,
+            backdropFilter: `blur(10px)`,
+            border: `1px solid ${playlist.color}20`,
+            boxShadow: `0 8px 32px ${playlist.color}08`
           }}
         >
           {/* Decorative background */}
           <div 
             className="absolute top-0 right-0 w-32 h-32 opacity-5"
             style={{
-              background: 'radial-gradient(circle, ${playlist.color} 0%, transparent 70%)'
+              background: `radial-gradient(circle, ${playlist.color}`0%, transparent 70%)`
             }}
           />
 
@@ -59,7 +59,7 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
               <div 
                 className="p-3 rounded-xl"
                 style={{
-                  backgroundColor: '${playlist.color}15',
+                  backgroundColor: `${playlist.color}15`,
                   color: playlist.color
                 }}
               >
@@ -104,12 +104,12 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
             {playlist.books.slice(0, 4).map((book, bookIndex) => (
               <div 
                 key={book.id} 
-                className="relative w-12 h-16 rounded border-2 border-white shadow-sm"
+                className="relative w-12 h-16 rounded border-2 border-white shadow-sm`
                 style={{ zIndex: 4 - bookIndex }}
               >
                 <Image
-                  src={book.image_couverture || '/placeholder-book.svg'}
-                  alt={'Couverture de ${book.titre}'}
+                  src={book.image_couverture || `/placeholder-book.svg`}
+                  alt={`Couverture de ${book.titre}`}
                   fill
                   className="object-cover rounded"
                   sizes="48px"
@@ -121,7 +121,7 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
               <div 
                 className="w-12 h-16 rounded flex items-center justify-center text-xs font-bold border-2 border-white"
                 style={{
-                  backgroundColor: '${playlist.color}20',
+                  backgroundColor: `${playlist.color}20`,
                   color: playlist.color
                 }}
               >
@@ -136,12 +136,12 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
               <div key={book.id} className="flex items-center gap-2">
                 <Star className="w-3 h-3 text-yellow-400 fill-current flex-shrink-0" />
                 <p 
-                  className="text-xs truncate"
+                  className="text-xs truncate`
                   style={{
-                    fontFamily: 'Inter, sans-serif',
+                    fontFamily: `Inter, sans-serif',
                     color: '#2C1810'
                   }}
-                  title={'${book.titre} - ${book.auteur}'}
+                  title={`${book.titre}`- ${book.auteur}`}
                 >
                   <span className="font-medium">{book.titre}</span>
                   <span className="opacity-70"> • {book.auteur}</span>
@@ -155,7 +155,7 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
             <span 
               className="text-sm font-semibold group-hover:text-[#8B1538] transition-colors duration-300"
               style={{
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: "Inter, sans-serif`,
                 color: playlist.color
               }}
             >
@@ -181,7 +181,7 @@ function PlaylistSkeleton({ index }: { index: number }) {
       className="p-6 rounded-2xl animate-pulse"
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        border: '1px solid rgba(139, 21, 56, 0.05)'
+        border: "1px solid rgba(139, 21, 56, 0.05)"
       }}
     >
       <div className="flex items-center gap-3 mb-3">
@@ -216,7 +216,7 @@ export function PlaylistsIndociles({}: PlaylistsIndocilesProps) {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "#FAF8F5" }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <div className="h-10 bg-gray-200 rounded-lg w-80 mx-auto mb-4 animate-pulse"></div>
@@ -234,7 +234,7 @@ export function PlaylistsIndociles({}: PlaylistsIndocilesProps) {
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "#FAF8F5" }}>
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div

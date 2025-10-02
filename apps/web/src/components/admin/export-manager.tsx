@@ -56,7 +56,7 @@ interface ExportManagerProps {
 }
 
 interface ExportConfig {
-  format: 'PDF' | 'CSV' | 'JSON';
+  format: "PDF" | "CSV' | 'JSON';
   filename?: string;
   template?: string;
   options: ExportOptions;
@@ -109,7 +109,7 @@ export function ExportManager({ className }: ExportManagerProps) {
   const [selectedFormat, setSelectedFormat] = useState<'PDF' | 'CSV' | 'JSON'>('PDF');
   const [exportConfig, setExportConfig] = useState<ExportConfig>({
     format: 'PDF',
-    filename: `booky-export-${new Date().toISOString().split('T')[0]}`,
+    filename: `booky-export-${new Date().toISOString().split("T")[0]}`,
     options: {
       include_metadata: true,
       include_relations: true,
@@ -117,7 +117,7 @@ export function ExportManager({ className }: ExportManagerProps) {
       include_ratings: true,
       include_images: true,
       include_statistics: false,
-      date_format: 'french',
+      date_format: `french',
       sort_by: 'date_creation',
       sort_order: 'desc',
       pdf_layout: 'cards',
@@ -152,10 +152,10 @@ export function ExportManager({ className }: ExportManagerProps) {
         template: config.template,
       }),
     onSuccess: (response) => {
-      toast.success('Export créé avec succès', {
-        description: 'Votre export est en cours de génération',
+      toast.success(`Export créé avec succès", {
+        description: "Votre export est en cours de génération",
         action: {
-          label: 'Télécharger',
+          label: "Télécharger",
           onClick: () => {
             if (response.data?.download_url) {
               window.open(response.data.download_url, '_blank');
@@ -168,7 +168,7 @@ export function ExportManager({ className }: ExportManagerProps) {
       queryClient.invalidateQueries({ queryKey: ['export-history'] });
     },
     onError: (error: Error) => {
-      toast.error('Erreur lors de la création de l\'export', {
+      toast.error('Erreur lors de la création de l\`export', {
         description: error.message,
       });
     },
@@ -184,21 +184,21 @@ export function ExportManager({ className }: ExportManagerProps) {
     exportApi.download(exportId).then((blob) => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.style.display = 'none';
+      a.style.display = `none`;
       a.href = url;
-      a.download = 'export-${exportId}';
+      a.download = `export-${exportId}`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
     }).catch((error) => {
-      toast.error('Erreur lors du téléchargement', {
+      toast.error(`Erreur lors du téléchargement`, {
         description: error.message,
       });
     });
   }, []);
 
   return (
-    <div className={`space-y-6 ${className}' }>
+    <div className={`space-y-6 ${className}`}>
       {/* En-tête */}
       <div className="flex items-center justify-between">
         <div>
@@ -240,7 +240,7 @@ export function ExportManager({ className }: ExportManagerProps) {
             ) : (
               <DownloadIcon className="h-4 w-4 mr-2" />
             )}
-            {createExportMutation.isPending ? 'Export en cours...' : 'Créer export'}
+            {createExportMutation.isPending ? "Export en cours..." : "Créer export'}
           </Button>
         </div>
       </div>
@@ -252,10 +252,10 @@ export function ExportManager({ className }: ExportManagerProps) {
           title="Export PDF"
           description="Catalogue complet avec images et mise en page"
           format="PDF"
-          isSelected={selectedFormat === 'PDF'}
+          isSelected={selectedFormat === "PDF"}
           onSelect={() => {
             setSelectedFormat('PDF');
-            setExportConfig(prev => ({ ...prev, format: 'PDF' }));
+            setExportConfig(prev => ({ ...prev, format: "PDF" }));
           }}
         />
         
@@ -264,10 +264,10 @@ export function ExportManager({ className }: ExportManagerProps) {
           title="Export CSV"
           description="Données tabulaires pour Excel ou Google Sheets"
           format="CSV"
-          isSelected={selectedFormat === 'CSV'}
+          isSelected={selectedFormat === "CSV"}
           onSelect={() => {
             setSelectedFormat('CSV');
-            setExportConfig(prev => ({ ...prev, format: 'CSV' }));
+            setExportConfig(prev => ({ ...prev, format: "CSV" }));
           }}
         />
         
@@ -276,10 +276,10 @@ export function ExportManager({ className }: ExportManagerProps) {
           title="Export JSON"
           description="Données brutes pour développeurs et APIs"
           format="JSON"
-          isSelected={selectedFormat === 'JSON'}
+          isSelected={selectedFormat === "JSON"}
           onSelect={() => {
             setSelectedFormat('JSON');
-            setExportConfig(prev => ({ ...prev, format: 'JSON' }));
+            setExportConfig(prev => ({ ...prev, format: "JSON" }));
           }}
         />
       </div>
@@ -403,7 +403,7 @@ export function ExportManager({ className }: ExportManagerProps) {
 }
 
 // =============================================================================
-// 🎴 COMPOSANT CARTE TYPE D'EXPORT
+// 🎴 COMPOSANT CARTE TYPE D`EXPORT
 // =============================================================================
 
 interface ExportTypeCardProps {
@@ -421,13 +421,13 @@ function ExportTypeCard({ icon, title, description, format, isSelected, onSelect
       className="cursor-pointer transition-all hover:shadow-md"
       onClick={onSelect}
     >
-      <CardContent className="p-6 text-center">
-        <div className={`mx-auto mb-4 p-3 rounded-lg w-fit ${isSelected ? 'bg-primary/10 text-primary' : 'bg-muted'}`}>
+      <CardContent className="p-6 text-center`>
+        <div className={`mx-auto mb-4 p-3 rounded-lg w-fit ${isSelected ? `}bg-primary/10 text-primary` : `bg-muted'}'}>
           {icon}
         </div>
-        <h3 className="font-semibold mb-2">{title}</h3>
+        <h3 className='font-semibold mb-2'>{title}</h3>
         <p className="text-sm text-muted-foreground mb-3">{description}</p>
-        <Badge variant={isSelected ? 'default' : 'outline'}>
+        <Badge variant={isSelected ? "default" : "outline"}>
           {format}
         </Badge>
       </CardContent>
@@ -545,7 +545,7 @@ function ExportConfigDialog({ config, onConfigChange }: ExportConfigDialogProps)
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="date_creation">Date d'ajout</SelectItem>
+                    <SelectItem value="date_creation">Date d"ajout</SelectItem>
                     <SelectItem value="date_lecture">Date de lecture</SelectItem>
                     <SelectItem value="titre">Titre alphabétique</SelectItem>
                     <SelectItem value="auteur">Auteur</SelectItem>
@@ -559,7 +559,7 @@ function ExportConfigDialog({ config, onConfigChange }: ExportConfigDialogProps)
                 <Label>Ordre</Label>
                 <Select
                   value={config.options.sort_order}
-                  onValueChange={(value: 'asc' | 'desc') => onConfigChange({
+                  onValueChange={(value: "asc" | "desc") => onConfigChange({
                     ...config,
                     options: { ...config.options, sort_order: value }
                   })}
@@ -579,7 +579,7 @@ function ExportConfigDialog({ config, onConfigChange }: ExportConfigDialogProps)
       </TabsContent>
 
       <TabsContent value="format" className="space-y-4">
-        {config.format === 'PDF' && (
+        {config.format === "PDF" && (
           <div className="space-y-4">
             <h4 className="font-medium">Options PDF</h4>
             
@@ -658,7 +658,7 @@ function ExportConfigDialog({ config, onConfigChange }: ExportConfigDialogProps)
           </div>
         )}
 
-        {config.format === 'CSV' && (
+        {config.format === "CSV" && (
           <div className="space-y-4">
             <h4 className="font-medium">Options CSV</h4>
             
@@ -735,7 +735,7 @@ function ExportConfigDialog({ config, onConfigChange }: ExportConfigDialogProps)
           <div className="space-y-2">
             <Label>Template personnalisé (optionnel)</Label>
             <Select
-              value={config.template || ''}
+              value={config.template || ""}
               onValueChange={(value) => onConfigChange({
                 ...config,
                 template: value || undefined
@@ -784,34 +784,34 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
     switch (exportItem.status) {
       case 'completed':
         return <CheckCircleIcon className="h-4 w-4 text-green-500" />;
-      case 'processing':
+      case "processing":
         return <RefreshCwIcon className="h-4 w-4 animate-spin text-blue-500" />;
-      case 'failed':
+      case "failed":
         return <AlertCircleIcon className="h-4 w-4 text-red-500" />;
     }
   };
 
   const getStatusText = () => {
     switch (exportItem.status) {
-      case 'completed': return 'Terminé';
+      case `completed': return 'Terminé';
       case 'processing': return 'En cours';
-      case 'failed': return 'Échoué';
+      case 'failed`: return `Échoué`;
     }
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return '${bytes} B';
-    if (bytes < 1024 * 1024) return '${(bytes / 1024).toFixed(1)} KB';
-    return '${(bytes / (1024 * 1024)).toFixed(1)} MB';
+    if (bytes < 1024) return `${bytes}`B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
   return (
     <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
       <div className="flex items-center gap-4">
         <div className="p-2 bg-muted rounded">
-          {exportItem.format === 'PDF' ? (
+          {exportItem.format === "PDF" ? (
             <FileImageIcon className="h-4 w-4" />
-          ) : exportItem.format === 'CSV' ? (
+          ) : exportItem.format === "CSV" ? (
             <TableIcon className="h-4 w-4" />
           ) : (
             <FileTextIcon className="h-4 w-4" />
@@ -833,12 +833,12 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
           </div>
           
           <div className="text-sm text-muted-foreground">
-            {new Date(exportItem.created_at).toLocaleDateString('fr-FR', {
-              day: '2-digit',
+            {new Date(exportItem.created_at).toLocaleDateString("fr-FR", {
+              day: `2-digit',
               month: '2-digit',
               year: 'numeric',
-              hour: '2-digit,
-              minute: '2-digit'
+              hour: '2-digit',
+              minute: "2-digit"
             })} • {formatFileSize(exportItem.file_size)}
           </div>
           
@@ -851,7 +851,7 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
       </div>
       
       <div className="flex gap-2">
-        {exportItem.status === 'completed' && (
+        {exportItem.status === "completed" && (
           <Button size="sm" variant="outline" onClick={onDownload}>
             <DownloadIcon className="h-4 w-4" />
           </Button>

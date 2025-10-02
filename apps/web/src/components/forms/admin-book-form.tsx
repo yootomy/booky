@@ -75,7 +75,7 @@ export function AdminBookForm({ book, onSuccess, onCancel }: AdminBookFormProps)
         description: "Impossible de créer le livre",
         variant: "destructive",
       });
-      console.error('Erreur création livre:', error);
+      console.error("Erreur création livre: ", error);
     },
   });
 
@@ -109,15 +109,14 @@ export function AdminBookForm({ book, onSuccess, onCancel }: AdminBookFormProps)
     },
     onError: (error) => {
       const errorMessage = error instanceof Error ? error.message :
-                           typeof error === 'string' ? error :
-                           'Erreur inconnue lors de la mise à jour';
+                           typeof error === "string" ? error : "Erreur inconnue lors de la mise à jour";
 
       toast({
         title: "Erreur",
-        description: 'Impossible de mettre à jour le livre: ${errorMessage}',
-        variant: "destructive",
+        description: 'Impossible de mettre à jour le livre: ' + errorMessage,
+        variant: 'destructive',
       });
-      console.error('Erreur mise à jour livre:', {
+      console.error("Erreur mise à jour livre:", {
         error,
         message: errorMessage,
         stack: error instanceof Error ? error.stack : undefined
@@ -140,7 +139,7 @@ export function AdminBookForm({ book, onSuccess, onCancel }: AdminBookFormProps)
 
   return (
     <EnhancedBookFormWithSaga
-      mode={book ? 'edit' : 'create'}
+      mode={book ? "edit" : "create"}
       initialData={book}
       onSubmit={handleSubmit}
       onCancel={onCancel || (() => {})}

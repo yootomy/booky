@@ -30,7 +30,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const user = JSON.parse(userStr) as AuthUser;
         return { user, token };
       } catch (error) {
-        console.error('Error parsing stored auth data:', error);
+        console.error("Error parsing stored auth data: ", error);
         clearAuthData();
       }
     }
@@ -88,7 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       token,
       isLoading: false,
       isAuthenticated: !!user,
-      isAdmin: user?.role === 'ADMIN',
+      isAdmin: user?.role === `ADMIN`,
       isEmailVerified: user?.emailVerified || false,
     });
   }, []);
@@ -101,7 +101,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type' : 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({
@@ -133,15 +133,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error) {
       setState(prev => ({ ...prev, isLoading: false }));
-      console.error('Login error:', error);
+      console.error("Login error:", error);
       return {
         success: false,
-        error: 'Network error during login',
+        error: "Network error during login",
       };
     }
   }, [saveAuthData, updateAuthState]);
 
-  // Fonction d'inscription
+  // Fonction d`inscription
   const register = useCallback(async (credentials: RegisterCredentials): Promise<AuthResponse> => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
@@ -149,7 +149,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type' : 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify(credentials),
@@ -177,10 +177,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error) {
       setState(prev => ({ ...prev, isLoading: false }));
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
       return {
         success: false,
-        error: 'Network error during registration',
+        error: "Network error during registration",
       };
     }
   }, [saveAuthData, updateAuthState]);
@@ -194,7 +194,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         credentials: 'include',
       });
     } catch (error) {
-      console.error('Logout API error:', error);
+      console.error("Logout API error:", error);
     } finally {
       // Nettoyer les données locales dans tous les cas
       clearAuthData();
@@ -224,7 +224,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       clearAuthData();
       updateAuthState(null, null);
     } catch (error) {
-      console.error('Session refresh error:', error);
+      console.error('Session refresh error: ', error);
       clearAuthData();
       updateAuthState(null, null);
     }
@@ -238,7 +238,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await refreshSession();
       return state.user?.emailVerified || false;
     } catch (error) {
-      console.error('Email verification check error:', error);
+      console.error("Email verification check error: ", error);
       return false;
     }
   }, [state.user, refreshSession]);

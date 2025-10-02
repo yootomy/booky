@@ -10,5 +10,5 @@ export default function TestBooksPage() {
 
 export const metadata = {
   title: "Test - Composants de Livres",
-  description: "Page de test pour tous les composants d'affichage de livres",
+  description: "Page de test pour tous les composants d"affichage de livres',
 };

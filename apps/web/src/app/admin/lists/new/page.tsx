@@ -49,7 +49,7 @@ export default function NewListPage() {
             </CardHeader>
             <CardContent>
               <ListForm
-                onSuccess={() => router.push('/admin/lists')}
+                onSuccess={() => router.push("/admin/lists")}
                 onCancel={() => router.back()}
               />
             </CardContent>

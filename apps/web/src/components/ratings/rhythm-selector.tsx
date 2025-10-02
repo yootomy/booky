@@ -10,7 +10,7 @@ import { Clock, Zap, Timer, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ratingDarkRomanceStyles } from "@/lib/theme-variants";
 
-export type RhythmValue = "slow" | "medium" | "fast" | "insta";
+export type RhythmValue="slow" | "medium" | "fast" | "insta";
 
 export interface RhythmOption {
   value: RhythmValue;
@@ -26,28 +26,28 @@ export const rhythmOptions: RhythmOption[] = [
     label: "Slow",
     description: "Lecture lente et posée",
     icon: Clock,
-    color: "text-blue-500 hover:text-blue-600",
+    color: 'text-blue-500 hover:text-blue-600',
   },
   {
     value: "medium",
     label: "Medium",
     description: "Rythme équilibré",
     icon: Timer,
-    color: "text-green-500 hover:text-green-600",
+    color: 'text-green-500 hover:text-green-600',
   },
   {
     value: "fast",
     label: "Fast",
     description: "Rythme soutenu",
     icon: Gauge,
-    color: "text-orange-500 hover:text-orange-600",
+    color: 'text-orange-500 hover:text-orange-600',
   },
   {
     value: "insta",
     label: "Insta",
     description: "Action non-stop",
     icon: Zap,
-    color: "text-red-500 hover:text-red-600",
+    color: 'text-red-500 hover:text-red-600',
   },
 ];
 
@@ -68,15 +68,15 @@ export interface RhythmSelectorProps {
 export function RhythmSelector({
   value,
   onChange,
-  size = "md",
-  layout = "horizontal",
+  size="md",
+  layout="horizontal",
   readonly = false,
   showLabel = true,
   showDescription = false,
   className,
   optionClassName,
   allowDeselect = false,
-  variant = "default",
+  variant="default",
 }: RhythmSelectorProps) {
   const handleOptionClick = (optionValue: RhythmValue) => {
     if (readonly || !onChange) return;
@@ -166,20 +166,20 @@ export function RhythmSelector({
     return (
       <button
         key={option.value}
-        type="button"
+        type=`button`
         disabled={readonly}
         className={cn(
           getOptionClasses(option, isSelected),
           optionClassName
         )}
         onClick={() => handleOptionClick(option.value)}
-        aria-label={'Rythme ${option.label}: ${option.description}'}
+        aria-label={`Rythme ${option.label}:`${option.description}`}
         aria-pressed={isSelected}
       >
         <Icon
           className={cn(
             sizeClasses[size].icon,
-            "transition-colors duration-200",
+            `transition-colors duration-200",
             isSelected ? "text-primary" : option.color
           )}
         />
@@ -244,7 +244,7 @@ export function RhythmSelector({
 // Composant d'affichage en lecture seule
 export function RhythmDisplay({ 
   value, 
-  size = "md", 
+  size="md", 
   showDescription = true,
   className 
 }: {

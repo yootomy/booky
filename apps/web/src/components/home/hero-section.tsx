@@ -15,7 +15,7 @@ export function HeroSection() {
   const { pickRandom } = useRandomPick();
   const [showConseilModal, setShowConseilModal] = useState(false);
 
-  // Toujours afficher "Bruna" - c'est sa bibliothèque
+  // Toujours afficher "Bruna" - c"est sa bibliothèque
   const libraryOwner = 'Bruna';
 
 
@@ -25,10 +25,10 @@ export function HeroSection() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full"
         style={{
-          backgroundImage: 'url(\'/images/hero.png\')',
+          backgroundImage: "url(\"/images/hero.png\")",
           backgroundSize: 'cover',
           backgroundPosition: 'center right',
-          filter: 'brightness(1.1) contrast(1.05)'
+          filter: "brightness(1.1) contrast(1.05)"
         }}
       />
 
@@ -41,16 +41,16 @@ export function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
+          transition={{ duration: 1, ease: "easeOut" }}
         >
           {/* Elegant subtitle first */}
           <p
             className="mb-4 text-foreground/70 tracking-wide"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+              fontSize: "clamp(0.9rem, 2vw, 1.1rem)",
               letterSpacing: '0.1em',
-              textTransform: 'uppercase'
+              textTransform: "uppercase"
             }}
           >
             Bibliothèque Dark Romance
@@ -61,7 +61,7 @@ export function HeroSection() {
             className="mb-6 text-foreground font-bold"
             style={{
               fontFamily: 'Playfair Display, serif',
-              fontSize: 'clamp(2.2rem, 5vw, 4rem)',
+              fontSize: "clamp(2.2rem, 5vw, 4rem)",
               lineHeight: '1.1',
               fontWeight: 700
             }}
@@ -70,7 +70,7 @@ export function HeroSection() {
             <span
               className="block mt-2 text-foreground"
               style={{
-                fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
+                fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
               }}
             >
               de {libraryOwner}
@@ -82,9 +82,9 @@ export function HeroSection() {
             className="mb-10 leading-relaxed max-w-2xl mx-auto text-foreground/80"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: 'clamp(1rem, 2.5vw, 1.3rem)',
+              fontSize: "clamp(1rem, 2.5vw, 1.3rem)",
               lineHeight: '1.7',
-              fontStyle: 'italic'
+              fontStyle: "italic"
             }}
           >
             « Explorez un univers de passion et de mystère, où chaque page révèle des émotions intenses entre ombre et lumière. »
@@ -101,13 +101,13 @@ export function HeroSection() {
         >
           {/* Primary CTA - Classic romantic style */}
           <button
-            onClick={() => window.location.href = '/books'}
+            onClick={() => window.location.href="/books"}
             className="group px-8 py-4 sm:px-10 sm:py-5 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 w-full sm:w-auto"
             style={{
               background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
               color: 'white',
               fontFamily: 'Playfair Display, serif',
-              fontSize: 'clamp(1rem, 2.2vw, 1.2rem)',
+              fontSize: "clamp(1rem, 2.2vw, 1.2rem)",
               fontWeight: 600,
               fontStyle: 'italic',
               boxShadow: '0 10px 30px rgba(139, 21, 56, 0.3)',
@@ -130,8 +130,8 @@ export function HeroSection() {
             className="group transition-all duration-300 hover:scale-105 focus:outline-none"
             style={{
               background: 'none',
-              border: 'none',
-              cursor: 'pointer',
+              border: "none",
+              cursor: "pointer",
             }}
           >
             <span
@@ -139,9 +139,9 @@ export function HeroSection() {
               style={{
                 color: '#D4AF37',
                 fontFamily: 'Playfair Display, serif',
-                fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+                fontSize: "clamp(0.9rem, 2vw, 1.1rem)",
                 fontWeight: 500,
-                fontStyle: 'italic',
+                fontStyle: "italic",
               }}
             >
               Clique-moi

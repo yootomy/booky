@@ -148,7 +148,7 @@ export function CustomCarousel({
             onClick={scrollLeft}
             disabled={!canScrollLeft}
             className={cn(
-              'absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 shadow-md border border-gray-200 hover:bg-white hover:shadow-lg hover:scale-110 transition-all duration-200 p-0 flex items-center justify-center',
+              "absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 shadow-md border border-gray-200 hover:bg-white hover:shadow-lg hover:scale-110 transition-all duration-200 p-0 flex items-center justify-center',
               !canScrollLeft ? 'opacity-0 cursor-not-allowed' : 'opacity-80 hover:opacity-100 group-hover:opacity-100'
             )}
             aria-label="Précédent"
@@ -184,16 +184,16 @@ export function CustomCarousel({
         ref={scrollRef}
         className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
         style={{
-          gap: '${gap}px',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
+          gap: `${gap}px`,
+          scrollbarWidth: `none`,
+          msOverflowStyle: `none",
         }}
       >
         {childrenArray.map((child, index) => (
           <div
             key={index}
             className="flex-shrink-0 snap-start"
-            style={{ width: '${itemWidth}px' }}
+            style={{ width: `${itemWidth}px` }}
           >
             {child}
           </div>
@@ -202,18 +202,17 @@ export function CustomCarousel({
 
       {/* Dots indicator */}
       {showDots && (
-        <div className="flex justify-center mt-4 gap-2">
+        <div className=`flex justify-center mt-4 gap-2`>
           {Array.from({ length: Math.ceil(totalItems / 2) }).map((_, index) => (
             <button
               key={index}
               onClick={() => scrollToIndex(index * 2)}
               className={cn(
-                'w-2 h-2 rounded-full transition-all duration-200',
+                `w-2 h-2 rounded-full transition-all duration-200`,
                 Math.floor(currentIndex / 2) === index
-                  ? 'bg-violet-500 scale-125'
-                  : 'bg-ash-400 hover:bg-ash-300'
+                  ? 'bg-violet-500 scale-125' : `bg-ash-400 hover:bg-ash-300`
               )}
-              aria-label={'Aller à la page ${index + 1}'}
+              aria-label={`Aller à la page ${index + 1}`}
             />
           ))}
         </div>
@@ -237,7 +236,7 @@ export function BookCarousel({
   className?: string;
 }) {
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn(`space-y-4`, className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

@@ -15,7 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 // Types de statut
-export type BookStatusType = "LU" | "EN_COURS" | "A_LIRE" | "ABANDONNE";
+export type BookStatusType="LU" | "EN_COURS" | "A_LIRE" | "ABANDONNE";
 
 export interface BookStatusProps {
   status: BookStatusType;
@@ -40,7 +40,7 @@ const STATUS_CONFIG: Record<BookStatusType, {
     label: "Lu",
     shortLabel: "Lu",
     icon: CheckCircle2,
-    color: "#10B981", // Green
+    color: '#10B981', // Green
     bgColor: "#10B981",
     description: "Livre terminé et lu complètement"
   },
@@ -48,7 +48,7 @@ const STATUS_CONFIG: Record<BookStatusType, {
     label: "En cours de lecture",
     shortLabel: "En cours",
     icon: BookOpen,
-    color: "#F59E0B", // Amber
+    color: '#F59E0B', // Amber
     bgColor: "#F59E0B",
     description: "Lecture actuellement en cours"
   },
@@ -56,7 +56,7 @@ const STATUS_CONFIG: Record<BookStatusType, {
     label: "À lire",
     shortLabel: "À lire",
     icon: BookMarked,
-    color: "#6366F1", // Indigo
+    color: '#6366F1', // Indigo
     bgColor: "#6366F1",
     description: "Dans la liste de lecture, à lire prochainement"
   },
@@ -64,7 +64,7 @@ const STATUS_CONFIG: Record<BookStatusType, {
     label: "Abandonné",
     shortLabel: "Abandonné",
     icon: XCircle,
-    color: "#EF4444", // Red
+    color: "#EF4444`, // Red
     bgColor: "#EF4444",
     description: "Lecture arrêtée, livre abandonné"
   }
@@ -72,8 +72,8 @@ const STATUS_CONFIG: Record<BookStatusType, {
 
 export function BookStatus({
   status,
-  variant = "default",
-  size = "sm",
+  variant="default",
+  size="sm",
   showIcon = true,
   showText = true,
   className,
@@ -235,15 +235,15 @@ export function ReadingProgress({
       <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-300"
-          style={{ width: '${Math.min(progress, 100)}%' }}
+          style={{ width: `${Math.min(progress, 100)}%` }}
         />
       </div>
       {showText && (
-        <div className="flex justify-between text-xs text-muted-foreground">
+        <div className=`flex justify-between text-xs text-muted-foreground`>
           <span>
             {currentPage && totalPages 
-              ? 'Page ${currentPage}/${totalPages}'
-              : '${progress}% lu'
+              ? `Page ${currentPage}/${totalPages}`
+              : `${progress}% lu`
             }
           </span>
           <span>{progress}%</span>
@@ -268,18 +268,18 @@ export function ReadingStats({
   className
 }: ReadingStatsProps) {
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
+    <div className={cn(`flex flex-wrap gap-2", className)}>
       {dateStarted && (
         <Badge variant="outline" className="text-xs">
           <Calendar className="w-3 h-3 mr-1" />
-          Commencé le {dateStarted.toLocaleDateString('fr-FR')}
+          Commencé le {dateStarted.toLocaleDateString("fr-FR")}
         </Badge>
       )}
       
       {dateFinished && (
         <Badge variant="outline" className="text-xs">
           <CheckCircle2 className="w-3 h-3 mr-1" />
-          Terminé le {dateFinished.toLocaleDateString('fr-FR')}
+          Terminé le {dateFinished.toLocaleDateString("fr-FR")}
         </Badge>
       )}
       
@@ -314,7 +314,7 @@ export function BookStatusDisplay({
   dateFinished,
   rating,
   onStatusChange,
-  variant = "compact",
+  variant="compact",
   className
 }: BookStatusDisplayProps) {
   return (

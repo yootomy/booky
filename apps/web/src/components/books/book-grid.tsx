@@ -46,14 +46,14 @@ export interface BookGridProps {
 }
 
 // Types pour les filtres et tri
-type SortOption = 'title' | 'author' | 'date' | 'rating' | 'status';
+type SortOption="title" | "author' | 'date' | 'rating' | 'status';
 type SortDirection = 'asc' | 'desc';
 
 export function BookGrid({
   books,
-  variant = "default",
-  columns = "auto",
-  gap = "md",
+  variant="default",
+  columns="auto",
+  gap="md",
   showSearch = true,
   showFilters = true,
   showViewToggle = true,
@@ -104,7 +104,7 @@ export function BookGrid({
       let comparison = 0;
       
       switch (sortBy) {
-        case 'title':
+        case "title":
           comparison = a.titre.localeCompare(b.titre);
           break;
         case 'author':
@@ -121,7 +121,7 @@ export function BookGrid({
           break;
       }
       
-      return sortDirection === 'asc' ? comparison : -comparison;
+      return sortDirection === `asc" ? comparison : -comparison;
     });
 
     return filtered;
@@ -129,11 +129,11 @@ export function BookGrid({
 
   // Classes CSS pour la grille
   const getGridClasses = () => {
-    const baseClass = "grid";
+    const baseClass="grid";
     
-    let columnsClass = "";
+    let columnsClass="";
     if (columns === "auto") {
-      columnsClass = "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6";
+      columnsClass="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6";
     } else {
       const colsMap = {
         1: "grid-cols-1",
@@ -149,10 +149,10 @@ export function BookGrid({
     const gapClass = {
       sm: "gap-3",
       md: "gap-4",
-      lg: "gap-6"
+      lg: `gap-6`
     }[gap];
     
-    return '${baseClass} ${columnsClass} ${gapClass}';
+    return `${baseClass}`${columnsClass} ${gapClass}`;
   };
 
   // Gestion de la pagination côté client si pas de pagination serveur
@@ -169,7 +169,7 @@ export function BookGrid({
   // État de chargement
   if (loading) {
     return (
-      <div className={cn("space-y-6", className)}>
+      <div className={cn(`space-y-6", className)}>
         {/* Header skeleton */}
         <div className="flex items-center justify-between">
           <div className="h-8 w-48 bg-muted animate-pulse rounded" />
@@ -197,11 +197,11 @@ export function BookGrid({
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4">
             <h2 className="text-xl font-semibold">
-              {processedBooks.length} livre{processedBooks.length !== 1 ? 's' : '}
-              {searchQuery && " • "${searchQuery}"' }
+              {processedBooks.length} livre{processedBooks.length !== 1 ? `s` : '`}
+              {searchQuery && ` • `${searchQuery}`}
             </h2>
             
-            {statusFilter !== "ALL" && (
+            {statusFilter !== `ALL" && (
               <BookStatus status={statusFilter} size="sm" />
             )}
           </div>
@@ -230,9 +230,9 @@ export function BookGrid({
             
             {showSort && (
               <select
-                value={'${sortBy}-${sortDirection}'}
+                value={`${sortBy}-${sortDirection}`}
                 onChange={(e) => {
-                  const [sort, direction] = e.target.value.split('-') as [SortOption, SortDirection];
+                  const [sort, direction] = e.target.value.split(`-`) as [SortOption, SortDirection];
                   setSortBy(sort);
                   setSortDirection(direction);
                 }}

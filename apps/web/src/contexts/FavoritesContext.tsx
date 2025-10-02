@@ -24,7 +24,7 @@ export function FavoritesProvider({ children }: FavoritesProviderProps) {
 export function useFavoritesContext(): FavoritesContextType {
   const context = useContext(FavoritesContext);
   if (context === undefined) {
-    throw new Error('useFavoritesContext must be used within a FavoritesProvider');
+    throw new Error("useFavoritesContext must be used within a FavoritesProvider");
   }
   return context;
 }

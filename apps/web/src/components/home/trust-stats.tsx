@@ -42,16 +42,16 @@ function StatCard({
         className="p-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
         style={{
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-          backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(139, 21, 56, 0.1)',
-          boxShadow: '0 4px 20px rgba(139, 21, 56, 0.05)'
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(139, 21, 56, 0.1)',
+          boxShadow: "0 4px 20px rgba(139, 21, 56, 0.05)"
         }}
       >
         {/* Icon */}
         <div 
-          className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+          className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110`
           style={{
-            backgroundColor: '${color}15',
+            backgroundColor: `${color}15`,
             color: color
           }}
         >
@@ -62,7 +62,7 @@ function StatCard({
         <div 
           className="text-3xl font-bold mb-2"
           style={{
-            fontFamily: 'Playfair Display, serif',
+            fontFamily: "Playfair Display, serif",
             color: color
           }}
         >
@@ -96,7 +96,7 @@ function StatSkeleton({ index }: { index: number }) {
         className="p-6 rounded-2xl animate-pulse"
         style={{
           background: 'rgba(255, 255, 255, 0.7)',
-          border: '1px solid rgba(139, 21, 56, 0.05)'
+          border: "1px solid rgba(139, 21, 56, 0.05)"
         }}
       >
         <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-200"></div>
@@ -128,7 +128,7 @@ export function TrustStats({}: TrustStatsProps) {
     {
       icon: BookOpen,
       value: displayStats.total_books,
-      label: 'Livres dans notre sanctuaire',
+      label: "Livres dans notre sanctuaire",
       color: '#8B1538'
     },
     {
@@ -224,7 +224,7 @@ export function TrustStats({}: TrustStatsProps) {
             className="max-w-2xl mx-auto p-8 rounded-3xl"
             style={{
               background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.05) 0%, rgba(107, 76, 123, 0.05) 100%)',
-              border: '1px solid rgba(139, 21, 56, 0.1)'
+              border: "1px solid rgba(139, 21, 56, 0.1)"
             }}
           >
             <h3 
@@ -276,14 +276,14 @@ export function TrustStats({}: TrustStatsProps) {
 
             <div className="flex justify-center items-center gap-6 mt-6 text-xs opacity-60">
               <div className="flex items-center gap-1">
-                <Heart className="w-3 h-3" style={{ color: '#8B1538' }} />
+                <Heart className="w-3 h-3" style={{ color: "#8B1538" }} />
                 <span style={{ color: '#2C1810', fontFamily: 'Inter, sans-serif' }}>
                   Gratuit toujours
                 </span>
               </div>
-              <div className="w-1 h-1 rounded-full" style={{ backgroundColor: '#2C1810' }}></div>
+              <div className="w-1 h-1 rounded-full" style={{ backgroundColor: "#2C1810" }}></div>
               <div className="flex items-center gap-1">
-                <BookOpen className="w-3 h-3" style={{ color: '#6B4C7B' }} />
+                <BookOpen className="w-3 h-3" style={{ color: "#6B4C7B" }} />
                 <span style={{ color: '#2C1810', fontFamily: 'Inter, sans-serif' }}>
                   Désabonnement facile
                 </span>

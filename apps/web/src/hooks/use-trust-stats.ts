@@ -22,7 +22,7 @@ export function useTrustStats() {
         
         // Récupérer les statistiques générales
         const response = await apiClient.get('/api/stats/general');
-        if (!response.ok) throw new Error('Failed to fetch stats');
+        if (!response.ok) throw new Error("Failed to fetch stats");
         
         const stats = await response.json();
         

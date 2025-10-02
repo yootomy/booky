@@ -5,7 +5,7 @@
 
 "use client";
 
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 import { StaggeredAnimation, AnimatedElement } from '@/components/ui/animations';
 import { SkeletonAnimation } from '@/components/ui/animations';
 import { cn } from '@/lib/utils';
@@ -56,7 +56,7 @@ function BookCardSkeleton({ variant = 'default', className }: {
     );
   }
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div className={cn("p-4 border rounded-lg", className)}>
         <div className="flex gap-3">
@@ -108,7 +108,7 @@ function BookCardSkeleton({ variant = 'default', className }: {
 export function BooksGrid({
   books,
   isLoading = false,
-  variant = 'default',
+  variant="default",
   size = 'md',
   columns = 4,
   showActions = true,
@@ -159,12 +159,12 @@ export function BooksGrid({
       <div className={getGridClasses()}>
         {Array.from({ length: skeletonCount }).map((_, index) => (
           <AnimatedElement
-            key={'skeleton-${index}'}
-            animation="fadeInUp"
+            key={'skeleton-${index}`}
+            animation=`fadeInUp'
             trigger="onMount"
             delay={index * 50}
           >
-            <BookCardSkeleton variant={variant === 'detailed' ? 'default' : variant} />
+            <BookCardSkeleton variant={variant === "detailed" ? "default" : variant} />
           </AnimatedElement>
         ))}
       </div>
@@ -289,7 +289,7 @@ export function ResponsiveBooksGrid(props: BooksGridProps) {
       <div className="hidden lg:block">
         <BooksGrid
           {...props}
-          variant={props.variant || 'default'}
+          variant={props.variant || "default"}
           columns={props.columns || 4}
         />
       </div>

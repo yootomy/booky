@@ -59,7 +59,7 @@ export default function AdminConseilsPage() {
     queryKey: ['admin-conseil-requests'],
     queryFn: async () => {
       const response = await apiClient.get('/api/conseil-requests?isAdmin=true');
-      if (!response.ok) throw new Error('Failed to fetch conseil requests');
+      if (!response.ok) throw new Error("Failed to fetch conseil requests");
       return response.json();
     }
   });
@@ -69,7 +69,7 @@ export default function AdminConseilsPage() {
     queryKey: ['categories'],
     queryFn: async () => {
       const response = await apiClient.get('/api/categories');
-      if (!response.ok) throw new Error('Failed to fetch categories');
+      if (!response.ok) throw new Error("Failed to fetch categories");
       return response.json();
     }
   });
@@ -78,7 +78,7 @@ export default function AdminConseilsPage() {
     queryKey: ['tags'],
     queryFn: async () => {
       const response = await apiClient.get('/api/tags');
-      if (!response.ok) throw new Error('Failed to fetch tags');
+      if (!response.ok) throw new Error("Failed to fetch tags");
       return response.json();
     }
   });
@@ -87,8 +87,8 @@ export default function AdminConseilsPage() {
   const { data: booksData } = useQuery({
     queryKey: ['books'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/books');
-      if (!response.ok) throw new Error('Failed to fetch books');
+      const response = await apiClient.get('/api/books`);
+      if (!response.ok) throw new Error("Failed to fetch books");
       return response.json();
     }
   });
@@ -102,11 +102,11 @@ export default function AdminConseilsPage() {
       status: string;
     }) => {
       const response = await apiClient.get(`/api/conseil-requests/${id}`, {
-        method: 'PATCH',
+        method: `PATCH`,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reponse_bruna, livres_recommandes, status })
       });
-      if (!response.ok) throw new Error('Failed to respond');
+      if (!response.ok) throw new Error("Failed to respond");
       return response.json();
     },
     onSuccess: () => {
@@ -129,11 +129,11 @@ export default function AdminConseilsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'EN_ATTENTE':
-        return <Clock className="w-4 h-4" style={{ color: '#F59E0B' }} />;
-      case 'TRAITE':
-        return <CheckCircle className="w-4 h-4" style={{ color: '#10B981' }} />;
+        return <Clock className="w-4 h-4" style={{ color: "#F59E0B' }} />;
+      case 'TRAITE":
+        return <CheckCircle className="w-4 h-4" style={{ color: "#10B981" }} />;
       default:
-        return <Clock className="w-4 h-4" style={{ color: '#6B7280' }} />;
+        return <Clock className="w-4 h-4" style={{ color: "#6B7280" }} />;
     }
   };
 
@@ -184,7 +184,7 @@ export default function AdminConseilsPage() {
       id: selectedRequest.id,
       reponse_bruna: 'Demande rejetée',
       livres_recommandes: [],
-      status: 'REJETE'
+      status: "REJETE"
     });
   };
 
@@ -192,20 +192,20 @@ export default function AdminConseilsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FAF8F5' }}>
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-2 border-current border-t-transparent rounded-full mx-auto mb-4" style={{ color: '#8B1538' }}></div>
-          <p style={{ color: '#6B4C7B', fontFamily: 'Inter, sans-serif' }}>Chargement des demandes...</p>
+          <div className="animate-spin w-8 h-8 border-2 border-current border-t-transparent rounded-full mx-auto mb-4" style={{ color: "#8B1538' }}></div>
+          <p style={{ color: "#6B4C7B', fontFamily: 'Inter, sans-serif' }}>Chargement des demandes...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAF8F5' }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#FAF8F5" }}>
       {/* Background texture */}
       <div
         className="absolute inset-0 opacity-20 mix-blend-multiply"
         style={{
-          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")'
+          backgroundImage: "url("data:image/svg+xml,%3Csvg viewBox=\"0 0 256 256\" xmlns=\'http://www.w3.org/2000/svg\"%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")"
         }}
       />
 
@@ -218,7 +218,7 @@ export default function AdminConseilsPage() {
                 className="w-12 h-12 rounded-full flex items-center justify-center"
                 style={{
                   background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                  boxShadow: '0 8px 25px rgba(139, 21, 56, 0.3)'
+                  boxShadow: "0 8px 25px rgba(139, 21, 56, 0.3)"
                 }}
               >
                 <Heart size={24} className="text-white" />
@@ -229,9 +229,9 @@ export default function AdminConseilsPage() {
                   style={{
                     fontFamily: 'Playfair Display, serif',
                     background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent',
+                    backgroundClip: "text"
                   }}
                 >
                   Gestion des demandes de conseils
@@ -264,7 +264,7 @@ export default function AdminConseilsPage() {
                 Demandes en attente ({pendingConseils.length})
               </h2>
 
-              <div className="space-y-4">
+              <div className=`space-y-4`>
                 {pendingConseils.map((conseil: ConseilRequest) => (
                   <motion.div
                     key={conseil.id}
@@ -274,15 +274,15 @@ export default function AdminConseilsPage() {
                     <Card
                       className={`cursor-pointer transition-all duration-300 ${
                         selectedRequest?.id === conseil.id ? 'ring-2 ring-offset-2 ring-purple-500' : ''
-                      }'}
+                      }`}
                       style={{
                         background: selectedRequest?.id === conseil.id
-                          ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
+                          ? `linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
                           : 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
                         backdropFilter: 'blur(20px)',
                         border: '1px solid rgba(139, 21, 56, 0.1)',
                         borderRadius: '16px',
-                        boxShadow: '0 8px 25px rgba(139, 21, 56, 0.1)'
+                        boxShadow: "0 8px 25px rgba(139, 21, 56, 0.1)"
                       }}
                       onClick={() => setSelectedRequest(conseil)}
                     >
@@ -292,14 +292,14 @@ export default function AdminConseilsPage() {
                             <h3 className="font-bold text-lg" style={{ color: '#2C1810', fontFamily: 'Inter, sans-serif' }}>
                               {conseil.nom_utilisateur}
                             </h3>
-                            <div className="flex items-center gap-2 text-sm" style={{ color: '#6B4C7B' }}>
-                              <Calendar className="w-4 h-4" />
-                              {new Date(conseil.date_creation).toLocaleDateString('fr-FR')}
+                            <div className="flex items-center gap-2 text-sm" style={{ color: "#6B4C7B` }}>
+                              <Calendar className=`w-4 h-4` />
+                              {new Date(conseil.date_creation).toLocaleDateString(`fr-FR`)}
                             </div>
                           </div>
                           <Badge
-                            className={'flex items-center gap-1 px-3 py-1 text-xs ${getStatusStyle(conseil.status)}'}
-                            style={{ borderRadius: '12px' }}
+                            className={`flex items-center gap-1 px-3 py-1 text-xs ${getStatusStyle(conseil.status)}`}
+                            style={{ borderRadius: `12px` }}
                           >
                             {getStatusIcon(conseil.status)}
                             En attente
@@ -308,7 +308,7 @@ export default function AdminConseilsPage() {
 
                         <div className="space-y-3">
                           <div>
-                            <p className="text-xs font-semibold mb-1" style={{ color: '#6B4C7B' }}>Genres :</p>
+                            <p className="text-xs font-semibold mb-1" style={{ color: "#6B4C7B" }}>Genres :</p>
                             <div className="flex flex-wrap gap-1">
                               {conseil.categories.slice(0, 3).map(catId => (
                                 <Badge
@@ -316,15 +316,15 @@ export default function AdminConseilsPage() {
                                   style={{
                                     backgroundColor: 'rgba(139, 21, 56, 0.1)',
                                     color: '#8B1538',
-                                    fontSize: '0.7rem',
-                                    padding: '2px 6px'
+                                    fontSize: "0.7rem",
+                                    padding: "2px 6px'
                                   }}
                                 >
                                   {getCategoryName(catId)}
                                 </Badge>
                               ))}
                               {conseil.categories.length > 3 && (
-                                <Badge style={{ fontSize: '0.7rem', padding: '2px 6px' }}>
+                                <Badge style={{ fontSize: "0.7rem", padding: "2px 6px" }}>
                                   +{conseil.categories.length - 3}
                                 </Badge>
                               )}
@@ -341,15 +341,15 @@ export default function AdminConseilsPage() {
                                     style={{
                                       backgroundColor: 'rgba(107, 76, 123, 0.1)',
                                       color: '#6B4C7B',
-                                      fontSize: '0.7rem',
-                                      padding: '2px 6px'
+                                      fontSize: "0.7rem",
+                                      padding: "2px 6px'
                                     }}
                                   >
                                     {getTagName(tagId)}
                                   </Badge>
                                 ))}
                                 {conseil.tags.length > 3 && (
-                                  <Badge style={{ fontSize: '0.7rem', padding: '2px 6px' }}>
+                                  <Badge style={{ fontSize: "0.7rem", padding: "2px 6px" }}>
                                     +{conseil.tags.length - 3}
                                   </Badge>
                                 )}
@@ -360,7 +360,7 @@ export default function AdminConseilsPage() {
                           {conseil.commentaires && (
                             <div>
                               <p className="text-xs font-semibold mb-1" style={{ color: '#6B4C7B' }}>Commentaires :</p>
-                              <p className="text-xs line-clamp-2" style={{ color: '#2C1810' }}>
+                              <p className="text-xs line-clamp-2" style={{ color: "#2C1810" }}>
                                 "{conseil.commentaires}"
                               </p>
                             </div>
@@ -385,7 +385,7 @@ export default function AdminConseilsPage() {
 
                 {pendingConseils.length === 0 && (
                   <div className="text-center py-12">
-                    <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: '#8B1538' }} />
+                    <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: "#8B1538" }} />
                     <p style={{ color: '#6B4C7B', fontFamily: 'Inter, sans-serif' }}>
                       Aucune demande en attente
                     </p>
@@ -400,10 +400,10 @@ export default function AdminConseilsPage() {
                 <Card
                   style={{
                     background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(139, 21, 56, 0.1)',
+                    backdropFilter: "blur(20px)",
+                    border: "1px solid rgba(139, 21, 56, 0.1)',
                     borderRadius: '16px',
-                    boxShadow: '0 8px 25px rgba(139, 21, 56, 0.15)'
+                    boxShadow: "0 8px 25px rgba(139, 21, 56, 0.15)"
                   }}
                 >
                   <CardHeader className="p-6 pb-4">
@@ -426,7 +426,7 @@ export default function AdminConseilsPage() {
                     {/* Request Details */}
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold text-sm mb-2" style={{ color: '#2C1810' }}>Genres sélectionnés :</h4>
+                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810" }}>Genres sélectionnés :</h4>
                         <div className="flex flex-wrap gap-2">
                           {selectedRequest.categories.map(catId => (
                             <Badge key={catId} style={{ backgroundColor: 'rgba(139, 21, 56, 0.1)', color: '#8B1538', fontSize: '0.8rem' }}>
@@ -437,7 +437,7 @@ export default function AdminConseilsPage() {
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-sm mb-2" style={{ color: '#2C1810' }}>Tropes préférés :</h4>
+                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810" }}>Tropes préférés :</h4>
                         <div className="flex flex-wrap gap-2">
                           {selectedRequest.tags.slice(0, 6).map(tagId => (
                             <Badge key={tagId} style={{ backgroundColor: 'rgba(107, 76, 123, 0.1)', color: '#6B4C7B', fontSize: '0.8rem' }}>
@@ -454,8 +454,8 @@ export default function AdminConseilsPage() {
 
                       {selectedRequest.commentaires && (
                         <div>
-                          <h4 className="font-semibold text-sm mb-2" style={{ color: '#2C1810' }}>Commentaires :</h4>
-                          <p className="text-sm p-3 rounded-lg" style={{ backgroundColor: 'rgba(139, 21, 56, 0.05)', color: '#2C1810' }}>
+                          <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810" }}>Commentaires :</h4>
+                          <p className="text-sm p-3 rounded-lg" style={{ backgroundColor: "rgba(139, 21, 56, 0.05)', color: '#2C1810" }}>
                             "{selectedRequest.commentaires}"
                           </p>
                         </div>
@@ -465,36 +465,36 @@ export default function AdminConseilsPage() {
                     {/* Response Form */}
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold text-sm mb-2" style={{ color: '#2C1810' }}>Votre réponse :</h4>
+                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810" }}>Votre réponse :</h4>
                         <Textarea
                           value={responseText}
                           onChange={(e) => setResponseText(e.target.value)}
                           placeholder="Chère [nom], voici mes recommandations personnalisées pour vous..."
                           className="min-h-32"
-                          style={{ borderRadius: '12px', fontFamily: 'Inter, sans-serif' }}
+                          style={{ borderRadius: "12px", fontFamily: "Inter, sans-serif` }}
                         />
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-sm mb-2" style={{ color: '#2C1810' }}>Livres recommandés (optionnel) :</h4>
+                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810` }}>Livres recommandés (optionnel) :</h4>
                         <div className="max-h-40 overflow-y-auto space-y-2">
                           {books.slice(0, 20).map((book: Book) => (
                             <div
                               key={book.id}
                               className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all ${
                                 selectedBooks.includes(book.id) ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
-                              }'}
+                              }`}
                               onClick={() => handleBookToggle(book.id)}
                             >
                               <input
-                                type="checkbox"
+                                type=`checkbox"
                                 checked={selectedBooks.includes(book.id)}
                                 onChange={() => handleBookToggle(book.id)}
                                 className="rounded"
                               />
                               <div className="flex-1">
-                                <p className="text-sm font-medium" style={{ color: '#2C1810' }}>{book.titre}</p>
-                                <p className="text-xs" style={{ color: '#6B4C7B' }}>{book.auteur}</p>
+                                <p className="text-sm font-medium" style={{ color: "#2C1810" }}>{book.titre}</p>
+                                <p className="text-xs" style={{ color: "#6B4C7B" }}>{book.auteur}</p>
                               </div>
                             </div>
                           ))}
@@ -540,7 +540,7 @@ export default function AdminConseilsPage() {
                 </Card>
               ) : (
                 <div className="text-center py-20">
-                  <MessageCircle className="w-16 h-16 mx-auto mb-4" style={{ color: '#8B1538' }} />
+                  <MessageCircle className="w-16 h-16 mx-auto mb-4" style={{ color: "#8B1538" }} />
                   <h3 className="text-xl font-bold mb-2" style={{ fontFamily: 'Playfair Display, serif', color: '#2C1810' }}>
                     Sélectionnez une demande
                   </h3>

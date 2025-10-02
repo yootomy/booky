@@ -57,11 +57,11 @@ export function RecentActivity({ stats }: RecentActivityProps) {
       stats.recent_questions.forEach((question) => {
         activities.push({
           id: question.id,
-          type: 'question',
-          title: 'Nouvelle question posée`,
-          description: `"${question.question.substring(0, 50)}..." sur ${question.book_title}`,
+          type: "question",
+          title: "Nouvelle question posée",
+          description: `${question.question.substring(0, 50)}...` sur ${question.book_title}`,
           user: question.user_name,
-          time: new Date(question.date_question).toLocaleString('fr-FR'),
+          time: new Date(question.date_question).toLocaleString(`fr-FR`),
           timestamp: new Date(question.date_question)
         });
       });
@@ -72,11 +72,11 @@ export function RecentActivity({ stats }: RecentActivityProps) {
       stats.recent_books.slice(0, 3).forEach((book) => {
         activities.push({
           id: book.id,
-          type: 'book',
-          title: 'Livre ajouté`,
-          description: `"${book.titre}" par ${book.auteur}`,
-          user: 'Admin',
-          time: new Date(book.date_creation).toLocaleString('fr-FR'),
+          type: `book`,
+          title: "Livre ajouté",
+          description: `${book.titre}` par ${book.auteur}`,
+          user: `Admin`,
+          time: new Date(book.date_creation).toLocaleString(`fr-FR`),
           timestamp: new Date(book.date_creation),
           rating: book.note_generale
         });
@@ -91,64 +91,64 @@ export function RecentActivity({ stats }: RecentActivityProps) {
 
   const quickActions = [
     {
-      title: 'Ajouter un livre',
-      description: 'Nouveau livre au catalogue',
+      title: "Ajouter un livre",
+      description: "Nouveau livre au catalogue",
       icon: Plus,
-      href: '/admin/books/new'
+      href: "/admin/books/new"
     },
     {
-      title: 'Gérer les livres',
-      description: 'Voir et modifier les livres',
+      title: "Gérer les livres",
+      description: "Voir et modifier les livres",
       icon: BookOpen,
-      href: '/admin/books'
+      href: "/admin/books"
     },
     {
-      title: 'Gérer les catégories',
-      description: 'Catégories de livres',
+      title: "Gérer les catégories",
+      description: "Catégories de livres",
       icon: TrendingUp,
-      href: '/admin/categories'
+      href: "/admin/categories"
     },
     {
-      title: 'Gérer les tags',
-      description: 'Tags et étiquettes',
+      title: "Gérer les tags",
+      description: "Tags et étiquettes",
       icon: Hash,
-      href: '/admin/tags'
+      href: "/admin/tags"
     },
     {
-      title: 'Gérer les listes',
-      description: 'Listes personnalisées',
+      title: "Gérer les listes",
+      description: "Listes personnalisées",
       icon: List,
-      href: '/admin/lists'
+      href: "/admin/lists"
     },
     {
-      title: 'Demandes de conseils',
-      description: 'Recommandations de Bruna',
+      title: "Demandes de conseils",
+      description: "Recommandations de Bruna",
       icon: Heart,
-      href: '/admin/conseils'
+      href: "/admin/conseils"
     },
     {
-      title: 'Gérer les utilisateurs',
-      description: 'Permissions et rôles',
+      title: "Gérer les utilisateurs",
+      description: "Permissions et rôles",
       icon: User,
-      href: '/admin/users'
+      href: "/admin/users"
     },
     {
-      title: 'Exporter les données',
-      description: 'Backup et export',
+      title: "Exporter les données",
+      description: "Backup et export",
       icon: Download,
-      href: '/admin/export'
+      href: "/admin/export"
     },
     {
-      title: 'Activité système',
-      description: 'Logs et historique',
+      title: "Activité système",
+      description: "Logs et historique",
       icon: BarChart3,
-      href: '/admin/activity'
+      href: "/admin/activity"
     },
     {
-      title: 'Paramètres',
-      description: 'Configuration système',
+      title: "Paramètres",
+      description: "Configuration système",
       icon: Activity,
-      href: '/admin/settings'
+      href: "/admin/settings"
     }
   ];
 
@@ -205,7 +205,7 @@ export function RecentActivity({ stats }: RecentActivityProps) {
               </div>
             ) : (
               <>
-                <div className="text-xs font-medium text-gray-500 mb-3">Aujourd'hui</div>
+                <div className="text-xs font-medium text-gray-500 mb-3">Aujourd"hui</div>
                 {activities.map((activity, index) => {
                   const Icon = getActivityIcon(activity.type);
                   return (

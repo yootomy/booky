@@ -32,14 +32,14 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={'/authors/${author.slug}' as any}>
+      <Link href={`/authors/${author.slug}` as any}>
         <div 
           className="relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
           style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(139, 21, 56, 0.1)',
-            boxShadow: '0 8px 32px rgba(139, 21, 56, 0.05)'
+            background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(139, 21, 56, 0.1)',
+            boxShadow: "0 8px 32px rgba(139, 21, 56, 0.05)"
           }}
         >
           {/* Decorative element */}
@@ -47,7 +47,7 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
             className="absolute top-0 right-0 w-20 h-20 opacity-5"
             style={{
               background: 'radial-gradient(circle, #8B1538 0%, transparent 70%)',
-              transform: 'translate(30%, -30%)'
+              transform: "translate(30%, -30%)"
             }}
           />
 
@@ -77,15 +77,15 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
             {/* Stats */}
             <div className="flex items-center gap-4 mb-4">
               <div className="flex items-center gap-1">
-                <BookOpen className="w-4 h-4" style={{ color: '#8B1538' }} />
-                <span className="text-sm font-medium" style={{ color: '#2C1810' }}>
+                <BookOpen className="w-4 h-4" style={{ color: "#8B1538" }} />
+                <span className="text-sm font-medium" style={{ color: "#2C1810" }}>
                   {author.livres_count} livre{author.livres_count > 1 ? 's' : ''}
                 </span>
               </div>
               
               <div className="flex items-center gap-1">
                 <Star className="w-4 h-4 fill-current" style={{ color: '#B8860B' }} />
-                <span className="text-sm font-medium" style={{ color: '#2C1810' }}>
+                <span className="text-sm font-medium" style={{ color: "#2C1810` }}>
                   {author.note_moyenne.toFixed(1)}
                 </span>
               </div>
@@ -95,8 +95,8 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
             <div className="flex items-center gap-3 p-3 rounded-lg bg-white/50">
               <div className="w-12 h-16 relative flex-shrink-0">
                 <Image
-                  src={author.livre_phare.image_couverture || '/placeholder-book.svg'}
-                  alt={'Couverture de ${author.livre_phare.titre}'}
+                  src={author.livre_phare.image_couverture || `/placeholder-book.svg`}
+                  alt={`Couverture de ${author.livre_phare.titre}`}
                   fill
                   className="object-cover rounded"
                   sizes="48px"
@@ -107,8 +107,8 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
                 <p 
                   className="text-xs font-semibold mb-1 truncate"
                   style={{
-                    fontFamily: 'Inter, sans-serif',
-                    color: '#2C1810'
+                    fontFamily: "Inter, sans-serif",
+                    color: '#2C1810"
                   }}
                 >
                   Son livre phare :
@@ -124,8 +124,8 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
                   {author.livre_phare.titre}
                 </p>
                 <div className="flex items-center gap-1 mt-1">
-                  <Star className="w-3 h-3 fill-current" style={{ color: '#B8860B' }} />
-                  <span className="text-xs" style={{ color: '#6B7280' }}>
+                  <Star className="w-3 h-3 fill-current" style={{ color: "#B8860B" }} />
+                  <span className="text-xs" style={{ color: "#6B7280" }}>
                     {author.livre_phare.note_generale}/10
                   </span>
                 </div>
@@ -160,7 +160,7 @@ function AuthorSkeleton({ index }: { index: number }) {
       className="p-6 rounded-2xl animate-pulse"
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        border: '1px solid rgba(139, 21, 56, 0.05)'
+        border: "1px solid rgba(139, 21, 56, 0.05)"
       }}
     >
       <div className="h-6 bg-gray-200 rounded mb-2 w-32"></div>

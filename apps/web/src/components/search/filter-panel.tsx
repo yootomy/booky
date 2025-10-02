@@ -492,7 +492,7 @@ export function FilterPanel({
               <Input
                 id="date-from"
                 type="date"
-                value={filters.dateFrom?.toISOString().split('T')[0] || ""}
+                value={filters.dateFrom?.toISOString().split("T")[0] || ""}
                 onChange={(e) => updateFilters({
                   dateFrom: e.target.value ? new Date(e.target.value) : undefined
                 })}
@@ -506,7 +506,7 @@ export function FilterPanel({
               <Input
                 id="date-to"
                 type="date"
-                value={filters.dateTo?.toISOString().split('T')[0] || ""}
+                value={filters.dateTo?.toISOString().split("T")[0] || ""}
                 onChange={(e) => updateFilters({
                   dateTo: e.target.value ? new Date(e.target.value) : undefined
                 })}

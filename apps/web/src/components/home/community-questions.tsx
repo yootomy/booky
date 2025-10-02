@@ -40,14 +40,14 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={'/books/${question.book.id}/questions/${question.id}' as any}>
+      <Link href={`/books/${question.book.id}/questions/${question.id}` as any}>
         <div 
-          className="relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
+          className=`relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(139, 21, 56, 0.1)',
-            boxShadow: '0 8px 32px rgba(139, 21, 56, 0.05)'
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(139, 21, 56, 0.1)',
+            boxShadow: "0 8px 32px rgba(139, 21, 56, 0.05)"
           }}
         >
           {/* Decorative background */}
@@ -55,7 +55,7 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
             className="absolute top-0 right-0 w-24 h-24 opacity-5"
             style={{
               background: 'radial-gradient(circle, #8B1538 0%, transparent 70%)',
-              transform: 'translate(50%, -50%)'
+              transform: "translate(50%, -50%)"
             }}
           />
 
@@ -104,7 +104,7 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
               style={{
                 fontFamily: 'Inter, sans-serif',
                 color: '#2C1810',
-                lineHeight: '1.5'
+                lineHeight: "1.5"
               }}
             >
               {question.excerpt}
@@ -115,8 +115,8 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
           <div className="flex items-center gap-3 mb-4 p-3 rounded-lg bg-white/50">
             <div className="w-10 h-12 relative flex-shrink-0">
               <Image
-                src={question.book.image_couverture || '/placeholder-book.svg'}
-                alt={'Couverture de ${question.book.titre}'}
+                src={question.book.image_couverture || `/placeholder-book.svg`}
+                alt={`Couverture de ${question.book.titre}`}
                 fill
                 className="object-cover rounded"
                 sizes="40px"
@@ -127,8 +127,8 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
               <p 
                 className="text-xs font-semibold mb-1 truncate"
                 style={{
-                  fontFamily: 'Playfair Display, serif',
-                  color: '#8B1538'
+                  fontFamily: "Playfair Display, serif",
+                  color: '#8B1538"
                 }}
                 title={question.book.titre}
               >
@@ -177,7 +177,7 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
             >
               {new Date(question.date_question).toLocaleDateString('fr-FR', {
                 day: 'numeric',
-                month: 'short'
+                month: "short"
               })}
             </span>
           </div>
@@ -196,7 +196,7 @@ function QuestionSkeleton({ index }: { index: number }) {
       className="p-6 rounded-2xl animate-pulse"
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        border: '1px solid rgba(139, 21, 56, 0.05)'
+        border: "1px solid rgba(139, 21, 56, 0.05)"
       }}
     >
       <div className="flex justify-between mb-4">

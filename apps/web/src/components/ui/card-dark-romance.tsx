@@ -20,7 +20,7 @@ const CardDarkRomance = React.forwardRef<HTMLDivElement, CardDarkRomanceProps>(
     />
   )
 );
-CardDarkRomance.displayName = "CardDarkRomance";
+CardDarkRomance.displayName="CardDarkRomance";
 
 const CardDarkRomanceHeader = React.forwardRef<
   HTMLDivElement,
@@ -32,7 +32,7 @@ const CardDarkRomanceHeader = React.forwardRef<
     {...props}
   />
 ));
-CardDarkRomanceHeader.displayName = "CardDarkRomanceHeader";
+CardDarkRomanceHeader.displayName="CardDarkRomanceHeader";
 
 const CardDarkRomanceTitle = React.forwardRef<
   HTMLParagraphElement,
@@ -47,7 +47,7 @@ const CardDarkRomanceTitle = React.forwardRef<
     {...props}
   />
 ));
-CardDarkRomanceTitle.displayName = "CardDarkRomanceTitle";
+CardDarkRomanceTitle.displayName="CardDarkRomanceTitle";
 
 const CardDarkRomanceDescription = React.forwardRef<
   HTMLParagraphElement,
@@ -59,7 +59,7 @@ const CardDarkRomanceDescription = React.forwardRef<
     {...props}
   />
 ));
-CardDarkRomanceDescription.displayName = "CardDarkRomanceDescription";
+CardDarkRomanceDescription.displayName="CardDarkRomanceDescription";
 
 const CardDarkRomanceContent = React.forwardRef<
   HTMLDivElement,
@@ -67,7 +67,7 @@ const CardDarkRomanceContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ));
-CardDarkRomanceContent.displayName = "CardDarkRomanceContent";
+CardDarkRomanceContent.displayName="CardDarkRomanceContent";
 
 const CardDarkRomanceFooter = React.forwardRef<
   HTMLDivElement,
@@ -79,7 +79,7 @@ const CardDarkRomanceFooter = React.forwardRef<
     {...props}
   />
 ));
-CardDarkRomanceFooter.displayName = "CardDarkRomanceFooter";
+CardDarkRomanceFooter.displayName="CardDarkRomanceFooter";
 
 export {
   CardDarkRomance,

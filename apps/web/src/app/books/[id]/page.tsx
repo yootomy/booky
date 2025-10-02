@@ -173,9 +173,9 @@ export default function BookDetailPage() {
   const bookQuery = useQuery({
     queryKey: ['book', bookId],
     queryFn: async () => {
-      const response = await apiClient.get('/api/books/${bookId}');
+      const response = await apiClient.get(`/api/books/${bookId}`);
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       return data.data as Book;
@@ -184,11 +184,11 @@ export default function BookDetailPage() {
   });
 
   const questionsQuery = useQuery({
-    queryKey: ['questions', bookId],
+    queryKey: [`questions`, bookId],
     queryFn: async () => {
-      const response = await apiClient.get('/api/books/${bookId}/questions');
+      const response = await apiClient.get(`/api/books/${bookId}/questions`);
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       return (data.data || []) as BookQuestion[];
@@ -198,27 +198,27 @@ export default function BookDetailPage() {
 
   const submitQuestionMutation = useMutation({
     mutationFn: async (question: string) => {
-      const response = await apiClient.get('/api/books/${bookId}/questions', {
-        method: 'POST',
+      const response = await apiClient.get(`/api/books/${bookId}/questions`, {
+        method: `POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type' : 'application/json',
         },
         body: JSON.stringify({ question: question }),
       });
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      if (!data.data) throw new Error('Erreur lors de l\'envoi');
+      if (!data.data) throw new Error(`Erreur lors de l\`envoi');
       return data.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['questions', bookId] });
-      setNewQuestion('');
-      toast.success('Question envoyée !');
+      setNewQuestion('`);
+      toast.success("Question envoyée !");
     },
     onError: () => {
-      toast.error('Erreur lors de l\'envoi de la question');
+      toast.error("Erreur lors de l\`envoi de la question`);
     },
     onSettled: () => {
       setIsSubmittingQuestion(false);
@@ -227,20 +227,20 @@ export default function BookDetailPage() {
 
   const likeQuestionMutation = useMutation({
     mutationFn: async (questionId: string) => {
-      const response = await apiClient.get('/api/books/${bookId}/questions/${questionId}/like', {
-        method: 'POST',
+      const response = await apiClient.get(`/api/books/${bookId}/questions/${questionId}/like`, {
+        method: `POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type' : 'application/json',
         },
       });
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();
     },
     onMutate: async (questionId: string) => {
       // Annuler les requêtes en cours pour éviter les conflits
-      await queryClient.cancelQueries({ queryKey: ['questions', bookId] });
+      await queryClient.cancelQueries({ queryKey: [`questions`, bookId] });
 
       // Sauvegarder les données actuelles pour le rollback
       const previousQuestions = queryClient.getQueryData(['questions', bookId]);
@@ -272,7 +272,7 @@ export default function BookDetailPage() {
       if (context?.previousQuestions) {
         queryClient.setQueryData(['questions', bookId], context.previousQuestions);
       }
-      toast.error('Erreur lors du like');
+      toast.error("Erreur lors du like");
     },
     onSettled: () => {
       // Synchroniser avec le serveur après l'opération
@@ -308,7 +308,7 @@ export default function BookDetailPage() {
           color: config.color,
           padding: '0.375rem 0.75rem',
           borderRadius: '9999px',
-          fontSize: '0.75rem',
+          fontSize: "0.75rem",
           fontWeight: 600
         }}
       >
@@ -322,9 +322,9 @@ export default function BookDetailPage() {
       'SLOW_BURN': { emoji: '🐌', text: 'Slow Burn' },
       'MEDIUM_BURN': { emoji: '🔥', text: 'Medium Burn' },
       'FAST_PACE': { emoji: '⚡', text: 'Fast Pace' },
-      'INSTA_LOVE': { emoji: '💕', text: 'Insta Love' }
+      'INSTA_LOVE' : { emoji: '💕', text: 'Insta Love' }
     };
-    const config = rhythmConfig[rythme as keyof typeof rhythmConfig] || { emoji: '', text: rythme };
+    const config = rhythmConfig[rythme as keyof typeof rhythmConfig] || { emoji: "", text: rythme };
     return (
       <span className="inline-flex items-center gap-1 px-3 py-1 bg-background rounded-full text-sm font-medium border border-border">
         <span>{config.emoji}</span>
@@ -341,7 +341,7 @@ export default function BookDetailPage() {
           <div className="animate-pulse">
             <div className="h-8 bg-muted rounded w-32 mb-6"></div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="aspect-square bg-muted rounded-lg" style={{ aspectRatio: '3/4' }}></div>
+              <div className="aspect-square bg-muted rounded-lg" style={{ aspectRatio: "3/4" }}></div>
               <div className="md:col-span-2 space-y-4">
                 <div className="h-8 bg-muted rounded w-3/4"></div>
                 <div className="h-4 bg-muted rounded w-1/2"></div>
@@ -361,7 +361,7 @@ export default function BookDetailPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 md:py-8 min-h-screen">
           <div className="text-center py-12">
             <h1 className="text-2xl font-bold text-foreground mb-4">Livre non trouvé</h1>
-            <p className="text-foreground/70 mb-6">Ce livre n'existe pas ou n'est plus disponible.</p>
+            <p className="text-foreground/70 mb-6">Ce livre n"existe pas ou n'est plus disponible.</p>
             <Button onClick={() => router.push('/books')} variant="default">
               Retour au catalogue
             </Button>
@@ -373,7 +373,7 @@ export default function BookDetailPage() {
 
   // Tabs configuration
   const tabs = [
-    { id: 'resume', label: 'Résumé', icon: BookOpen, count: null },
+    { id: "resume", label: "Résumé', icon: BookOpen, count: null },
     { id: 'stats', label: 'Notes', icon: BarChart3, count: null },
     { id: 'genres', label: 'Genres & Tropes', icon: Tag, count: null },
     { id: 'info', label: 'Infos', icon: FileText, count: null },
@@ -387,7 +387,7 @@ export default function BookDetailPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => router.push('/books')}
+              onClick={() => router.push("/books")}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-card hover:bg-muted text-foreground border border-border shadow-sm transition-colors"
               style={{
                 fontFamily: 'Inter, sans-serif'
@@ -401,7 +401,7 @@ export default function BookDetailPage() {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
-                toast.success('Lien copié !');
+                toast.success("Lien copié !");
               }}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium bg-card hover:bg-muted text-foreground border border-border shadow-sm transition-colors"
               style={{
@@ -456,7 +456,7 @@ export default function BookDetailPage() {
                     ) : (
                       <div className="w-44 md:w-52 flex items-center justify-center rounded-2xl shadow-2xl relative bg-gradient-to-br from-primary to-primary/80"
                         style={{
-                          aspectRatio: '2/3'
+                          aspectRatio: "2/3"
                         }}
                       >
                         <BookOpen className="w-16 h-16 text-white opacity-70" />
@@ -476,7 +476,7 @@ export default function BookDetailPage() {
                     <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground"
                       style={{
                         fontFamily: 'Playfair Display, serif',
-                        lineHeight: '1.2'
+                        lineHeight: "1.2"
                       }}
                     >
                       {book.titre}
@@ -494,33 +494,33 @@ export default function BookDetailPage() {
                   {/* Métriques avec barres de progression - Masqué sur mobile */}
                   <div className="hidden md:grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {[
-                      { label: '🌶️ Spicy', value: book.niveau_spicy, colorClass: 'text-orange-600 dark:text-orange-400', bgClass: 'from-orange-500 to-red-500' },
+                      { label: "🌶️ Spicy", value: book.niveau_spicy, colorClass: "text-orange-600 dark:text-orange-400', bgClass: 'from-orange-500 to-red-500' },
                       { label: '💕 Romance', value: book.niveau_romance, colorClass: 'text-primary', bgClass: 'from-pink-500 to-rose-500' },
                       { label: '🖤 Dark', value: book.niveau_dark, colorClass: 'text-gray-700 dark:text-gray-300', bgClass: 'from-gray-500 to-gray-700' },
                       { label: '✨ Émotions', value: book.intensite_emotionnelle, colorClass: 'text-purple-600 dark:text-purple-400', bgClass: 'from-purple-500 to-indigo-500' }
                     ].map((metric, index) => (
                       <div key={index} className="p-4 sm:p-5 rounded-xl bg-card/50 border border-border">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-sm sm:text-base font-medium text-foreground"
+                          <span className=`text-sm sm:text-base font-medium text-foreground'
                             style={{
                               fontFamily: 'Inter, sans-serif'
                             }}
                           >
                             {metric.label}
                           </span>
-                          <span className={'text-2xl font-bold ${metric.colorClass}'}
+                          <span className={`text-2xl font-bold ${metric.colorClass}`}
                             style={{
-                              fontFamily: 'Playfair Display, serif'
+                              fontFamily: `Playfair Display, serif`
                             }}
                           >
                             {metric.value}/10
                           </span>
                         </div>
-                        <div className="w-full rounded-full h-3 bg-muted">
+                        <div className=`w-full rounded-full h-3 bg-muted`>
                           <div
-                            className={'h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
+                            className={`h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
                             style={{
-                              width: '${(metric.value / 10) * 100}%'
+                              width: `${(metric.value / 10) * 100}%`
                             }}
                           />
                         </div>
@@ -546,16 +546,16 @@ export default function BookDetailPage() {
           <div className="mb-3 sm:mb-4 md:mb-8 rounded-2xl overflow-hidden shadow-lg bg-card/95 backdrop-blur-xl border border-border"
           >
             <div className="p-2 sm:p-3 md:p-6">
-              <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3">
+              <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3`>
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all duration-200 cursor-pointer border-2 relative ${
                       activeTab === tab.id
-                        ? 'text-primary-foreground shadow-lg border-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90'
+                        ? `text-primary-foreground shadow-lg border-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90"
                         : 'hover:bg-muted/50 border-transparent hover:border-border text-muted-foreground hover:text-foreground'
-                    }'}
+                    }`}
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       ...(activeTab === tab.id
@@ -567,13 +567,12 @@ export default function BookDetailPage() {
                     }}
                   >
                     <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="hidden xs:inline sm:inline">{tab.label}</span>
+                    <span className="hidden xs:inline sm:inline`>{tab.label}</span>
                     {tab.count !== null && (
                       <span className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-200 ${
                         activeTab === tab.id
-                          ? 'bg-primary-foreground/20 text-primary-foreground shadow-sm'
-                          : 'bg-muted text-muted-foreground'
-                      }'}>
+                          ? 'bg-primary-foreground/20 text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'
+                      }`}>
                         {tab.count}
                       </span>
                     )}
@@ -593,18 +592,18 @@ export default function BookDetailPage() {
             <div className="p-3 sm:p-4 md:p-6 lg:p-12">
 
             {/* Onglet Résumé */}
-            {activeTab === 'resume' && (
+            {activeTab === "resume" && (
               <div className="space-y-4">
                 {/* Résumé officiel */}
                 {book.resume_officiel && (
                   <div className="border border-border rounded-xl bg-card">
                     <button
-                      onClick={() => toggleSection('resume_officiel')}
+                      onClick={() => toggleSection("resume_officiel")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <BookOpen className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Résumé officiel
                         </h3>
                       </div>
@@ -614,7 +613,7 @@ export default function BookDetailPage() {
                         <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
                     </button>
-                    {expandedSections.has('resume_officiel') && (
+                    {expandedSections.has("resume_officiel") && (
                       <div className="px-4 pb-4">
                         <div
                           className="prose prose-sm max-w-none leading-relaxed dark:prose-invert text-foreground/80"
@@ -630,12 +629,12 @@ export default function BookDetailPage() {
                 {book.critique_detaillee && (
                   <div className="border border-border rounded-xl bg-card">
                     <button
-                      onClick={() => toggleSection('critique_detaillee')}
+                      onClick={() => toggleSection("critique_detaillee")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <Heart className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Critique de {book.user?.nom_complet || 'Bruna'}
                         </h3>
                       </div>
@@ -645,17 +644,17 @@ export default function BookDetailPage() {
                         <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
                     </button>
-                    {expandedSections.has('critique_detaillee') && (
+                    {expandedSections.has("critique_detaillee") && (
                       <div className="px-4 pb-4">
-                        <p className="leading-relaxed whitespace-pre-line text-foreground/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <p className="leading-relaxed whitespace-pre-line text-foreground/80" style={{ fontFamily: "Inter, sans-serif" }}>
                           {book.critique_detaillee}
                         </p>
                         {book.resume_personnel && (
                           <div className="mt-4 p-4 rounded-lg bg-muted/50">
-                            <h4 className="font-semibold mb-2 text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            <h4 className="font-semibold mb-2 text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                               💝 Avis personnel
                             </h4>
-                            <p className="text-foreground/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+                            <p className="text-foreground/80" style={{ fontFamily: "Inter, sans-serif" }}>
                               {book.resume_personnel}
                             </p>
                           </div>
@@ -669,12 +668,12 @@ export default function BookDetailPage() {
                 {book.citations_favorites && (
                   <div className="border border-border rounded-xl bg-card">
                     <button
-                      onClick={() => toggleSection('citations_favorites')}
+                      onClick={() => toggleSection("citations_favorites")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <Quote className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Citations favorites
                         </h3>
                       </div>
@@ -684,9 +683,9 @@ export default function BookDetailPage() {
                         <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
                     </button>
-                    {expandedSections.has('citations_favorites') && (
+                    {expandedSections.has("citations_favorites") && (
                       <div className="px-4 pb-4">
-                        <blockquote className="italic leading-relaxed text-foreground/80 border-l-4 border-primary pl-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <blockquote className="italic leading-relaxed text-foreground/80 border-l-4 border-primary pl-4" style={{ fontFamily: "Playfair Display, serif" }}>
                           {book.citations_favorites}
                         </blockquote>
                       </div>
@@ -698,12 +697,12 @@ export default function BookDetailPage() {
                 {book.pourquoi_aimer && (
                   <div className="border border-border rounded-xl bg-card">
                     <button
-                      onClick={() => toggleSection('pourquoi_aimer')}
+                      onClick={() => toggleSection("pourquoi_aimer")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <ThumbsUp className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Pourquoi vous allez l'aimer
                         </h3>
                       </div>
@@ -713,9 +712,9 @@ export default function BookDetailPage() {
                         <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
                     </button>
-                    {expandedSections.has('pourquoi_aimer') && (
+                    {expandedSections.has("pourquoi_aimer") && (
                       <div className="px-4 pb-4">
-                        <p className="leading-relaxed text-foreground/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        <p className="leading-relaxed text-foreground/80" style={{ fontFamily: "Inter, sans-serif" }}>
                           {book.pourquoi_aimer}
                         </p>
                       </div>
@@ -741,34 +740,33 @@ export default function BookDetailPage() {
                 <div className="text-center py-3 md:py-8 rounded-xl md:rounded-2xl"
                   style={{
                     background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%)',
-                    border: '2px solid rgba(212, 175, 55, 0.2)'
+                    border: "2px solid rgba(212, 175, 55, 0.2)"
                   }}
                 >
                   <div className="text-xl md:text-4xl font-bold mb-2 md:mb-3 text-yellow-700 dark:text-yellow-300"
                     style={{
-                      fontFamily: 'Playfair Display, serif'
+                      fontFamily: "Playfair Display, serif`
                     }}
                   >
                     {book.note_generale}/10
                   </div>
 
                   {/* Affichage correct: 10 étoiles pour /10 */}
-                  <div className="flex justify-center gap-0.5 md:gap-1 mb-2 md:mb-3">
+                  <div className=`flex justify-center gap-0.5 md:gap-1 mb-2 md:mb-3`>
                     {Array.from({ length: 10 }).map((_, i) => (
                       <Star
                         key={i}
                         className={`w-2.5 h-2.5 md:w-5 md:h-5 ${
                           i < book.note_generale
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'fill-muted text-muted'
-                        }'}
+                            ? 'fill-yellow-400 text-yellow-400' : 'fill-muted text-muted'
+                        }`}
                       />
                     ))}
                   </div>
 
                   <p className="text-xs md:text-base text-yellow-700 dark:text-yellow-300 font-medium"
                     style={{
-                      fontFamily: 'Inter, sans-serif'
+                      fontFamily: "Inter, sans-serif"
                     }}
                   >
                     Note générale
@@ -778,7 +776,7 @@ export default function BookDetailPage() {
                 {/* Grille des métriques - Version compacte mobile */}
                 <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
                   {[
-                    { label: '🌶️ Spicy', value: book.niveau_spicy, colorClass: 'text-orange-600 dark:text-orange-400', bgClass: 'from-orange-600 to-orange-500' },
+                    { label: "🌶️ Spicy", value: book.niveau_spicy, colorClass: "text-orange-600 dark:text-orange-400', bgClass: 'from-orange-600 to-orange-500' },
                     { label: '💕 Romance', value: book.niveau_romance, colorClass: 'text-primary', bgClass: 'from-primary to-primary/80' },
                     { label: '🖤 Dark', value: book.niveau_dark, colorClass: 'text-gray-700 dark:text-gray-300', bgClass: 'from-gray-600 to-gray-500' },
                     { label: '✨ Émotions', value: book.intensite_emotionnelle, colorClass: 'text-purple-600 dark:text-purple-400', bgClass: 'from-purple-600 to-purple-500' },
@@ -789,26 +787,26 @@ export default function BookDetailPage() {
                     <div key={index} className="p-3 md:p-6 rounded-xl md:rounded-2xl bg-card/90 backdrop-blur-lg border border-border shadow-lg"
                     >
                       <div className="flex items-center justify-between mb-2 md:mb-4">
-                        <span className="text-sm md:text-lg font-medium"
+                        <span className=`text-sm md:text-lg font-medium'
                           style={{
                               fontFamily: 'Inter, sans-serif'
                           }}
                         >
                           {metric.label}
                         </span>
-                        <span className={'text-lg md:text-2xl font-bold ${metric.colorClass}'}
+                        <span className={`text-lg md:text-2xl font-bold ${metric.colorClass}`}
                           style={{
-                            fontFamily: 'Playfair Display, serif'
+                            fontFamily: `Playfair Display, serif`
                           }}
                         >
                           {metric.value}/10
                         </span>
                       </div>
-                      <div className="w-full rounded-full h-2 md:h-3 bg-muted">
+                      <div className=`w-full rounded-full h-2 md:h-3 bg-muted`>
                         <div
-                          className={'h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
+                          className={`h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
                           style={{
-                            width: '${(metric.value / 10) * 100}%'
+                            width: `${(metric.value / 10) * 100}%`
                           }}
                         />
                       </div>
@@ -819,7 +817,7 @@ export default function BookDetailPage() {
             )}
 
             {/* Onglet Genres & Tropes */}
-            {activeTab === 'genres' && (
+            {activeTab === `genres" && (
               <div className="space-y-4 sm:space-y-6 md:space-y-8">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
                   style={{
@@ -853,7 +851,7 @@ export default function BookDetailPage() {
                             'FAST_PACE': { emoji: '⚡', text: 'Fast Pace' },
                             'INSTA_LOVE': { emoji: '💕', text: 'Insta Love' }
                           };
-                          const config = rhythmConfig[book.rythme as keyof typeof rhythmConfig] || { emoji: '', text: book.rythme };
+                          const config = rhythmConfig[book.rythme as keyof typeof rhythmConfig] || { emoji: "", text: book.rythme };
                           return (
                             <>
                               <span>{config.emoji}</span>
@@ -885,7 +883,7 @@ export default function BookDetailPage() {
                                 style={{
                                   backgroundColor: item.category.couleur,
                                   color: 'white',
-                                  border: 'none'
+                                  border: "none"
                                 }}
                               >
                                 {item.category.icone} {item.category.nom}
@@ -934,7 +932,7 @@ export default function BookDetailPage() {
             )}
 
             {/* Onglet Informations */}
-            {activeTab === 'info' && (
+            {activeTab === "info" && (
               <div className="space-y-4 sm:space-y-6 md:space-y-8">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
                   style={{
@@ -948,7 +946,7 @@ export default function BookDetailPage() {
                 <div className="bg-card border border-border rounded-xl p-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
-                      { label: 'Auteur', value: book.auteur, icon: '👤' },
+                      { label: "Auteur", value: book.auteur, icon: "👤' },
                       { label: 'ISBN', value: book.isbn, icon: '📊' },
                       { label: 'Éditeur', value: book.editeur, icon: '🏢' },
                       { label: 'Date de publication', value: book.date_publication ? new Date(book.date_publication).toLocaleDateString('fr-FR') : null, icon: '📅' },
@@ -961,7 +959,7 @@ export default function BookDetailPage() {
                                book.statut === 'EN_COURS' ? 'En cours' :
                                book.statut === 'LU' ? 'Lu' :
                                book.statut === 'ABANDONNE' ? 'Abandonné' : book.statut,
-                        icon: '📋'
+                        icon: "📋"
                       }
                     ].filter(item => item.value).map((item, index) => (
                       <div key={index} className="flex items-center gap-3 py-2 border-b border-border/50 last:border-b-0">
@@ -970,7 +968,7 @@ export default function BookDetailPage() {
                           <div className="text-sm text-muted-foreground font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
                             {item.label}
                           </div>
-                          <div className="text-base font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                          <div className="text-base font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                             {item.value}
                           </div>
                         </div>
@@ -1031,7 +1029,7 @@ export default function BookDetailPage() {
                           className="px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-medium text-white shadow-lg bg-gradient-to-br from-primary to-primary/90"
                         >
                           <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                          {isSubmittingQuestion ? 'Envoi...' : 'Envoyer'}
+                          {isSubmittingQuestion ? "Envoi..." : "Envoyer"}
                         </Button>
                       </div>
                     </div>
@@ -1096,12 +1094,12 @@ export default function BookDetailPage() {
                               >
                                 {question.user.nom_complet}
                               </h4>
-                              <p className="text-xs text-muted-foreground"
+                              <p className=`text-xs text-muted-foreground`
                                 style={{
                                   fontFamily: 'Inter, sans-serif'
                                 }}
                               >
-                                {new Date(question.date_question).toLocaleDateString('fr-FR')}
+                                {new Date(question.date_question).toLocaleDateString('fr-FR`)}
                               </p>
                             </div>
                           </div>
@@ -1111,13 +1109,12 @@ export default function BookDetailPage() {
                             onClick={() => handleLikeQuestion(question.id)}
                             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 active:scale-95 ${
                               question.is_liked
-                                ? 'bg-primary/15 text-primary border border-primary/20'
-                                : 'bg-background/50 text-muted-foreground border border-border/30 hover:bg-primary/10 hover:text-primary hover:border-primary/20'
-                            }'}
+                                ? `}bg-primary/15 text-primary border border-primary/20` : `bg-background/50 text-muted-foreground border border-border/30 hover:bg-primary/10 hover:text-primary hover:border-primary/20`
+                            }`}
                           >
                             <ThumbsUp className={`w-3.5 h-3.5 transition-all duration-200 ${
-                              question.is_liked ? 'fill-current' : ''
-                            }'} />
+                              question.is_liked ? `fill-current` : ""
+                            }`} />
                             <span className="font-medium">{question.likes_count}</span>
                           </button>
                         </div>
@@ -1127,7 +1124,7 @@ export default function BookDetailPage() {
                           <div className="p-4 rounded-xl bg-background/40 border border-border/30">
                             <p className="text-sm sm:text-base leading-relaxed text-foreground break-words overflow-wrap-anywhere hyphens-auto"
                               style={{
-                                fontFamily: 'Inter, sans-serif'
+                                fontFamily: "Inter, sans-serif"
                               }}
                             >
                               {question.question}

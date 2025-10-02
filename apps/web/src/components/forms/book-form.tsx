@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import { 
   Save, 
@@ -295,7 +295,7 @@ export function BookForm({
       const results = await onSearchExternal(watchedValues.titre);
       setExternalResults(results);
     } catch (error) {
-      console.error('Erreur lors de la recherche externe:', error);
+      console.error("Erreur lors de la recherche externe: ", error);
     } finally {
       setSearchingExternal(false);
     }
@@ -303,7 +303,7 @@ export function BookForm({
 
   // Appliquer un résultat externe
   const applyExternalResult = (result: ExternalBookResult) => {
-    setValue('titre', result.titre);
+    setValue("titre", result.titre);
     setValue('auteur', result.auteur);
     setValue('isbn', result.isbn || '');
     setValue('resume_officiel', result.resume_officiel || '');
@@ -357,17 +357,17 @@ export function BookForm({
                            typeof error === 'string' ? error :
                            'Erreur inconnue lors de la soumission';
 
-      console.error('Erreur lors de la soumission:', {
+      console.error("Erreur lors de la soumission: ", {
         error,
         message: errorMessage,
         stack: error instanceof Error ? error.stack : undefined
       });
 
-      // Afficher l'erreur à l'utilisateur
+      // Afficher l'erreur à l`utilisateur
       toast({
         title: "Erreur",
-        description: 'Erreur lors de la soumission: ${errorMessage}',
-        variant: "destructive",
+        description: `Erreur lors de la soumission: ${errorMessage}`,
+        variant: `destructive",
       });
     }
   };
@@ -382,17 +382,17 @@ export function BookForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn('space-y-6', className)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className={cn("space-y-6", className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-xl font-semibold">
-            {mode === 'create' ? 'Ajouter un livre' : 'Modifier le livre'}
+            {mode === "create" ? 'Ajouter un livre' : "Modifier le livre"}
           </h2>
           <p className="text-sm text-muted-foreground">
-            {mode === 'create' 
+            {mode === "create" 
               ? 'Ajoutez un nouveau livre à votre bibliothèque'
-              : 'Modifiez les informations du livre'
+              : "Modifiez les informations du livre"
             }
           </p>
         </div>
@@ -408,7 +408,7 @@ export function BookForm({
             Aperçu
           </Button>
           
-          {mode === 'create' && (
+          {mode === "create" && (
             <Button
               type="button"
               variant="outline"
@@ -435,7 +435,7 @@ export function BookForm({
         {/* Tab Informations de base */}
         <TabsContent value="informations" className="space-y-6">
           {/* Recherche externe */}
-          {mode === 'create' && onSearchExternal && (
+          {mode === "create" && onSearchExternal && (
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -448,7 +448,7 @@ export function BookForm({
                   <Input
                     placeholder="Tapez le titre du livre..."
                     value={watchedValues.titre}
-                    onChange={(e) => setValue('titre', e.target.value)}
+                    onChange={(e) => setValue("titre", e.target.value)}
                     className="flex-1"
                   />
                   <Button
@@ -485,7 +485,7 @@ export function BookForm({
                               <p className="text-xs text-muted-foreground">{result.editeur}</p>
                             )}
                             <Badge variant="outline" className="text-xs mt-1">
-                              {result.source === 'google_books' ? 'Google Books' : 'Open Library'}
+                              {result.source === "google_books" ? 'Google Books' : "Open Library"}
                             </Badge>
                           </div>
                           <Button
@@ -544,7 +544,7 @@ export function BookForm({
                 <Label htmlFor="isbn">ISBN</Label>
                 <Input
                   id="isbn"
-                  {...register('isbn')}
+                  {...register("isbn")}
                   placeholder="978-2-123456-78-9"
                 />
               </div>
@@ -556,7 +556,7 @@ export function BookForm({
                   id="nombre_pages"
                   type="number"
                   min="1"
-                  {...register('nombre_pages', { valueAsNumber: true })}
+                  {...register("nombre_pages", { valueAsNumber: true })}
                 />
               </div>
             </div>
@@ -565,7 +565,7 @@ export function BookForm({
               {/* Éditeur */}
               <div className="space-y-2">
                 <Label htmlFor="editeur">Éditeur</Label>
-                <Input id="editeur" {...register('editeur')} />
+                <Input id="editeur" {...register("editeur")} />
               </div>
 
               {/* Date de publication */}
@@ -574,7 +574,7 @@ export function BookForm({
                 <Input
                   id="date_publication"
                   type="date"
-                  {...register('date_publication')}
+                  {...register("date_publication")}
                 />
               </div>
 
@@ -583,7 +583,7 @@ export function BookForm({
                 <Label htmlFor="langue">Langue</Label>
                 <Input
                   id="langue"
-                  {...register('langue')}
+                  {...register("langue")}
                   placeholder="Français, English, etc."
                 />
               </div>
@@ -593,7 +593,7 @@ export function BookForm({
                 <Label htmlFor="statut">Statut de lecture</Label>
                 <select
                   id="statut"
-                  {...register('statut')}
+                  {...register("statut")}
                   className="w-full px-3 py-2 border rounded-md bg-background"
                 >
                   {Object.entries(BOOK_STATUS_LABELS).map(([key, label]) => (
@@ -603,13 +603,13 @@ export function BookForm({
               </div>
 
               {/* Date de lecture */}
-              {watchedValues.statut === 'LU' && (
+              {watchedValues.statut === "LU" && (
                 <div className="space-y-2">
                   <Label htmlFor="date_lecture">Date de fin de lecture</Label>
                   <Input
                     id="date_lecture"
                     type="date"
-                    {...register('date_lecture')}
+                    {...register("date_lecture")}
                   />
                 </div>
               )}
@@ -621,7 +621,7 @@ export function BookForm({
             <Label htmlFor="resume_officiel">Résumé officiel</Label>
             <Textarea
               id="resume_officiel"
-              {...register('resume_officiel')}
+              {...register("resume_officiel")}
               rows={4}
               placeholder="Résumé du livre ou description officielle..."
             />
@@ -635,7 +635,7 @@ export function BookForm({
             onChange={(file) => {
               setCoverFile(file);
               if (file) {
-                setValue('image_couverture', URL.createObjectURL(file));
+                setValue("image_couverture", URL.createObjectURL(file));
               }
             }}
             aspectRatio={2/3}
@@ -653,7 +653,7 @@ export function BookForm({
                 <Label>Note générale</Label>
                 <StarRating
                   value={watchedValues.note_generale}
-                  onChange={(value) => setValue('note_generale', value)}
+                  onChange={(value) => setValue("note_generale", value)}
                   size="lg"
                 />
               </div>
@@ -663,7 +663,7 @@ export function BookForm({
                 <Label>Niveau Spicy 🌶️</Label>
                 <SpicyRating
                   value={watchedValues.niveau_spicy}
-                  onChange={(value) => setValue('niveau_spicy', value)}
+                  onChange={(value) => setValue("niveau_spicy", value)}
                   size="lg"
                 />
               </div>
@@ -673,7 +673,7 @@ export function BookForm({
                 <Label>Niveau Dark 💀</Label>
                 <DarkRating
                   value={watchedValues.niveau_dark}
-                  onChange={(value) => setValue('niveau_dark', value)}
+                  onChange={(value) => setValue("niveau_dark", value)}
                   size="lg"
                 />
               </div>
@@ -683,7 +683,7 @@ export function BookForm({
                 <Label>Niveau Romance ❤️</Label>
                 <RomanceRating
                   value={watchedValues.niveau_romance}
-                  onChange={(value) => setValue('niveau_romance', value)}
+                  onChange={(value) => setValue("niveau_romance", value)}
                   size="lg"
                 />
               </div>
@@ -695,7 +695,7 @@ export function BookForm({
                 <Label>Intensité émotionnelle</Label>
                 <StarRating
                   value={watchedValues.intensite_emotionnelle}
-                  onChange={(value) => setValue('intensite_emotionnelle', value)}
+                  onChange={(value) => setValue("intensite_emotionnelle", value)}
                   size="lg"
                 />
               </div>
@@ -705,7 +705,7 @@ export function BookForm({
                 <Label>Niveau de danger</Label>
                 <StarRating
                   value={watchedValues.danger}
-                  onChange={(value) => setValue('danger', value)}
+                  onChange={(value) => setValue("danger", value)}
                   size="lg"
                 />
               </div>
@@ -715,7 +715,7 @@ export function BookForm({
                 <Label>Niveau de violence</Label>
                 <StarRating
                   value={watchedValues.violence}
-                  onChange={(value) => setValue('violence', value)}
+                  onChange={(value) => setValue("violence", value)}
                   size="lg"
                 />
               </div>
@@ -725,7 +725,7 @@ export function BookForm({
                 <Label>Originalité</Label>
                 <StarRating
                   value={watchedValues.originalite}
-                  onChange={(value) => setValue('originalite', value)}
+                  onChange={(value) => setValue("originalite", value)}
                   size="lg"
                 />
               </div>
@@ -735,7 +735,7 @@ export function BookForm({
                 <Label>Rythme de lecture</Label>
                 <RhythmSelector
                   value={bookRhythmToRhythmValue(watchedValues.rythme)}
-                  onChange={(value) => setValue('rythme', rhythmValueToBookRhythm(value))}
+                  onChange={(value) => setValue("rythme", rhythmValueToBookRhythm(value))}
                 />
               </div>
             </div>
@@ -750,7 +750,7 @@ export function BookForm({
               <Label htmlFor="resume_personnel">Résumé personnel</Label>
               <Textarea
                 id="resume_personnel"
-                {...register('resume_personnel')}
+                {...register("resume_personnel")}
                 rows={3}
                 placeholder="Votre résumé du livre..."
               />
@@ -761,7 +761,7 @@ export function BookForm({
               <Label htmlFor="critique_detaillee">Critique détaillée</Label>
               <Textarea
                 id="critique_detaillee"
-                {...register('critique_detaillee')}
+                {...register("critique_detaillee")}
                 rows={6}
                 placeholder="Votre critique complète..."
               />
@@ -772,7 +772,7 @@ export function BookForm({
               <Label htmlFor="citations_favorites">Citations favorites</Label>
               <Textarea
                 id="citations_favorites"
-                {...register('citations_favorites')}
+                {...register("citations_favorites")}
                 rows={4}
                 placeholder="Vos citations préférées du livre..."
               />
@@ -780,10 +780,10 @@ export function BookForm({
 
             {/* Pourquoi aimer */}
             <div className="space-y-2">
-              <Label htmlFor="pourquoi_aimer">Pourquoi vous devriez l'aimer</Label>
+              <Label htmlFor="pourquoi_aimer">Pourquoi vous devriez l"aimer</Label>
               <Textarea
                 id="pourquoi_aimer"
-                {...register('pourquoi_aimer')}
+                {...register("pourquoi_aimer")}
                 rows={3}
                 placeholder="Les raisons qui rendent ce livre spécial..."
               />
@@ -794,7 +794,7 @@ export function BookForm({
               <Label htmlFor="questions_sur_le_livre">Questions fréquentes</Label>
               <Textarea
                 id="questions_sur_le_livre"
-                {...register('questions_sur_le_livre')}
+                {...register("questions_sur_le_livre")}
                 rows={3}
                 placeholder="Questions que les lecteurs pourraient se poser..."
               />
@@ -805,7 +805,7 @@ export function BookForm({
               <Label htmlFor="recommandation_personnalisee">À qui le recommander</Label>
               <Textarea
                 id="recommandation_personnalisee"
-                {...register('recommandation_personnalisee')}
+                {...register("recommandation_personnalisee")}
                 rows={3}
                 placeholder="Type de lecteur qui appréciera ce livre..."
               />
@@ -898,7 +898,7 @@ export function BookForm({
             <Checkbox
               id="ajout_manuel"
               checked={watchedValues.ajout_manuel}
-              onCheckedChange={(checked) => setValue('ajout_manuel', checked as boolean)}
+              onCheckedChange={(checked) => setValue("ajout_manuel", checked as boolean)}
             />
             <Label htmlFor="ajout_manuel">
               Ajout manuel (non importé depuis une source externe)
@@ -934,8 +934,8 @@ export function BookForm({
               {/* Informations */}
               <div className="flex-1 space-y-2">
                 <div>
-                  <h3 className="font-semibold">{watchedValues.titre || 'Titre du livre'}</h3>
-                  <p className="text-sm text-muted-foreground">{watchedValues.auteur || 'Auteur'}</p>
+                  <h3 className="font-semibold">{watchedValues.titre || "Titre du livre"}</h3>
+                  <p className="text-sm text-muted-foreground">{watchedValues.auteur || "Auteur"}</p>
                 </div>
 
                 {/* Statut et notes */}
@@ -965,7 +965,7 @@ export function BookForm({
                           variant="secondary"
                           className="text-xs"
                           style={{
-                            backgroundColor: '${category.couleur}20',
+                            backgroundColor: category.couleur + '20',
                             color: category.couleur
                           }}
                         >
@@ -991,7 +991,7 @@ export function BookForm({
       {/* Actions */}
       <div className="flex items-center justify-between pt-4 border-t">
         <div className="text-xs text-muted-foreground">
-          {isDirty && '• Modifications non sauvegardées'}
+          {isDirty && "• Modifications non sauvegardées"}
           {selectedCategories.length > 0 && (
             <span className="ml-2">{selectedCategories.length} catégorie(s) sélectionnée(s)</span>
           )}
@@ -1017,7 +1017,7 @@ export function BookForm({
           >
             {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             <Save className="w-4 h-4 mr-2" />
-            {mode === 'create' ? 'Ajouter le livre' : 'Sauvegarder'}
+            {mode === "create" ? "Ajouter le livre" : 'Sauvegarder'}
           </Button>
         </div>
       </div>

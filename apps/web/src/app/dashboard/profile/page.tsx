@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { apiClient } from '@/lib/api-client';
+import { apiClient } from "@/lib/api-client";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -68,12 +68,12 @@ export default function ProfilePage() {
   } = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
-      const response = await apiClient.get('/api/auth/profile", {
-        credentials: 'include'
+      const response = await apiClient.get("/api/auth/profile", {
+        credentials: "include"
       });
       
       if (!response.ok) {
-        throw new Error('Failed to fetch profile');
+        throw new Error("Failed to fetch profile");
       }
       
       return response.json();
@@ -97,13 +97,13 @@ export default function ProfilePage() {
   // Mutation pour mettre à jour le profil
   const updateProfileMutation = useMutation({
     mutationFn: async (data: { nom_complet: string; username: string; email: string }) => {
-      const response = await apiClient.get('/api/auth/profile", {
+      const response = await apiClient.get("/api/auth/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-        credentials: 'include'
+        credentials: "include"
       });
 
       if (!response.ok) {
@@ -127,7 +127,7 @@ export default function ProfilePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.email || !formData.email.includes('@')) {
+    if (!formData.email || !formData.email.includes("@")) {
       toast.error("Email valide requis");
       return;
     }
@@ -135,12 +135,12 @@ export default function ProfilePage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
+    return new Date(dateString).toLocaleDateString("fr-FR", {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: "2-digit"
     });
   };
 
@@ -224,7 +224,7 @@ export default function ProfilePage() {
           >
             <Button
               variant="outline"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => window.location.href="/dashboard"}
               className="bg-card/50 backdrop-blur border-border/50 hover:bg-card/70 text-foreground transition-all duration-200"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -236,7 +236,7 @@ export default function ProfilePage() {
                 <User className="w-6 h-6 text-primary" />
                 Mon Profil
               </h1>
-              <p className="text-sm sm:text-base text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <p className="text-sm sm:text-base text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                 Gérez vos informations personnelles
               </p>
             </div>
@@ -272,11 +272,11 @@ export default function ProfilePage() {
               >
                 <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                       <User className="w-5 h-5 text-primary" />
                       Informations personnelles
                     </CardTitle>
-                    <CardDescription className="text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <CardDescription className="text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                       {isEditing ? "Modifiez vos informations" : "Vos informations de profil"}
                     </CardDescription>
                   </CardHeader>
@@ -303,7 +303,7 @@ export default function ProfilePage() {
                       </div>
 
                       <div>
-                        <Label htmlFor="username">Nom d'utilisateur</Label>
+                        <Label htmlFor="username">Nom d"utilisateur</Label>
                         <Input
                           id="username"
                           type="text"
@@ -312,7 +312,7 @@ export default function ProfilePage() {
                             ...prev,
                             username: e.target.value
                           }))}
-                          placeholder="Votre nom d'utilisateur"
+                          placeholder="Votre nom d"utilisateur'
                         />
                       </div>
 
@@ -361,7 +361,7 @@ export default function ProfilePage() {
                           </p>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium text-muted-foreground">Nom d'utilisateur</Label>
+                          <Label className="text-sm font-medium text-muted-foreground">Nom d"utilisateur</Label>
                           <p className="text-sm text-foreground mt-1">
                             {profile.username || "Non renseigné"}
                           </p>
@@ -393,7 +393,7 @@ export default function ProfilePage() {
               >
                 <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                     <Shield className="w-5 h-5 text-primary" />
                     Informations du compte
                   </CardTitle>
@@ -456,11 +456,11 @@ export default function ProfilePage() {
               >
               <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                     <Award className="w-5 h-5 text-primary" />
                     Mes statistiques
                   </CardTitle>
-                  <CardDescription className="text-muted-foreground" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <CardDescription className="text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
                     Votre activité sur la plateforme
                   </CardDescription>
                 </CardHeader>
@@ -474,7 +474,7 @@ export default function ProfilePage() {
                           <p className="text-xs text-muted-foreground">Contributions</p>
                         </div>
                       </div>
-                      <span className="text-xl font-bold text-primary" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      <span className="text-xl font-bold text-primary" style={{ fontFamily: "Playfair Display, serif" }}>
                         {profile.stats.books_count}
                       </span>
                     </div>
@@ -487,7 +487,7 @@ export default function ProfilePage() {
                           <p className="text-xs text-muted-foreground">Interactions</p>
                         </div>
                       </div>
-                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400" style={{ fontFamily: "Playfair Display, serif" }}>
                         {profile.stats.questions_count}
                       </span>
                     </div>
@@ -500,7 +500,7 @@ export default function ProfilePage() {
                           <p className="text-xs text-muted-foreground">Appréciations</p>
                         </div>
                       </div>
-                      <span className="text-xl font-bold text-pink-600 dark:text-pink-400" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      <span className="text-xl font-bold text-pink-600 dark:text-pink-400" style={{ fontFamily: "Playfair Display, serif" }}>
                         {profile.stats.likes_given_count}
                       </span>
                     </div>
@@ -513,7 +513,7 @@ export default function ProfilePage() {
                           <p className="text-xs text-muted-foreground">Sélections</p>
                         </div>
                       </div>
-                      <span className="text-xl font-bold text-amber-600 dark:text-amber-400" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      <span className="text-xl font-bold text-amber-600 dark:text-amber-400" style={{ fontFamily: "Playfair Display, serif" }}>
                         {profile.stats.favorites_count}
                       </span>
                     </div>
@@ -530,7 +530,7 @@ export default function ProfilePage() {
               >
               <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-4">
-                  <CardTitle className="text-lg font-bold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  <CardTitle className="text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                     Actions rapides
                   </CardTitle>
                 </CardHeader>

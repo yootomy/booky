@@ -62,9 +62,9 @@ export async function POST(request: NextRequest) {
     return responseNext;
     
   } catch (error) {
-    console.error('Login proxy error:', error);
+    console.error("Login proxy error: ", error);
     return NextResponse.json(
-      { error: 'Authentication failed' },
+      { error: "Authentication failed" },
       { status: 500 }
     );
   }

@@ -10,30 +10,30 @@ const RHYTHM_CONFIG: Record<BookRhythm, any> = {
   SLOW_BURN: {
     label: 'Slow Burn',
     icon: Clock,
-    colorClass: 'bg-gradient-to-r from-ash-500 to-ash-400 text-white',
-    description: 'Développement lent et intense'
+    colorClass: "bg-gradient-to-r from-ash-500 to-ash-400 text-white",
+    description: "Développement lent et intense"
   },
   MEDIUM_BURN: {
     label: 'Medium',
     icon: Wind,
-    colorClass: 'bg-gradient-to-r from-violet-600 to-violet-500 text-white',
-    description: 'Rythme équilibré'
+    colorClass: "bg-gradient-to-r from-violet-600 to-violet-500 text-white",
+    description: "Rythme équilibré"
   },
   FAST_PACE: {
     label: 'Fast Pace',
     icon: Zap,
-    colorClass: 'bg-gradient-to-r from-crimson-600 to-crimson-500 text-white',
-    description: 'Action rapide et intense'
+    colorClass: "bg-gradient-to-r from-crimson-600 to-crimson-500 text-white",
+    description: "Action rapide et intense"
   },
   INSTA_LOVE: {
     label: 'Insta Love',
     icon: Heart,
-    colorClass: 'bg-gradient-to-r from-violet-500 to-crimson-500 text-white',
-    description: 'Coup de foudre immédiat'
+    colorClass: "bg-gradient-to-r from-violet-500 to-crimson-500 text-white",
+    description: "Coup de foudre immédiat"
   },
 } as const;
 
-export function RhythmBadge({ rhythm, size = 'md' }: RhythmBadgeProps) {
+export function RhythmBadge({ rhythm, size="md" }: RhythmBadgeProps) {
   const config = RHYTHM_CONFIG[rhythm as keyof typeof RHYTHM_CONFIG];
   
   if (!config) {
@@ -108,7 +108,7 @@ export function RhythmGrid({
   className?: string;
 }) {
   return (
-    <div className={cn('grid grid-cols-2 gap-2', className)}>
+    <div className={cn("grid grid-cols-2 gap-2", className)}>
       {Object.entries(RHYTHM_CONFIG).map(([key, config]) => {
         const rhythm = key as BookRhythm;
         const isSelected = selectedRhythms.includes(rhythm);
@@ -122,7 +122,7 @@ export function RhythmGrid({
               'flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sm transition-all hover:scale-102',
               isSelected 
                 ? colorClass + ' shadow-lg' 
-                : 'bg-ink-700 text-ash-300 border border-ash-500/30 hover:border-ash-400/50'
+                : "bg-ink-700 text-ash-300 border border-ash-500/30 hover:border-ash-400/50"
             )}
             title={description}
           >

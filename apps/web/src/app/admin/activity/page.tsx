@@ -44,9 +44,9 @@ function getActivityColor(type: string) {
   }
 }
 
-function getActivityBadgeVariant(type: string): "default" | "secondary" | "destructive" | "outline" {
+function getActivityBadgeVariant(type: string): 'default' | "secondary" | "destructive" | "outline" {
   switch (type) {
-    case 'book': return 'default';
+    case "book": return 'default';
     case 'question': return 'secondary';
     case 'user': return 'outline';
     case 'rating': return 'default';
@@ -59,7 +59,7 @@ export default function AdminActivity() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   
-  // Générer l'activité récente étendue
+  // Générer l`activité récente étendue
   const generateAllActivity = () => {
     const activities: any[] = [];
 
@@ -69,8 +69,8 @@ export default function AdminActivity() {
         activities.push({
           id: question.id,
           type: 'question',
-          title: 'Nouvelle question posée`,
-          description: `"${question.question.substring(0, 100)}..." sur ${question.book_title}`,
+          title: "Nouvelle question posée",
+          description: question.question.substring(0, 100) + '... sur ' + question.book_title,
           user: question.user_name,
           time: new Date(question.date_question).toLocaleString('fr-FR'),
           timestamp: new Date(question.date_question),
@@ -86,8 +86,8 @@ export default function AdminActivity() {
         activities.push({
           id: book.id,
           type: 'book',
-          title: 'Livre ajouté`,
-          description: `"${book.titre}" par ${book.auteur}`,
+          title: "Livre ajouté",
+          description: book.titre + ' par ' + book.auteur,
           user: 'Admin',
           time: new Date(book.date_creation).toLocaleString('fr-FR'),
           timestamp: new Date(book.date_creation),
@@ -96,14 +96,14 @@ export default function AdminActivity() {
       });
     }
 
-    // Ajouter des activités d'exemple pour les notes
+    // Ajouter des activités d`exemple pour les notes
     if (stats?.recent_books) {
       stats.recent_books.filter(book => book.note_generale && book.note_generale > 0).forEach((book) => {
         activities.push({
-          id: 'rating_${book.id}',
+          id: 'rating_' + book.id,
           type: 'rating',
-          title: 'Note attribuée`,
-          description: `Note de ${book.note_generale}/10 pour "${book.titre}"`,
+          title: 'Note attribuée',
+          description: 'Note de ' + book.note_generale + '/10 pour ' + book.titre,
           user: 'Admin',
           time: new Date(book.date_creation).toLocaleString('fr-FR'),
           timestamp: new Date(book.date_creation),
@@ -137,8 +137,8 @@ export default function AdminActivity() {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-        <div className="container mx-auto py-8 px-4">
+      <div className='min-h-screen bg-gradient-to-br from-background to-muted'>
+        <div className='container mx-auto py-8 px-4'>
           {/* Header */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 space-y-4 sm:space-y-0">
             <div className="space-y-2">
@@ -246,32 +246,32 @@ export default function AdminActivity() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button
-                    variant={filterType === 'all' ? 'default' : 'outline'}
+                    variant={filterType === "all" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setFilterType('all')}
+                    onClick={() => setFilterType("all")}
                   >
                     Toutes ({allActivities.length})
                   </Button>
                   <Button
-                    variant={filterType === 'book' ? 'default' : 'outline'}
+                    variant={filterType === 'book' ? 'default' : "outline"}
                     size="sm"
-                    onClick={() => setFilterType('book')}
+                    onClick={() => setFilterType("book")}
                   >
                     <BookOpen className="h-4 w-4 mr-1" />
                     Livres ({activityTypeStats.book})
                   </Button>
                   <Button
-                    variant={filterType === 'question' ? 'default' : 'outline'}
+                    variant={filterType === "question" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setFilterType('question')}
+                    onClick={() => setFilterType("question")}
                   >
                     <MessageCircle className="h-4 w-4 mr-1" />
                     Questions ({activityTypeStats.question})
                   </Button>
                   <Button
-                    variant={filterType === 'rating' ? 'default' : 'outline'}
+                    variant={filterType === "rating" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setFilterType('rating')}
+                    onClick={() => setFilterType("rating")}
                   >
                     <Star className="h-4 w-4 mr-1" />
                     Notes ({activityTypeStats.rating})
@@ -301,7 +301,7 @@ export default function AdminActivity() {
                     <Clock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-lg font-medium">Aucune activité trouvée</p>
                     <p className="text-sm text-muted-foreground">
-                      {searchTerm ? 'Essayez de modifier votre recherche' : 'Aucune activité récente'}
+                      {searchTerm ? "Essayez de modifier votre recherche" : "Aucune activité récente"}
                     </p>
                   </div>
                 ) : (
@@ -310,7 +310,7 @@ export default function AdminActivity() {
                     return (
                       <div key={activity.id} className="relative">
                         <div className="flex items-start space-x-4 p-4 rounded-lg border bg-card hover:bg-muted/50 transition-colors">
-                          <div className={'w-3 h-3 rounded-full mt-2 ${getActivityColor(activity.type)}'}></div>
+                          <div className={`w-3 h-3 rounded-full mt-2 ${getActivityColor(activity.type)}`}></div>
                           
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
@@ -320,7 +320,7 @@ export default function AdminActivity() {
                                 <Badge variant={getActivityBadgeVariant(activity.type)} className="text-xs">
                                   {activity.type}
                                 </Badge>
-                                {activity.status && activity.status === 'LEGACY' && (
+                                {activity.status && activity.status === "LEGACY" && (
                                   <Badge variant="outline" className="text-xs">
                                     Question existante
                                   </Badge>
@@ -350,7 +350,7 @@ export default function AdminActivity() {
                               </div>
                               
                               {activity.bookId && (
-                                <Link href={'/books/${activity.bookId}'}>
+                                <Link href={'/books/' + activity.bookId}>
                                   <Button variant="ghost" size="sm">
                                     <Eye className="h-3 w-3 mr-1" />
                                     Voir

@@ -118,8 +118,8 @@ export function SortDropdown({
   onChange,
   options = DEFAULT_SORT_OPTIONS,
   className,
-  size = "default",
-  variant = "outline",
+  size="default",
+  variant="outline",
   showIcon = true,
   showDirection = true
 }: SortDropdownProps) {

@@ -83,7 +83,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     mode: 'onChange',
   });
 
-  const password = watch('password');
+  const password = watch('password`);
 
   const onSubmit = async (data: RegisterFormData) => {
     clearError();
@@ -106,29 +106,29 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   // Affichage du message de succès
   if (successMessage) {
     return (
-      <div className={`w-full text-center space-y-6 ${className || ''}'}>
+      <div className={`w-full text-center space-y-6 ${className || `}"}"}>
         <div className="space-y-4">
           <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30">
             <CheckCircle className="h-8 w-8 text-white" />
           </div>
           <h2
             className="text-2xl font-bold text-green-600"
-            style={{ fontFamily: 'Playfair Display, serif' }}
+            style={{ fontFamily: `Playfair Display, serif` }}
           >
             Bienvenue dans le cercle !
           </h2>
         </div>
 
-        <div className="p-6 rounded-xl border-l-4 bg-green-500/5 text-green-600 border-l-green-500" style={{ fontFamily: 'Inter, sans-serif' }}>
+        <div className="p-6 rounded-xl border-l-4 bg-green-500/5 text-green-600 border-l-green-500" style={{ fontFamily: "Inter, sans-serif` }}>
           {successMessage}
         </div>
 
         <div>
-          <p className="text-sm text-foreground/70" style={{ fontFamily: 'Inter, sans-serif' }}>
+          <p className="text-sm text-foreground/70" style={{ fontFamily: "Inter, sans-serif` }}>
             Vous allez être redirigé automatiquement vers votre nouvelle bibliothèque...
           </p>
           <div className="mt-3 flex justify-center">
-            <div className="animate-spin h-5 w-5 border-2 border-green-500 border-t-transparent rounded-full" />
+            <div className="animate-spin h-5 w-5 border-2 border-green-500 border-t-transparent rounded-full` />
           </div>
         </div>
       </div>
@@ -136,14 +136,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   }
 
   return (
-    <div className={`w-full space-y-6 ${className || ''}'}>
+    <div className={`w-full space-y-6 ${className || ""}`}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Affichage des erreurs */}
         {error && (
           <div
             className="p-4 rounded-lg text-sm border-l-4 bg-destructive/5 text-destructive border-l-destructive"
             style={{
-              fontFamily: 'Inter, sans-serif'
+              fontFamily: "Inter, sans-serif"
             }}
           >
             {error}
@@ -164,14 +164,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           <div className="relative">
             <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary" />
             <input
-              {...register('email')}
+              {...register("email")}
               id="email"
               type="email"
               placeholder="votre@email.com"
               className="w-full pl-11 pr-4 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
               style={{
                 fontFamily: 'Inter, sans-serif',
-                fontSize: '16px'
+                fontSize: "16px"
               }}
               aria-invalid={!!errors.email}
             />
@@ -202,14 +202,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           <div className="relative">
             <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
-              {...register('username')}
+              {...register("username")}
               id="username"
               type="text"
               placeholder="votre_pseudo"
               className="w-full pl-11 pr-4 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
               style={{
                 fontFamily: 'Inter, sans-serif',
-                fontSize: '16px'
+                fontSize: "16px"
               }}
               aria-invalid={!!errors.username}
             />
@@ -254,7 +254,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             className="w-full px-4 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: '16px'
+              fontSize: "16px"
             }}
             aria-invalid={!!errors.nom_complet}
           />
@@ -292,14 +292,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           <div className="relative">
             <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
-              {...register('password')}
+              {...register("password")}
               id="password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               className="w-full pl-11 pr-12 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
               style={{
                 fontFamily: 'Inter, sans-serif',
-                fontSize: '16px'
+                fontSize: "16px"
               }}
               aria-invalid={!!errors.password}
             />
@@ -341,14 +341,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           <div className="relative">
             <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <input
-              {...register('confirmPassword')}
+              {...register("confirmPassword")}
               id="confirmPassword"
-              type={showConfirmPassword ? 'text' : 'password'}
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="••••••••"
               className="w-full pl-11 pr-12 py-4 rounded-xl border border-border outline-none transition-all duration-200 focus:ring-2 focus:ring-primary bg-background dark:bg-card text-foreground shadow-md placeholder:text-muted-foreground"
               style={{
                 fontFamily: 'Inter, sans-serif',
-                fontSize: '16px'
+                fontSize: "16px"
               }}
               aria-invalid={!!errors.confirmPassword}
             />
@@ -391,25 +391,25 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               <div
                 className="h-2 flex-1 rounded-full transition-colors duration-200"
                 style={{
-                  backgroundColor: password.length >= 6 ? '#F59E0B' : 'hsl(var(--muted))'
+                  backgroundColor: password.length >= 6 ? "#F59E0B" : "hsl(var(--muted))"
                 }}
               />
               <div
                 className="h-2 flex-1 rounded-full transition-colors duration-200"
                 style={{
-                  backgroundColor: /[A-Z]/.test(password) ? '#F59E0B' : 'hsl(var(--muted))'
+                  backgroundColor: /[A-Z]/.test(password) ? "#F59E0B" : "hsl(var(--muted))"
                 }}
               />
               <div
                 className="h-2 flex-1 rounded-full transition-colors duration-200"
                 style={{
-                  backgroundColor: /[a-z]/.test(password) ? '#F59E0B' : 'hsl(var(--muted))'
+                  backgroundColor: /[a-z]/.test(password) ? "#F59E0B" : "hsl(var(--muted))"
                 }}
               />
               <div
                 className="h-2 flex-1 rounded-full transition-colors duration-200"
                 style={{
-                  backgroundColor: /\d/.test(password) ? '#22C55E' : 'hsl(var(--muted))'
+                  backgroundColor: /\d/.test(password) ? "#22C55E" : "hsl(var(--muted))"
                 }}
               />
             </div>
@@ -423,7 +423,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           className="w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 bg-gradient-to-r from-primary to-accent shadow-xl"
           style={{
             fontFamily: 'Inter, sans-serif',
-            fontSize: '16px'
+            fontSize: "16px"
           }}
         >
           {isLoading ? (

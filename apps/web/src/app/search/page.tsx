@@ -59,7 +59,7 @@ function SearchPageContent() {
       try {
         setSearchHistory(JSON.parse(stored));
       } catch (e) {
-        console.error('Failed to parse search history:', e);
+        console.error("Failed to parse search history: ", e);
       }
     }
   }, []);
@@ -67,7 +67,7 @@ function SearchPageContent() {
   // Sauvegarder dans localStorage
   const saveSearchHistory = useCallback((newHistory: SearchHistory[]) => {
     setSearchHistory(newHistory);
-    localStorage.setItem('booky-search-history', JSON.stringify(newHistory));
+    localStorage.setItem("booky-search-history", JSON.stringify(newHistory));
   }, []);
 
   // Recherche de livres
@@ -238,7 +238,7 @@ function SearchPageContent() {
     // Mettre à jour l'URL
     const params = new URLSearchParams();
     params.set('q', searchQuery);
-    router.push('/search?${params.toString()}');
+    router.push('/search?${params.toString()}`);
   };
 
   const clearSearch = () => {
@@ -257,7 +257,7 @@ function SearchPageContent() {
   const isLoading = booksLoading || categoriesLoading || tagsLoading;
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
+    <div className='container mx-auto py-8 px-4 max-w-6xl'>
       {/* En-tête */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">
@@ -277,7 +277,7 @@ function SearchPageContent() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === "Enter") {
                 handleSearch(query);
               }
               if (e.key === 'Escape') {
@@ -366,33 +366,33 @@ function SearchPageContent() {
       {/* Filtres de type */}
       <div className="flex flex-wrap gap-2 mb-6">
         <Button
-          variant={searchType === 'all' ? "default" : "outline"}
+          variant={searchType === "all" ? "default" : "outline"}
           size="sm"
-          onClick={() => setSearchType('all')}
+          onClick={() => setSearchType("all")}
         >
           <Search className="h-4 w-4 mr-2" />
           Tout
         </Button>
         <Button
-          variant={searchType === 'books' ? "default" : "outline"}
+          variant={searchType === "books" ? "default" : "outline"}
           size="sm"
-          onClick={() => setSearchType('books')}
+          onClick={() => setSearchType("books")}
         >
           <BookOpen className="h-4 w-4 mr-2" />
           Livres
         </Button>
         <Button
-          variant={searchType === 'categories' ? "default" : "outline"}
+          variant={searchType === "categories" ? "default" : "outline"}
           size="sm"
-          onClick={() => setSearchType('categories')}
+          onClick={() => setSearchType("categories")}
         >
           <Grid3X3 className="h-4 w-4 mr-2" />
           Catégories
         </Button>
         <Button
-          variant={searchType === 'tags' ? "default" : "outline"}
+          variant={searchType === "tags" ? "default" : "outline"}
           size="sm"
-          onClick={() => setSearchType('tags')}
+          onClick={() => setSearchType("tags")}
         >
           <Tag className="h-4 w-4 mr-2" />
           Tags
@@ -409,11 +409,11 @@ function SearchPageContent() {
                 Résultats pour "{activeQuery}"
               </h2>
               <p className="text-gray-400">
-                {isLoading ? 'Recherche en cours...' : '${results.length} résultat${results.length > 1 ? 's' : ''} trouvé${results.length > 1 ? 's' : ''}'}
+                {isLoading ? `Recherche en cours...` : `${results.length}`résultat${results.length > 1 ? `s' : '`} trouvé${results.length > 1 ? `s` : '' }`}
               </p>
             </div>
             {activeQuery && (
-              <Button variant="outline" onClick={clearSearch}>
+              <Button variant=`outline" onClick={clearSearch}>
                 <X className="h-4 w-4 mr-2" />
                 Effacer la recherche
               </Button>
@@ -442,36 +442,36 @@ function SearchPageContent() {
             // Résultats groupés par type
             <div className="space-y-8">
               {/* Livres */}
-              {results.some(r => r.type === 'book') && (
+              {results.some(r => r.type === "book") && (
                 <div>
                   <h3 className="text-lg font-medium text-white mb-4 flex items-center space-x-2">
                     <BookOpen className="h-5 w-5" />
-                    <span>Livres ({results.filter(r => r.type === 'book').length})</span>
+                    <span>Livres ({results.filter(r => r.type === "book").length})</span>
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`>
                     {results
-                      .filter(r => r.type === 'book')
+                      .filter(r => r.type === `book`)
                       .slice(0, 9)
                       .map((result, index) => (
-                        <BookCard key={'book-${index}'} book={transformBookForCard(result.item)} />
+                        <BookCard key={`book-${index}`} book={transformBookForCard(result.item)} />
                       ))}
                   </div>
                 </div>
               )}
 
               {/* Catégories */}
-              {results.some(r => r.type === 'category') && (
+              {results.some(r => r.type === `category`) && (
                 <div>
                   <h3 className="text-lg font-medium text-white mb-4 flex items-center space-x-2">
                     <Grid3X3 className="h-5 w-5" />
-                    <span>Catégories ({results.filter(r => r.type === 'category').length})</span>
+                    <span>Catégories ({results.filter(r => r.type === "category").length})</span>
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {results
-                      .filter(r => r.type === 'category')
+                      .filter(r => r.type === `category`)
                       .slice(0, 6)
                       .map((result, index) => (
-                        <Link key={'category-${index}'} href={'/categories/${result.item.id}'}>
+                        <Link key={`category-${index}`} href={`/categories/${result.item.id}`}>
                           <Card className="hover:bg-gray-800/50 transition-colors cursor-pointer">
                             <CardContent className="p-4">
                               <div className="flex items-center justify-between">
@@ -494,21 +494,21 @@ function SearchPageContent() {
               )}
 
               {/* Tags */}
-              {results.some(r => r.type === 'tag') && (
+              {results.some(r => r.type === "tag") && (
                 <div>
                   <h3 className="text-lg font-medium text-white mb-4 flex items-center space-x-2">
                     <Tag className="h-5 w-5" />
-                    <span>Tags ({results.filter(r => r.type === 'tag').length})</span>
+                    <span>Tags ({results.filter(r => r.type === "tag").length})</span>
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {results
-                      .filter(r => r.type === 'tag')
+                      .filter(r => r.type === `tag`)
                       .slice(0, 20)
                       .map((result, index) => (
-                        <Link key={'tag-${index}'} href={'/tags/${result.item.id}'}>
+                        <Link key={`tag-${index}`} href={`/tags/${result.item.id}`}>
                           <Badge
-                            variant="outline"
-                            className="hover:scale-105 transition-transform cursor-pointer px-3 py-1"
+                            variant=`outline'
+                            className='hover:scale-105 transition-transform cursor-pointer px-3 py-1'
                             style={{ borderColor: result.item.couleur }}
                           >
                             <span className="mr-1">{TAG_TYPE_ICONS[result.item.type as TagType]}</span>
@@ -535,7 +535,7 @@ function SearchPageContent() {
                 <Button variant="outline" onClick={clearSearch}>
                   Nouvelle recherche
                 </Button>
-                <Button variant="outline" onClick={() => setSearchType('all')}>
+                <Button variant="outline" onClick={() => setSearchType("all")}>
                   Rechercher dans tout
                 </Button>
               </div>
@@ -557,7 +557,7 @@ function SearchPageContent() {
             <CardContent>
               <div className="flex flex-wrap gap-2">
                 {[
-                  'Dark Romance', 'Enemies to Lovers', 'Mafia Romance',
+                  "Dark Romance", 'Enemies to Lovers', 'Mafia Romance',
                   'Urban Fantasy', 'Paranormal', 'Vampire', 'Werewolf',
                   'Second Chance', 'Age Gap', 'Reverse Harem'
                 ].map((term) => (
@@ -606,7 +606,7 @@ function SearchPageContent() {
                         <span className="text-white">{item.query}</span>
                       </div>
                       <div className="text-sm text-gray-400">
-                        {new Date(item.timestamp).toLocaleDateString('fr-FR')}
+                        {new Date(item.timestamp).toLocaleDateString("fr-FR")}
                       </div>
                     </div>
                   ))}

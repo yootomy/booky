@@ -60,7 +60,7 @@ export function StatsCards({ stats, isLoading, listsCount = 0, publicListsCount 
   const calculateTrend = (current: number, base: number = 10): string => {
     if (base === 0) return '+0%';
     const trend = Math.round(((current - base) / base) * 100);
-    return trend > 0 ? '+${trend}%' : '${trend}%';
+    return trend > 0 ? '+${trend}%` : `${trend}%`;
   };
 
   return (
@@ -137,7 +137,7 @@ export function StatsCards({ stats, isLoading, listsCount = 0, publicListsCount 
           <div className="text-3xl md:text-4xl font-semibold text-gray-900 mb-1">
             {stats.recent_books.length > 0
               ? (stats.recent_books.reduce((acc, book) => acc + (book.note_generale || 0), 0) / stats.recent_books.length).toFixed(1)
-              : '0.0'
+              : "0.0"
             }
           </div>
           <div className="text-sm text-gray-500">Note moyenne</div>

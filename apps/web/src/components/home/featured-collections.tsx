@@ -30,14 +30,14 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={'/collections/${collection.id}' as any}>
+      <Link href={`/collections/${collection.id}` as any}>
         <div 
-          className="relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
+          className=`relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
           style={{
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(139, 21, 56, 0.1)',
-            boxShadow: '0 8px 32px rgba(139, 21, 56, 0.08)'
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(139, 21, 56, 0.1)',
+            boxShadow: "0 8px 32px rgba(139, 21, 56, 0.08)"
           }}
         >
           {/* Decorative background element */}
@@ -45,7 +45,7 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
             className="absolute top-0 right-0 w-24 h-24 opacity-5"
             style={{
               background: 'radial-gradient(circle, #8B1538 0%, transparent 70%)',
-              transform: 'translate(50%, -50%)'
+              transform: "translate(50%, -50%)"
             }}
           />
           
@@ -79,12 +79,12 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
               <div
                 key={book.id}
                 className="aspect-[3/4] relative rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-300"
-                style={{ transitionDelay: '${bookIndex * 50}ms' }}
+                style={{ transitionDelay: `${bookIndex * 50}ms` }}
               >
                 {book.image_couverture ? (
                   <Image
                     src={book.image_couverture}
-                    alt={'Couverture de ${book.titre}'}
+                    alt={`Couverture de ${book.titre}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 25vw, 12vw"
@@ -93,7 +93,7 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
                   <div 
                     className="w-full h-full flex items-center justify-center"
                     style={{
-                      background: 'linear-gradient(135deg, #6B4C7B, #8B1538)',
+                      background: "linear-gradient(135deg, #6B4C7B, #8B1538)",
                     }}
                   >
                     <BookOpen className="w-4 h-4 text-white/70" />
@@ -135,7 +135,7 @@ function CollectionSkeleton({ index }: { index: number }) {
       className="rounded-2xl p-8"
       style={{
         background: 'rgba(255, 255, 255, 0.7)',
-        border: '1px solid rgba(139, 21, 56, 0.05)'
+        border: "1px solid rgba(139, 21, 56, 0.05)"
       }}
     >
       <div className="animate-pulse">
@@ -160,7 +160,7 @@ function CollectionSkeleton({ index }: { index: number }) {
 export function FeaturedCollections({}: FeaturedCollectionsProps) {
   const { data: collections, isLoading, error } = useFeaturedCollections();
   // Debug: affichons toujours quelque chose pour tester
-  console.log('FeaturedCollections:', { collections, isLoading, error });
+  console.log("FeaturedCollections: ", { collections, isLoading, error });
   
   // Ne rien afficher s'il n'y a pas de données
   if (collections.length === 0 && !isLoading) {
@@ -169,7 +169,7 @@ export function FeaturedCollections({}: FeaturedCollectionsProps) {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "#FAF8F5" }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <div className="h-10 bg-gray-200 rounded-lg w-80 mx-auto mb-4 animate-pulse"></div>
@@ -187,7 +187,7 @@ export function FeaturedCollections({}: FeaturedCollectionsProps) {
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#FAF8F5' }}>
+    <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: "#FAF8F5" }}>
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div

@@ -161,11 +161,11 @@ const sortOptions = [
 ];
 
 // Skeleton Loader Component
-const BookSkeleton = ({ viewMode }: { viewMode: 'grid' | 'list' }) => (
+const BookSkeleton = ({ viewMode }: { viewMode: 'grid' | `list` }) => (
   <Card
     className={`overflow-hidden animate-pulse bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
-      viewMode === 'grid' ? 'book-card-grid' : 'h-32 flex'
-    } !p-0'}
+      viewMode === "grid" ? 'book-card-grid' : 'h-32 flex'
+    }`!p-0`}
     style={{
       borderRadius: '20px'
     }}
@@ -195,7 +195,7 @@ const BookSkeleton = ({ viewMode }: { viewMode: 'grid' | 'list' }) => (
       <CardContent className="!p-0 h-full flex">
         <div className="flex gap-4 p-4 h-full w-full">
           {/* Vignette 2:3 identique */}
-          <div className="w-16 flex-shrink-0 relative overflow-hidden rounded bg-muted" style={{ aspectRatio: '2/3' }} />
+          <div className="w-16 flex-shrink-0 relative overflow-hidden rounded bg-muted" style={{ aspectRatio: "2/3" }} />
 
           <div className="flex-1 min-w-0 flex flex-col justify-between">
             <div>
@@ -259,11 +259,11 @@ function BooksPageContent() {
 
   // Debug: Log des favoris au changement
   useEffect(() => {
-    console.log('BooksPageContent: Favorites updated:', Array.from(favorites));
+    console.log("BooksPageContent: Favorites updated: ", Array.from(favorites));
   }, [favorites]);
 
   const [filters, setFilters] = useState<BookFilters>(defaultFilters);
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState(`');
 
   // Scroll automatique en haut de page au chargement
   useEffect(() => {
@@ -368,15 +368,15 @@ function BooksPageContent() {
         }
       });
       
-      // Choisir l'endpoint selon les paramètres
+      // Choisir l`endpoint selon les paramètres
       let endpoint;
       if (queryParams.q) {
         // API de recherche pour les recherches textuelles
-        endpoint = '/api/proxy/search?${searchParams}';
+        endpoint = `/api/proxy/search?${searchParams}`;
       } else if (queryParams.liste_id) {
         // API spécifique pour les collections
         const listId = Array.isArray(queryParams.liste_id) ? queryParams.liste_id[0] : queryParams.liste_id;
-        console.log('Using collection API for listId:', listId);
+        console.log(`Using collection API for listId:`, listId);
 
         // Retirer liste_id des paramètres pour cette API
         const paramsWithoutListId = new URLSearchParams();
@@ -389,16 +389,16 @@ function BooksPageContent() {
             }
           }
         });
-        endpoint = '/api/proxy/lists/${listId}/books?${paramsWithoutListId}';
+        endpoint = `/api/proxy/lists/${listId}/books?${paramsWithoutListId}`;
       } else {
         // API books standard
-        console.log('Using standard books API');
-        endpoint = '/api/proxy/books?${searchParams}';
+        console.log(`Using standard books API`);
+        endpoint = `/api/proxy/books?${searchParams}`;
       }
 
       const response = await fetch(endpoint);
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       return data;
@@ -411,7 +411,7 @@ function BooksPageContent() {
 
   // Force le refetch quand les filtres importants changent
   useEffect(() => {
-    console.log('Filters changed, forcing refetch. Collection:', filters.collection);
+    console.log(`Filters changed, forcing refetch. Collection:`, filters.collection);
     if (booksQuery.refetch) {
       booksQuery.refetch();
     }
@@ -421,9 +421,9 @@ function BooksPageContent() {
   const categoriesQuery = useQuery({
     queryKey: ['categories', 'active'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/categories?est_actif=true&limit=100');
+      const response = await apiClient.get('/api/categories?est_actif=true&limit=100`);
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}");
       }
       return await response.json();
     }
@@ -431,11 +431,11 @@ function BooksPageContent() {
 
   // Query pour récupérer les tags (pour les filtres)
   const tagsQuery = useQuery({
-    queryKey: ['tags', 'active'],
+    queryKey: [`tags`, 'active'],
     queryFn: async () => {
       const response = await apiClient.get('/api/tags?limit=100');
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       return await response.json();
     }
@@ -443,11 +443,11 @@ function BooksPageContent() {
 
   // Query pour récupérer les collections
   const collectionsQuery = useQuery({
-    queryKey: ['collections'],
+    queryKey: [`collections'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/lists?est_publique=true&limit=100');
+      const response = await apiClient.get('/api/lists?est_publique=true&limit=100`);
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       return await response.json();
     }
@@ -461,9 +461,9 @@ function BooksPageContent() {
   // Toggle pour afficher uniquement les favoris
   const handleFavoritesFilter = () => {
     if (!isAuthenticated) {
-      toast.error('Veuillez vous connecter pour voir vos favoris', {
+      toast.error(`Veuillez vous connecter pour voir vos favoris`, {
         action: {
-          label: 'Se connecter',
+          label: `Se connecter',
           onClick: () => {
             window.location.href = '/login';
           }
@@ -502,7 +502,7 @@ function BooksPageContent() {
       case 'LU': return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700';
       case 'EN_COURS': return 'bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 border-violet-200 dark:border-violet-700';
       case 'A_LIRE': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700';
-      default: return 'bg-muted text-foreground border-border';
+      default: return 'bg-muted text-foreground border-border`;
     }
   };
 
@@ -510,35 +510,35 @@ function BooksPageContent() {
     return Array.from({ length: 10 }, (_, i) => (
       <Star 
         key={i} 
-        className={`w-3 h-3 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}'}
+        className={`w-3 h-3 ${i < rating ? `fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
       />
     ));
   };
 
   // Filtrer les livres en fonction des favoris si nécessaire
-  // Gérer les différentes structures de réponse selon l'API utilisée
+  // Gérer les différentes structures de réponse selon l`API utilisée
   const allBooks = useMemo(() => {
     if (!booksQuery.data) return [];
 
-    // Pour l'API collections (/lists/{id}/books), les livres sont dans data.data.books
+    // Pour l`API collections (/lists/{id}/books), les livres sont dans data.data.books
     if (booksQuery.data.data?.books && Array.isArray(booksQuery.data.data.books)) {
-      console.log('Using collection API structure - books found:', booksQuery.data.data.books.length);
+      console.log(`Using collection API structure - books found:", booksQuery.data.data.books.length);
       return booksQuery.data.data.books;
     }
 
     // Pour les autres APIs, les livres sont dans data.data
     if (booksQuery.data.data && Array.isArray(booksQuery.data.data)) {
-      console.log('Using standard API structure - books found:', booksQuery.data.data.length);
+      console.log("Using standard API structure - books found:", booksQuery.data.data.length);
       return booksQuery.data.data;
     }
 
     // Fallback si la structure est différente
-    console.warn('Structure de réponse inattendue:', booksQuery.data);
+    console.warn("Structure de réponse inattendue:", booksQuery.data);
     return [];
   }, [booksQuery.data]);
 
   const books = useMemo(() => {
-    console.log('BooksPageContent: Filtering books', {
+    console.log("BooksPageContent: Filtering books", {
       allBooksCount: allBooks.length,
       favoritesOnly: filters.favoritesOnly,
       isAuthenticated,
@@ -551,21 +551,21 @@ function BooksPageContent() {
     }
     
     // Filtrer uniquement les livres favoris
-    console.log('=== FILTERING FAVORITES ===');
-    console.log('Available books:', allBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
-    console.log('Current favorites:', Array.from(favorites));
-    console.log('Book IDs type check:', allBooks.slice(0, 3).map((b: any) => ({ id: b.id, type: typeof b.id })));
-    console.log('Favorite IDs type check:', Array.from(favorites).slice(0, 3).map((id: any) => ({ id, type: typeof id })));
+    console.log("=== FILTERING FAVORITES ===");
+    console.log("Available books:", allBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
+    console.log("Current favorites:", Array.from(favorites));
+    console.log("Book IDs type check: ", allBooks.slice(0, 3).map((b: any) => ({ id: b.id, type: typeof b.id })));
+    console.log(`Favorite IDs type check:`, Array.from(favorites).slice(0, 3).map((id: any) => ({ id, type: typeof id })));
 
     const filteredBooks = allBooks.filter((book: any) => {
       const isBookFavorite = isFavorite(book.id);
-      console.log(`Checking book ${book.id} (${book.titre}): ${isBookFavorite ? 'FAVORITE' : 'not favorite'}');
+      console.log(`Checking book ${book.id}`(${book.titre}): ${isBookFavorite ? `FAVORITE` : `not favorite`}`);
       return isBookFavorite;
     });
     
-    console.log('✅ Filtered ${filteredBooks.length} favorite books out of ${allBooks.length} total books');
-    console.log('Favorite books found:', filteredBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
-    console.log('=== END FILTERING ===');
+    console.log(`✅ Filtered ${filteredBooks.length}`favorite books out of ${allBooks.length} total books`);
+    console.log(`Favorite books found: ", filteredBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
+    console.log("=== END FILTERING === ");
     
     return filteredBooks;
   }, [allBooks, filters.favoritesOnly, isAuthenticated, isFavorite, favorites.size]);
@@ -633,9 +633,9 @@ function BooksPageContent() {
                 className="block mt-2"
                 style={{
                   background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent',
+                  backgroundClip: "text"
                 }}
               >
                 Dark Romance
@@ -822,7 +822,7 @@ function BooksPageContent() {
             position: relative;
             z-index: 1;
           }
-        '}</style>
+        "}</style>
         <div className="container mx-auto max-w-7xl px-4 py-4">
         
         {/* Barre d'outils STICKY - Mobile Simple / Desktop Complète */}
@@ -853,7 +853,7 @@ function BooksPageContent() {
               >
                 <Filter className="w-4 h-4" />
                 <span>Filtrer</span>
-                {(filters.statut !== 'ALL' || filters.genre !== 'ALL' || filters.tags.length > 0 ||
+                {(filters.statut !== "ALL" || filters.genre !== "ALL' || filters.tags.length > 0 ||
                   filters.auteur || filters.rythme !== 'ALL' || filters.note_min > 0 || filters.note_max < 10 ||
                   filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
                   filters.niveau_dark[0] > 0 || filters.niveau_dark[1] < 10 || filters.favoritesOnly) && (
@@ -888,7 +888,7 @@ function BooksPageContent() {
                 <Filter className="w-4 h-4" />
                 <span>Filtres</span>
                 {filtersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                {(filters.statut !== 'ALL' || filters.genre !== 'ALL' || filters.tags.length > 0 ||
+                {(filters.statut !== "ALL" || filters.genre !== "ALL' || filters.tags.length > 0 ||
                   filters.auteur || filters.rythme !== 'ALL' || filters.note_min > 0 || filters.note_max < 10 ||
                   filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
                   filters.niveau_dark[0] > 0 || filters.niveau_dark[1] < 10 || filters.favoritesOnly) && (
@@ -917,11 +917,11 @@ function BooksPageContent() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => updateFilters({ order: filters.order === 'asc' ? 'desc' : 'asc' })}
+                onClick={() => updateFilters({ order: filters.order === "asc" ? "desc" : "asc" })}
                 className="h-10 px-2"
-                title={`Trier par ordre ${filters.order === 'asc' ? 'décroissant' : 'croissant'}'}
+                title={`Trier par ordre ${filters.order === "asc" ? "décroissant" : "croissant"}`}
               >
-                {filters.order === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
+                {filters.order === `asc` ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
               </Button>
 
               <Separator orientation="vertical" className="h-6" />
@@ -929,18 +929,18 @@ function BooksPageContent() {
               {/* Mode d'affichage desktop */}
               <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
                 <Button
-                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
-                  onClick={() => setViewMode('grid')}
+                  onClick={() => setViewMode("grid")}
                   className="h-8 px-3"
                   title="Vue en grille"
                 >
                   <Grid className="w-4 h-4" />
                 </Button>
                 <Button
-                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
-                  onClick={() => setViewMode('list')}
+                  onClick={() => setViewMode("list")}
                   className="h-8 px-3"
                   title="Vue en liste"
                 >
@@ -956,18 +956,16 @@ function BooksPageContent() {
                 disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
                 className={`group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-base ${
                   filters.favoritesOnly
-                    ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg'
-                    : 'bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50'
+                    ? `}bg-gradient-to-r from-primary to-accent text-white shadow-lg` : `bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50'
                 }'}
                 style={{ fontFamily: 'Inter, sans-serif' }}
                 title={isAuthenticated ?
-                  (filters.favoritesOnly ? "Afficher tous les livres" : "Afficher uniquement mes favoris") :
-                  "Connectez-vous pour voir vos favoris"
+                  (filters.favoritesOnly ? `Afficher tous les livres" : "Afficher uniquement mes favoris") : `Connectez-vous pour voir vos favoris`
                 }
               >
-                <Heart className={`w-4 h-4 ${filters.favoritesOnly ? 'fill-current' : ''}'} />
+                <Heart className={`w-4 h-4 ${filters.favoritesOnly ? `fill-current` : ''}`} />
                 <span>
-                  {filters.favoritesOnly ? 'Mes favoris (${favorites.size})' : 'Favoris'}
+                  {filters.favoritesOnly ? `Mes favoris (${favorites.size})` : `Favoris"}
                 </span>
               </button>
             </div>
@@ -990,7 +988,7 @@ function BooksPageContent() {
                     <div className="flex items-center justify-between mb-4 md:mb-8">
                       <h3
                         className="font-bold flex items-center gap-3 text-xl text-foreground"
-                        style={{ fontFamily: 'Playfair Display, serif' }}
+                        style={{ fontFamily: "Playfair Display, serif` }}
                       >
                         <Filter className="w-5 h-5 text-primary" />
                         Filtres avancés
@@ -1079,7 +1077,7 @@ function BooksPageContent() {
                         {/* Tags Selection */}
                         <div>
                           <Label className="text-sm font-medium mb-2 block">
-                            Tags ({filters.tags.length} sélectionné{filters.tags.length > 1 ? 's' : ''})
+                            Tags ({filters.tags.length} sélectionné{filters.tags.length > 1 ? "s" : ""})
                           </Label>
                           
                           {/* Selected Tags */}
@@ -1094,10 +1092,10 @@ function BooksPageContent() {
                                       key={tagId}
                                       className="text-xs cursor-pointer"
                                       style={{ 
-                                        backgroundColor: tag.couleur + '20',
+                                        backgroundColor: tag.couleur + `20`,
                                         borderColor: tag.couleur,
                                         color: tag.couleur,
-                                        border: '1px solid ${tag.couleur}'
+                                        border: `1px solid ${tag.couleur}`
                                       }}
                                       onClick={() => removeTag(tagId)}
                                     >
@@ -1132,7 +1130,7 @@ function BooksPageContent() {
                           <Input
                             id="auteur-filter"
                             type="text"
-                            placeholder="Nom de l'auteur"
+                            placeholder="Nom de l"auteur'
                             value={filters.auteur}
                             onChange={(e) => updateFilters({ auteur: e.target.value })}
                             className="h-11 md:h-9 text-base md:text-sm"
@@ -1246,7 +1244,7 @@ function BooksPageContent() {
               {/* Compteur de résultats */}
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-foreground font-medium">
-                  <strong>{searchInfo?.total_results || books.length}</strong> livre{(searchInfo?.total_results || books.length) > 1 ? 's' : ''} trouvé{(searchInfo?.total_results || books.length) > 1 ? 's' : ''}
+                  <strong>{searchInfo?.total_results || books.length}</strong> livre{(searchInfo?.total_results || books.length) > 1 ? "s" : "'} trouvé{(searchInfo?.total_results || books.length) > 1 ? 's' : "`}
                 </span>
                 {booksQuery.isFetching && (
                   <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -1260,7 +1258,7 @@ function BooksPageContent() {
                   <Badge 
                     variant="secondary" 
                     className="bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 cursor-pointer gap-1"
-                    onClick={() => setSearchInput('')}
+                    onClick={() => setSearchInput("")}
                   >
                     Recherche: "{debouncedSearch}"
                     <X className="w-3 h-3" />
@@ -1268,11 +1266,11 @@ function BooksPageContent() {
                 )}
 
                 {/* Filtre de statut */}
-                {filters.statut !== 'ALL' && (
+                {filters.statut !== "ALL" && (
                   <Badge 
                     variant="secondary" 
                     className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50 cursor-pointer gap-1"
-                    onClick={() => updateFilters({ statut: 'ALL' })}
+                    onClick={() => updateFilters({ statut: "ALL" })}
                   >
                     Statut: {statutOptions.find(s => s.value === filters.statut)?.label}
                     <X className="w-3 h-3" />
@@ -1280,13 +1278,13 @@ function BooksPageContent() {
                 )}
 
                 {/* Filtre de genre */}
-                {filters.genre !== 'ALL' && (
+                {filters.genre !== "ALL" && (
                   <Badge 
                     variant="secondary" 
                     className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 cursor-pointer gap-1"
-                    onClick={() => updateFilters({ genre: 'ALL' })}
+                    onClick={() => updateFilters({ genre: "ALL" })}
                   >
-                    Genre: {categories.find((c: any) => c.id === filters.genre)?.nom || 'Sélectionné'}
+                    Genre: {categories.find((c: any) => c.id === filters.genre)?.nom || "Sélectionné"}
                     <X className="w-3 h-3" />
                   </Badge>
                 )}
@@ -1299,21 +1297,21 @@ function BooksPageContent() {
                     onClick={() => updateFilters({ tags: [] })}
                   >
                     {filters.tags.length === 1
-                      ? `Tag: ${tags.find((t: any) => t.id === filters.tags[0])?.nom || 'Sélectionné'}'
-                      : 'Tags (${filters.tags.length})'
+                      ? `Tag: ${tags.find((t: any) => t.id === filters.tags[0])?.nom || `Sélectionné`}`
+                      : `Tags (${filters.tags.length})`
                     }
                     <X className="w-3 h-3" />
                   </Badge>
                 )}
 
                 {/* Filtre collection */}
-                {filters.collection !== 'ALL' && (
+                {filters.collection !== "ALL" && (
                   <Badge
                     variant="secondary"
                     className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 cursor-pointer gap-1"
-                    onClick={() => updateFilters({ collection: 'ALL' })}
+                    onClick={() => updateFilters({ collection: "ALL" })}
                   >
-                    Collection: {collectionsQuery.data?.data?.find((c: any) => c.id === filters.collection)?.nom || 'Sélectionnée'}
+                    Collection: {collectionsQuery.data?.data?.find((c: any) => c.id === filters.collection)?.nom || "Sélectionnée"}
                     <X className="w-3 h-3" />
                   </Badge>
                 )}
@@ -1323,7 +1321,7 @@ function BooksPageContent() {
                   <Badge 
                     variant="secondary" 
                     className="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-900/50 cursor-pointer gap-1"
-                    onClick={() => updateFilters({ auteur: '' })}
+                    onClick={() => updateFilters({ auteur: "" })}
                   >
                     Auteur: {filters.auteur}
                     <X className="w-3 h-3" />
@@ -1355,7 +1353,7 @@ function BooksPageContent() {
                 )}
 
                 {/* Bouton "Effacer tout" */}
-                {(debouncedSearch || filters.statut !== 'ALL' || filters.genre !== 'ALL' || 
+                {(debouncedSearch || filters.statut !== "ALL" || filters.genre !== "ALL' || 
                   filters.tags.length > 0 || filters.auteur || filters.note_min > 0 || 
                   filters.note_max < 10 || filters.favoritesOnly || filters.rythme !== 'ALL' ||
                   filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
@@ -1365,7 +1363,7 @@ function BooksPageContent() {
                     size="sm"
                     onClick={() => {
                       resetFilters();
-                      setSearchInput('');
+                      setSearchInput("");
                     }}
                     className="h-7 px-2 text-gray-500 hover:text-gray-700 text-xs"
                   >
@@ -1378,9 +1376,9 @@ function BooksPageContent() {
 
             {/* Loading with Skeletons */}
             {booksQuery.isLoading && !booksQuery.data && (
-              <div className={viewMode === 'grid'
+              <div className={viewMode === "grid"
                 ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6'
-                : 'space-y-4'
+                : "space-y-4"
               }>
                 {Array.from({ length: 12 }).map((_, i) => (
                   <BookSkeleton key={i} viewMode={viewMode} />
@@ -1415,9 +1413,8 @@ function BooksPageContent() {
                   </div>
                 ) : (
                   <motion.div 
-                    className={viewMode === 'grid' 
-                      ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6'
-                      : 'space-y-4'
+                    className={viewMode === "grid" 
+                      ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6' : 'space-y-4'
                     }
                     initial="hidden"
                     animate="visible"
@@ -1434,16 +1431,16 @@ function BooksPageContent() {
                             whileHover="hover"
                             layout
                             transition={{ delay: index * 0.05 }}
-                            className="relative group"
+                            className="relative group`
                           >
 
-                            <Link href={'/books/${book.id}'}>
+                            <Link href={`/books/${book.id}`}>
                               <Card
                                 className={`overflow-hidden cursor-pointer bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
                                   viewMode === 'grid' ? 'book-card-grid' : 'h-32 flex'
-                                } !p-0 group-hover:scale-105 transition-all duration-300'}
+                                } !p-0 group-hover:scale-105 transition-all duration-300`}
                                 style={{
-                                  borderRadius: '20px',
+                                  borderRadius: `20px',
                                   transition: 'all 0.3s ease'
                                 }}
                                 onMouseEnter={(e) => {
@@ -1455,28 +1452,28 @@ function BooksPageContent() {
                                   e.currentTarget.style.borderColor = 'rgba(139, 21, 56, 0.1)';
                                 }}
                               >
-                                {viewMode === 'grid' ? (
+                                {viewMode === 'grid` ? (
                                   /* Vue grille : Structure optimale avec ratio 2:3 */
                                   <>
                                     {/* Bloc média avec ratio 2:3 fixe */}
                                     <div className="book-cover-container">
                                       {/* Placeholder/fallback avec même ratio - toujours visible au début */}
                                       <div className="book-cover-placeholder">
-                                        <Book className="w-12 h-12 text-purple-400" />
+                                        <Book className="w-12 h-12 text-purple-400` />
                                       </div>
 
                                       {book.image_couverture ? (
                                         <img
                                           src={book.image_couverture}
-                                          alt={'${book.titre} — ${book.auteur}'}
+                                          alt={`${book.titre}`— ${book.auteur}`}
                                           className="book-cover-image opacity-0"
-                                          loading={index < 6 ? 'eager' : 'lazy'}
+                                          loading={index < 6 ? "eager" : "lazy"}
                                           onLoad={(e) => {
                                             const target = e.target as HTMLImageElement;
-                                            target.style.opacity = '1';
+                                            target.style.opacity="1";
                                             const placeholder = target.previousElementSibling as HTMLElement;
                                             if (placeholder) {
-                                              placeholder.style.opacity = '0';
+                                              placeholder.style.opacity = `0';
                                               setTimeout(() => {
                                                 placeholder.style.display = 'none';
                                               }, 300);
@@ -1509,7 +1506,7 @@ function BooksPageContent() {
                                       <div className="flex items-center justify-between text-xs">
                                         <div className="flex items-center gap-2 text-foreground/60">
                                           {book.note_generale > 0 && (
-                                            <span className="flex items-center gap-0.5" title="Note générale" style={{ color: '#B8860B' }}>
+                                            <span className="flex items-center gap-0.5" title="Note générale" style={{ color: "#B8860B` }}>
                                               <Star className="w-3 h-3 fill-current" />
                                               {book.note_generale}
                                             </span>
@@ -1532,24 +1529,24 @@ function BooksPageContent() {
                                   <CardContent className="!p-0 h-full flex">
                                     <div className="flex gap-4 p-4 h-full w-full">
                                       {/* Vignette 2:3 à gauche */}
-                                      <div className="w-16 flex-shrink-0 relative overflow-hidden rounded" style={{ aspectRatio: '2/3' }}>
+                                      <div className="w-16 flex-shrink-0 relative overflow-hidden rounded" style={{ aspectRatio: "2/3` }}>
                                         {book.image_couverture ? (
                                           <img 
                                             src={book.image_couverture} 
-                                            alt={'${book.titre} — ${book.auteur}'}
+                                            alt={`${book.titre}`— ${book.auteur}`}
                                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                            loading="lazy"
+                                            loading= `lazy`
                                             onError={(e) => {
                                               const target = e.target as HTMLImageElement;
-                                              target.src = '';
-                                              target.style.display = 'none';
+                                              target.src = `;
+                                              target.style.display = `none`;
                                               const placeholder = target.nextElementSibling as HTMLElement;
-                                              if (placeholder) placeholder.style.display = 'flex';
+                                              if (placeholder) placeholder.style.display = `flex`;
                                             }}
                                           />
                                         ) : null}
                                         
-                                        <div className={`absolute inset-0 bg-muted flex items-center justify-center ${book.image_couverture ? 'hidden' : ''}'}>
+                                        <div className={`absolute inset-0 bg-muted flex items-center justify-center ${book.image_couverture ? 'hidden' : '"}'}>
                                           <Book className="w-4 h-4 text-foreground/40" />
                                         </div>
 
@@ -1572,7 +1569,7 @@ function BooksPageContent() {
                                         <div className="flex items-center justify-between">
                                           <div className="flex items-center gap-3 text-sm text-foreground/60">
                                             {book.note_generale > 0 && (
-                                              <span className="flex items-center gap-1" title="Note générale" style={{ color: '#B8860B' }}>
+                                              <span className="flex items-center gap-1" title="Note générale" style={{ color: "#B8860B` }}>
                                                 <Star className="w-3 h-3 fill-current" />
                                                 {book.note_generale}
                                               </span>
@@ -1591,14 +1588,13 @@ function BooksPageContent() {
                                             }}
                                             className="p-1 rounded-full hover:bg-background/50 transition-colors"
                                             title={bookIsFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
-                                            aria-label={bookIsFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+                                            aria-label={bookIsFavorite ? "Retirer des favoris" : `Ajouter aux favoris`}
                                           >
                                             <Heart
                                               className={`w-4 h-4 transition-colors ${
                                                 bookIsFavorite
-                                                  ? 'fill-red-500 text-red-500'
-                                                  : 'text-gray-600 hover:text-red-500'
-                                              }'}
+                                                  ? 'fill-red-500 text-red-500' : 'text-gray-600 hover:text-red-500'
+                                              }`}
                                             />
                                           </button>
                                         </div>
@@ -1685,7 +1681,7 @@ function BooksPageContent() {
                     {/* Info pagination */}
                     <div className="ml-4 text-sm text-foreground/70">
                       Page {pagination.page} sur {pagination.totalPages}
-                      ({pagination.totalCount} livre{pagination.totalCount > 1 ? 's' : ''} au total)
+                      ({pagination.totalCount} livre{pagination.totalCount > 1 ? "s" : ""} au total)
                     </div>
                   </div>
                 )}
@@ -1704,11 +1700,11 @@ function BooksPageContent() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-0 md:p-4"
             style={{
-              height: '100vh',
-              height: '100dvh',
+              height: "100vh",
+              height: '100dvh",
               background: 'rgba(0, 0, 0, 0.8)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)"
             }}
             onClick={() => setIsMobileFiltersOpen(false)}
           >
@@ -1723,7 +1719,7 @@ function BooksPageContent() {
                 maxHeight: '100vh',
                 maxHeight: '100dvh',
                 background: 'var(--background)',
-                position: 'relative'
+                position: "relative"
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -1751,30 +1747,29 @@ function BooksPageContent() {
 
                   {/* Favoris */}
                   <div className="space-y-3">
-                    <Label className="text-base font-medium">Affichage</Label>
+                    <Label className="text-base font-medium`>Affichage</Label>
                     <button
                       onClick={handleFavoritesFilter}
                       disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
                       className={`w-full p-4 rounded-xl transition-all duration-300 flex items-center justify-between disabled:opacity-50 disabled:cursor-not-allowed ${
                         filters.favoritesOnly
-                          ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg'
-                          : 'bg-muted hover:bg-muted/80 border border-border'
-                      }' }
+                          ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg' : 'bg-muted hover:bg-muted/80 border border-border'
+                      }` }
                     >
-                      <div className="flex items-center gap-3">
-                        <Heart className={`w-5 h-5 ${filters.favoritesOnly ? 'fill-current' : 'text-primary'}' } />
+                      <div className=`flex items-center gap-3`>
+                        <Heart className={`w-5 h-5 ${filters.favoritesOnly ? `fill-current" : "text-primary"}` } />
                         <div className="text-left">
-                          <div className="font-medium">
-                            {filters.favoritesOnly ? 'Mes favoris (${favorites.size})' : 'Afficher mes favoris'}
+                          <div className="font-medium`>
+                            {filters.favoritesOnly ? `Mes favoris (${favorites.size})` : `Afficher mes favoris"}
                           </div>
                           <div className="text-sm opacity-75">
-                            {filters.favoritesOnly ? 'Affichage des favoris uniquement' : 'Afficher tous les livres'}
+                            {filters.favoritesOnly ? "Affichage des favoris uniquement" : "Afficher tous les livres`}
                           </div>
                         </div>
                       </div>
                       <div className={`w-5 h-5 rounded-full border-2 ${
-                        filters.favoritesOnly ? 'bg-background border-primary' : 'border-primary'
-                      }'}>
+                        filters.favoritesOnly ? `bg-background border-primary' : 'border-primary'
+                      }`}>
                         {filters.favoritesOnly && (
                           <div className="w-full h-full rounded-full bg-primary" />
                         )}
@@ -1805,16 +1800,16 @@ function BooksPageContent() {
 
                       <div className="flex gap-2">
                         <Button
-                          variant={filters.order === 'asc' ? 'default' : 'outline'}
-                          onClick={() => updateFilters({ order: 'asc' })}
+                          variant={filters.order === "asc" ? "default" : "outline"}
+                          onClick={() => updateFilters({ order: "asc" })}
                           className="flex-1 h-12"
                         >
                           <SortAsc className="w-4 h-4 mr-2" />
                           Croissant
                         </Button>
                         <Button
-                          variant={filters.order === 'desc' ? 'default' : 'outline'}
-                          onClick={() => updateFilters({ order: 'desc' })}
+                          variant={filters.order === "desc" ? "default" : "outline"}
+                          onClick={() => updateFilters({ order: "desc" })}
                           className="flex-1 h-12"
                         >
                           <SortDesc className="w-4 h-4 mr-2" />
@@ -1829,16 +1824,16 @@ function BooksPageContent() {
                     <Label className="text-base font-medium">Vue</Label>
                     <div className="flex gap-2">
                       <Button
-                        variant={viewMode === 'grid' ? 'default' : 'outline'}
-                        onClick={() => setViewMode('grid')}
+                        variant={viewMode === "grid" ? "default" : "outline"}
+                        onClick={() => setViewMode("grid")}
                         className="flex-1 h-12"
                       >
                         <Grid className="w-4 h-4 mr-2" />
                         Grille
                       </Button>
                       <Button
-                        variant={viewMode === 'list' ? 'default' : 'outline'}
-                        onClick={() => setViewMode('list')}
+                        variant={viewMode === "list" ? "default" : "outline"}
+                        onClick={() => setViewMode("list")}
                         className="flex-1 h-12"
                       >
                         <List className="w-4 h-4 mr-2" />
@@ -1949,7 +1944,7 @@ function BooksPageContent() {
                       <Label className="text-sm text-muted-foreground">Auteur</Label>
                       <Input
                         type="text"
-                        placeholder="Nom de l'auteur"
+                        placeholder="Nom de l"auteur'
                         value={filters.auteur}
                         onChange={(e) => updateFilters({ auteur: e.target.value })}
                         className="h-11"
@@ -1959,7 +1954,7 @@ function BooksPageContent() {
                     {/* Tags Selection */}
                     <div className="space-y-2">
                       <Label className="text-sm text-muted-foreground">
-                        Tags ({filters.tags.length} sélectionné{filters.tags.length > 1 ? 's' : ''})
+                        Tags ({filters.tags.length} sélectionné{filters.tags.length > 1 ? "s" : ""})
                       </Label>
                       <Button
                         variant="outline"
@@ -1980,12 +1975,12 @@ function BooksPageContent() {
                             return (
                               <Badge
                                 key={tagId}
-                                className="text-xs cursor-pointer"
+                                className=`text-xs cursor-pointer`
                                 style={{
-                                  backgroundColor: tag.couleur + '20',
+                                  backgroundColor: tag.couleur + `20`,
                                   borderColor: tag.couleur,
                                   color: tag.couleur,
-                                  border: '1px solid ${tag.couleur}'
+                                  border: `1px solid ${tag.couleur}`
                                 }}
                                 onClick={() => removeTag(tagId)}
                               >
@@ -2055,13 +2050,13 @@ function BooksPageContent() {
               <div
                 className="border-t border-border"
                 style={{
-                  background: 'var(--background)',
-                  position: 'sticky',
+                  background: "var(--background)",
+                  position: "sticky",
                   bottom: 0,
                   zIndex: 100
                 }}
               >
-                <div className="p-4 md:p-6" style={{ background: 'var(--muted)' }}>
+                <div className="p-4 md:p-6" style={{ background: "var(--muted)" }}>
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
@@ -2082,10 +2077,10 @@ function BooksPageContent() {
                 <div
                   className="md:hidden"
                   style={{
-                    height: 'max(3rem, env(safe-area-inset-bottom, 3rem))',
-                    background: 'var(--background)',
-                    width: '100%',
-                    position: 'relative',
+                    height: "max(3rem, env(safe-area-inset-bottom, 3rem))",
+                    background: "var(--background)',
+                    width: "100%",
+                    position: "relative",
                     zIndex: 101
                   }}
                 />
@@ -2159,10 +2154,10 @@ function BooksPageContent() {
                           key={tagId}
                           className="text-sm cursor-pointer"
                           style={{ 
-                            backgroundColor: tag.couleur + '20',
+                            backgroundColor: tag.couleur + `20`,
                             borderColor: tag.couleur,
                             color: tag.couleur,
-                            border: '1px solid ${tag.couleur}'
+                            border: `1px solid ${tag.couleur}`
                           }}
                           onClick={() => removeTag(tagId)}
                         >
@@ -2177,37 +2172,37 @@ function BooksPageContent() {
 
               {/* Tags Grid */}
               <div className="p-3 md:p-4 overflow-y-auto max-h-80 md:max-h-96">
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-1 gap-2`>
                   {tags.map((tag: any) => {
                     const isSelected = filters.tags.includes(tag.id);
                     return (
                       <div 
                         key={tag.id} 
-                        className={'
+                        className={`
                           flex items-center justify-between p-4 md:p-3 rounded-lg cursor-pointer transition-all duration-200 touch-manipulation
                           ${isSelected
-                            ? 'bg-primary/10 border-2 border-primary/20 shadow-sm'
-                            : 'border-2 border-transparent hover:bg-muted hover:border-border active:bg-muted'
+                            ? `bg-primary/10 border-2 border-primary/20 shadow-sm`
+                            : "border-2 border-transparent hover:bg-muted hover:border-border active:bg-muted"
                           }
-                        '}
+"                       "}
                         onClick={() => handleTagToggle(tag.id)}
                       >
                         <div className="flex items-center space-x-3">
                           <div 
-                            className="w-4 h-4 rounded-full ring-2 ring-white shadow-sm" 
+                            className=`w-4 h-4 rounded-full ring-2 ring-white shadow-sm` 
                             style={{backgroundColor: tag.couleur}}
                           />
-                          <span className={`font-medium text-base md:text-sm ${isSelected ? 'text-primary' : 'text-foreground'}'}>
+                          <span className={`font-medium text-base md:text-sm ${isSelected ? `}text-primary` : `text-foreground`}`}>
                             {tag.nom}
                           </span>
                         </div>
-                        <div className={'
+                        <div className={`
                           w-7 h-7 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center transition-all
                           ${isSelected
-                            ? 'bg-primary border-primary'
-                            : 'border-muted-foreground hover:border-primary'
+                            ? `bg-primary border-primary`
+                            : `border-muted-foreground hover:border-primary`
                           }
-                        '}>
+"                       "}>
                           {isSelected && (
                             <motion.div 
                               className="w-3.5 h-3.5 md:w-3 md:h-3 bg-background rounded-full" 
@@ -2251,7 +2246,7 @@ export default function BooksPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-foreground/70">Chargement du catalogue...</p>
+          <p className="text-foreground/70`>Chargement du catalogue...</p>
         </div>
       </div>
     }>

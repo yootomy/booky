@@ -9,44 +9,44 @@ interface EncoreEnvieFooterProps {}
 
 const navigationLinks = [
   {
-    title: 'Genres',
-    description: 'Par atmosphères & univers',
-    href: '/books?filter=genre',
+    title: "Genres",
+    description: "Par atmosphères & univers",
+    href: "/books?filter=genre",
     icon: BookOpen,
     color: '#8B1538'
   },
   {
-    title: 'Tropes',
-    description: 'Vos obsessions favorites',
-    href: '/books?filter=trope',
+    title: "Tropes",
+    description: "Vos obsessions favorites",
+    href: "/books?filter=trope",
     icon: Tag,
     color: '#6B4C7B'
   },
   {
-    title: 'Collections',
-    description: 'Sélections éditorialisées',
-    href: '/collections',
+    title: "Collections",
+    description: "Sélections éditorialisées",
+    href: "/collections",
     icon: Crown,
     color: '#B8860B'
   },
   {
-    title: 'Auteurs',
-    description: 'Plumes qui marquent',
-    href: '/authors',
+    title: "Auteurs",
+    description: "Plumes qui marquent",
+    href: "/authors",
     icon: Users,
     color: '#059669'
   },
   {
-    title: 'Favoris',
-    description: 'Coups de cœur partagés',
-    href: '/books?sort=favorites',
+    title: "Favoris",
+    description: "Coups de cœur partagés",
+    href: "/books?sort=favorites",
     icon: Heart,
     color: '#DC2626'
   },
   {
-    title: 'Questions',
-    description: 'Débats & échanges',
-    href: '/questions',
+    title: "Questions",
+    description: "Débats & échanges",
+    href: "/questions",
     icon: Sparkles,
     color: '#7C2D12'
   }
@@ -68,7 +68,7 @@ function NavigationCard({ link, index }: { link: typeof navigationLinks[0]; inde
           <div
             className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
             style={{
-              backgroundColor: '${link.color}15',
+              backgroundColor: `${link.color}15`,
               color: link.color
             }}
           >
@@ -79,7 +79,7 @@ function NavigationCard({ link, index }: { link: typeof navigationLinks[0]; inde
           <h3
             className="font-bold text-lg mb-2 group-hover:text-primary transition-colors duration-300 text-foreground"
             style={{
-              fontFamily: 'Playfair Display, serif'
+              fontFamily: "Playfair Display, serif"
             }}
           >
             {link.title}

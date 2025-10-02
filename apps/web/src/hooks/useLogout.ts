@@ -27,7 +27,7 @@ export const useLogout = (): UseLogoutReturn => {
         router.push('/?message=À bientôt !');
       }
     } catch (error) {
-      console.error('Logout hook error:', error);
+      console.error("Logout hook error: ", error);
       // Même en cas d'erreur, rediriger vers la page d'accueil
       router.push('/');
     } finally {

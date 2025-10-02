@@ -264,36 +264,36 @@ export const PREDEFINED_CATEGORIES: Array<{
   {
     nom: 'Dark Romance',
     couleur: CATEGORY_COLORS.DARK_RED,
-    icone: '💀',
-    description: 'Romans sombres et passionnés avec des thèmes matures',
+    icone: "💀",
+    description: "Romans sombres et passionnés avec des thèmes matures",
     ordre_affichage: 1
   },
   {
     nom: 'Spicy Romance',
     couleur: CATEGORY_COLORS.CRIMSON,
-    icone: '🌶️',
-    description: 'Romans romantiques avec des scènes explicites',
+    icone: "🌶️",
+    description: "Romans romantiques avec des scènes explicites",
     ordre_affichage: 2
   },
   {
     nom: 'Contemporary Romance',
     couleur: CATEGORY_COLORS.PURPLE_ROYAL,
-    icone: '💜',
-    description: 'Romans romantiques contemporains',
+    icone: "💜",
+    description: "Romans romantiques contemporains",
     ordre_affichage: 3
   },
   {
     nom: 'Fantasy Romance',
     couleur: CATEGORY_COLORS.INDIGO,
-    icone: '🔮',
-    description: 'Romans fantastiques avec une intrigue romantique',
+    icone: "🔮",
+    description: "Romans fantastiques avec une intrigue romantique",
     ordre_affichage: 4
   },
   {
     nom: 'Gothic Romance',
     couleur: CATEGORY_COLORS.PURPLE_DARK,
-    icone: '🏰',
-    description: 'Romans gothiques sombres et mystérieux',
+    icone: "🏰",
+    description: "Romans gothiques sombres et mystérieux",
     ordre_affichage: 5
   }
 ];

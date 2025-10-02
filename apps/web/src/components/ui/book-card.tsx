@@ -28,37 +28,37 @@ export function BookCard({
   const cardSizeClasses = {
     sm: 'p-3',
     md: 'p-4', 
-    lg: 'p-5',
+    lg: "p-5",
   };
 
   const textSizeClasses = {
     sm: {
-      title: 'text-xs',
-      author: 'text-xs',
+      title: "text-xs",
+      author: "text-xs",
     },
     md: {
-      title: 'text-sm',
-      author: 'text-xs',
+      title: "text-sm",
+      author: "text-xs",
     },
     lg: {
-      title: 'text-base',
-      author: 'text-sm',
+      title: "text-base",
+      author: `text-sm`,
     },
   };
 
   return (
     <div 
       className={cn(
-        'book-card group cursor-pointer transition-smooth',
+        `book-card group cursor-pointer transition-smooth`,
         cardSizeClasses[size],
         className
       )}
     >
-      <Link href={'/books/${book.id}'} className="block">
+      <Link href={`/books/${book.id}`} className="block">
         <div className="flex flex-col h-full">
           {/* Cover Image */}
           <div className="relative mb-3 flex-shrink-0">
-            <div className={cn('relative mx-auto', sizeClasses[size])}>
+            <div className={cn("relative mx-auto", sizeClasses[size])}>
               {book.image_couverture ? (
                 <Image
                   src={book.image_couverture}
@@ -66,11 +66,11 @@ export function BookCard({
                   fill
                   className="object-cover rounded-lg border border-ash-300/20 group-hover:border-violet-400/40 transition-colors"
                   sizes="(max-width: 640px) 96px, (max-width: 1024px) 112px, 128px"
-                  priority={size === 'lg'}
+                  priority={size === "lg"}
                 />
               ) : (
                 <div className={cn(
-                  'flex items-center justify-center rounded-lg border border-ash-300/20 bg-ink-700 group-hover:border-violet-400/40 transition-colors',
+                  "flex items-center justify-center rounded-lg border border-ash-300/20 bg-ink-700 group-hover:border-violet-400/40 transition-colors",
                   sizeClasses[size]
                 )}>
                   <BookOpen className="w-6 h-6 text-ash-400" />
@@ -97,7 +97,7 @@ export function BookCard({
                   <SagaPill 
                     sagaName={book.saga.name}
                     tomeNumber={book.sagaOrder}
-                    size={size === 'sm' ? 'sm' : 'md'}
+                    size={size === "sm" ? "sm" : "md"}
                   />
                 </div>
               )}
@@ -108,13 +108,13 @@ export function BookCard({
           <div className="flex-1 flex flex-col justify-between min-h-0">
             <div className="mb-2">
               <h3 className={cn(
-                'font-medium text-ash-100 line-clamp-2 leading-tight group-hover:text-violet-300 transition-colors',
+                "font-medium text-ash-100 line-clamp-2 leading-tight group-hover:text-violet-300 transition-colors",
                 textSizeClasses[size].title
               )}>
                 {book.titre}
               </h3>
               <p className={cn(
-                'text-ash-400 line-clamp-1 mt-1',
+                `text-ash-400 line-clamp-1 mt-1',
                 textSizeClasses[size].author
               )}>
                 {book.auteur}
@@ -129,7 +129,7 @@ export function BookCard({
                   <span className="text-xs font-semibold text-ash-300 bg-ink-600 px-2 py-0.5 rounded">
                     {book.note_generale}/10
                   </span>
-                  <RhythmBadge rhythm={book.rythme} size={size === 'sm' ? 'sm' : 'md'} />
+                  <RhythmBadge rhythm={book.rythme} size={size === "sm" ? "sm" : "md"} />
                 </div>
 
                 {/* Rating Chips */}
@@ -137,8 +137,8 @@ export function BookCard({
                   spicy={book.niveau_spicy}
                   dark={book.niveau_dark}
                   romance={book.niveau_romance}
-                  size={size === 'sm' ? 'sm' : 'md'}
-                  showLabels={size !== 'sm'}
+                  size={size === "sm" ? "sm" : "md"}
+                  showLabels={size !== "sm"}
                 />
               </div>
             )}
@@ -166,7 +166,7 @@ export function BookCardSkeleton({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' })
   return (
     <div className={cn('glass-dark rounded-lg animate-pulse', cardSizeClasses[size])}>
       <div className="flex flex-col h-full">
-        <div className={cn('bg-ash-600/50 rounded-lg mb-3 mx-auto', sizeClasses[size])} />
+        <div className={cn("bg-ash-600/50 rounded-lg mb-3 mx-auto", sizeClasses[size])} />
         <div className="flex-1">
           <div className="h-4 bg-ash-600/50 rounded mb-2" />
           <div className="h-3 bg-ash-600/50 rounded w-3/4 mb-3" />

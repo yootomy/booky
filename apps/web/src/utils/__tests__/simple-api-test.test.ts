@@ -79,17 +79,17 @@ describe('Error Handler Tests', () => {
 // Test 3: Vérification de la configuration des URL API
 describe('API Configuration Tests', () => {
   test('should validate API endpoints configuration', () => {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001`;
     
     const endpoints = {
-      auth: '${API_BASE_URL}/api/auth',
-      books: '${API_BASE_URL}/api/books', 
-      categories: '${API_BASE_URL}/api/categories',
-      tags: '${API_BASE_URL}/api/tags',
-      dashboard: '${API_BASE_URL}/api/dashboard'
+      auth: `${API_BASE_URL}/api/auth`,
+      books: `${API_BASE_URL}/api/books`, 
+      categories: `${API_BASE_URL}/api/categories`,
+      tags: `${API_BASE_URL}/api/tags`,
+      dashboard: `${API_BASE_URL}/api/dashboard`
     };
     
-    expect(endpoints.auth).toContain('/api/auth');
+    expect(endpoints.auth).toContain(`/api/auth');
     expect(endpoints.books).toContain('/api/books');
     expect(endpoints.categories).toContain('/api/categories');
     expect(endpoints.tags).toContain('/api/tags');

@@ -54,7 +54,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
   const [currentStep, setCurrentStep] = useState(STEPS.INTRO);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState("");
   const [comments, setComments] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -75,7 +75,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
     queryKey: ['categories'],
     queryFn: async () => {
       const response = await apiClient.get('/api/categories');
-      if (!response.ok) throw new Error('Failed to fetch categories');
+      if (!response.ok) throw new Error("Failed to fetch categories");
       return response.json();
     },
     enabled: isOpen
@@ -86,7 +86,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
     queryKey: ['tags-romance'],
     queryFn: async () => {
       const response = await apiClient.get('/api/tags');
-      if (!response.ok) throw new Error('Failed to fetch tags');
+      if (!response.ok) throw new Error("Failed to fetch tags");
       const result = await response.json();
       // Filter for romance-related tags
       return {
@@ -178,8 +178,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
       alert('Votre demande a été envoyée à Bruna ! Elle vous répondra bientôt avec ses recommandations. 📚✨');
 
     } catch (error) {
-      console.error('Erreur envoi demande conseil:', error);
-      alert('Erreur lors de l\'envoi de votre demande. Veuillez réessayer.');
+      console.error("Erreur envoi demande conseil: ", error);
+      alert("Erreur lors de l\"envoi de votre demande. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
     }
@@ -245,8 +245,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                       selectedCategories.includes(category.id)
                         ? 'ring-2 ring-primary/50 bg-primary/10'
                         : 'bg-card/60'
-                    } border border-border hover:bg-card/80'}
-                    style={{ borderRadius: '12px' }}
+                    } border border-border hover:bg-card/80`}
+                    style={{ borderRadius: "12px" }}
                     onClick={() => handleCategoryToggle(category.id)}
                   >
                     <CardContent className="p-3 text-center">
@@ -282,9 +282,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                   whileTap={{ scale: 0.95 }}
                 >
                   <div
-                    className={`cursor-pointer transition-all duration-300 p-2 text-center w-full rounded-lg border ${
-                      selectedTags.includes(tag.id) ? 'ring-1 ring-offset-0' : ''
-                    }`}
+                    className={`cursor-pointer transition-all duration-300 p-2 text-center w-full rounded-lg border ${selectedTags.includes(tag.id) ? 'ring-1 ring-offset-0' : ''}`}
                     style={{
                       backgroundColor: selectedTags.includes(tag.id)
                         ? tag.couleur
@@ -328,7 +326,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                 placeholder="Votre prénom..."
                 className="text-center py-3 bg-background border-2 border-primary/20 text-foreground focus:border-primary/40"
                 style={{
-                  borderRadius: '12px'
+                  borderRadius: "12px"
                 }}
               />
               <p className="text-xs text-center text-foreground/70">
@@ -356,7 +354,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
               placeholder="Ex: Envie d'émotion, d'un anti-héros irrésistible..."
               className="min-h-24 bg-background border-2 border-primary/20 text-foreground focus:border-primary/40 text-sm"
               style={{
-                borderRadius: '12px'
+                borderRadius: "12px"
               }}
             />
           </div>
@@ -440,7 +438,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex items-center justify-center p-4"
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
+        style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
         onClick={onClose}
       >
         <motion.div
@@ -450,7 +448,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
           className="relative w-full max-w-lg max-h-[85vh] bg-card/95 backdrop-blur-xl border border-border shadow-2xl"
           style={{
-            borderRadius: '16px'
+            borderRadius: "16px"
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -465,8 +463,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                   <div
                     className="h-1 rounded-full transition-all duration-500"
                     style={{
-                      width: '${(currentStep / STEPS.CONFIRMATION) * 100}%',
-                      background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'
+                      width: `${(currentStep / STEPS.CONFIRMATION) * 100}%`,
+                      background: `linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)`
                     }}
                   />
                 </div>
@@ -541,8 +539,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                 className="flex items-center gap-2 px-6"
                 style={{
                   background: canProceedToNext()
-                    ? 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'
-                    : '#ccc',
+                    ? "linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)" : "#ccc",
                   color: 'white'
                 }}
               >

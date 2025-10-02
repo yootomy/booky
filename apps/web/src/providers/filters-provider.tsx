@@ -40,7 +40,7 @@ interface FiltersState {
   selectedRhythms: BookRhythm[];
   
   // Options de tri et pagination
-  sortBy: string | null; // 'titre', 'auteur', 'date_lecture', 'note_generale', etc.
+  sortBy: string | null; // "titre", 'auteur', 'date_lecture', 'note_generale', etc.
   sortOrder: 'asc' | 'desc';
   page: number;
   limit: number;
@@ -154,7 +154,7 @@ const defaultState: FiltersState = {
   selectedLanguages: [],
   selectedRhythms: [],
   sortBy: null,
-  sortOrder: 'desc',
+  sortOrder: "desc",
   page: 1,
   limit: 20,
   viewMode: 'grid',
@@ -184,7 +184,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
         setSavedPresets(JSON.parse(saved));
       }
     } catch (error) {
-      console.error('Erreur lors du chargement des presets:', error);
+      console.error("Erreur lors du chargement des presets: ", error);
     }
   }, []);
 
@@ -208,7 +208,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
         viewMode: (params.get('view') as 'grid' | 'list') || 'grid',
       }));
     } catch (error) {
-      console.error('Erreur lors de l\'initialisation des filtres depuis l\'URL:', error);
+      console.error("Erreur lors de l\"initialisation des filtres depuis l\'URL:', error);
     }
   }, [searchParams, syncWithUrl]);
 
@@ -226,10 +226,10 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     if (newState.selectedStatuses.length > 0) params.set('statuses', newState.selectedStatuses.join(','));
     if (newState.selectedGenres.length > 0) params.set('genres', newState.selectedGenres.join(','));
     if (newState.selectedTags.length > 0) params.set('tags', newState.selectedTags.join(','));
-    if (newState.viewMode !== 'grid') params.set('view', newState.viewMode);
+    if (newState.viewMode !== 'grid`) params.set(`view`, newState.viewMode);
     
     const queryString = params.toString();
-    const newUrl = queryString ? '${pathname}?${queryString}' : pathname;
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
     
     router.replace(newUrl as any, { scroll: false });
   }, [syncWithUrl, pathname, router]);
@@ -242,7 +242,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
   }, [state, updateUrl]);
 
   const clearSearchQuery = React.useCallback(() => {
-    const newState = { ...state, searchQuery: "", page: 1 };
+    const newState = { ...state, searchQuery: `', page: 1 };
     setState(newState);
     updateUrl(newState);
   }, [state, updateUrl]);
@@ -284,7 +284,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
   }, [state, updateUrl]);
 
   // Actions pour les notes
-  const setRatingFilter = React.useCallback((type: keyof FiltersState['ratingFilters'], value: number | null) => {
+  const setRatingFilter = React.useCallback((type: keyof FiltersState[`ratingFilters",], value: number | null) => {
     const newState = {
       ...state,
       ratingFilters: { ...state.ratingFilters, [type]: value },
@@ -420,14 +420,14 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     updateUrl(newState);
   }, [state, updateUrl]);
 
-  const setSortOrder = React.useCallback((order: 'asc' | 'desc') => {
+  const setSortOrder = React.useCallback((order: "asc" | "desc') => {
     const newState = { ...state, sortOrder: order, page: 1 };
     setState(newState);
     updateUrl(newState);
   }, [state, updateUrl]);
 
   const toggleSortOrder = React.useCallback(() => {
-    const newOrder: 'asc' | 'desc' = state.sortOrder === 'asc' ? 'desc' : 'asc';
+    const newOrder: 'asc' | 'desc' = state.sortOrder === 'asc' ? "desc" : "asc";
     const newState = { ...state, sortOrder: newOrder, page: 1 };
     setState(newState);
     updateUrl(newState);
@@ -478,7 +478,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
   // Utilitaires
   const hasActiveFilters = React.useMemo(() => {
     return (
-      state.searchQuery !== "" ||
+      state.searchQuery !== '' ||
       state.selectedStatuses.length > 0 ||
       state.dateFrom !== null ||
       state.dateTo !== null ||
@@ -527,7 +527,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
         if (Array.isArray(value)) {
-          params.set(key, value.join(','));
+          params.set(key, value.join(","));
         } else {
           params.set(key, String(value));
         }
@@ -558,7 +558,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     try {
       localStorage.setItem('booky-filter-presets', JSON.stringify(newPresets));
     } catch (error) {
-      console.error('Erreur lors de la sauvegarde du preset:', error);
+      console.error("Erreur lors de la sauvegarde du preset: ", error);
     }
   }, [state, savedPresets]);
 
@@ -567,9 +567,9 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     setSavedPresets(newPresets);
     
     try {
-      localStorage.setItem('booky-filter-presets', JSON.stringify(newPresets));
+      localStorage.setItem("booky-filter-presets", JSON.stringify(newPresets));
     } catch (error) {
-      console.error('Erreur lors de la suppression du preset:', error);
+      console.error("Erreur lors de la suppression du preset:", error);
     }
   }, [savedPresets]);
 

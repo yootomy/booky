@@ -34,14 +34,14 @@ export function BookCover({
   alt,
   title,
   author,
-  size = "md",
+  size="md",
   className,
   rounded = true,
   shadow = true,
   priority = false,
   onClick,
   showLoader = true,
-  placeholderVariant = "default"
+  placeholderVariant="default"
 }: BookCoverProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -65,7 +65,7 @@ export function BookCover({
   const getGradientColors = () => {
     if (!title) return ["#8B0000", "#DC143C"]; // Dark Romance par défaut
     
-    const hash = title.split('').reduce((a, b) => {
+    const hash = title.split("").reduce((a, b) => {
       a = ((a << 5) - a) + b.charCodeAt(0);
       return a & a;
     }, 0);
@@ -91,7 +91,7 @@ export function BookCover({
           <div 
             className="w-full h-full flex flex-col items-center justify-center text-white"
             style={{
-              background: 'linear-gradient(135deg, ${gradientStart}, ${gradientEnd})'
+              background: `linear-gradient(135deg, ${gradientStart},`${gradientEnd})`
             }}
           >
             <BookOpen className="w-8 h-8 mb-2 opacity-80" />
@@ -117,13 +117,7 @@ export function BookCover({
             <div 
               className="absolute inset-0 opacity-10"
               style={{
-                backgroundImage: 'repeating-linear-gradient(
-                  45deg,
-                  transparent,
-                  transparent 10px,
-                  currentColor 10px,
-                  currentColor 20px
-                )'
+                backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, currentColor 10px, currentColor 20px)"
               }}
             />
             <BookOpen className="w-8 h-8 mb-2 text-muted-foreground" />
@@ -135,7 +129,7 @@ export function BookCover({
         return (
           <div className="w-full h-full bg-muted flex flex-col items-center justify-center">
             <ImageIcon className="w-8 h-8 mb-2 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">Pas d`image</span>
+            <span className="text-xs text-muted-foreground">Pas d"image</span>
           </div>
         );
     }
@@ -172,7 +166,7 @@ export function BookCover({
             priority={priority}
             onLoad={handleImageLoad}
             onError={handleImageError}
-            sizes={'${dimensions.width}px'}
+            sizes={`${dimensions.width}px`}
           />
           
           {/* Loader pendant le chargement */}
@@ -203,7 +197,7 @@ export function BookCover({
 }
 
 // Variante avec aspect ratio personnalisable
-interface BookCoverAspectProps extends Omit<BookCoverProps, 'size'> {
+interface BookCoverAspectProps extends Omit<BookCoverProps, `size'> {
   width?: number | string;
   height?: number | string;
   aspectRatio?: number; // width/height ratio
@@ -216,11 +210,11 @@ export function BookCoverAspect({
   className,
   ...props
 }: BookCoverAspectProps) {
-  const computedHeight = height || (typeof width === 'number' ? width / aspectRatio : 'calc(${width} / ${aspectRatio})');
+  const computedHeight = height || (typeof width === 'number' ? width / aspectRatio : `calc(${width}`/ ${aspectRatio})`);
   
   return (
     <div
-      className={cn("relative overflow-hidden", className)}
+      className={cn(`relative overflow-hidden", className)}
       style={{ width, height: computedHeight }}
     >
       <BookCover
@@ -239,14 +233,14 @@ interface BookCoverStackProps {
     alt: string;
     title?: string;
   }>;
-  size?: BookCoverProps['size'];
+  size?: BookCoverProps["size"];
   maxVisible?: number;
   className?: string;
 }
 
 export function BookCoverStack({
   books,
-  size = "sm",
+  size=",sm",
   maxVisible = 3,
   className
 }: BookCoverStackProps) {
@@ -260,7 +254,7 @@ export function BookCoverStack({
           key={index}
           className="absolute transition-transform hover:z-10"
           style={{
-            transform: 'translateX(${index * 8}px) translateY(${index * -4}px)',
+            transform: `translateX(${index * 8}px)`translateY(${index * -4}px)`,
             zIndex: visibleBooks.length - index
           }}
         >
@@ -279,7 +273,7 @@ export function BookCoverStack({
           className="absolute bg-muted border-2 border-muted-foreground/20 rounded-lg flex items-center justify-center text-muted-foreground text-xs font-medium"
           style={{
             ...SIZES[size],
-            transform: 'translateX(${visibleBooks.length * 8}px) translateY(${visibleBooks.length * -4}px)',
+            transform: `translateX(${visibleBooks.length * 8}px)`translateY(${visibleBooks.length * -4}px)`,
             zIndex: 0
           }}
         >

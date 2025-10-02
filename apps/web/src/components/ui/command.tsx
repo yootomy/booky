@@ -68,10 +68,10 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>(
     </div>
   )
 );
-Command.displayName = "Command";
+Command.displayName="Command";
 
 const CommandInput = React.forwardRef<HTMLInputElement, CommandInputProps>(
-  ({ className, placeholder = "Rechercher...", ...props }, ref) => (
+  ({ className, placeholder="Rechercher...", ...props }, ref) => (
     <div className="flex items-center border-b px-3">
       <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
       <input
@@ -86,7 +86,7 @@ const CommandInput = React.forwardRef<HTMLInputElement, CommandInputProps>(
     </div>
   )
 );
-CommandInput.displayName = "CommandInput";
+CommandInput.displayName="CommandInput";
 
 const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
   ({ children, className, ...props }, ref) => (
@@ -99,7 +99,7 @@ const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
     </div>
   )
 );
-CommandList.displayName = "CommandList";
+CommandList.displayName="CommandList";
 
 const CommandEmpty = React.forwardRef<HTMLDivElement, CommandEmptyProps>(
   ({ children, className, ...props }, ref) => (
@@ -112,7 +112,7 @@ const CommandEmpty = React.forwardRef<HTMLDivElement, CommandEmptyProps>(
     </div>
   )
 );
-CommandEmpty.displayName = "CommandEmpty";
+CommandEmpty.displayName="CommandEmpty";
 
 const CommandGroup = React.forwardRef<HTMLDivElement, CommandGroupProps>(
   ({ heading, children, className, ...props }, ref) => (
@@ -132,7 +132,7 @@ const CommandGroup = React.forwardRef<HTMLDivElement, CommandGroupProps>(
     </div>
   )
 );
-CommandGroup.displayName = "CommandGroup";
+CommandGroup.displayName="CommandGroup";
 
 const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
   ({ children, onSelect, disabled, className, ...props }, ref) => (
@@ -152,7 +152,7 @@ const CommandItem = React.forwardRef<HTMLDivElement, CommandItemProps>(
     </div>
   )
 );
-CommandItem.displayName = "CommandItem";
+CommandItem.displayName="CommandItem";
 
 export {
   Command,

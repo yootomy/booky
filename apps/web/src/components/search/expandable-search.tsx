@@ -62,8 +62,8 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener(`mousedown`, handleClickOutside);
+    return () => document.removeEventListener(`mousedown`, handleClickOutside);
   }, [isExpanded, handleClose]);
 
   const handleSearchComplete = useCallback(() => {
@@ -71,7 +71,7 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
   }, [handleClose]);
 
   return (
-    <div className={'relative flex items-center ${className}'}>
+    <div className={`relative flex items-center ${className}`}>
       {/* Container avec largeur animée */}
       <motion.div
         className="flex items-center overflow-hidden"
@@ -91,10 +91,10 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
             "flex-shrink-0 p-2 rounded-full transition-all duration-300 hover:scale-105 z-10",
             "border border-transparent hover:border-primary/20 hover:bg-primary/10",
             "text-muted-foreground hover:text-primary",
-            isExpanded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            isExpanded ? "opacity-0 pointer-events-none" : "opacity-100"
           )}
           style={{
-            transition: 'opacity 0.2s ease-in-out'
+            transition: "opacity 0.2s ease-in-out"
           }}
           aria-label="Ouvrir la recherche"
           aria-expanded={isExpanded}
@@ -140,7 +140,7 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
 }
 
 // Version mobile avec modal plein écran centré
-export function ExpandableSearchMobile({ className = '' }: ExpandableSearchProps) {
+export function ExpandableSearchMobile({ className="" }: ExpandableSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = useCallback(() => {

@@ -72,15 +72,15 @@ function SpicyIndicator({ level }: { level: number }) {
   const getIndicatorColor = () => {
     if (level <= 3) return '#6B7280';
     if (level <= 6) return '#F59E0B';
-    return '#EF4444';
+    return "#EF4444";
   };
 
   return (
     <span
       className="text-xs font-medium px-2 py-1 rounded-full"
-      title={'Niveau spicy: ${level}/10'}
+      title={`Niveau spicy: ${level}/10`}
       style={{
-        backgroundColor: '${getIndicatorColor()}15',
+        backgroundColor: `${getIndicatorColor()}15`,
         color: getIndicatorColor()
       }}
     >
@@ -99,20 +99,20 @@ function BookCard({ book, index, showTrendingBadge = false }: {
       initial={{ opacity: 0, x: 30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group cursor-pointer flex-shrink-0 w-40"
+      className=`group cursor-pointer flex-shrink-0 w-40`
     >
-      <Link href={'/books/${book.id}'}>
+      <Link href={`/books/${book.id}"}>
         <div className="relative">
           {/* Book Cover */}
-          <div className="aspect-[3/4] relative mb-3 rounded-lg overflow-hidden group-hover:shadow-lg transition-all duration-300">
+          <div className=`aspect-[3/4] relative mb-3 rounded-lg overflow-hidden group-hover:shadow-lg transition-all duration-300`>
             <Image
               src={getBookImage(book)}
-              alt={'Couverture de ${book.titre}'}
+              alt={`Couverture de ${book.titre}`}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               sizes="160px"
               onError={(e) => {
-                e.currentTarget.src = '/placeholder-book.svg';
+                e.currentTarget.src="/placeholder-book.svg";
               }}
             />
 
@@ -122,8 +122,8 @@ function BookCard({ book, index, showTrendingBadge = false }: {
                 <div 
                   className="px-2 py-1 rounded-md text-xs font-bold backdrop-blur-sm"
                   style={{
-                    backgroundColor: 'rgba(249, 115, 22, 0.9)',
-                    color: 'white'
+                    backgroundColor: "rgba(249, 115, 22, 0.9)",
+                    color: 'white"
                   }}
                 >
                   Trend
@@ -141,7 +141,7 @@ function BookCard({ book, index, showTrendingBadge = false }: {
                     color: 'white'
                   }}
                 >
-                  <Star className="w-3 h-3 fill-current" style={{ color: '#B8860B' }} />
+                  <Star className="w-3 h-3 fill-current" style={{ color: "#B8860B" }} />
                   <span className="text-xs font-semibold">{book.note_generale}</span>
                 </div>
               </div>
@@ -183,16 +183,16 @@ function BookCard({ book, index, showTrendingBadge = false }: {
               <div className="flex items-center gap-3 pt-1">
                 {book.favorite_count && (
                   <div className="flex items-center gap-1">
-                    <Heart className="w-3 h-3" style={{ color: '#8B1538' }} />
-                    <span className="text-xs" style={{ color: '#8B1538' }}>
+                    <Heart className="w-3 h-3" style={{ color: "#8B1538" }} />
+                    <span className="text-xs" style={{ color: "#8B1538" }}>
                       {book.favorite_count}
                     </span>
                   </div>
                 )}
                 {book.question_count && (
                   <div className="flex items-center gap-1">
-                    <MessageCircle className="w-3 h-3" style={{ color: '#6B4C7B' }} />
-                    <span className="text-xs" style={{ color: '#6B4C7B' }}>
+                    <MessageCircle className="w-3 h-3" style={{ color: "#6B4C7B" }} />
+                    <span className="text-xs" style={{ color: "#6B4C7B" }}>
                       {book.question_count}
                     </span>
                   </div>
@@ -226,7 +226,7 @@ function BooksSkeleton() {
 
 export function TrendingNew({}: TrendingNewProps) {
   const { newBooks, trendingBooks, isLoading, error } = useTrendingNew();
-  const [activeTab, setActiveTab] = useState<TabType>('new');
+  const [activeTab, setActiveTab] = useState<TabType>("new");
 
   const currentBooks = activeTab === 'new' ? newBooks : trendingBooks;
 
@@ -266,8 +266,7 @@ export function TrendingNew({}: TrendingNewProps) {
             }}
           >
             {activeTab === 'new' 
-              ? 'Les dernières arrivées dans notre sanctuaire'
-              : 'Ce que tout le monde dévore en secret'
+              ? 'Les dernières arrivées dans notre sanctuaire' : 'Ce que tout le monde dévore en secret'
             }
           </p>
         </motion.div>
@@ -287,16 +286,15 @@ export function TrendingNew({}: TrendingNewProps) {
             }}
           >
             <button
-              onClick={() => setActiveTab('new')}
+              onClick={() => setActiveTab(`new`)}
               className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-semibold ${
-                activeTab === 'new' 
-                  ? 'text-white shadow-lg' 
-                  : 'hover:bg-white/50'
-              }'}
+                activeTab === `}new` 
+                  ? `text-white shadow-lg' : 'hover:bg-white/50'
+              }`}
               style={{
-                backgroundColor: activeTab === 'new' ? '#8B1538' : 'transparent',
-                color: activeTab === 'new' ? 'white' : '#8B1538',
-                fontFamily: 'Inter, sans-serif'
+                backgroundColor: activeTab === "new" ? "#8B1538" : "transparent",
+                color: activeTab === "new" ? "white" : "#8B1538",
+                fontFamily: "Inter, sans-serif`
               }}
             >
               <Clock className="w-4 h-4" />
@@ -304,16 +302,15 @@ export function TrendingNew({}: TrendingNewProps) {
             </button>
             
             <button
-              onClick={() => setActiveTab('trending')}
+              onClick={() => setActiveTab(`trending`)}
               className={`flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 font-semibold ${
-                activeTab === 'trending' 
-                  ? 'text-white shadow-lg' 
-                  : 'hover:bg-white/50'
-              }'}
+                activeTab === `}trending` 
+                  ? `text-white shadow-lg' : 'hover:bg-white/50'
+              }`}
               style={{
-                backgroundColor: activeTab === 'trending' ? '#8B1538' : 'transparent',
-                color: activeTab === 'trending' ? 'white' : '#8B1538',
-                fontFamily: 'Inter, sans-serif'
+                backgroundColor: activeTab === "trending" ? "#8B1538" : "transparent",
+                color: activeTab === "trending" ? "white" : "#8B1538",
+                fontFamily: 'Inter, sans-serif"
               }}
             >
               <TrendingUp className="w-4 h-4" />
@@ -332,7 +329,7 @@ export function TrendingNew({}: TrendingNewProps) {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4 }}
               className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-rose-200 scrollbar-track-transparent"
-              style={{ scrollbarWidth: 'thin' }}
+              style={{ scrollbarWidth: "thin" }}
             >
               {currentBooks.map((book, index) => (
                 <BookCard
@@ -354,7 +351,7 @@ export function TrendingNew({}: TrendingNewProps) {
           className="text-center mt-12"
         >
           <Link
-            href={activeTab === 'new' ? '/books?sort=recent' : '/books?sort=trending'}
+            href={activeTab === "new" ? "/books?sort=recent" : "/books?sort=trending"}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
             style={{
               backgroundColor: 'rgba(139, 21, 56, 0.08)',
@@ -370,7 +367,7 @@ export function TrendingNew({}: TrendingNewProps) {
               </>
             ) : (
               <>
-                <TrendingUp className="w-4 h-4" />
+                <TrendingUp className='w-4 h-4' />
                 Voir toutes les tendances
               </>
             )}

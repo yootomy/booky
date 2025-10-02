@@ -21,13 +21,13 @@ export function ThemeToggle() {
     );
   }
 
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       className="h-9 w-9 rounded-full transition-all duration-300 hover:scale-105 border border-transparent hover:border-accent/20 hover:bg-accent/10"
     >
       {isDark ? (

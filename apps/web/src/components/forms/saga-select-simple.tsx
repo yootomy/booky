@@ -62,12 +62,12 @@ export function SimpleSagaSelect({
   value,
   onValueChange,
   onCreateSaga,
-  placeholder = "Sélectionnez une saga...",
+  placeholder="Sélectionnez une saga...",
   disabled = false,
   error
 }: SimpleSagaSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
   
   // Récupérer les sagas avec recherche ou liste complète
@@ -132,7 +132,7 @@ export function SimpleSagaSelect({
                     </Badge>
                     {selectedSaga.bookCount && selectedSaga.bookCount > 0 && (
                       <span className="text-xs text-muted-foreground">
-                        {selectedSaga.bookCount} tome{selectedSaga.bookCount > 1 ? 's' : ''}
+                        {selectedSaga.bookCount} tome{selectedSaga.bookCount > 1 ? "s" : ""}
                       </span>
                     )}
                   </div>

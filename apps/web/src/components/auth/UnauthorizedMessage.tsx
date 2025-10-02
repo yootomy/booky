@@ -37,7 +37,7 @@ export const UnauthorizedMessage: React.FC<UnauthorizedMessageProps> = ({
         <div className="space-y-2">
           {showLogin && (
             <Button
-              onClick={() => window.location.href = '/login'}
+              onClick={() => window.location.href="/login"}
               className="w-full"
             >
               <LogIn className="h-4 w-4 mr-2" />
@@ -47,7 +47,7 @@ export const UnauthorizedMessage: React.FC<UnauthorizedMessageProps> = ({
           
           {showRegister && (
             <Button
-              onClick={() => window.location.href = '/register'}
+              onClick={() => window.location.href="/register"}
               variant="outline"
               className="w-full"
             >

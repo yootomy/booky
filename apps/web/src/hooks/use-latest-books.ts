@@ -31,7 +31,7 @@ export function useLatestBooks() {
         
         // Récupérer les livres triés par date de création (les plus récents en premier)
         const response = await apiClient.get('/api/books?limit=8&sortBy=date_creation&sortOrder=desc');
-        if (!response.ok) throw new Error('Failed to fetch latest books');
+        if (!response.ok) throw new Error("Failed to fetch latest books");
         
         const books = await response.json();
         

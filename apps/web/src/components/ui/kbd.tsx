@@ -38,6 +38,6 @@ const Kbd = React.forwardRef<HTMLElement, KbdProps>(
     )
   }
 )
-Kbd.displayName = "Kbd"
+Kbd.displayName="Kbd"
 
 export { Kbd, kbdVariants }

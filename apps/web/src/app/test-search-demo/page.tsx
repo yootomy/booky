@@ -37,7 +37,7 @@ export default function SearchDemoPage() {
       const test = tests[i];
       setTestResults(prev => [
         ...prev.slice(0, i),
-        { ...test, status: 'running' },
+        { ...test, status: "running" },
         ...tests.slice(i + 1)
       ]);
 
@@ -55,7 +55,7 @@ export default function SearchDemoPage() {
           ...prev.slice(0, i),
           {
             ...test,
-            status: success ? 'success' : 'error',
+            status: success ? "success" : "error",
             message: success ? 'Test passé' : 'Erreur de test simulée',
             duration
           },
@@ -82,22 +82,22 @@ export default function SearchDemoPage() {
     switch (status) {
       case 'running':
         return <Clock className="h-4 w-4 animate-spin text-blue-500" />;
-      case 'success':
+      case "success":
         return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error':
+      case "error":
         return <AlertCircle className="h-4 w-4 text-red-500" />;
       default:
         return <div className="h-4 w-4 rounded-full bg-gray-300" />;
     }
   };
 
-  const getStatusBadge = (status: TestResult['status']) => {
+  const getStatusBadge = (status: TestResult["status"]) => {
     switch (status) {
       case 'running':
         return <Badge variant="secondary">En cours</Badge>;
-      case 'success':
+      case "success":
         return <Badge variant="default" className="bg-green-500">Réussi</Badge>;
-      case 'error':
+      case "error":
         return <Badge variant="destructive">Échec</Badge>;
       default:
         return <Badge variant="outline">En attente</Badge>;
@@ -185,7 +185,7 @@ export default function SearchDemoPage() {
                   disabled={isRunningTests}
                   size="sm"
                 >
-                  {isRunningTests ? 'Tests en cours...' : 'Lancer les tests'}
+                  {isRunningTests ? "Tests en cours..." : "Lancer les tests"}
                 </Button>
               </CardTitle>
             </CardHeader>
@@ -214,13 +214,13 @@ export default function SearchDemoPage() {
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
                       <div className="text-lg font-bold text-green-600">
-                        {testResults.filter(t => t.status === 'success').length}
+                        {testResults.filter(t => t.status === "success").length}
                       </div>
                       <div className="text-xs text-muted-foreground">Réussis</div>
                     </div>
                     <div>
                       <div className="text-lg font-bold text-red-600">
-                        {testResults.filter(t => t.status === 'error').length}
+                        {testResults.filter(t => t.status === "error").length}
                       </div>
                       <div className="text-xs text-muted-foreground">Échecs</div>
                     </div>

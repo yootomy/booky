@@ -40,17 +40,17 @@ export const useAuthGuard = (options: AuthGuardOptions = {}) => {
     if (requireAuth && !isAuthenticated) {
       const loginUrl = redirectTo || '/login';
       const currentPath = window.location.pathname;
-      router.push('${loginUrl}?redirect=${encodeURIComponent(currentPath)}' as any);
+      router.push(`${loginUrl}?redirect=${encodeURIComponent(currentPath)}` as any);
       return;
     }
 
     // Vérifier le rôle spécifique
     if (requiredRole && !hasRole(requiredRole)) {
       if (!isAuthenticated) {
-        router.push('/login' as any);
+        router.push(`/login` as any);
       } else {
         // Utilisateur connecté mais pas le bon rôle
-        router.push('/unauthorized' as any);
+        router.push(`/unauthorized` as any);
       }
       return;
     }

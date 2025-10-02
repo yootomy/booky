@@ -200,7 +200,7 @@ export interface ChartData {
     category: CategorySummary;
     count: number;
     pourcentage: number;
-    evolution: 'hausse' | 'baisse' | 'stable';
+    evolution: "hausse" | "baisse' | 'stable';
   }>;
   
   // Rythmes préférés
@@ -435,20 +435,20 @@ export const WIDGET_SIZES = {
 export const DEFAULT_READING_GOALS = [
   {
     type: 'livres_par_an' as const,
-    titre: '12 livres par an',
+    titre: "12 livres par an",
     cible: 12,
-    description: 'Lire un livre par mois en moyenne'
+    description: "Lire un livre par mois en moyenne"
   },
   {
     type: 'pages_par_mois' as const,
-    titre: '1000 pages par mois',
+    titre: "1000 pages par mois",
     cible: 1000,
-    description: 'Maintenir un rythme de lecture régulier'
+    description: "Maintenir un rythme de lecture régulier"
   },
   {
     type: 'genres_diversifies' as const,
-    titre: '5 genres différents',
+    titre: "5 genres différents",
     cible: 5,
-    description: 'Explorer la diversité littéraire'
+    description: "Explorer la diversité littéraire"
   }
 ] as const;

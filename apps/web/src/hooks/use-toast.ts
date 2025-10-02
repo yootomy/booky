@@ -13,7 +13,7 @@ export interface Toast {
 export interface ToastOptions {
   title?: string;
   description?: string;
-  variant?: 'default' | 'destructive' | 'success';
+  variant?: 'default' | 'destructive' | 'success`;
   duration?: number;
 }
 
@@ -37,7 +37,7 @@ export function useToast() {
     }, newToast.duration);
 
     // Simple console output for now
-    console.log('🔔 Toast: ${newToast.title || ''} - ${newToast.description || ''}');
+    console.log(`🔔 Toast: ${newToast.title || ''} - ${newToast.description || ''}`);
   }, []);
 
   const dismiss = useCallback((id: string) => {

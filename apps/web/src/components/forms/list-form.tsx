@@ -139,7 +139,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       }
 
       try {
-        const response = await apiClient.get('/api/lists/${initialData.id}/books');
+        const response = await apiClient.get(`/api/lists/${initialData.id}/books`);
         const result = await response.json();
 
         if (result.success && result.data) {
@@ -178,10 +178,9 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       setLoading(true);
 
       const url = isEditing && initialData?.id
-        ? '/api/proxy/lists/${initialData.id}'
-        : '/api/proxy/lists';
+        ? `/api/proxy/lists/${initialData.id}` : "/api/proxy/lists";
 
-      const method = isEditing ? 'PUT' : 'POST';
+      const method = isEditing ? "PUT" : "POST";
 
       // Séparer les données de la liste et les livres sélectionnés
       const { selectedBooks, ...listData } = data;
@@ -190,7 +189,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       const response = await fetch(url, {
         method,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           ...listData,
@@ -209,7 +208,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
         });
         onSuccess();
       } else {
-        throw new Error(result.error || 'Erreur lors de la sauvegarde');
+        throw new Error(result.error || "Erreur lors de la sauvegarde");
       }
     } catch (error) {
       toast({
@@ -331,7 +330,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
                             field.value === color
                               ? 'border-primary ring-2 ring-primary/50'
                               : 'border-border hover:border-primary'
-                          }'}
+                          }`}
                           style={{ backgroundColor: color }}
                           onClick={() => field.onChange(color)}
                           title={color}
@@ -352,7 +351,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
         {/* Ordre d'affichage */}
         <FormField
           control={form.control}
-          name="ordre_affichage"
+          name='ordre_affichage'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Ordre d'affichage</FormLabel>
@@ -464,7 +463,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
                   </div>
                 ) : filteredBooks.length === 0 ? (
                   <div className="p-4 text-center text-muted-foreground">
-                    {searchQuery ? 'Aucun livre trouvé' : 'Aucun livre disponible'}
+                    {searchQuery ? "Aucun livre trouvé" : "Aucun livre disponible"}
                   </div>
                 ) : (
                   <div className="space-y-1 p-2">
@@ -477,14 +476,13 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
                             isSelected
                               ? 'bg-primary/10 border border-primary/20'
                               : 'hover:bg-muted'
-                          }' }
+                          }`}
                           onClick={() => toggleBookSelection(book.id)}
                         >
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                             isSelected
-                              ? 'bg-primary border-primary text-primary-foreground'
-                              : 'border-gray-300 hover:border-primary'
-                          }' }>
+                              ? "bg-primary border-primary text-primary-foreground" : "border-gray-300 hover:border-primary"
+                          }`}>
                             {isSelected && <span className="text-xs">✓</span>}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -499,11 +497,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
                                 {[1, 2, 3, 4, 5].map((star) => (
                                   <span
                                     key={star}
-                                    className={`text-xs ${
-                                      star <= book.note_generale
-                                        ? 'text-yellow-500'
-                                        : 'text-gray-300'
-                                    }'}
+                                    className={`text-xs ${star <= book.note_generale ? 'text-yellow-500' : 'text-gray-300'}`}
                                   >
                                     ★
                                   </span>
@@ -540,7 +534,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
             className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary"
           >
             {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            {isEditing ? 'Mettre à jour' : 'Créer la liste'}
+            {isEditing ? "Mettre à jour" : "Créer la liste"}
           </Button>
         </div>
       </form>

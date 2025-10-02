@@ -207,7 +207,7 @@ export function SpotlightBook() {
                       <span
                         className="text-xl lg:text-2xl font-bold text-primary"
                         style={{
-                          fontFamily: 'Inter, sans-serif'
+                          fontFamily: "Inter, sans-serif"
                         }}
                       >
                         {book.note_generale}/10
@@ -244,9 +244,9 @@ export function SpotlightBook() {
                             key={category.id}
                             className="px-3 py-1 rounded-full text-xs font-medium"
                             style={{
-                              backgroundColor: '${category.couleur}20',
+                              backgroundColor: `${category.couleur}20`,
                               color: category.couleur,
-                              border: '1px solid ${category.couleur}40'
+                              border: `1px solid ${category.couleur}40`
                             }}
                           >
                             {category.nom}
@@ -265,9 +265,9 @@ export function SpotlightBook() {
                             key={tag.id}
                             className="px-2 py-1 rounded-md text-xs font-medium"
                             style={{
-                              backgroundColor: '${tag.couleur}15',
+                              backgroundColor: `${tag.couleur}15`,
                               color: tag.couleur,
-                              border: '1px solid ${tag.couleur}30'
+                              border: `1px solid ${tag.couleur}30`
                             }}
                           >
                             {tag.nom}
@@ -288,8 +288,8 @@ export function SpotlightBook() {
                     <p
                       className="italic leading-relaxed line-clamp-4 lg:line-clamp-5 text-foreground"
                       style={{
-                        fontFamily: 'Playfair Display, serif',
-                        fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+                        fontFamily: "Playfair Display, serif",
+                        fontSize: "clamp(0.9rem, 2vw, 1rem)"
                       }}
                     >
                       "{excerpt}"
@@ -302,7 +302,7 @@ export function SpotlightBook() {
                   <div className="bg-card/40 rounded-lg p-2.5 lg:p-3 border border-border">
                     <div className="text-xs text-foreground/60 uppercase tracking-wide">Pages</div>
                     <div className="text-base lg:text-lg font-bold text-foreground">
-                      {book.nombre_pages || 'N/A'}
+                      {book.nombre_pages || "N/A"}
                     </div>
                   </div>
                   <div className="bg-card/40 rounded-lg p-2.5 lg:p-3 border border-border">
@@ -311,7 +311,7 @@ export function SpotlightBook() {
                       Favoris
                     </div>
                     <div className="text-base lg:text-lg font-bold text-foreground">
-                      {book._count?.book_favorite ? '${book._count.book_favorite}' : '0'}
+                      {book._count?.book_favorite ? `${book._count.book_favorite}` : "0"}
                     </div>
                   </div>
                 </div>
@@ -319,16 +319,16 @@ export function SpotlightBook() {
                 {/* Action Button */}
                 <div className="pt-2 lg:pt-4">
                   <Link
-                    href={'/books/${book.id}'}
+                    href={`/books/${book.id}`}
                     className="inline-flex items-center justify-center gap-2 lg:gap-3 px-6 lg:px-8 py-3 lg:py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 w-full text-sm lg:text-base"
                     style={{
                       background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
                       color: 'white',
                       fontFamily: 'Inter, sans-serif',
-                      boxShadow: '0 8px 25px rgba(139, 21, 56, 0.3)'
+                      boxShadow: "0 8px 25px rgba(139, 21, 56, 0.3)"
                     }}
                   >
-                    <BookOpen className="w-5 h-5" />
+                    <BookOpen className='w-5 h-5' />
                     Découvrir ce livre
                   </Link>
                 </div>

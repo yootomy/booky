@@ -104,7 +104,7 @@ export default function TagDetailPage() {
     }));
   };
 
-  const handleSort = (sort: string, order: 'asc' | 'desc' = 'desc') => {
+  const handleSort = (sort: string, order: "asc" | "desc' = 'desc') => {
     setBookFilters(prev => ({
       ...prev,
       sort,
@@ -159,12 +159,12 @@ export default function TagDetailPage() {
           </div>
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4" />
-            <span>Créé le {format(new Date(tag.date_creation), 'dd MMMM yyyy', { locale: fr })}</span>
+            <span>Créé le {format(new Date(tag.date_creation), "dd MMMM yyyy", { locale: fr })}</span>
           </div>
           {tag.date_modification !== tag.date_creation && (
             <div className="flex items-center space-x-1">
               <Calendar className="h-4 w-4" />
-              <span>Modifié le {format(new Date(tag.date_modification), 'dd MMMM yyyy', { locale: fr })}</span>
+              <span>Modifié le {format(new Date(tag.date_modification), "dd MMMM yyyy", { locale: fr })}</span>
             </div>
           )}
         </div>
@@ -212,13 +212,13 @@ export default function TagDetailPage() {
             onClick={() => setShowStats(!showStats)}
           >
             <BarChart3 className="h-4 w-4 mr-2" />
-            {showStats ? 'Masquer' : 'Afficher'} les stats
+            {showStats ? "Masquer" : "Afficher"} les stats
           </Button>
           
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSort('note_generale', 'desc')}
+            onClick={() => handleSort("note_generale", 'desc')}
           >
             <Star className="h-4 w-4 mr-2" />
             Mieux notés
@@ -227,7 +227,7 @@ export default function TagDetailPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleSort('date_lecture', 'desc')}
+            onClick={() => handleSort("date_lecture", 'desc')}
           >
             <Calendar className="h-4 w-4 mr-2" />
             Plus récents
@@ -269,20 +269,20 @@ export default function TagDetailPage() {
                 <div className="text-center">
                   <div className="flex items-center justify-center space-x-1">
                     <Star className="h-4 w-4 text-yellow-400" />
-                    <span className="text-lg font-bold text-white">{stats.notes.moyenne_generale?.toFixed(1) || 'N/A'}</span>
+                    <span className="text-lg font-bold text-white">{stats.notes.moyenne_generale?.toFixed(1) || "N/A"}</span>
                   </div>
                   <div className="text-sm text-gray-400">Note générale</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-rose-400">{stats.notes.moyenne_spicy?.toFixed(1) || 'N/A'}</div>
+                  <div className="text-lg font-bold text-rose-400">{stats.notes.moyenne_spicy?.toFixed(1) || "N/A"}</div>
                   <div className="text-sm text-gray-400">Niveau Spicy</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-purple-400">{stats.notes.moyenne_dark?.toFixed(1) || 'N/A'}</div>
+                  <div className="text-lg font-bold text-purple-400">{stats.notes.moyenne_dark?.toFixed(1) || "N/A"}</div>
                   <div className="text-sm text-gray-400">Niveau Dark</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-lg font-bold text-pink-400">{stats.notes.moyenne_romance?.toFixed(1) || 'N/A'}</div>
+                  <div className="text-lg font-bold text-pink-400">{stats.notes.moyenne_romance?.toFixed(1) || "N/A"}</div>
                   <div className="text-sm text-gray-400">Romance</div>
                 </div>
               </div>
@@ -316,7 +316,7 @@ export default function TagDetailPage() {
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {stats.tendances.tags_souvent_associes.slice(0, 6).map((tagAssoc: any, index: number) => (
-                        <Link key={index} href={'/tags/${tagAssoc.tag.id}'}>
+                        <Link key={index} href={`/tags/${tagAssoc.tag.id}`}>
                           <Badge 
                             variant="outline" 
                             className="hover:bg-gray-700 cursor-pointer"
@@ -336,7 +336,7 @@ export default function TagDetailPage() {
                     <h4 className="font-medium text-white mb-2">Catégories associées</h4>
                     <div className="flex flex-wrap gap-2">
                       {stats.tendances.categories_associees.slice(0, 6).map((category: any, index: number) => (
-                        <Link key={index} href={'/categories/${category.id}' }>
+                        <Link key={index} href={`/categories/${category.id}` }>
                           <Badge 
                             variant="outline" 
                             className="hover:bg-gray-700 cursor-pointer"
@@ -404,8 +404,8 @@ export default function TagDetailPage() {
             <h3 className="text-lg font-medium text-white mb-2">Aucun livre avec ce tag</h3>
             <p className="text-gray-400 mb-6">
               {bookFilters.statut 
-                ? `Aucun livre avec le statut "${bookFilters.statut}" pour ce tag'
-                : 'Ce tag n\'est associé à aucun livre pour le moment'
+                ? `Aucun livre avec le statut `${bookFilters.statut}` pour ce tag`
+                : `Ce tag n\"est associé à aucun livre pour le moment"
               }
             </p>
             {bookFilters.statut && (

@@ -26,6 +26,6 @@ const ButtonDarkRomance = React.forwardRef<HTMLButtonElement, ButtonDarkRomanceP
     );
   }
 );
-ButtonDarkRomance.displayName = "ButtonDarkRomance";
+ButtonDarkRomance.displayName="ButtonDarkRomance";
 
 export { ButtonDarkRomance, buttonDarkRomanceVariants };
