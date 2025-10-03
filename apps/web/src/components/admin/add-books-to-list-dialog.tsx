@@ -172,15 +172,15 @@ export function AddBooksToListDialog({
       if (successCount > 0) {
         toast({
           title: "Succès",
-          description: '${successCount}'livre${successCount > 1 ? 's ajoutés' : ' ajouté'} à la liste',
+          description: `${successCount} livre${successCount > 1 ? 's ajoutés' : ' ajouté'} à la liste`,
         });
         onBookAdded();
       }
 
       if (errorCount > 0) {
         toast({
-          title: 'Attention",
-          description: "Certains livres n"ont pas pu être ajoutés (déjà dans la liste ou erreur)',
+          title: 'Attention',
+          description: "Certains livres n'ont pas pu être ajoutés (déjà dans la liste ou erreur)",
           variant: "destructive"
         });
       }
@@ -189,7 +189,7 @@ export function AddBooksToListDialog({
     } catch (error) {
       toast({
         title: "Erreur",
-        description: "Erreur lors de l"ajout des livres',
+        description: "Erreur lors de l'ajout des livres",
         variant: "destructive"
       });
     } finally {
@@ -239,7 +239,7 @@ export function AddBooksToListDialog({
           {selectedBooks.size > 0 && (
             <div className="flex items-center space-x-2 p-3 bg-primary/5 rounded-lg">
               <Badge variant="secondary">
-                {selectedBooks.size} livre{selectedBooks.size > 1 ? "s" : "'} sélectionné{selectedBooks.size > 1 ? 's' : "'}
+                {selectedBooks.size} livre{selectedBooks.size > 1 ? "s" : ""} sélectionné{selectedBooks.size > 1 ? 's' : ""}
               </Badge>
               <Button
                 variant="outline"

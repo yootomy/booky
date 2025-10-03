@@ -111,7 +111,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
       toast({
         title: "Erreur",
         description: "Erreur lors du chargement des livres",
-        variant: "destructive'
+        variant: "destructive"
       });
     } finally {
       setLoading(false);
@@ -123,8 +123,8 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
 
     try {
       setRemoving(true);
-      const response = await apiClient.get('/api/lists/${listId}/books/${bookToRemove.id}', {
-        method: 'DELETE",
+      const response = await apiClient.get(`/api/lists/${listId}/books/${bookToRemove.id}`, {
+        method: 'DELETE',
       });
 
       const data = await response.json();

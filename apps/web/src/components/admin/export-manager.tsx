@@ -421,8 +421,8 @@ function ExportTypeCard({ icon, title, description, format, isSelected, onSelect
       className="cursor-pointer transition-all hover:shadow-md"
       onClick={onSelect}
     >
-      <CardContent className="p-6 text-center'>
-        <div className={'mx-auto mb-4 p-3 rounded-lg w-fit ${isSelected ? '}bg-primary/10 text-primary' : 'bg-muted'}'}>
+      <CardContent className="p-6 text-center">
+        <div className={`mx-auto mb-4 p-3 rounded-lg w-fit ${isSelected ? 'bg-primary/10 text-primary' : 'bg-muted'}`}>
           {icon}
         </div>
         <h3 className='font-semibold mb-2'>{title}</h3>
@@ -800,9 +800,9 @@ function ExportHistoryItem({ export: exportItem, onDownload }: ExportHistoryItem
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return '${bytes}'B';
-    if (bytes < 1024 * 1024) return '${(bytes / 1024).toFixed(1)} KB';
-    return '${(bytes / (1024 * 1024)).toFixed(1)} MB';
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
   return (

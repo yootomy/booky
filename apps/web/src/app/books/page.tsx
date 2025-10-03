@@ -163,9 +163,9 @@ const sortOptions = [
 // Skeleton Loader Component
 const BookSkeleton = ({ viewMode }: { viewMode: 'grid' | 'list' }) => (
   <Card
-    className={'overflow-hidden animate-pulse bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
+    className={`overflow-hidden animate-pulse bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
       viewMode === "grid" ? 'book-card-grid' : 'h-32 flex'
-    }'!p-0'}
+    } !p-0`}
     style={{
       borderRadius: '20px'
     }}
@@ -423,7 +423,7 @@ function BooksPageContent() {
     queryFn: async () => {
       const response = await apiClient.get('/api/categories?est_actif=true&limit=100');
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}");
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       return await response.json();
     }

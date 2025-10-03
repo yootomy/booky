@@ -218,7 +218,7 @@ export default function BookDetailPage() {
       toast.success("Question envoyée !");
     },
     onError: () => {
-      toast.error("Erreur lors de l\'envoi de la question');
+      toast.error("Erreur lors de l'envoi de la question");
     },
     onSettled: () => {
       setIsSubmittingQuestion(false);
@@ -373,7 +373,7 @@ export default function BookDetailPage() {
 
   // Tabs configuration
   const tabs = [
-    { id: "resume", label: "Résumé', icon: BookOpen, count: null },
+    { id: "resume", label: "Résumé", icon: BookOpen, count: null },
     { id: 'stats', label: 'Notes', icon: BarChart3, count: null },
     { id: 'genres', label: 'Genres & Tropes', icon: Tag, count: null },
     { id: 'info', label: 'Infos', icon: FileText, count: null },

@@ -317,7 +317,7 @@ export default function AdminConseilsPage() {
                                     backgroundColor: 'rgba(139, 21, 56, 0.1)',
                                     color: '#8B1538',
                                     fontSize: "0.7rem",
-                                    padding: "2px 6px'
+                                    padding: "2px 6px"
                                   }}
                                 >
                                   {getCategoryName(catId)}
@@ -342,7 +342,7 @@ export default function AdminConseilsPage() {
                                       backgroundColor: 'rgba(107, 76, 123, 0.1)',
                                       color: '#6B4C7B',
                                       fontSize: "0.7rem",
-                                      padding: "2px 6px'
+                                      padding: "2px 6px"
                                     }}
                                   >
                                     {getTagName(tagId)}
@@ -401,7 +401,7 @@ export default function AdminConseilsPage() {
                   style={{
                     background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
                     backdropFilter: "blur(20px)",
-                    border: "1px solid rgba(139, 21, 56, 0.1)',
+                    border: "1px solid rgba(139, 21, 56, 0.1)",
                     borderRadius: '16px',
                     boxShadow: "0 8px 25px rgba(139, 21, 56, 0.15)"
                   }}
@@ -471,23 +471,23 @@ export default function AdminConseilsPage() {
                           onChange={(e) => setResponseText(e.target.value)}
                           placeholder="Chère [nom], voici mes recommandations personnalisées pour vous..."
                           className="min-h-32"
-                          style={{ borderRadius: "12px", fontFamily: "Inter, sans-serif' }}
+                          style={{ borderRadius: "12px", fontFamily: "Inter, sans-serif" }}
                         />
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810' }}>Livres recommandés (optionnel) :</h4>
+                        <h4 className="font-semibold text-sm mb-2" style={{ color: "#2C1810" }}>Livres recommandés (optionnel) :</h4>
                         <div className="max-h-40 overflow-y-auto space-y-2">
                           {books.slice(0, 20).map((book: Book) => (
                             <div
                               key={book.id}
-                              className={'flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all ${
+                              className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all ${
                                 selectedBooks.includes(book.id) ? 'bg-blue-50 border border-blue-200' : 'hover:bg-gray-50'
-                              }'}
+                              }`}
                               onClick={() => handleBookToggle(book.id)}
                             >
                               <input
-                                type='checkbox"
+                                type='checkbox'
                                 checked={selectedBooks.includes(book.id)}
                                 onChange={() => handleBookToggle(book.id)}
                                 className="rounded"
