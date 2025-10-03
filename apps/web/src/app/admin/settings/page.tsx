@@ -320,7 +320,7 @@ export default function AdminSettings() {
                     <div className="relative">
                       <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Tapez le titre ou l"auteur du livre...'
+                        placeholder="Tapez le titre ou l'auteur du livre..."
                         value={bookSearchQuery}
                         onChange={(e) => setBookSearchQuery(e.target.value)}
                         className="pl-10"

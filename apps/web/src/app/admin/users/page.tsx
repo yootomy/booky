@@ -241,7 +241,7 @@ export default function AdminUsersPage() {
                   </h3>
                   <p className="text-gray-500">
                     {searchQuery || roleFilter 
-                      ? "Essayez de modifier vos filtres de recherche" : "Il n\'y a pas encore d\'utilisateurs dans le système'
+                      ? "Essayez de modifier vos filtres de recherche" : "Il n'y a pas encore d'utilisateurs dans le système"
                     }
                   </p>
                 </div>

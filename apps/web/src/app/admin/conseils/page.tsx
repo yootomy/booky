@@ -230,7 +230,7 @@ export default function AdminConseilsPage() {
                     fontFamily: 'Playfair Display, serif',
                     background: 'linear-gradient(135deg, #2C1810 0%, #8B1538 100%)',
                     WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent',
+                    WebkitTextFillColor: "transparent",
                     backgroundClip: "text"
                   }}
                 >
@@ -272,9 +272,9 @@ export default function AdminConseilsPage() {
                     animate={{ opacity: 1, y: 0 }}
                   >
                     <Card
-                      className={'cursor-pointer transition-all duration-300 ${
+                      className={`cursor-pointer transition-all duration-300 ${
                         selectedRequest?.id === conseil.id ? 'ring-2 ring-offset-2 ring-purple-500' : ''
-                      }'}
+                      }`}
                       style={{
                         background: selectedRequest?.id === conseil.id
                           ? 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
@@ -292,7 +292,7 @@ export default function AdminConseilsPage() {
                             <h3 className="font-bold text-lg" style={{ color: '#2C1810', fontFamily: 'Inter, sans-serif' }}>
                               {conseil.nom_utilisateur}
                             </h3>
-                            <div className="flex items-center gap-2 text-sm" style={{ color: "#6B4C7B' }}>
+                            <div className="flex items-center gap-2 text-sm" style={{ color: "#6B4C7B" }}>
                               <Calendar className='w-4 h-4' />
                               {new Date(conseil.date_creation).toLocaleDateString('fr-FR')}
                             </div>

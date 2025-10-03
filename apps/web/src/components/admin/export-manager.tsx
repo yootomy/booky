@@ -56,7 +56,7 @@ interface ExportManagerProps {
 }
 
 interface ExportConfig {
-  format: "PDF" | "CSV' | 'JSON';
+  format: "PDF" | "CSV" | "JSON";
   filename?: string;
   template?: string;
   options: ExportOptions;
@@ -152,7 +152,7 @@ export function ExportManager({ className }: ExportManagerProps) {
         template: config.template,
       }),
     onSuccess: (response) => {
-      toast.success('Export créé avec succès", {
+      toast.success('Export créé avec succès', {
         description: "Votre export est en cours de génération",
         action: {
           label: "Télécharger",
@@ -240,7 +240,7 @@ export function ExportManager({ className }: ExportManagerProps) {
             ) : (
               <DownloadIcon className="h-4 w-4 mr-2" />
             )}
-            {createExportMutation.isPending ? "Export en cours..." : "Créer export'}
+            {createExportMutation.isPending ? "Export en cours..." : "Créer export"}
           </Button>
         </div>
       </div>
