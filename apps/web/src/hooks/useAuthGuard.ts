@@ -40,7 +40,8 @@ export const useAuthGuard = (options: AuthGuardOptions = {}) => {
     if (requireAuth && !isAuthenticated) {
       const loginUrl = redirectTo || '/login';
       const currentPath = window.location.pathname;
-      router.push(`${loginUrl}?redirect=${encodeURIComponent(currentPath)}`);
+      const redirectUrl = `${loginUrl}?redirect=${encodeURIComponent(currentPath)}`;
+      router.push(redirectUrl as any);
       return;
     }
 

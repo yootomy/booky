@@ -1,0 +1,33 @@
+$ turbo build
+turbo 2.5.6
+
+• Packages in scope: native, server, web
+• Running build in 3 packages
+• Remote caching disabled
+server:build: cache miss, executing 59a695bf6dc8bc05
+web:build: cache miss, executing cdf69ce8629e04b5
+web:build: $ next build
+server:build: $ prisma generate && next build
+web:build:    ▲ Next.js 15.5.0
+web:build:    - Environments: .env.local, .env
+web:build: 
+web:build:    Creating an optimized production build ...
+server:build: Loaded Prisma config from prisma.config.ts.
+server:build: 
+server:build: Prisma config detected, skipping environment variable loading.
+server:build: Prisma schema loaded from prisma\schema
+server:build: Error: 
+server:build: EPERM: operation not permitted, rename 'C:\Datas\Projects\Booky\booky\apps\server\prisma\generated\query_engine-windows.dll.node.tmp6764' -> 'C:\Datas\Projects\Booky\booky\apps\server\prisma\generated\query_engine-windows.dll.node'
+server:build: 
+server:build: 
+server:build: error: script "build" exited with code 1
+server:build: ERROR: command finished with error: command (C:\Datas\Projects\Booky\booky\apps\server) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+server#build: command (C:\Datas\Projects\Booky\booky\apps\server) C:\Users\jtoma\AppData\Roaming\npm\bun.cmd run build exited (1)
+
+ Tasks:    0 successful, 2 total
+Cached:    0 cached, 2 total
+  Time:    2.239s 
+Failed:    server#build
+
+ ERROR  run failed: command  exited (1)
+error: script "build" exited with code 1
