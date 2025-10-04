@@ -230,7 +230,7 @@ export function BookGrid({
             
             {showSort && (
               <select
-                value={'${sortBy}-${sortDirection}'}
+                value={`${sortBy}-${sortDirection}`}
                 onChange={(e) => {
                   const [sort, direction] = e.target.value.split('-') as [SortOption, SortDirection];
                   setSortBy(sort);

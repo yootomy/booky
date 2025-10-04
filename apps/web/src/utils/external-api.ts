@@ -400,7 +400,7 @@ export const externalSearchApi = {
       } else {
         const titre = book.titre?.toLowerCase() || 'no-title';
         const auteur = book.auteur?.toLowerCase() || 'no-author';
-        uniqueKey = '${titre}_${auteur}';
+        uniqueKey = `${titre}_${auteur}`;
       }
       
       if (!seen.has(uniqueKey)) {

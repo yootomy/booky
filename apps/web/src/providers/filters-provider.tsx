@@ -227,11 +227,11 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     if (newState.selectedGenres.length > 0) params.set('genres', newState.selectedGenres.join(','));
     if (newState.selectedTags.length > 0) params.set('tags', newState.selectedTags.join(','));
     if (newState.viewMode !== 'grid') params.set('view', newState.viewMode);
-    
+
     const queryString = params.toString();
-    const newUrl = queryString ? '${pathname}?${queryString}' : pathname;
-    
-    router.replace(newUrl as any, { scroll: false });
+    const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
+
+    router.replace(newUrl, { scroll: false });
   }, [syncWithUrl, pathname, router]);
 
   // Actions de recherche
