@@ -95,7 +95,7 @@ export default function ProfilePage() {
   // Mutation pour mettre à jour le profil
   const updateProfileMutation = useMutation({
     mutationFn: async (data: { nom_complet: string; username: string; email: string }) => {
-      const response = await apiClient.put("/api/auth/profile", data);
+      const response = await apiClient.put("/api/profile", data);
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to update profile');
