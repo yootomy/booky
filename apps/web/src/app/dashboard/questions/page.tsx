@@ -81,8 +81,8 @@ export default function QuestionsPage() {
   const { data: questions, isLoading, error } = useQuery({
     queryKey: ["questions"],
     queryFn: async () => {
-      const response = await apiClient.get('/api/questions?include=responses', {
-        credentials: 'include'
+      const response = await apiClient.get('/api/questions', {
+        include: 'responses'
       });
       if (!response.success) throw new Error(response.error || "Erreur lors du chargement");
       return response.data;

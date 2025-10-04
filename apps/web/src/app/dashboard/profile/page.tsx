@@ -68,14 +68,12 @@ export default function ProfilePage() {
   } = useQuery({
     queryKey: ["user-profile"],
     queryFn: async () => {
-      const response = await apiClient.get("/api/auth/profile", {
-        credentials: "include"
-      });
-      
+      const response = await apiClient.get("/api/profile");
+
       if (!response.success) {
         throw new Error(response.error || "Failed to fetch profile");
       }
-      
+
       return response.data;
     },
     enabled: !!user

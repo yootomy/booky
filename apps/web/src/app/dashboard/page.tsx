@@ -43,9 +43,7 @@ export default function Dashboard() {
   const { data: userStats, isLoading: statsLoading } = useQuery({
     queryKey: ['user-stats'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/stats/user', {
-        credentials: 'include'
-      });
+      const response = await apiClient.get('/api/profile');
       if (!response.success) return { favoriteBooks: 0, questionsCount: 0, conseilsCount: 0 };
       return response.data;
     },
