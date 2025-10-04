@@ -175,7 +175,7 @@ export default function BookDetailPage() {
     queryFn: async () => {
       const response = await apiClient.get(`/api/books/${bookId}`);
       if (!response.success) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(response.error || 'Failed to fetch book');
       }
       return response.data as Book;
     },
@@ -187,7 +187,7 @@ export default function BookDetailPage() {
     queryFn: async () => {
       const response = await apiClient.get(`/api/books/${bookId}/questions`);
       if (!response.success) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(response.error || 'Failed to fetch questions');
       }
       return (response.data || []) as BookQuestion[];
     },

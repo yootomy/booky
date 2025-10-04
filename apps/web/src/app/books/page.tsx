@@ -458,7 +458,7 @@ function BooksPageContent() {
     queryFn: async () => {
       const response = await apiClient.get('/api/lists?est_publique=true&limit=100');
       if (!response.success) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(response.error || 'Failed to fetch collections');
       }
       return response.data;
     }
