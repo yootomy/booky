@@ -82,9 +82,9 @@ class Media {
 
   createShader() {
     const texture = new Texture(this.gl);
-    
+
     this.program = new Program(this.gl, {
-      vertex: '
+      vertex: `
         attribute vec3 position;
         attribute vec2 uv;
         uniform mat4 modelViewMatrix;
@@ -95,52 +95,52 @@ class Media {
         void main() {
           vUv = uv;
           vec3 p = position;
-          
+
           // Animation plus fluide et réactive
           float wave = sin(uTime * 0.4 + p.x * 0.3) * 0.003;
           float hoverEffect = uHover * 0.015 + wave;
           p.z = hoverEffect;
-          
+
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
-      ',
-      fragment: '
+      `,
+      fragment: `
         precision highp float;
         uniform sampler2D tMap;
         uniform vec2 uImageSizes;
         uniform vec2 uPlaneSizes;
         uniform float uHover;
         varying vec2 vUv;
-        
+
         void main() {
           // Cover fit simple et stable
           vec2 scale = vec2(1.0);
           vec2 aspectRatio = uImageSizes / uPlaneSizes;
-          
+
           if (aspectRatio.x > aspectRatio.y) {
             scale.x = aspectRatio.y / aspectRatio.x;
           } else {
             scale.y = aspectRatio.x / aspectRatio.y;
           }
-          
+
           vec2 uv = (vUv - 0.5) / scale + 0.5;
           vec4 color = texture2D(tMap, uv);
-          
+
           // Bordures arrondies améliorées
           vec2 center = abs(vUv - 0.5);
           float border = max(center.x, center.y);
           float radius = 0.02; // Coins légèrement arrondis
           float alpha = 1.0 - smoothstep(0.45 - radius, 0.48, border);
-          
+
           // Effet hover léger et amélioration des couleurs
           vec3 finalColor = mix(color.rgb, color.rgb * 1.15 + vec3(0.02), uHover * 0.3);
-          
+
           // Améliorer le contraste
           finalColor = pow(finalColor, vec3(0.95));
-          
+
           gl_FragColor = vec4(finalColor, alpha * color.a);
         }
-      ',
+      `,
       uniforms: {
         tMap: { value: texture },
         uPlaneSizes: { value: [1, 1] },
@@ -311,9 +311,9 @@ class Media {
       if (this.book.note_generale) {
         ctx.font = 'bold 18px Arial, sans-serif';
         ctx.fillStyle = '#ffd700';
-        const stars = '★'.repeat(Math.floor(this.book.note_generale / 2)) + 
-                     (this.book.note_generale % 2 >= 1 ? '☆' : ');
-        ctx.fillText('${stars}'${this.book.note_generale}/10', 200, startY + (lines.length * 30) + 60);
+        const stars = '★'.repeat(Math.floor(this.book.note_generale / 2)) +
+                     (this.book.note_generale % 2 >= 1 ? '☆' : '');
+        ctx.fillText(`${stars} ${this.book.note_generale}/10`, 200, startY + (lines.length * 30) + 60);
       }
       
       // Icône livre
@@ -652,7 +652,7 @@ interface CircularGalleryProps {
 export default function CircularGallery({
   books,
   onBookClick,
-  className = '
+  className = ''
 }: CircularGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<GalleryApp | null>(null);

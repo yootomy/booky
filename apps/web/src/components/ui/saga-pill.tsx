@@ -17,12 +17,12 @@ export function SagaPill({ sagaName, tomeNumber, size = 'md' }: SagaPillProps) {
   };
 
   return (
-    <div 
+    <div
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full font-semibold bg-gradient-to-r from-violet-700 to-violet-600 text-white transition-all hover:scale-105 shadow-sm',
         sizeClasses[size]
       )}
-      title={`${sagaName}'- Tome ${tomeNumber}'}
+      title={`${sagaName} - Tome ${tomeNumber}`}
     >
       <BookOpen className={iconSizeClasses[size]} />
       <span>T{tomeNumber}</span>
@@ -41,9 +41,9 @@ export function SagaPillLarge({
   className?: string; 
 }) {
   return (
-    <div 
+    <div
       className={cn(
-        'inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm bg-gradient-to-r from-violet-700 to-violet-600 text-white transition-all hover:scale-105 shadow-md",
+        'inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm bg-gradient-to-r from-violet-700 to-violet-600 text-white transition-all hover:scale-105 shadow-md',
         className
       )}
     >
@@ -86,10 +86,10 @@ export function SagaBadge({
   const statusLabel = statusLabels[status as keyof typeof statusLabels] || statusLabels.UNKNOWN;
 
   return (
-    <div 
+    <div
       className={cn(
-        'inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium text-sm text-white transition-all hover:scale-105 shadow-sm',
-        'bg-gradient-to-r ${colorClass}",
+        "inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium text-sm text-white transition-all hover:scale-105 shadow-sm",
+        `bg-gradient-to-r ${colorClass}`,
         className
       )}
     >
@@ -98,7 +98,7 @@ export function SagaBadge({
         <span className="font-semibold">{sagaName}</span>
         <span className="text-xs opacity-90">
           {statusLabel}
-          {bookCount && " • ${bookCount}'tome${bookCount > 1 ? 's' : ''}'}
+          {bookCount && ` • ${bookCount} tome${bookCount > 1 ? "s" : ""}`}
         </span>
       </div>
     </div>

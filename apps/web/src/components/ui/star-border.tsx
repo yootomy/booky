@@ -22,35 +22,35 @@ const StarBorder = <T extends React.ElementType = 'button'>({
 
   return (
     <Component
-      className={'relative inline-block overflow-hidden rounded-[20px] ${className}'}
+      className={`relative inline-block overflow-hidden rounded-[20px] ${className}`}
       {...(rest as any)}
       style={{
-        padding: '${thickness}px 0',
+        padding: `${thickness}px 0`,
         ...(rest as any).style
       }}
     >
       <div
         className="absolute w-[300%] h-[50%] opacity-70 bottom-[-11px] right-[-250%] rounded-full animate-star-movement-bottom z-0"
         style={{
-          background: 'radial-gradient(circle, ${color},'transparent 10%),
+          background: `radial-gradient(circle, ${color}, transparent 10%)`,
           animationDuration: speed
         }}
       ></div>
       <div
-        className='absolute w-[300%] h-[50%] opacity-70 top-[-10px] left-[-250%] rounded-full animate-star-movement-top z-0'
+        className="absolute w-[300%] h-[50%] opacity-70 top-[-10px] left-[-250%] rounded-full animate-star-movement-top z-0"
         style={{
-          background: 'radial-gradient(circle, ${color},'transparent 10%)',
+          background: `radial-gradient(circle, ${color}, transparent 10%)`,
           animationDuration: speed
         }}
       ></div>
-      <div className='relative z-1 bg-gradient-to-b from-transparent via-transparent to-transparent text-center rounded-[20px] flex items-center justify-center"
+      <div className="relative z-1 bg-gradient-to-b from-transparent via-transparent to-transparent text-center rounded-[20px] flex items-center justify-center"
            style={{
-             background: 'radial-gradient(ellipse at center, rgba(200, 157, 99, 0.15) 0%, rgba(200, 157, 99, 0.08) 50%, transparent 100%)',
+             background: "radial-gradient(ellipse at center, rgba(200, 157, 99, 0.15) 0%, rgba(200, 157, 99, 0.08) 50%, transparent 100%)",
              backdropFilter: "blur(8px)",
-             minHeight: '70px",
-             minWidth: '200px',
-             border: "${thickness}px'solid ${color}',
-             boxShadow: '0 0 15px ${color}40,"inset 0 0 15px ${color}20'
+             minHeight: "70px",
+             minWidth: "200px",
+             border: `${thickness}px solid ${color}`,
+             boxShadow: `0 0 15px ${color}40, inset 0 0 15px ${color}20`
            }}>
         {children}
       </div>

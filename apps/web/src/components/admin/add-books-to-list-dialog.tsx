@@ -99,18 +99,17 @@ export function AddBooksToListDialog({
       params.append('page', reset ? '1' : page.toString());
       if (searchQuery) params.append('search', searchQuery);
 
-      const response = await apiClient.get('/api/books?${params.toString()}');
-      const data = await response.json();
+      const response = await apiClient.get(`/api/books?${params.toString()}`);
 
-      if (data.success) {
-        const newBooks = data.data || [];
+      if (response.success) {
+        const newBooks = response.data || [];
         if (reset) {
           setBooks(newBooks);
           setPage(1);
         } else {
           setBooks(prev => [...prev, ...newBooks]);
         }
-        setHasMore(data.pagination?.hasNextPage || false);
+        setHasMore(response.data.pagination?.hasNextPage || false);
       } else {
         toast({
           title: "Erreur",
@@ -154,20 +153,13 @@ export function AddBooksToListDialog({
     try {
       setAdding(true);
       const promises = Array.from(selectedBooks).map(bookId =>
-        apiClient.get('/api/lists/${listId}/books', {
-          method: 'POST',
-          headers: {
-            'Content-Type' : 'application/json',
-          },
-          body: JSON.stringify({ bookId }),
-        })
+        apiClient.post(`/api/lists/${listId}/books`, { bookId })
       );
 
       const responses = await Promise.all(promises);
-      const results = await Promise.all(responses.map(r => r.json()));
 
-      const successCount = results.filter(r => r.success).length;
-      const errorCount = results.length - successCount;
+      const successCount = responses.filter(r => r.success).length;
+      const errorCount = responses.length - successCount;
 
       if (successCount > 0) {
         toast({
@@ -276,7 +268,7 @@ export function AddBooksToListDialog({
                     {book.image_couverture ? (
                       <img
                         src={book.image_couverture}
-                        alt={"Couverture de ${book.titre}'}
+                        alt={`Couverture de ${book.titre}`}
                         className="w-12 h-16 object-cover rounded border"
                       />
                     ) : (

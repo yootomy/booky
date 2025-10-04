@@ -41,11 +41,11 @@ export default function EditListPage({ params }: { params: Promise<{ id: string 
         setLoading(true);
         const response = await apiClient.get(`/api/lists/${resolvedParams.id}`);
 
-        if (!response.ok) {
+        if (!response.success) {
           throw new Error("Liste non trouvée");
         }
 
-        const data = await response.json();
+        const data = response.data;
         if (data.success) {
           setList(data.data);
         } else {

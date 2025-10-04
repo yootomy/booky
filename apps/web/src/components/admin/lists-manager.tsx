@@ -97,11 +97,10 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
       params.append('include_books', 'true');
       params.append('limit', '50');
 
-      const response = await apiClient.get('/api/lists?${params.toString()}');
-      const data = await response.json();
+      const response = await apiClient.get(`/api/lists?${params.toString()}`);
 
-      if (data.success) {
-        setLists(data.data);
+      if (response.success) {
+        setLists(response.data);
       } else {
         toast({
           title: "Erreur",
@@ -125,20 +124,16 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
 
     try {
       setDeleting(true);
-      const response = await apiClient.delete('/api/lists/${listToDelete.id}', {
-        method: "DELETE",
-      });
+      const response = await apiClient.delete(`/api/lists/${listToDelete.id}`);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.success) {
         toast({
           title: "Succès",
           description: "Liste supprimée avec succès",
         });
         setLists(prev => prev.filter(list => list.id !== listToDelete.id));
       } else {
-        throw new Error(data.error || "Erreur lors de la suppression");
+        throw new Error(response.error || "Erreur lors de la suppression");
       }
     } catch (error) {
       toast({
@@ -232,20 +227,20 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem
-                      onClick={() => router.push('/books?collection=${list.id}')}
+                      onClick={() => router.push(`/books?collection=${list.id}`)}
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       Voir la liste
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => router.push('/admin/lists/${list.id}/manage')}
+                      onClick={() => router.push(`/admin/lists/${list.id}/manage`)}
                     >
                       <BookOpen className="h-4 w-4 mr-2" />
                       Gérer les livres
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => router.push('/admin/lists/${list.id}/edit')}
+                      onClick={() => router.push(`/admin/lists/${list.id}/edit`)}
                     >
                       <Edit2 className="h-4 w-4 mr-2" />
                       Modifier
@@ -331,13 +326,13 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                           className="aspect-[3/4] relative rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
                           onClick={(e) => {
                             e.stopPropagation();
-                            router.push('/books/${book.id}');
+                            router.push(`/books/${book.id}`);
                           }}
                         >
                           {book.image_couverture ? (
                             <img
                               src={book.image_couverture}
-                              alt={'Couverture de ${book.titre}'}
+                              alt={`Couverture de ${book.titre}`}
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -386,7 +381,7 @@ export function ListsManager({ searchQuery }: ListsManagerProps) {
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        router.push('/admin/lists/${list.id}/manage');
+                        router.push(`/admin/lists/${list.id}/manage`);
                       }}
                     >
                       <Plus className="h-4 w-4 mr-2" />

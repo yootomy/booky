@@ -46,8 +46,8 @@ export interface BookGridProps {
 }
 
 // Types pour les filtres et tri
-type SortOption="title" | "author' | 'date' | 'rating' | 'status';
-type SortDirection = 'asc' | 'desc';
+type SortOption = "title" | "author" | "date" | "rating" | "status";
+type SortDirection = "asc" | "desc";
 
 export function BookGrid({
   books,
@@ -120,8 +120,8 @@ export function BookGrid({
           comparison = a.statut.localeCompare(b.statut);
           break;
       }
-      
-      return sortDirection === 'asc" ? comparison : -comparison;
+
+      return sortDirection === "asc" ? comparison : -comparison;
     });
 
     return filtered;
@@ -151,8 +151,8 @@ export function BookGrid({
       md: "gap-4",
       lg: 'gap-6'
     }[gap];
-    
-    return '${baseClass}'${columnsClass} ${gapClass}';
+
+    return `${baseClass} ${columnsClass} ${gapClass}`;
   };
 
   // Gestion de la pagination côté client si pas de pagination serveur
@@ -169,7 +169,7 @@ export function BookGrid({
   // État de chargement
   if (loading) {
     return (
-      <div className={cn('space-y-6", className)}>
+      <div className={cn("space-y-6", className)}>
         {/* Header skeleton */}
         <div className="flex items-center justify-between">
           <div className="h-8 w-48 bg-muted animate-pulse rounded" />
@@ -198,10 +198,10 @@ export function BookGrid({
           <div className="flex items-center gap-4">
             <h2 className="text-xl font-semibold">
               {processedBooks.length} livre{processedBooks.length !== 1 ? 's' : ''}
-              {searchQuery && ' • '${searchQuery}'}
+              {searchQuery && ` • ${searchQuery}`}
             </h2>
-            
-            {statusFilter !== 'ALL" && (
+
+            {statusFilter !== "ALL" && (
               <BookStatus status={statusFilter} size="sm" />
             )}
           </div>

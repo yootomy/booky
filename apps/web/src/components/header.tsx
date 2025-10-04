@@ -314,7 +314,7 @@ export default function Header() {
                         <div className="flex-1">
                           <div className="font-semibold">{link.label}</div>
                           <div className="text-sm opacity-60 mt-0.5">
-                            {link.to === "/" ? "Page d"accueil' :
+                            {link.to === "/" ? "Page d'accueil" :
                              link.to === "/books" ? "Explorez nos livres" :
                              "Sélections spéciales"}
                           </div>

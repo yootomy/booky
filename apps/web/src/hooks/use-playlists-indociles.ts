@@ -30,9 +30,9 @@ export function usePlaylistsIndociles() {
         
         // Récupérer tous les livres
         const response = await apiClient.get('/api/books');
-        if (!response.ok) throw new Error("Failed to fetch books");
+        if (!response.success) throw new Error(response.error || "Failed to fetch books");
         
-        const books = await response.json();
+        const books = response.data;
         
         // Règle 1: "Dévorer en une nuit"
         // rythme IN ("FAST_PACE", 'INSTA_LOVE') AND note_generale >= 7

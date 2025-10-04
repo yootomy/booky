@@ -18,8 +18,8 @@ import {
   UserRole 
 } from '@/types/auth';
 
-// Configuration - Utiliser le proxy pour éviter les problèmes de cookies cross-domain
-const API_BASE_URL = '/api/proxy';
+// Configuration - Utiliser l'URL du serveur API
+const API_BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 const TOKEN_STORAGE_KEY = 'booky_auth_token';
 const USER_STORAGE_KEY = 'booky_auth_user';
 
@@ -98,10 +98,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
 
-      const response = await fetch('${API_BASE_URL}/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
-          'Content-Type' : 'application/json',
+          'Content-Type': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({
@@ -146,10 +146,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
 
-      const response = await fetch('${API_BASE_URL}/auth/register', {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
-          'Content-Type' : 'application/json',
+          'Content-Type': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify(credentials),
@@ -205,7 +205,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Fonction pour rafraîchir la session
   const refreshSession = useCallback(async (): Promise<void> => {
     try {
-      const response = await fetch('${API_BASE_URL}/auth/session', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/session`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -219,7 +219,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           return;
         }
       }
-      
+
       // Session invalide, nettoyer
       clearAuthData();
       updateAuthState(null, null);

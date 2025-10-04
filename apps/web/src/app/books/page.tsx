@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { apiClient } from '@/utils/orpc';
+import { apiClient } from '@/lib/api-client';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useAuth } from '@/contexts/AuthContext';
 import { useViewMode } from '@/contexts/ViewModeContext';
@@ -369,10 +369,11 @@ function BooksPageContent() {
       });
       
       // Choisir l'endpoint selon les paramètres
+      const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
       let endpoint;
       if (queryParams.q) {
         // API de recherche pour les recherches textuelles
-        endpoint = '/api/proxy/search?${searchParams}';
+        endpoint = `${API_URL}/api/search?${searchParams}`;
       } else if (queryParams.liste_id) {
         // API spécifique pour les collections
         const listId = Array.isArray(queryParams.liste_id) ? queryParams.liste_id[0] : queryParams.liste_id;
@@ -389,16 +390,16 @@ function BooksPageContent() {
             }
           }
         });
-        endpoint = '/api/proxy/lists/${listId}/books?${paramsWithoutListId}';
+        endpoint = `${API_URL}/api/lists/${listId}/books?${paramsWithoutListId}`;
       } else {
         // API books standard
         console.log('Using standard books API');
-        endpoint = '/api/proxy/books?${searchParams}';
+        endpoint = `${API_URL}/api/books?${searchParams}`;
       }
 
       const response = await fetch(endpoint);
       if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       return data;
@@ -421,11 +422,16 @@ function BooksPageContent() {
   const categoriesQuery = useQuery({
     queryKey: ['categories', 'active'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/categories?est_actif=true&limit=100');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      try {
+        const response = await apiClient.get('/api/categories?est_actif=true&limit=100');
+        if (!response.success) {
+          throw new Error(response.error || 'HTTP error!');
+        }
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        return { data: [] };
       }
-      return await response.json();
     }
   });
 
@@ -433,11 +439,16 @@ function BooksPageContent() {
   const tagsQuery = useQuery({
     queryKey: ['tags', 'active'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/tags?limit=100');
-      if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+      try {
+        const response = await apiClient.get('/api/tags?limit=100');
+        if (!response.success) {
+          throw new Error(response.error || 'HTTP error!');
+        }
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+        return { data: [] };
       }
-      return await response.json();
     }
   });
 
@@ -446,10 +457,10 @@ function BooksPageContent() {
     queryKey: ['collections'],
     queryFn: async () => {
       const response = await apiClient.get('/api/lists?est_publique=true&limit=100');
-      if (!response.ok) {
+      if (!response.success) {
         throw new Error('HTTP error! status: ${response.status}');
       }
-      return await response.json();
+      return response.data;
     }
   });
 
@@ -510,7 +521,7 @@ function BooksPageContent() {
     return Array.from({ length: 10 }, (_, i) => (
       <Star 
         key={i} 
-        className={'w-3 h-3 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}'}
+        className={`w-3 h-3 ${i < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
       />
     ));
   };
@@ -522,7 +533,7 @@ function BooksPageContent() {
 
     // Pour l'API collections (/lists/{id}/books), les livres sont dans data.data.books
     if (booksQuery.data.data?.books && Array.isArray(booksQuery.data.data.books)) {
-      console.log('Using collection API structure - books found:", booksQuery.data.data.books.length);
+      console.log('Using collection API structure - books found:', booksQuery.data.data.books.length);
       return booksQuery.data.data.books;
     }
 
@@ -559,12 +570,12 @@ function BooksPageContent() {
 
     const filteredBooks = allBooks.filter((book: any) => {
       const isBookFavorite = isFavorite(book.id);
-      console.log('Checking book ${book.id}'(${book.titre}): ${isBookFavorite ? 'FAVORITE' : 'not favorite'}');
+      console.log(`Checking book ${book.id} (${book.titre}): ${isBookFavorite ? 'FAVORITE' : 'not favorite'}`);
       return isBookFavorite;
     });
     
-    console.log('✅ Filtered ${filteredBooks.length}'favorite books out of ${allBooks.length} total books');
-    console.log('Favorite books found: ", filteredBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
+    console.log(`✅ Filtered ${filteredBooks.length} favorite books out of ${allBooks.length} total books`);
+    console.log('Favorite books found: ', filteredBooks.map((b: any) => ({ id: b.id, titre: b.titre })));
     console.log("=== END FILTERING === ");
     
     return filteredBooks;
@@ -634,7 +645,7 @@ function BooksPageContent() {
                 style={{
                   background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
                   WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent',
+                  WebkitTextFillColor: "transparent",
                   backgroundClip: "text"
                 }}
               >
@@ -650,7 +661,7 @@ function BooksPageContent() {
           </div>
         </div>
 
-        <style jsx global>{'
+        <style jsx global>{`
           .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
           }
@@ -822,7 +833,7 @@ function BooksPageContent() {
             position: relative;
             z-index: 1;
           }
-        "}</style>
+        `}</style>
         <div className="container mx-auto max-w-7xl px-4 py-4">
         
         {/* Barre d'outils STICKY - Mobile Simple / Desktop Complète */}
@@ -853,7 +864,7 @@ function BooksPageContent() {
               >
                 <Filter className="w-4 h-4" />
                 <span>Filtrer</span>
-                {(filters.statut !== "ALL" || filters.genre !== "ALL' || filters.tags.length > 0 ||
+                {(filters.statut !== "ALL" || filters.genre !== "ALL" || filters.tags.length > 0 ||
                   filters.auteur || filters.rythme !== 'ALL' || filters.note_min > 0 || filters.note_max < 10 ||
                   filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
                   filters.niveau_dark[0] > 0 || filters.niveau_dark[1] < 10 || filters.favoritesOnly) && (
@@ -888,7 +899,7 @@ function BooksPageContent() {
                 <Filter className="w-4 h-4" />
                 <span>Filtres</span>
                 {filtersOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                {(filters.statut !== "ALL" || filters.genre !== "ALL' || filters.tags.length > 0 ||
+                {(filters.statut !== "ALL" || filters.genre !== "ALL" || filters.tags.length > 0 ||
                   filters.auteur || filters.rythme !== 'ALL' || filters.note_min > 0 || filters.note_max < 10 ||
                   filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
                   filters.niveau_dark[0] > 0 || filters.niveau_dark[1] < 10 || filters.favoritesOnly) && (
@@ -954,18 +965,18 @@ function BooksPageContent() {
               <button
                 onClick={handleFavoritesFilter}
                 disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
-                className={'group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-base ${
+                className={`group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-base ${
                   filters.favoritesOnly
-                    ? '}bg-gradient-to-r from-primary to-accent text-white shadow-lg' : 'bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50'
-                }'}
+                    ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg' : 'bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50'
+                }`}
                 style={{ fontFamily: 'Inter, sans-serif' }}
                 title={isAuthenticated ?
-                  (filters.favoritesOnly ? 'Afficher tous les livres" : "Afficher uniquement mes favoris") : 'Connectez-vous pour voir vos favoris'
+                  (filters.favoritesOnly ? 'Afficher tous les livres' : 'Afficher uniquement mes favoris') : 'Connectez-vous pour voir vos favoris'
                 }
               >
-                <Heart className={'w-4 h-4 ${filters.favoritesOnly ? 'fill-current' : ''}'} />
+                <Heart className={`w-4 h-4 ${filters.favoritesOnly ? 'fill-current' : ''}`} />
                 <span>
-                  {filters.favoritesOnly ? 'Mes favoris (${favorites.size})' : 'Favoris"}
+                  {filters.favoritesOnly ? `Mes favoris (${favorites.size})` : 'Favoris'}
                 </span>
               </button>
             </div>
@@ -988,7 +999,7 @@ function BooksPageContent() {
                     <div className="flex items-center justify-between mb-4 md:mb-8">
                       <h3
                         className="font-bold flex items-center gap-3 text-xl text-foreground"
-                        style={{ fontFamily: "Playfair Display, serif' }}
+                        style={{ fontFamily: "Playfair Display, serif" }}
                       >
                         <Filter className="w-5 h-5 text-primary" />
                         Filtres avancés
@@ -1130,7 +1141,7 @@ function BooksPageContent() {
                           <Input
                             id="auteur-filter"
                             type="text"
-                            placeholder="Nom de l"auteur'
+                            placeholder="Nom de l'auteur"
                             value={filters.auteur}
                             onChange={(e) => updateFilters({ auteur: e.target.value })}
                             className="h-11 md:h-9 text-base md:text-sm"
@@ -1244,7 +1255,7 @@ function BooksPageContent() {
               {/* Compteur de résultats */}
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-foreground font-medium">
-                  <strong>{searchInfo?.total_results || books.length}</strong> livre{(searchInfo?.total_results || books.length) > 1 ? "s" : "'} trouvé{(searchInfo?.total_results || books.length) > 1 ? 's' : "'}
+                  <strong>{searchInfo?.total_results || books.length}</strong> livre{(searchInfo?.total_results || books.length) > 1 ? "s" : ""} trouvé{(searchInfo?.total_results || books.length) > 1 ? 's' : ""}
                 </span>
                 {booksQuery.isFetching && (
                   <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -1297,8 +1308,8 @@ function BooksPageContent() {
                     onClick={() => updateFilters({ tags: [] })}
                   >
                     {filters.tags.length === 1
-                      ? 'Tag: ${tags.find((t: any) => t.id === filters.tags[0])?.nom || 'Sélectionné'}'
-                      : 'Tags (${filters.tags.length})'
+                      ? `Tag: ${tags.find((t: any) => t.id === filters.tags[0])?.nom || 'Sélectionné'}`
+                      : `Tags (${filters.tags.length})`
                     }
                     <X className="w-3 h-3" />
                   </Badge>
@@ -1353,7 +1364,7 @@ function BooksPageContent() {
                 )}
 
                 {/* Bouton "Effacer tout" */}
-                {(debouncedSearch || filters.statut !== "ALL" || filters.genre !== "ALL' || 
+                {(debouncedSearch || filters.statut !== "ALL" || filters.genre !== "ALL" ||
                   filters.tags.length > 0 || filters.auteur || filters.note_min > 0 || 
                   filters.note_max < 10 || filters.favoritesOnly || filters.rythme !== 'ALL' ||
                   filters.niveau_spicy[0] > 0 || filters.niveau_spicy[1] < 10 ||
@@ -1431,14 +1442,14 @@ function BooksPageContent() {
                             whileHover="hover"
                             layout
                             transition={{ delay: index * 0.05 }}
-                            className="relative group'
+                            className="relative group"
                           >
 
-                            <Link href={'/books/${book.id}'}>
+                            <Link href={`/books/${book.id}`}>
                               <Card
-                                className={'overflow-hidden cursor-pointer bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
+                                className={`overflow-hidden cursor-pointer bg-card/95 backdrop-blur-xl border border-border shadow-lg ${
                                   viewMode === 'grid' ? 'book-card-grid' : 'h-32 flex'
-                                } !p-0 group-hover:scale-105 transition-all duration-300'}
+                                } !p-0 group-hover:scale-105 transition-all duration-300`}
                                 style={{
                                   borderRadius: '20px',
                                   transition: 'all 0.3s ease'
@@ -1459,13 +1470,13 @@ function BooksPageContent() {
                                     <div className="book-cover-container">
                                       {/* Placeholder/fallback avec même ratio - toujours visible au début */}
                                       <div className="book-cover-placeholder">
-                                        <Book className="w-12 h-12 text-purple-400' />
+                                        <Book className="w-12 h-12 text-purple-400" />
                                       </div>
 
                                       {book.image_couverture ? (
                                         <img
                                           src={book.image_couverture}
-                                          alt={"${book.titre}'— ${book.auteur}'}
+                                          alt={`${book.titre} — ${book.auteur}`}
                                           className="book-cover-image opacity-0"
                                           loading={index < 6 ? "eager" : "lazy"}
                                           onLoad={(e) => {
@@ -1506,7 +1517,7 @@ function BooksPageContent() {
                                       <div className="flex items-center justify-between text-xs">
                                         <div className="flex items-center gap-2 text-foreground/60">
                                           {book.note_generale > 0 && (
-                                            <span className="flex items-center gap-0.5" title="Note générale" style={{ color: "#B8860B' }}>
+                                            <span className="flex items-center gap-0.5" title="Note générale" style={{ color: "#B8860B" }}>
                                               <Star className="w-3 h-3 fill-current" />
                                               {book.note_generale}
                                             </span>
@@ -1529,16 +1540,16 @@ function BooksPageContent() {
                                   <CardContent className="!p-0 h-full flex">
                                     <div className="flex gap-4 p-4 h-full w-full">
                                       {/* Vignette 2:3 à gauche */}
-                                      <div className="w-16 flex-shrink-0 relative overflow-hidden rounded" style={{ aspectRatio: "2/3' }}>
+                                      <div className="w-16 flex-shrink-0 relative overflow-hidden rounded" style={{ aspectRatio: "2/3" }}>
                                         {book.image_couverture ? (
-                                          <img 
-                                            src={book.image_couverture} 
-                                            alt={"${book.titre}'— ${book.auteur}'}
+                                          <img
+                                            src={book.image_couverture}
+                                            alt={`${book.titre} — ${book.auteur}`}
                                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             loading= 'lazy'
                                             onError={(e) => {
                                               const target = e.target as HTMLImageElement;
-                                              target.src = ';
+                                              target.src = '';
                                               target.style.display = 'none';
                                               const placeholder = target.nextElementSibling as HTMLElement;
                                               if (placeholder) placeholder.style.display = 'flex';
@@ -1546,7 +1557,7 @@ function BooksPageContent() {
                                           />
                                         ) : null}
                                         
-                                        <div className={'absolute inset-0 bg-muted flex items-center justify-center ${book.image_couverture ? 'hidden' : '"}'}>
+                                        <div className={`absolute inset-0 bg-muted flex items-center justify-center ${book.image_couverture ? 'hidden' : ''}`}>
                                           <Book className="w-4 h-4 text-foreground/40" />
                                         </div>
 
@@ -1569,7 +1580,7 @@ function BooksPageContent() {
                                         <div className="flex items-center justify-between">
                                           <div className="flex items-center gap-3 text-sm text-foreground/60">
                                             {book.note_generale > 0 && (
-                                              <span className="flex items-center gap-1" title="Note générale" style={{ color: "#B8860B' }}>
+                                              <span className="flex items-center gap-1" title="Note générale" style={{ color: "#B8860B" }}>
                                                 <Star className="w-3 h-3 fill-current" />
                                                 {book.note_generale}
                                               </span>
@@ -1591,10 +1602,10 @@ function BooksPageContent() {
                                             aria-label={bookIsFavorite ? "Retirer des favoris" : 'Ajouter aux favoris'}
                                           >
                                             <Heart
-                                              className={'w-4 h-4 transition-colors ${
+                                              className={`w-4 h-4 transition-colors ${
                                                 bookIsFavorite
                                                   ? 'fill-red-500 text-red-500' : 'text-gray-600 hover:text-red-500'
-                                              }'}
+                                              }`}
                                             />
                                           </button>
                                         </div>
@@ -1700,9 +1711,8 @@ function BooksPageContent() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-0 md:p-4"
             style={{
-              height: "100vh",
-              height: '100dvh",
-              background: 'rgba(0, 0, 0, 0.8)',
+              height: "100dvh",
+              background: "rgba(0, 0, 0, 0.8)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)"
             }}
@@ -1714,9 +1724,7 @@ function BooksPageContent() {
               exit={{ opacity: 0, y: "100%" }}
               className="w-full h-full md:h-auto overflow-hidden md:rounded-lg md:max-w-lg md:w-full md:max-h-[80vh] md:border md:mx-4 flex flex-col md:bg-card"
               style={{
-                height: '100vh',
                 height: '100dvh',
-                maxHeight: '100vh',
                 maxHeight: '100dvh',
                 background: 'var(--background)',
                 position: "relative"
@@ -1747,29 +1755,29 @@ function BooksPageContent() {
 
                   {/* Favoris */}
                   <div className="space-y-3">
-                    <Label className="text-base font-medium'>Affichage</Label>
+                    <Label className="text-base font-medium">Affichage</Label>
                     <button
                       onClick={handleFavoritesFilter}
                       disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
-                      className={'w-full p-4 rounded-xl transition-all duration-300 flex items-center justify-between disabled:opacity-50 disabled:cursor-not-allowed ${
+                      className={`w-full p-4 rounded-xl transition-all duration-300 flex items-center justify-between disabled:opacity-50 disabled:cursor-not-allowed ${
                         filters.favoritesOnly
                           ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg' : 'bg-muted hover:bg-muted/80 border border-border'
-                      }' }
+                      }`}
                     >
-                      <div className='flex items-center gap-3'>
-                        <Heart className={'w-5 h-5 ${filters.favoritesOnly ? 'fill-current" : "text-primary"}' } />
+                      <div className="flex items-center gap-3">
+                        <Heart className={`w-5 h-5 ${filters.favoritesOnly ? "fill-current" : "text-primary"}`} />
                         <div className="text-left">
-                          <div className="font-medium'>
-                            {filters.favoritesOnly ? 'Mes favoris (${favorites.size})' : 'Afficher mes favoris"}
+                          <div className="font-medium">
+                            {filters.favoritesOnly ? `Mes favoris (${favorites.size})` : "Afficher mes favoris"}
                           </div>
                           <div className="text-sm opacity-75">
-                            {filters.favoritesOnly ? "Affichage des favoris uniquement" : "Afficher tous les livres'}
+                            {filters.favoritesOnly ? "Affichage des favoris uniquement" : "Afficher tous les livres"}
                           </div>
                         </div>
                       </div>
-                      <div className={'w-5 h-5 rounded-full border-2 ${
+                      <div className={`w-5 h-5 rounded-full border-2 ${
                         filters.favoritesOnly ? 'bg-background border-primary' : 'border-primary'
-                      }'}>
+                      }`}>
                         {filters.favoritesOnly && (
                           <div className="w-full h-full rounded-full bg-primary" />
                         )}
@@ -1944,7 +1952,7 @@ function BooksPageContent() {
                       <Label className="text-sm text-muted-foreground">Auteur</Label>
                       <Input
                         type="text"
-                        placeholder="Nom de l"auteur'
+                        placeholder="Nom de l'auteur"
                         value={filters.auteur}
                         onChange={(e) => updateFilters({ auteur: e.target.value })}
                         className="h-11"
@@ -2078,7 +2086,7 @@ function BooksPageContent() {
                   className="md:hidden"
                   style={{
                     height: "max(3rem, env(safe-area-inset-bottom, 3rem))",
-                    background: "var(--background)',
+                    background: "var(--background)",
                     width: "100%",
                     position: "relative",
                     zIndex: 101
@@ -2172,37 +2180,37 @@ function BooksPageContent() {
 
               {/* Tags Grid */}
               <div className="p-3 md:p-4 overflow-y-auto max-h-80 md:max-h-96">
-                <div className="grid grid-cols-1 gap-2'>
+                <div className="grid grid-cols-1 gap-2">
                   {tags.map((tag: any) => {
                     const isSelected = filters.tags.includes(tag.id);
                     return (
                       <div 
-                        key={tag.id} 
-                        className={'
+                        key={tag.id}
+                        className={`
                           flex items-center justify-between p-4 md:p-3 rounded-lg cursor-pointer transition-all duration-200 touch-manipulation
                           ${isSelected
                             ? 'bg-primary/10 border-2 border-primary/20 shadow-sm'
-                            : "border-2 border-transparent hover:bg-muted hover:border-border active:bg-muted"
+                            : 'border-2 border-transparent hover:bg-muted hover:border-border active:bg-muted'
                           }
-"                       "}
+                        `}
                         onClick={() => handleTagToggle(tag.id)}
                       >
                         <div className="flex items-center space-x-3">
-                          <div 
-                            className='w-4 h-4 rounded-full ring-2 ring-white shadow-sm' 
+                          <div
+                            className="w-4 h-4 rounded-full ring-2 ring-white shadow-sm"
                             style={{backgroundColor: tag.couleur}}
                           />
-                          <span className={'font-medium text-base md:text-sm ${isSelected ? '}text-primary' : 'text-foreground'}'}>
+                          <span className={`font-medium text-base md:text-sm ${isSelected ? 'text-primary' : 'text-foreground'}`}>
                             {tag.nom}
                           </span>
                         </div>
-                        <div className={'
+                        <div className={`
                           w-7 h-7 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center transition-all
                           ${isSelected
                             ? 'bg-primary border-primary'
                             : 'border-muted-foreground hover:border-primary'
                           }
-"                       "}>
+                        `}>
                           {isSelected && (
                             <motion.div 
                               className="w-3.5 h-3.5 md:w-3 md:h-3 bg-background rounded-full" 
@@ -2246,7 +2254,7 @@ export default function BooksPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-foreground/70'>Chargement du catalogue...</p>
+          <p className="text-foreground/70">Chargement du catalogue...</p>
         </div>
       </div>
     }>

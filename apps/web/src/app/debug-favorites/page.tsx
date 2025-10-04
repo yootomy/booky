@@ -50,8 +50,8 @@ export default function DebugFavoritesPage() {
   const testRemoveFavorite = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/favorites/${bookId}', {
-        method: 'DELETE"
+      const response = await fetch(`/api/favorites/${bookId}`, {
+        method: 'DELETE'
       });
       const data = await response.json();
       console.log("DELETE /api/favorites: ", data);

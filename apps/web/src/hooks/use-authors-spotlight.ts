@@ -28,9 +28,9 @@ export function useAuthorsSpotlight() {
         
         // Récupérer tous les livres pour calculer les stats par auteur
         const response = await apiClient.get('/api/books');
-        if (!response.ok) throw new Error("Failed to fetch books");
+        if (!response.success) throw new Error(response.error || "Failed to fetch books");
         
-        const books = await response.json();
+        const books = response.data;
         
         // Calculer les statistiques par auteur
         const authorStats = books.reduce((acc: any, book: any) => {

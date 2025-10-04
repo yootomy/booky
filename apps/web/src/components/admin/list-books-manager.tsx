@@ -95,11 +95,10 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
       if (searchQuery) params.append('search', searchQuery);
       params.append('limit', '50');
 
-      const response = await apiClient.get('/api/lists/${listId}/books?${params.toString()}');
-      const data = await response.json();
+      const response = await apiClient.get(`/api/lists/${listId}/books?${params.toString()}`);
 
-      if (data.success) {
-        setBooks(data.data.books || []);
+      if (response.success) {
+        setBooks(response.data.books || []);
       } else {
         toast({
           title: "Erreur",
@@ -123,13 +122,9 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
 
     try {
       setRemoving(true);
-      const response = await apiClient.get(`/api/lists/${listId}/books/${bookToRemove.id}`, {
-        method: 'DELETE',
-      });
+      const response = await apiClient.delete(`/api/lists/${listId}/books/${bookToRemove.id}`);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.success) {
         toast({
           title: "Succès",
           description: "Livre retiré de la liste avec succès",
@@ -137,7 +132,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
         setBooks(prev => prev.filter(book => book.id !== bookToRemove.id));
         onBookRemoved();
       } else {
-        throw new Error(data.error || "Erreur lors de la suppression");
+        throw new Error(response.error || "Erreur lors de la suppression");
       }
     } catch (error) {
       toast({

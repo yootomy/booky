@@ -38,7 +38,7 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
           style={{
             background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)",
             backdropFilter: "blur(10px)",
-            border: "1px solid rgba(139, 21, 56, 0.1)',
+            border: "1px solid rgba(139, 21, 56, 0.1)",
             boxShadow: "0 8px 32px rgba(139, 21, 56, 0.05)"
           }}
         >
@@ -85,7 +85,7 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
               
               <div className="flex items-center gap-1">
                 <Star className="w-4 h-4 fill-current" style={{ color: '#B8860B' }} />
-                <span className="text-sm font-medium" style={{ color: "#2C1810' }}>
+                <span className="text-sm font-medium" style={{ color: "#2C1810" }}>
                   {author.note_moyenne.toFixed(1)}
                 </span>
               </div>
@@ -96,7 +96,7 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
               <div className="w-12 h-16 relative flex-shrink-0">
                 <Image
                   src={author.livre_phare.image_couverture || '/placeholder-book.svg'}
-                  alt={"Couverture de ${author.livre_phare.titre}'}
+                  alt={`Couverture de ${author.livre_phare.titre}`}
                   fill
                   className="object-cover rounded"
                   sizes="48px"
@@ -104,11 +104,11 @@ function AuthorCard({ author, index }: { author: Author; index: number }) {
               </div>
               
               <div className="flex-1 min-w-0">
-                <p 
+                <p
                   className="text-xs font-semibold mb-1 truncate"
                   style={{
                     fontFamily: "Inter, sans-serif",
-                    color: '#2C1810"
+                    color: '#2C1810'
                   }}
                 >
                   Son livre phare :

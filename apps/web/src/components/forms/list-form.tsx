@@ -110,12 +110,11 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       try {
         setLoadingBooks(true);
         const response = await apiClient.get('/api/books?limit=100');
-        const result = await response.json();
 
-        if (result.success) {
-          setBooks(result.data || []);
+        if (response.success) {
+          setBooks(response.data || []);
         } else {
-          throw new Error(result.error || 'Erreur lors du chargement des livres');
+          throw new Error(response.error || 'Erreur lors du chargement des livres');
         }
       } catch (error) {
         toast({
@@ -139,20 +138,19 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
       }
 
       try {
-        const response = await apiClient.get('/api/lists/${initialData.id}/books');
-        const result = await response.json();
+        const response = await apiClient.get(`/api/lists/${initialData.id}/books`);
 
-        if (result.success && result.data) {
-          // Vérifier si result.data est un tableau ou s'il faut accéder à une propriété
-          let booksArray = result.data;
+        if (response.success && response.data) {
+          // Vérifier si response.data est un tableau ou s'il faut accéder à une propriété
+          let booksArray = response.data;
 
-          // Si result.data est un objet avec une propriété books, l'utiliser
-          if (!Array.isArray(result.data) && result.data.books) {
-            booksArray = result.data.books;
+          // Si response.data est un objet avec une propriété books, l'utiliser
+          if (!Array.isArray(response.data) && response.data.books) {
+            booksArray = response.data.books;
           }
-          // Si result.data est un objet avec une propriété list_books, l'utiliser
-          else if (!Array.isArray(result.data) && result.data.list_books) {
-            booksArray = result.data.list_books;
+          // Si response.data est un objet avec une propriété list_books, l'utiliser
+          else if (!Array.isArray(response.data) && response.data.list_books) {
+            booksArray = response.data.list_books;
           }
 
           if (Array.isArray(booksArray)) {
@@ -177,8 +175,9 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
     try {
       setLoading(true);
 
+      const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
       const url = isEditing && initialData?.id
-        ? '/api/proxy/lists/${initialData.id}' : "/api/proxy/lists";
+        ? `${API_URL}/api/lists/${initialData.id}` : `${API_URL}/api/lists`;
 
       const method = isEditing ? "PUT" : "POST";
 

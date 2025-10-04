@@ -102,14 +102,14 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
           {/* Books preview */}
           <div className="flex -space-x-2 mb-4">
             {playlist.books.slice(0, 4).map((book, bookIndex) => (
-              <div 
-                key={book.id} 
-                className="relative w-12 h-16 rounded border-2 border-white shadow-sm'
+              <div
+                key={book.id}
+                className="relative w-12 h-16 rounded border-2 border-white shadow-sm"
                 style={{ zIndex: 4 - bookIndex }}
               >
                 <Image
                   src={book.image_couverture || '/placeholder-book.svg'}
-                  alt={'Couverture de ${book.titre}'}
+                  alt={`Couverture de ${book.titre}`}
                   fill
                   className="object-cover rounded"
                   sizes="48px"
@@ -135,13 +135,13 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
             {playlist.books.slice(0, 3).map((book) => (
               <div key={book.id} className="flex items-center gap-2">
                 <Star className="w-3 h-3 text-yellow-400 fill-current flex-shrink-0" />
-                <p 
-                  className="text-xs truncate'
+                <p
+                  className="text-xs truncate"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     color: '#2C1810'
                   }}
-                  title={'${book.titre}'- ${book.auteur}'}
+                  title={`${book.titre} - ${book.auteur}`}
                 >
                   <span className="font-medium">{book.titre}</span>
                   <span className="opacity-70"> • {book.auteur}</span>
@@ -152,10 +152,10 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
 
           {/* CTA */}
           <div className="flex items-center justify-between">
-            <span 
+            <span
               className="text-sm font-semibold group-hover:text-[#8B1538] transition-colors duration-300"
               style={{
-                fontFamily: "Inter, sans-serif',
+                fontFamily: "Inter, sans-serif",
                 color: playlist.color
               }}
             >

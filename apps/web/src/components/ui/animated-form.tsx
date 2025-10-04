@@ -298,25 +298,25 @@ export function AnimatedFormModal({
 // =============================================================================
 
 // Ces classes peuvent être ajoutées à votre fichier CSS global ou Tailwind config
-export const formAnimationClasses="
+export const formAnimationClasses = `
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-4px); }
     75% { transform: translateX(4px); }
   }
-  
+
   @keyframes bounce-subtle {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-2px); }
   }
-  
+
   .animate-shake {
     animation: shake 0.5s ease-in-out;
   }
-  
+
   .animate-bounce-subtle {
     animation: bounce-subtle 0.6s ease-in-out;
   }
-";
+`;
 
 export default AnimatedForm;

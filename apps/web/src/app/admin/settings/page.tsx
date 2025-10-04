@@ -70,8 +70,8 @@ export default function AdminSettings() {
     queryKey: ['featured-book'],
     queryFn: async () => {
       const response = await apiClient.get('/api/featured-book');
-      if (!response.ok) throw new Error("Failed to fetch featured book");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch featured book");
+      return response.data;
     }
   });
 
@@ -79,9 +79,9 @@ export default function AdminSettings() {
     queryKey: ['book-search', bookSearchQuery],
     queryFn: async () => {
       if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
-      const response = await apiClient.get('/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10');
-      if (!response.ok) throw new Error("Failed to search books");
-      return response.json();
+      const response = await apiClient.get(`/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10`);
+      if (!response.success) throw new Error(response.error || "Failed to search books");
+      return response.data;
     },
     enabled: bookSearchQuery.length >= 2
   });
@@ -90,15 +90,10 @@ export default function AdminSettings() {
   const setFeaturedBook = async (bookId: string) => {
     try {
       setFeaturedBookLoading(true);
-      const response = await apiClient.get('/api/featured-book', {
-        method: 'POST',
-        headers: { 'Content-Type' : 'application/json' },
-        body: JSON.stringify({ bookId })
-      });
+      const response = await apiClient.post('/api/featured-book', { bookId });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to set featured book');
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to set featured book');
       }
 
       toast({
@@ -126,13 +121,10 @@ export default function AdminSettings() {
   const clearFeaturedBook = async () => {
     try {
       setFeaturedBookLoading(true);
-      const response = await apiClient.get("/api/featured-book", {
-        method: 'DELETE'
-      });
+      const response = await apiClient.delete("/api/featured-book");
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to clear featured book');
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to clear featured book');
       }
 
       toast({

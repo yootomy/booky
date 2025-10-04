@@ -525,7 +525,7 @@ export function TagForm({
                   variant="secondary"
                   className="px-2 py-1"
                   style={{
-                    backgroundColor: "${watchedValues.couleur}20',
+                    backgroundColor: `${watchedValues.couleur}20`,
                     color: watchedValues.couleur,
                     borderColor: watchedValues.couleur
                   }}

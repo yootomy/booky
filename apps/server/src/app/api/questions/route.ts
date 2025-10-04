@@ -82,19 +82,24 @@ export async function GET(request: NextRequest) {
 
         // Construire l'array des réponses si elles sont demandées et qu'il y en a
         const responses = [];
-        if (include.includes('responses') && q.reponse && q.user_book_question_answeredByIdTouser) {
+        if (include.includes('responses') && q.reponse && q.user_book_question_answeredByIdTouser && 'nom_complet' in q.user_book_question_answeredByIdTouser) {
+          const answeredBy = q.user_book_question_answeredByIdTouser as any;
           responses.push({
             id: `${q.id}-response`, // ID unique pour la réponse
             contenu: q.reponse,
             date_creation: q.date_reponse?.toISOString() || q.date_question.toISOString(),
             author: {
-              nom_complet: q.user_book_question_answeredByIdTouser.nom_complet,
-              username: q.user_book_question_answeredByIdTouser.username,
-              avatar: q.user_book_question_answeredByIdTouser.avatar,
-              role: q.user_book_question_answeredByIdTouser.role || 'ADMIN'
+              nom_complet: answeredBy.nom_complet,
+              username: answeredBy.username,
+              avatar: answeredBy.avatar,
+              role: answeredBy.role || 'ADMIN'
             }
           });
         }
+
+        const book = q.book as any;
+        const author = q.user_book_question_authorIdTouser as any;
+        const count = q._count as any;
 
         const result: any = {
           id: q.id,
@@ -103,18 +108,18 @@ export async function GET(request: NextRequest) {
           date_creation: q.date_question.toISOString(), // Schema uses 'date_question' field
           date_modification: q.date_reponse?.toISOString() || null, // Using date_reponse as modification date
           book: {
-            id: q.book.id,
-            titre: q.book.titre,
-            auteur: q.book.auteur,
-            image_couverture: q.book.image_couverture
+            id: book.id,
+            titre: book.titre,
+            auteur: book.auteur,
+            image_couverture: book.image_couverture
           },
           author: {
-            nom_complet: q.user_book_question_authorIdTouser.nom_complet,
-            username: q.user_book_question_authorIdTouser.username,
-            avatar: q.user_book_question_authorIdTouser.avatar
+            nom_complet: author.nom_complet,
+            username: author.username,
+            avatar: author.avatar
           },
           stats: {
-            likes_count: q._count.book_question_like,
+            likes_count: count.book_question_like,
             responses_count: q.reponse ? 1 : 0 // Compter les réponses disponibles
           }
         };

@@ -12,7 +12,7 @@ export function useHomeStats() {
       if (!response.success) {
         throw new Error("Failed to fetch stats");
       }
-      return response.json();
+      return response.data;
     },
     staleTime: 10 * 60 * 1000, // 10 minutes
     refetchOnWindowFocus: false,
@@ -88,7 +88,7 @@ export function usePopularCategories() {
       if (!response.success) {
         throw new Error("Failed to fetch categories");
       }
-      return response.json();
+      return response.data;
     },
     staleTime: 60 * 60 * 1000, // 1 hour
     refetchOnWindowFocus: false,

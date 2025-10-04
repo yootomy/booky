@@ -22,13 +22,13 @@ export function useHauntingQuotes() {
         
         // Récupérer les livres avec citations
         const response = await apiClient.get('/api/books?has_citations=true&limit=20');
-        if (!response.ok) {
+        if (!response.success) {
           // Fallback en cas d'erreur API
           setData([]);
           return;
         }
         
-        const books = await response.json();
+        const books = response.data;
         
         // Traiter les livres pour extraire des citations
         const quotes: HauntingQuote[] = [];

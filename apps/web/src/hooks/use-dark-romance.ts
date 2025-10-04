@@ -31,9 +31,9 @@ export function useDarkRomance() {
         
         // Récupérer tous les livres et filtrer pour dark romance
         const response = await apiClient.get('/api/books');
-        if (!response.ok) throw new Error("Failed to fetch dark romance books");
+        if (!response.success) throw new Error(response.error || "Failed to fetch dark romance books");
         
-        const books = await response.json();
+        const books = response.data;
         
         // Filtrer pour obtenir les livres dark romance et prendre seulement les 6 premiers
         const darkRomanceBooks = books

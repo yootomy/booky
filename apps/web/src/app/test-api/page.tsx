@@ -42,14 +42,14 @@ export default function TestApiPage() {
       addResult(url, method, data, response.status);
       
       if (response.ok) {
-        toast.success(`${method}'${url} - OK');
+        toast.success(`${method} ${url} - OK`);
       } else {
-        toast.error('${method}'${url} - ${response.status}');
+        toast.error(`${method} ${url} - ${response.status}`);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       addResult(url, method, { error: errorMessage }, 0);
-      toast.error('Error: ${errorMessage}');
+      toast.error(`Error: ${errorMessage}`);
     } finally {
       setLoading(false);
     }
@@ -76,59 +76,59 @@ export default function TestApiPage() {
             <CardTitle>Tests API</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button 
-              onClick={() => testEndpoint("/api/favorites", 'GET')} 
+            <Button
+              onClick={() => testEndpoint("/api/favorites", "GET")}
               disabled={loading}
               className="w-full justify-start"
               variant="outline"
             >
               GET /api/favorites
             </Button>
-            
-            <Button 
-              onClick={() => testEndpoint("/api/favorites/debug", 'GET')} 
+
+            <Button
+              onClick={() => testEndpoint("/api/favorites/debug", "GET")}
               disabled={loading}
               className="w-full justify-start"
               variant="outline"
             >
               GET /api/favorites/debug
             </Button>
-            
-            <Button 
-              onClick={() => testEndpoint("/api/favorites/status", 'GET')} 
+
+            <Button
+              onClick={() => testEndpoint("/api/favorites/status", "GET")}
               disabled={loading}
               className="w-full justify-start"
               variant="default"
             >
               GET /api/favorites/status (NEW)
             </Button>
-            
-            <Button 
-              onClick={() => testEndpoint("/api/favorites", 'POST', { bookId: "test-book-1" })} 
+
+            <Button
+              onClick={() => testEndpoint("/api/favorites", "POST", { bookId: "test-book-1" })}
               disabled={loading}
               className="w-full justify-start bg-green-600 hover:bg-green-700"
             >
               POST /api/favorites (Add test-book-1)
             </Button>
-            
-            <Button 
-              onClick={() => testEndpoint('/api/favorites', 'POST', { bookId: 'test-book-2' })} 
+
+            <Button
+              onClick={() => testEndpoint("/api/favorites", "POST", { bookId: "test-book-2" })}
               disabled={loading}
               className="w-full justify-start bg-green-600 hover:bg-green-700"
             >
               POST /api/favorites (Add test-book-2)
             </Button>
-            
-            <Button 
-              onClick={() => testEndpoint('/api/favorites/test-book-1', 'DELETE')} 
+
+            <Button
+              onClick={() => testEndpoint("/api/favorites/test-book-1", "DELETE")}
               disabled={loading}
               className="w-full justify-start bg-red-600 hover:bg-red-700"
             >
               DELETE /api/favorites/test-book-1
             </Button>
-            
-            <Button 
-              onClick={() => testEndpoint("/api/favorites/reset", 'POST')} 
+
+            <Button
+              onClick={() => testEndpoint("/api/favorites/reset", "POST")} 
               disabled={loading}
               className="w-full justify-start bg-orange-600 hover:bg-orange-700"
             >
@@ -138,8 +138,8 @@ export default function TestApiPage() {
             {/* Tests avec de vrais IDs de livres si on en a */}
             <div className="border-t pt-4 mt-4">
               <p className="text-sm text-muted-foreground mb-2">Tests avec vrais livres:</p>
-              <Button 
-                onClick={() => testEndpoint("/api/favorites", 'POST', { bookId: "674f8e7adf1a1a2b8c3d4e5f' })} 
+              <Button
+                onClick={() => testEndpoint("/api/favorites", "POST", { bookId: "674f8e7adf1a1a2b8c3d4e5f" })}
                 disabled={loading}
                 className="w-full justify-start bg-blue-600 hover:bg-blue-700 text-xs"
               >
@@ -154,26 +154,26 @@ export default function TestApiPage() {
           <CardHeader>
             <CardTitle>Résultats ({results.length})</CardTitle>
           </CardHeader>
-          <CardContent className='max-h-96 overflow-y-auto space-y-2'>
+          <CardContent className="max-h-96 overflow-y-auto space-y-2">
             {results.map((result) => (
-              <div 
-                key={result.id} 
-                className={'p-3 rounded border text-xs ${
-                  result.status >= 200 && result.status < 300 
-                    ? 'bg-green-50 border-green-200' 
+              <div
+                key={result.id}
+                className={`p-3 rounded border text-xs ${
+                  result.status >= 200 && result.status < 300
+                    ? "bg-green-50 border-green-200"
                     : result.status >= 400
-                    ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'
-                }'}
+                    ? "bg-red-50 border-red-200" : "bg-gray-50 border-gray-200"
+                }`}
               >
                 <div className="flex justify-between items-start mb-1">
-                  <span className="font-mono font-semibold'>
+                  <span className="font-mono font-semibold">
                     {result.method} {result.endpoint}
                   </span>
-                  <span className={'px-2 py-1 rounded text-xs ${
-                    result.status >= 200 && result.status < 300 
-                      ? 'bg-green-100 text-green-800" 
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    result.status >= 200 && result.status < 300
+                      ? "bg-green-100 text-green-800"
                       : result.status >= 400
-                      ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-800" }'}>
+                      ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-800"}`}>
                     {result.status}
                   </span>
                 </div>

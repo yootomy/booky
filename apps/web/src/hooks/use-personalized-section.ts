@@ -35,13 +35,13 @@ export function usePersonalizedSection() {
         
         // Vérifier si l'utilisateur est connecté
         const sessionResponse = await apiClient.get('/api/auth/session');
-        if (!sessionResponse.ok) {
+        if (!sessionResponse.success) {
           setIsAuthenticated(false);
           setData({ suggestions: [], currentReading: [], toReadNext: [] });
           return;
         }
 
-        const session = await sessionResponse.json();
+        const session = sessionResponse.data;
         if (!session.user) {
           setIsAuthenticated(false);
           setData({ suggestions: [], currentReading: [], toReadNext: [] });
@@ -52,11 +52,11 @@ export function usePersonalizedSection() {
 
         // Récupérer les favoris de l'utilisateur
         const favoritesResponse = await apiClient.get('/api/favorites');
-        const favorites = favoritesResponse.ok ? await favoritesResponse.json() : [];
+        const favorites = favoritesResponse.success ? favoritesResponse.data : [];
 
         // Récupérer tous les livres pour les suggestions
         const booksResponse = await apiClient.get('/api/books');
-        const allBooks = booksResponse.ok ? await booksResponse.json() : [];
+        const allBooks = booksResponse.success ? booksResponse.data : [];
 
         // Générer des suggestions basées sur les favoris
         const suggestions = generateSuggestions(favorites, allBooks);

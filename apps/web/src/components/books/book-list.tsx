@@ -335,7 +335,7 @@ export function BookList({
               </Badge>
             ))}
             {(book.categories?.length || 0) > 2 && (
-              <Badge variant='outline" className="text-xs px-1.5 py-0.5">
+              <Badge variant="outline" className="text-xs px-1.5 py-0.5">
                 +{(book.categories?.length || 0) - 2}
               </Badge>
             )}
@@ -420,7 +420,7 @@ export function BookList({
         <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">
-              {selectedBooks.length} livre{selectedBooks.length > 1 ? "s" : "'} sélectionné{selectedBooks.length > 1 ? 's' : "'}
+              {selectedBooks.length} livre{selectedBooks.length > 1 ? "s" : ""} sélectionné{selectedBooks.length > 1 ? "s" : ""}
             </span>
           </div>
           

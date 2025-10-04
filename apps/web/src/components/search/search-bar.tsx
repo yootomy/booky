@@ -62,25 +62,25 @@ export function SearchBar({
       {
         id: "1",
         type: "book",
-        title: ""${searchQuery}' dans les titres',
+        title: `"${searchQuery}" dans les titres`,
         subtitle: "Recherche dans tous les livres",
       },
       {
         id: "2",
         type: "author",
-        title: "'${searchQuery}' dans les auteurs',
+        title: `"${searchQuery}" dans les auteurs`,
         subtitle: "Recherche par auteur",
       },
       {
         id: "3",
         type: "tag",
-        title: "'${searchQuery}' dans les tags',
+        title: `"${searchQuery}" dans les tags`,
         subtitle: "Genres, tropes, triggers",
       },
       {
         id: "4",
         type: "category",
-        title: "'${searchQuery}' dans les catégories',
+        title: `"${searchQuery}" dans les catégories`,
         subtitle: "Collections et catégories",
       },
     ];

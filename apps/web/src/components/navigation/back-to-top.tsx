@@ -201,7 +201,7 @@ export function BackToTopWithProgress({
     window.addEventListener("scroll", updateScrollProgress, { passive: true });
     updateScrollProgress();
 
-    return () => window.removeEventListener("scroll', updateScrollProgress);
+    return () => window.removeEventListener("scroll", updateScrollProgress);
   }, []);
 
   if (!isVisible) return null;
@@ -233,7 +233,7 @@ export function BackToTopWithProgress({
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            strokeDasharray={'${scrollProgress},'100'}
+            strokeDasharray={`${scrollProgress}, 100`}
           />
         </svg>
         

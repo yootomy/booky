@@ -104,7 +104,7 @@ export default function TagDetailPage() {
     }));
   };
 
-  const handleSort = (sort: string, order: "asc" | "desc' = 'desc') => {
+  const handleSort = (sort: string, order: "asc" | "desc" = 'desc') => {
     setBookFilters(prev => ({
       ...prev,
       sort,
@@ -403,9 +403,9 @@ export default function TagDetailPage() {
             <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-white mb-2">Aucun livre avec ce tag</h3>
             <p className="text-gray-400 mb-6">
-              {bookFilters.statut 
-                ? 'Aucun livre avec le statut '${bookFilters.statut}' pour ce tag'
-                : 'Ce tag n\"est associé à aucun livre pour le moment"
+              {bookFilters.statut
+                ? `Aucun livre avec le statut ${bookFilters.statut} pour ce tag`
+                : "Ce tag n'est associé à aucun livre pour le moment"
               }
             </p>
             {bookFilters.statut && (

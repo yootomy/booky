@@ -106,10 +106,10 @@ export default function TagsPage() {
             {/* Filtre favoris */}
             <Button
               variant={showFavoritesOnly ? "default" : "outline"}
-              size="sm'
+              size="sm"
               onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             >
-              <Heart className={'h-4 w-4 mr-1 ${showFavoritesOnly ? '},fill-current' : '"}"} />
+              <Heart className={`h-4 w-4 mr-1 ${showFavoritesOnly ? 'fill-current' : ''}`} />
               Favoris
             </Button>
           </div>
@@ -202,12 +202,12 @@ export default function TagsPage() {
             ) : tags.length > 0 ? (
               <div className="flex flex-wrap gap-2 items-center">
                 {tags.map((tag) => (
-                  <Link key={tag.id} href={'/tags/${tag.id}'}>
+                  <Link key={tag.id} href={`/tags/${tag.id}`}>
                     <Badge
                       variant="outline"
                       className="hover:scale-105 transition-transform cursor-pointer border-2 relative"
                       style={{
-                        fontSize: "${getTagSize(tag.utilisation_count, maxUsageCount)}px',
+                        fontSize: `${getTagSize(tag.utilisation_count, maxUsageCount)}px`,
                         borderColor: tag.couleur,
                         color: tag.couleur,
                         opacity: 0.7 + (tag.utilisation_count / maxUsageCount) * 0.3,
@@ -248,15 +248,15 @@ export default function TagsPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="h-3 bg-gray-700 rounded"></div>
-                    <div className="h-3 bg-gray-700 rounded w-3/4'></div>
+                    <div className="h-3 bg-gray-700 rounded w-3/4"></div>
                   </div>
                 </CardContent>
               </Card>
             ))
           ) : (
             tags.map((tag) => (
-              <Link key={tag.id} href={'/tags/${tag.id}'}>
-                <Card className="h-full hover:bg-gray-800/50 transition-colors cursor-pointer group">
+              <Link key={tag.id} href={`/tags/${tag.id}`}>
+                <Card className="h-full hover:bg-gray-800 transition-colors cursor-pointer group">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-2">
@@ -309,9 +309,9 @@ export default function TagsPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4'>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {typeTags.map((tag) => (
-                      <Link key={tag.id} href={'/tags/${tag.id}'}>
+                      <Link key={tag.id} href={`/tags/${tag.id}`}>
                         <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-800/50 transition-colors cursor-pointer">
                           <div className="flex items-center space-x-3">
                             <div 
@@ -345,7 +345,7 @@ export default function TagsPage() {
           <h3 className="text-lg font-medium text-white mb-2">Aucun tag trouvé</h3>
           <p className="text-gray-400 mb-6">
             {search || selectedTypes.length > 0 || showFavoritesOnly
-              ? "Essayez avec des critères différents'
+              ? "Essayez avec des critères différents"
               : "Aucun tag disponible pour le moment"
             }
           </p>

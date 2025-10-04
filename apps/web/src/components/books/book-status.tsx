@@ -64,7 +64,7 @@ const STATUS_CONFIG: Record<BookStatusType, {
     label: "Abandonné",
     shortLabel: "Abandonné",
     icon: XCircle,
-    color: "#EF4444', // Red
+    color: "#EF4444", // Red
     bgColor: "#EF4444",
     description: "Lecture arrêtée, livre abandonné"
   }
@@ -268,7 +268,7 @@ export function ReadingStats({
   className
 }: ReadingStatsProps) {
   return (
-    <div className={cn('flex flex-wrap gap-2", className)}>
+    <div className={cn('flex flex-wrap gap-2', className)}>
       {dateStarted && (
         <Badge variant="outline" className="text-xs">
           <Calendar className="w-3 h-3 mr-1" />

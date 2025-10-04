@@ -200,7 +200,7 @@ export interface ChartData {
     category: CategorySummary;
     count: number;
     pourcentage: number;
-    evolution: "hausse" | "baisse' | 'stable';
+    evolution: "hausse" | "baisse" | "stable";
   }>;
   
   // Rythmes préférés

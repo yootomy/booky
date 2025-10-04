@@ -88,10 +88,10 @@ export function BookCover({
     switch (placeholderVariant) {
       case "gradient":
         return (
-          <div 
+          <div
             className="w-full h-full flex flex-col items-center justify-center text-white"
             style={{
-              background: "linear-gradient(135deg, ${gradientStart},`${gradientEnd})'
+              background: `linear-gradient(135deg, ${gradientStart}, ${gradientEnd})`
             }}
           >
             <BookOpen className="w-8 h-8 mb-2 opacity-80" />
@@ -210,11 +210,11 @@ export function BookCoverAspect({
   className,
   ...props
 }: BookCoverAspectProps) {
-  const computedHeight = height || (typeof width === 'number' ? width / aspectRatio : "calc(${width}'/ ${aspectRatio})');
-  
+  const computedHeight = height || (typeof width === 'number' ? width / aspectRatio : `calc(${width} / ${aspectRatio})`);
+
   return (
     <div
-      className={cn('relative overflow-hidden", className)}
+      className={cn('relative overflow-hidden', className)}
       style={{ width, height: computedHeight }}
     >
       <BookCover
@@ -240,7 +240,7 @@ interface BookCoverStackProps {
 
 export function BookCoverStack({
   books,
-  size=",sm",
+  size="sm",
   maxVisible = 3,
   className
 }: BookCoverStackProps) {
@@ -254,7 +254,7 @@ export function BookCoverStack({
           key={index}
           className="absolute transition-transform hover:z-10"
           style={{
-            transform: "translateX(${index * 8}px)'translateY(${index * -4}px)',
+            transform: `translateX(${index * 8}px) translateY(${index * -4}px)`,
             zIndex: visibleBooks.length - index
           }}
         >

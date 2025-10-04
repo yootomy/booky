@@ -350,7 +350,7 @@ export default function AdminActivity() {
                               </div>
                               
                               {activity.bookId && (
-                                <Link href={'/books/' + activity.bookId}>
+                                <Link href={`/books/${activity.bookId}`}>
                                   <Button variant="ghost" size="sm">
                                     <Eye className="h-3 w-3 mr-1" />
                                     Voir

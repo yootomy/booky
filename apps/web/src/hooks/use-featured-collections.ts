@@ -25,21 +25,21 @@ export function useFeaturedCollections() {
       try {
         setIsLoading(true);
         
-        // Récupérer les catégories actives triées par ordre_affichage 
+        // Récupérer les catégories actives triées par ordre_affichage
         const categoriesResponse = await apiClient.get('/api/categories');
-        if (!categoriesResponse.ok) throw new Error("Failed to fetch categories");
-        
-        const allCategories = await categoriesResponse.json();
+        if (!categoriesResponse.success) throw new Error("Failed to fetch categories");
+
+        const allCategories = categoriesResponse.data;
         const activeCategories = allCategories
           .filter((cat: any) => cat.est_actif)
           .sort((a: any, b: any) => (a.ordre_affichage || 999) - (b.ordre_affichage || 999))
           .slice(0, 3); // Top 3 collections éditorialisées
-        
+
         // Pour chaque catégorie, récupérer les livres
         const collectionsWithBooks = await Promise.all(
           activeCategories.map(async (category: any) => {
             const booksResponse = await apiClient.get('/api/books');
-            const allBooks = booksResponse.ok ? await booksResponse.json() : [];
+            const allBooks = booksResponse.success ? booksResponse.data : [];
             
             // Filtrer les livres liés à cette catégorie (via book_category)
             const categoryBooks = allBooks.filter((book: any) => 

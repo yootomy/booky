@@ -34,7 +34,7 @@ function GenreTile({ genre, index }: GenreTileProps) {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.1, duration: 0.3 }}
-      className={'relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass}"hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"}
+      className={`relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass} hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}
     >
       {/* Content */}
       <div className="relative z-10 text-white">
@@ -52,9 +52,9 @@ function GenreTile({ genre, index }: GenreTileProps) {
         <h3 className="font-serif text-lg font-semibold mb-1 line-clamp-2">
           {genre.nom}
         </h3>
-        
-        <p className='text-white/80 text-sm'>
-          {genre.utilisation_count ? '${genre.utilisation_count}'livres" : "Genre populaire"}
+
+        <p className="text-white/80 text-sm">
+          {genre.utilisation_count ? `${genre.utilisation_count} livres` : "Genre populaire"}
         </p>
       </div>
 
@@ -82,7 +82,7 @@ function CategoryTile({ category, index }: { category: any; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: (index + 4) * 0.1, duration: 0.3 }}
-      className={'relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass}'hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"}
+      className={`relative group cursor-pointer rounded-xl p-6 bg-gradient-to-br ${colorClass} hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}
     >
       <div className="relative z-10 text-white">
         <div className="flex items-center justify-between mb-2">
@@ -99,9 +99,9 @@ function CategoryTile({ category, index }: { category: any; index: number }) {
         <h3 className="font-serif text-lg font-semibold mb-1">
           {category.nom}
         </h3>
-        
-        <p className="text-white/80 text-sm'>
-          {category._count?.book_category ? "${category._count.book_category}'livres" : "Catégorie"}
+
+        <p className="text-white/80 text-sm">
+          {category._count?.book_category ? `${category._count.book_category} livres` : "Catégorie"}
         </p>
       </div>
 

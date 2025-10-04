@@ -117,7 +117,7 @@ export const queryKeys = {
   // Export
   exports: {
     all: ['exports'] as const,
-    history: () => [...queryKeys.exports.all, 'history"] as const,
+    history: () => [...queryKeys.exports.all, 'history'] as const,
   },
 } as const;
 
@@ -141,11 +141,11 @@ export function useLogin(options?: UseMutationOptions<AuthResponse, ApiError, Lo
       if (data.success) {
         queryClient.invalidateQueries({ queryKey: queryKeys.auth.all });
         toast.success("Connexion réussie", {
-          description: 'Bienvenue ${data.user?.nom_complet}' });
+          description: `Bienvenue ${data.user?.nom_complet}` });
       }
     },
     onError: (error) => {
-      toast.error('Erreur de connexion", {
+      toast.error("Erreur de connexion", {
         description: error.error || "Identifiants incorrects"
       });
     },
@@ -167,7 +167,7 @@ export function useRegister(options?: UseMutationOptions<AuthResponse, ApiError,
       }
     },
     onError: (error) => {
-      toast.error("Erreur d"inscription', {
+      toast.error("Erreur d'inscription", {
         description: error.error || "Impossible de créer le compte"
       });
     },
@@ -262,12 +262,12 @@ export function useCreateBook(options?: UseMutationOptions<ApiResponse<Book>, Ap
       
       if (data.success) {
         toast.success("Livre ajouté", {
-          description: '${data.data?.titre}' a été ajouté à votre bibliothèque"});
+          description: `${data.data?.titre} a été ajouté à votre bibliothèque`});
       }
     },
     onError: (error) => {
-      toast.error("Erreur lors de l"ajout', {
-        description: error.error || "Impossible d"ajouter le livre'
+      toast.error("Erreur lors de l'ajout", {
+        description: error.error || "Impossible d'ajouter le livre"
       });
     },
     ...options,
@@ -286,8 +286,8 @@ export function useUpdateBook(options?: UseMutationOptions<ApiResponse<Book>, Ap
       queryClient.invalidateQueries({ queryKey: queryKeys.stats.all });
       
       if (data.success) {
-        toast.success('Livre modifié', {
-          description: '${data.data?.titre}' a été mis à jour"});
+        toast.success("Livre modifié", {
+          description: `${data.data?.titre} a été mis à jour`});
       }
     },
     onError: (error) => {
@@ -316,7 +316,7 @@ export function useDeleteBook(options?: UseMutationOptions<{ success: boolean },
     },
     onError: (error) => {
       toast.error("Erreur lors de la suppression", {
-        description: error.error || "Impossible de supprimer le livre'
+        description: error.error || "Impossible de supprimer le livre"
       });
     },
     ...options,
@@ -335,7 +335,7 @@ export function useBulkUpdateBooks(
       queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.stats.all });
       
-      toast.success('${result.updated}'livres modifiés");
+      toast.success(`${result.updated} livres modifiés`);
     },
     onError: (error) => {
       toast.error("Erreur lors de la modification groupée", {
@@ -388,8 +388,8 @@ export function useCreateCategory(
       queryClient.invalidateQueries({ queryKey: queryKeys.categories.all });
       
       if (data.success) {
-        toast.success('Catégorie créée', {
-          description: '${data.data?.nom}' a été ajoutée"});
+        toast.success("Catégorie créée", {
+          description: `${data.data?.nom} a été ajoutée`});
       }
     },
     onError: (error) => {
@@ -480,7 +480,7 @@ export function useCreateTag(
       
       if (data.success) {
         toast.success("Tag créé", {
-          description: '${data.data?.nom}' a été ajouté'});
+          description: `${data.data?.nom} a été ajouté`});
       }
     },
     ...options,
@@ -658,7 +658,7 @@ export function useUploadImage(
       toast.success("Image uploadée");
     },
     onError: (error) => {
-      toast.error("Erreur d"upload', {
+      toast.error("Erreur d'upload", {
         description: error.error
       });
     },
@@ -680,7 +680,7 @@ export function useImportBooks(
       queryClient.invalidateQueries({ queryKey: queryKeys.dashboard.all });
       
       if (data.success) {
-        toast.success("${data.data?.imported}'livres importés');
+        toast.success(`${data.data?.imported} livres importés`);
       }
     },
     ...options,

@@ -31,12 +31,12 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
       className="group cursor-pointer"
     >
       <Link href={'/collections/${collection.id}' as any}>
-        <div 
-          className='relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
+        <div
+          className="relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
           style={{
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
             backdropFilter: "blur(10px)",
-            border: "1px solid rgba(139, 21, 56, 0.1)',
+            border: "1px solid rgba(139, 21, 56, 0.1)",
             boxShadow: "0 8px 32px rgba(139, 21, 56, 0.08)"
           }}
         >

@@ -25,9 +25,8 @@ export default function AdminDashboard() {
     queryKey: ['admin-conseil-requests-stats'],
     queryFn: async () => {
       const response = await apiClient.get('/api/conseil-requests?isAdmin=true');
-      if (!response.ok) return { data: [] };
-      const result = await response.json();
-      return result;
+      if (!response.success) return { data: [] };
+      return response.data;
     }
   });
 
@@ -36,9 +35,8 @@ export default function AdminDashboard() {
     queryKey: ['admin-lists-stats'],
     queryFn: async () => {
       const response = await apiClient.get('/api/lists?limit=50');
-      if (!response.ok) return { data: [] };
-      const result = await response.json();
-      return result;
+      if (!response.success) return { data: [] };
+      return response.data;
     }
   });
 

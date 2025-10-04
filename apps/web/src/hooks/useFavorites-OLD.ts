@@ -43,7 +43,7 @@ export function useFavorites(): UseFavoritesReturn {
       const response = await apiClient.get('/api/favorites');
       
       if (!response.success) {
-        throw new Error("Failed to fetch favorites: ${response.status}');
+        throw new Error("Failed to fetch favorites");
       }
       
       const data = response.data;
@@ -102,15 +102,13 @@ export function useFavorites(): UseFavoritesReturn {
       setFavorites(prev => new Set([...prev, bookId]));
       
       console.log("Adding to favorites: ", bookId);
-      const response = await apiClient.post("/api/favorites', { bookId });
-      
+      const response = await apiClient.post("/api/favorites", { bookId });
+
       if (!response.success) {
-        const data = response.data.catch(() => ({
-          error: 'Server error: ${response.status}'
-        }));
+        const data = response.data || { error: "Server error" };
 
         // Handle 'already in favorites' case gracefully
-        if (response.status === 400 && data.error?.includes('already in favorites')) {
+        if (data.error?.includes('already in favorites')) {
           // Ensure local state is synced - book should be in favorites
           setFavorites(prev => new Set([...prev, bookId]));
           toast.info('Ce livre est déjà dans vos favoris');
@@ -145,7 +143,7 @@ export function useFavorites(): UseFavoritesReturn {
           }
         });
       } else {
-        toast.error('Impossible d'ajouter aux favoris. Erreur: ${error.message || 'Inconnue'}');
+        toast.error(`Impossible d'ajouter aux favoris. Erreur: ${error.message || 'Inconnue'}`);
       }
     }
   }, [isAuthenticated]);
@@ -165,15 +163,15 @@ export function useFavorites(): UseFavoritesReturn {
         return newSet;
       });
       
-      const response = await apiClient.get('/api/favorites/${bookId}', {
+      const response = await apiClient.get(`/api/favorites/${bookId}`, {
         method: 'DELETE',
         credentials: 'include'
       });
-      
+
       if (!response.success) {
-        const data = response.data.catch(() => ({
-          error: 'Server error: ${response.status}'
-        }));
+        const data = response.data || {
+          error: `Server error: ${response.status}`
+        };
         throw new Error(data.error || 'Failed to remove favorite');
       }
       

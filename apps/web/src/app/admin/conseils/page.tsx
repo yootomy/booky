@@ -59,8 +59,8 @@ export default function AdminConseilsPage() {
     queryKey: ['admin-conseil-requests'],
     queryFn: async () => {
       const response = await apiClient.get('/api/conseil-requests?isAdmin=true');
-      if (!response.ok) throw new Error("Failed to fetch conseil requests");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch conseil requests");
+      return response.data;
     }
   });
 
@@ -69,8 +69,8 @@ export default function AdminConseilsPage() {
     queryKey: ['categories'],
     queryFn: async () => {
       const response = await apiClient.get('/api/categories');
-      if (!response.ok) throw new Error("Failed to fetch categories");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch categories");
+      return response.data;
     }
   });
 
@@ -78,8 +78,8 @@ export default function AdminConseilsPage() {
     queryKey: ['tags'],
     queryFn: async () => {
       const response = await apiClient.get('/api/tags');
-      if (!response.ok) throw new Error("Failed to fetch tags");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch tags");
+      return response.data;
     }
   });
 
@@ -88,8 +88,8 @@ export default function AdminConseilsPage() {
     queryKey: ['books'],
     queryFn: async () => {
       const response = await apiClient.get('/api/books');
-      if (!response.ok) throw new Error("Failed to fetch books");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch books");
+      return response.data;
     }
   });
 
@@ -101,13 +101,13 @@ export default function AdminConseilsPage() {
       livres_recommandes: string[];
       status: string;
     }) => {
-      const response = await apiClient.get('/api/conseil-requests/${id}', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reponse_bruna, livres_recommandes, status })
+      const response = await apiClient.patch(`/api/conseil-requests/${id}`, {
+        reponse_bruna,
+        livres_recommandes,
+        status
       });
-      if (!response.ok) throw new Error("Failed to respond");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to respond");
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-conseil-requests'] });

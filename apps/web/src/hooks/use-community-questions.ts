@@ -35,7 +35,7 @@ export function useCommunityQuestions() {
         // Récupérer les questions publiques depuis l'API proxy
         const response = await apiClient.get('/api/questions?is_public=true&sort=likes_count_desc&limit=4');
         
-        if (!response.ok) {
+        if (!response.success) {
           // Fallback: utiliser des données simulées si l'API n'existe pas encore
           const simulatedQuestions: CommunityQuestion[] = [
             {
@@ -113,7 +113,7 @@ export function useCommunityQuestions() {
           return;
         }
         
-        const questions = await response.json();
+        const questions = response.data;
         
         // Traiter les données de l'API
         const processedQuestions = questions.map((question: any) => ({

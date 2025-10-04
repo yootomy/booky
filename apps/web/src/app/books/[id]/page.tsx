@@ -173,12 +173,11 @@ export default function BookDetailPage() {
   const bookQuery = useQuery({
     queryKey: ['book', bookId],
     queryFn: async () => {
-      const response = await apiClient.get('/api/books/${bookId}');
-      if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+      const response = await apiClient.get(`/api/books/${bookId}`);
+      if (!response.success) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
-      return data.data as Book;
+      return response.data as Book;
     },
     enabled: !!bookId
   });
@@ -186,29 +185,24 @@ export default function BookDetailPage() {
   const questionsQuery = useQuery({
     queryKey: ['questions', bookId],
     queryFn: async () => {
-      const response = await apiClient.get('/api/books/${bookId}/questions');
-      if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+      const response = await apiClient.get(`/api/books/${bookId}/questions`);
+      if (!response.success) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
-      return (data.data || []) as BookQuestion[];
+      return (response.data || []) as BookQuestion[];
     },
     enabled: !!bookId
   });
 
   const submitQuestionMutation = useMutation({
     mutationFn: async (question: string) => {
-      const response = await apiClient.get('/api/books/${bookId}/questions', {
-        method: 'POST',
-        headers: {
-          'Content-Type' : 'application/json',
-        },
-        body: JSON.stringify({ question: question }),
+      const response = await apiClient.post(`/api/books/${bookId}/questions`, {
+        question
       });
-      if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+      if (!response.success) {
+        throw new Error(response.error || 'HTTP error!');
       }
-      const data = await response.json();
+      const data = response.data;
       if (!data.data) throw new Error('Erreur lors de l\'envoi');
       return data.data;
     },
@@ -227,16 +221,11 @@ export default function BookDetailPage() {
 
   const likeQuestionMutation = useMutation({
     mutationFn: async (questionId: string) => {
-      const response = await apiClient.get('/api/books/${bookId}/questions/${questionId}/like', {
-        method: 'POST',
-        headers: {
-          'Content-Type' : 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('HTTP error! status: ${response.status}');
+      const response = await apiClient.post(`/api/books/${bookId}/questions/${questionId}/like`);
+      if (!response.success) {
+        throw new Error(response.error || 'HTTP error!');
       }
-      return response.json();
+      return response.data;
     },
     onMutate: async (questionId: string) => {
       // Annuler les requêtes en cours pour éviter les conflits
@@ -494,7 +483,7 @@ export default function BookDetailPage() {
                   {/* Métriques avec barres de progression - Masqué sur mobile */}
                   <div className="hidden md:grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     {[
-                      { label: "🌶️ Spicy", value: book.niveau_spicy, colorClass: "text-orange-600 dark:text-orange-400', bgClass: 'from-orange-500 to-red-500' },
+                      { label: "🌶️ Spicy", value: book.niveau_spicy, colorClass: "text-orange-600 dark:text-orange-400", bgClass: 'from-orange-500 to-red-500' },
                       { label: '💕 Romance', value: book.niveau_romance, colorClass: 'text-primary', bgClass: 'from-pink-500 to-rose-500' },
                       { label: '🖤 Dark', value: book.niveau_dark, colorClass: 'text-gray-700 dark:text-gray-300', bgClass: 'from-gray-500 to-gray-700' },
                       { label: '✨ Émotions', value: book.intensite_emotionnelle, colorClass: 'text-purple-600 dark:text-purple-400', bgClass: 'from-purple-500 to-indigo-500' }
@@ -546,16 +535,16 @@ export default function BookDetailPage() {
           <div className="mb-3 sm:mb-4 md:mb-8 rounded-2xl overflow-hidden shadow-lg bg-card/95 backdrop-blur-xl border border-border"
           >
             <div className="p-2 sm:p-3 md:p-6">
-              <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3'>
+              <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={'flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all duration-200 cursor-pointer border-2 relative ${
+                    className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all duration-200 cursor-pointer border-2 relative ${
                       activeTab === tab.id
-                        ? 'text-primary-foreground shadow-lg border-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90"
+                        ? 'text-primary-foreground shadow-lg border-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90'
                         : 'hover:bg-muted/50 border-transparent hover:border-border text-muted-foreground hover:text-foreground'
-                    }'}
+                    }`}
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       ...(activeTab === tab.id
@@ -567,12 +556,12 @@ export default function BookDetailPage() {
                     }}
                   >
                     <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="hidden xs:inline sm:inline'>{tab.label}</span>
+                    <span className="hidden xs:inline sm:inline">{tab.label}</span>
                     {tab.count !== null && (
-                      <span className={'px-2 py-1 rounded-full text-xs font-bold transition-all duration-200 ${
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold transition-all duration-200 ${
                         activeTab === tab.id
                           ? 'bg-primary-foreground/20 text-primary-foreground shadow-sm' : 'bg-muted text-muted-foreground'
-                      }'}>
+                      }`}>
                         {tab.count}
                       </span>
                     )}
@@ -745,21 +734,21 @@ export default function BookDetailPage() {
                 >
                   <div className="text-xl md:text-4xl font-bold mb-2 md:mb-3 text-yellow-700 dark:text-yellow-300"
                     style={{
-                      fontFamily: "Playfair Display, serif'
+                      fontFamily: "Playfair Display, serif"
                     }}
                   >
                     {book.note_generale}/10
                   </div>
 
                   {/* Affichage correct: 10 étoiles pour /10 */}
-                  <div className='flex justify-center gap-0.5 md:gap-1 mb-2 md:mb-3'>
+                  <div className="flex justify-center gap-0.5 md:gap-1 mb-2 md:mb-3">
                     {Array.from({ length: 10 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={'w-2.5 h-2.5 md:w-5 md:h-5 ${
+                        className={`w-2.5 h-2.5 md:w-5 md:h-5 ${
                           i < book.note_generale
                             ? 'fill-yellow-400 text-yellow-400' : 'fill-muted text-muted'
-                        }'}
+                        }`}
                       />
                     ))}
                   </div>
@@ -776,7 +765,7 @@ export default function BookDetailPage() {
                 {/* Grille des métriques - Version compacte mobile */}
                 <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-6">
                   {[
-                    { label: "🌶️ Spicy", value: book.niveau_spicy, colorClass: "text-orange-600 dark:text-orange-400', bgClass: 'from-orange-600 to-orange-500' },
+                    { label: "🌶️ Spicy", value: book.niveau_spicy, colorClass: "text-orange-600 dark:text-orange-400", bgClass: 'from-orange-600 to-orange-500' },
                     { label: '💕 Romance', value: book.niveau_romance, colorClass: 'text-primary', bgClass: 'from-primary to-primary/80' },
                     { label: '🖤 Dark', value: book.niveau_dark, colorClass: 'text-gray-700 dark:text-gray-300', bgClass: 'from-gray-600 to-gray-500' },
                     { label: '✨ Émotions', value: book.intensite_emotionnelle, colorClass: 'text-purple-600 dark:text-purple-400', bgClass: 'from-purple-600 to-purple-500' },
@@ -817,7 +806,7 @@ export default function BookDetailPage() {
             )}
 
             {/* Onglet Genres & Tropes */}
-            {activeTab === 'genres" && (
+            {activeTab === 'genres' && (
               <div className="space-y-4 sm:space-y-6 md:space-y-8">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
                   style={{
@@ -946,7 +935,7 @@ export default function BookDetailPage() {
                 <div className="bg-card border border-border rounded-xl p-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
-                      { label: "Auteur", value: book.auteur, icon: "👤' },
+                      { label: "Auteur", value: book.auteur, icon: "👤" },
                       { label: 'ISBN', value: book.isbn, icon: '📊' },
                       { label: 'Éditeur', value: book.editeur, icon: '🏢' },
                       { label: 'Date de publication', value: book.date_publication ? new Date(book.date_publication).toLocaleDateString('fr-FR') : null, icon: '📅' },
@@ -1107,14 +1096,14 @@ export default function BookDetailPage() {
                           {/* Like button */}
                           <button
                             onClick={() => handleLikeQuestion(question.id)}
-                            className={'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 active:scale-95 ${
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all duration-200 active:scale-95 ${
                               question.is_liked
-                                ? '}bg-primary/15 text-primary border border-primary/20' : 'bg-background/50 text-muted-foreground border border-border/30 hover:bg-primary/10 hover:text-primary hover:border-primary/20'
-                            }'}
+                                ? 'bg-primary/15 text-primary border border-primary/20' : 'bg-background/50 text-muted-foreground border border-border/30 hover:bg-primary/10 hover:text-primary hover:border-primary/20'
+                            }`}
                           >
-                            <ThumbsUp className={'w-3.5 h-3.5 transition-all duration-200 ${
+                            <ThumbsUp className={`w-3.5 h-3.5 transition-all duration-200 ${
                               question.is_liked ? 'fill-current' : ""
-                            }'} />
+                            }`} />
                             <span className="font-medium">{question.likes_count}</span>
                           </button>
                         </div>

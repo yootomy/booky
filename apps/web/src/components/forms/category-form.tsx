@@ -194,7 +194,7 @@ function IconPicker({
       <div className="flex gap-2">
         <Input
           type="text"
-          placeholder="🔥 ou nom d"icône'
+          placeholder="🔥 ou nom d'icône"
           value={value || ""}
           onChange={(e) => onChange(e.target.value || undefined)}
           className="flex-1"
@@ -480,7 +480,7 @@ export function CategoryForm({
                   variant="secondary"
                   className="px-3 py-1"
                   style={{
-                    backgroundColor: "${watchedValues.couleur}20',
+                    backgroundColor: `${watchedValues.couleur}20`,
                     color: watchedValues.couleur,
                     borderColor: watchedValues.couleur
                   }}

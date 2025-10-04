@@ -48,10 +48,12 @@ export function useBookFilters(): UseBookFiltersReturn {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch filtered books");
+        const data = await response.json();
+        throw new Error(data.error || "Failed to fetch filtered books");
       }
 
-      return response.json();
+      const data = await response.json();
+      return data.data;
     },
     enabled: Object.values(debouncedFilters).some(value => 
       Array.isArray(value) ? value.length > 0 : value !== undefined
@@ -92,15 +94,16 @@ export function useBookSearch() {
         return [];
       }
 
-      const response = await fetch('/api/search/suggestions?q=${encodeURIComponent(debouncedQuery)}', {
+      const response = await fetch(`/api/search/suggestions?q=${encodeURIComponent(debouncedQuery)}`, {
         credentials: 'include',
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch suggestions");
+        throw new Error("Failed to fetch suggestions");
       }
 
-      return response.json();
+      const data = await response.json();
+      return data.data;
     },
     enabled: Boolean(debouncedQuery && debouncedQuery.length >= 2),
     staleTime: 5 * 60 * 1000, // 5 minutes

@@ -72,11 +72,11 @@ export default function ProfilePage() {
         credentials: "include"
       });
       
-      if (!response.ok) {
-        throw new Error("Failed to fetch profile");
+      if (!response.success) {
+        throw new Error(response.error || "Failed to fetch profile");
       }
       
-      return response.json();
+      return response.data;
     },
     enabled: !!user
   });
@@ -97,21 +97,13 @@ export default function ProfilePage() {
   // Mutation pour mettre à jour le profil
   const updateProfileMutation = useMutation({
     mutationFn: async (data: { nom_complet: string; username: string; email: string }) => {
-      const response = await apiClient.get("/api/auth/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include"
-      });
+      const response = await apiClient.put("/api/auth/profile", data);
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to update profile');
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to update profile');
       }
 
-      return response.json();
+      return response.data;
     },
     onSuccess: () => {
       toast.success("Profil mis à jour avec succès!");
@@ -312,7 +304,7 @@ export default function ProfilePage() {
                             ...prev,
                             username: e.target.value
                           }))}
-                          placeholder="Votre nom d"utilisateur'
+                          placeholder="Votre nom d'utilisateur"
                         />
                       </div>
 

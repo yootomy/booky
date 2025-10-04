@@ -58,9 +58,9 @@ export default function ConseilsPage() {
     queryFn: async () => {
       if (!user?.id) return { data: [] };
 
-      const response = await apiClient.get('/api/conseil-requests?userId=${user.id}");
-      if (!response.ok) throw new Error("Failed to fetch conseil requests");
-      return response.json();
+      const response = await apiClient.get(`/api/conseil-requests?userId=${user.id}`);
+      if (!response.success) throw new Error(response.error || "Failed to fetch conseil requests");
+      return response.data;
     },
     enabled: !!user?.id
   });
@@ -70,8 +70,8 @@ export default function ConseilsPage() {
     queryKey: ["categories"],
     queryFn: async () => {
       const response = await apiClient.get('/api/categories');
-      if (!response.ok) throw new Error("Failed to fetch categories");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch categories");
+      return response.data;
     }
   });
 
@@ -79,8 +79,8 @@ export default function ConseilsPage() {
     queryKey: ['tags'],
     queryFn: async () => {
       const response = await apiClient.get('/api/tags');
-      if (!response.ok) throw new Error("Failed to fetch tags");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch tags");
+      return response.data;
     }
   });
 
@@ -89,8 +89,8 @@ export default function ConseilsPage() {
     queryKey: ['books'],
     queryFn: async () => {
       const response = await apiClient.get('/api/books');
-      if (!response.ok) throw new Error("Failed to fetch books");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch books");
+      return response.data;
     }
   });
 
@@ -126,10 +126,10 @@ export default function ConseilsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'EN_ATTENTE':
-        return <Clock className="w-4 h-4" style={{ color: "#F59E0B' }} />;
-      case 'TRAITE":
-        return <CheckCircle className="w-4 h-4" style={{ color: "#10B981' }} />;
-      case 'REJETE":
+        return <Clock className="w-4 h-4" style={{ color: "#F59E0B" }} />;
+      case 'TRAITE':
+        return <CheckCircle className="w-4 h-4" style={{ color: "#10B981" }} />;
+      case 'REJETE':
         return <MessageCircle className="w-4 h-4" style={{ color: "#EF4444" }} />;
       default:
         return <Clock className="w-4 h-4" style={{ color: "#6B7280" }} />;
@@ -304,8 +304,8 @@ export default function ConseilsPage() {
 
                 {/* Results count */}
                 <div className="text-sm text-muted-foreground whitespace-nowrap">
-                  <strong className="text-foreground">{filteredConseils.length}</strong> conseil{filteredConseils.length > 1 ? "s" : "'}
-                  {searchTerm && ' trouvé${filteredConseils.length > 1 ? 's' : ''}'}
+                  <strong className="text-foreground">{filteredConseils.length}</strong> conseil{filteredConseils.length > 1 ? "s" : ""}
+                  {searchTerm && ` trouvé${filteredConseils.length > 1 ? 's' : ''}`}
                 </div>
               </div>
             </motion.div>
@@ -331,7 +331,7 @@ export default function ConseilsPage() {
                     <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: "Inter, sans-serif" }}>
                       {searchTerm || statusFilter !== 'all'
                         ? "Essayez de modifier vos critères de recherche."
-                        : "Vous n"avez pas encore fait de demande de conseil à Bruna. Laissez-la vous surprendre !'
+                        : "Vous n'avez pas encore fait de demande de conseil à Bruna. Laissez-la vous surprendre !"
                       }
                     </p>
                     {!searchTerm && statusFilter === "all" && (

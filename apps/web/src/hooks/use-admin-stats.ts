@@ -56,47 +56,30 @@ export function useAdminStats() {
   // Fonction pour récupérer les statistiques admin
   const fetchAdminStats = async (): Promise<AdminStats> => {
     const [booksRes, questionsRes, categoriesRes] = await Promise.all([
-      apiClient.get('/api/books?limit=100', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }),
+      apiClient.get('/api/books?limit=100'),
       // Récupérer toutes les questions pour l'admin
-      apiClient.get('/api/admin/questions', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }),
-      apiClient.get('/api/categories?limit=10', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      apiClient.get('/api/admin/questions'),
+      apiClient.get('/api/categories?limit=10')
     ]);
 
-    if (!booksRes.ok) {
+    if (!booksRes.success) {
       throw new Error("Erreur lors de la récupération des statistiques");
     }
 
-    const booksData = await booksRes.json();
-    const books = booksData.data || [];
-    
+    const books = booksRes.data || [];
+
     // Récupérer les vraies questions
     let allQuestions: any[] = [];
-    if (questionsRes.ok) {
-      const questionsData = await questionsRes.json();
-      allQuestions = questionsData.data || [];
+    if (questionsRes.success) {
+      allQuestions = questionsRes.data || [];
     }
-    
+
     // Si aucune question dans la nouvelle API, compter les questions dans les champs des livres
     if (allQuestions.length === 0) {
       allQuestions = books
         .filter((book: any) => book.questions_sur_le_livre && book.questions_sur_le_livre.trim())
         .map((book: any) => ({
-          id: 'legacy_${book.id}',
+          id: `legacy_${book.id}`,
           question: book.questions_sur_le_livre,
           book_title: book.titre,
           book_id: book.id,
@@ -141,9 +124,8 @@ export function useAdminStats() {
       top_categories: []
     };
 
-    if (categoriesRes.ok) {
-      const categoriesData = await categoriesRes.json();
-      stats.top_categories = (categoriesData.data || []).slice(0, 5);
+    if (categoriesRes.success) {
+      stats.top_categories = (categoriesRes.data || []).slice(0, 5);
     }
 
     return stats;

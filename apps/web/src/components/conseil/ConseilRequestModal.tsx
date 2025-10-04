@@ -75,8 +75,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
     queryKey: ['categories'],
     queryFn: async () => {
       const response = await apiClient.get('/api/categories');
-      if (!response.ok) throw new Error("Failed to fetch categories");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch categories");
+      return response.data;
     },
     enabled: isOpen
   });
@@ -86,8 +86,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
     queryKey: ['tags-romance'],
     queryFn: async () => {
       const response = await apiClient.get('/api/tags');
-      if (!response.ok) throw new Error("Failed to fetch tags");
-      const result = await response.json();
+      if (!response.success) throw new Error(response.error || "Failed to fetch tags");
+      const result = response.data;
       // Filter for romance-related tags
       return {
         ...result,
@@ -161,13 +161,9 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
         userId: user?.id || null
       };
 
-      const response = await apiClient.get('/api/conseil-requests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestData)
-      });
+      const response = await apiClient.post('/api/conseil-requests', requestData);
 
-      if (!response.ok) {
+      if (!response.success) {
         throw new Error('Erreur lors de l\'envoi de la demande');
       }
 

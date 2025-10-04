@@ -24,8 +24,8 @@ export function RecentBooks() {
     const fetchRecentBooks = async () => {
       try {
         const response = await apiClient.get('/api/books?limit=6&sort=date_creation&order=desc');
-        if (response.ok) {
-          const data = await response.json();
+        if (response.success) {
+          const data = response.data;
           setBooks(data.data || []);
         }
       } catch (error) {

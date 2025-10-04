@@ -94,7 +94,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
           if (activeCardIndex > 0) {
             setActiveCardIndex(activeCardIndex - 1);
             // Focus the new active card
-            const newCard = gridRef.current?.querySelector('[data-index='${activeCardIndex - 1}'] > div') as HTMLElement;
+            const newCard = gridRef.current?.querySelector(`[data-index="${activeCardIndex - 1}"] > div`) as HTMLElement;
             newCard?.focus();
           }
           break;
@@ -103,7 +103,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
           if (activeCardIndex < allSagaBooks.length - 1) {
             setActiveCardIndex(activeCardIndex + 1);
             // Focus the new active card
-            const newCard = gridRef.current?.querySelector('[data-index='${activeCardIndex + 1}'] > div') as HTMLElement;
+            const newCard = gridRef.current?.querySelector(`[data-index="${activeCardIndex + 1}"] > div`) as HTMLElement;
             newCard?.focus();
           }
           break;
@@ -117,13 +117,13 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
             : Math.min(allSagaBooks.length - 1, activeCardIndex + columns);
           setActiveCardIndex(newIndex);
           // Focus the new active card
-          const newCard = gridRef.current?.querySelector('[data-index='${newIndex}'] > div') as HTMLElement;
+          const newCard = gridRef.current?.querySelector(`[data-index="${newIndex}"] > div`) as HTMLElement;
           newCard?.focus();
           break;
         case 'Enter':
         case ' ':
           e.preventDefault();
-          const activeCard = gridRef.current?.querySelector('[data-index='${activeCardIndex}'] a') as HTMLElement;
+          const activeCard = gridRef.current?.querySelector(`[data-index="${activeCardIndex}"] a`) as HTMLElement;
           activeCard?.click();
           break;
       }
@@ -185,7 +185,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                   className={cn("text-xs font-medium px-2 py-0.5", getStatusBadgeStyle(saga.status))}
                   style={{
                     borderRadius: "8px",
-                    fontFamily: "Inter, sans-serif'
+                    fontFamily: "Inter, sans-serif"
                   }}
                 >
                   {getStatusLabel(saga.status)}
@@ -254,10 +254,10 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                     style={{ minHeight: '180px' }}
                   >
                     <div
-                      className={'group cursor-pointer text-center h-full flex flex-col hover:transform hover:scale-105 transition-all duration-300 p-1.5 rounded-xl border-2 ${
+                      className={`group cursor-pointer text-center h-full flex flex-col hover:transform hover:scale-105 transition-all duration-300 p-1.5 rounded-xl border-2 ${
                         isCurrentBook
-                          ? '}bg-primary/10 border-primary/20' : 'border-transparent'
-                      }'}
+                          ? 'bg-primary/10 border-primary/20' : 'border-transparent'
+                      }`}
                       tabIndex={isActiveCard ? 0 : -1}
                       role='button'
                       aria-selected={isCurrentBook}
@@ -271,7 +271,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                               className="animate-pulse rounded-xl"
                               style={{
                                 aspectRatio: "2/3",
-                                width: '60px",
+                                width: '60px',
                                 height: '90px',
                                 background: 'linear-gradient(135deg, rgba(139, 21, 56, 0.1) 0%, rgba(107, 76, 123, 0.05) 100%)'
                               }}
@@ -292,7 +292,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                                   loading="lazy"
                                   style={{
                                     aspectRatio: "2/3",
-                                    width: "60px',
+                                    width: "60px",
                                     height: "90px",
                                     filter: isCurrentBook ? "brightness(1.05)" : "none"
                                   }}
@@ -319,7 +319,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                               {isRead && (
                                 <div
                                   className="absolute -top-1 -right-1 w-6 h-6 rounded-full border-2 border-white shadow-lg flex items-center justify-center"
-                                  style={{background: "linear-gradient(135deg, #10B981 0%, #059669 100%)'}}
+                                  style={{background: "linear-gradient(135deg, #10B981 0%, #059669 100%)"}}
                                   title="Lu"
                                 >
                                   <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -328,7 +328,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                               {isReading && (
                                 <div
                                   className="absolute -top-1 -right-1 w-6 h-6 rounded-full border-2 border-white shadow-lg flex items-center justify-center"
-                                  style={{background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'}}
+                                  style={{background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)"}}
                                   title="En cours de lecture"
                                 >
                                   <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -340,7 +340,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                         
                         <div className='flex-1 flex flex-col justify-center space-y-1 min-h-0 px-0.5'>
                           <div
-                            className={'text-xs font-bold uppercase tracking-wide text-center ${isCurrentBook ? 'text-primary" : "text-muted-foreground"}'}
+                            className={`text-xs font-bold uppercase tracking-wide text-center ${isCurrentBook ? 'text-primary' : 'text-muted-foreground'}`}
                             style={{
                               fontFamily: 'Inter, sans-serif',
                               letterSpacing: '0.05em'
@@ -350,11 +350,11 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                           </div>
 
                           <div
-                            className={'text-xs line-clamp-2 leading-tight font-medium text-center transition-colors duration-300 ${isCurrentBook ? 'text-foreground' : "text-muted-foreground"}'}
+                            className={`text-xs line-clamp-2 leading-tight font-medium text-center transition-colors duration-300 ${isCurrentBook ? 'text-foreground' : 'text-muted-foreground'}`}
                             style={{
                               fontFamily: 'Inter, sans-serif',
                               fontSize: "0.75rem",
-                              lineHeight: '1.2"
+                              lineHeight: '1.2'
                             }}
                           >
                             {book.titre}

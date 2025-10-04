@@ -26,7 +26,7 @@ class ApiClient {
    * Construit l'URL complète avec les paramètres de requête
    */
   private buildUrl(endpoint: string, params?: Record<string, string | number | boolean>): string {
-    const url = '${this.baseUrl}${endpoint}';
+    const url = `${this.baseUrl}${endpoint}`;
 
     if (!params || Object.keys(params).length === 0) {
       return url;
@@ -40,7 +40,7 @@ class ApiClient {
     });
 
     const queryString = searchParams.toString();
-    return queryString ? '${url}?${queryString}' : url;
+    return queryString ? `${url}?${queryString}` : url;
   }
 
   /**
@@ -80,15 +80,15 @@ class ApiClient {
         try {
           errorData = await response.json();
         } catch {
-          errorData = { error: 'HTTP ' + response.status + ': ' + response.statusText };
+          errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
         }
 
-        console.error('[API Error] ' + response.status + ':', errorData);
+        console.error(`[API Error] ${response.status}:`, errorData);
 
         // Retourne une réponse d'erreur standardisée
         return {
           success: false,
-          error: errorData.error || errorData.message || ('HTTP ' + response.status),
+          error: errorData.error || errorData.message || `HTTP ${response.status}`,
           data: undefined
         };
       }

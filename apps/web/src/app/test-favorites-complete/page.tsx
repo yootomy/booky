@@ -35,7 +35,7 @@ export default function TestFavoritesCompletePage() {
   const addTestResult = (name: string, success: boolean, message: string, data?: any) => {
     const result: TestResult = { name, success, message, data };
     setTestResults(prev => [...prev, result]);
-    console.log(`[TEST] ${name}:`${success ? "✅" : "❌'} ${message}', data);
+    console.log(`[TEST] ${name}: ${success ? "✅" : "❌"} ${message}`, data);
   };
 
   const testApiEndpoint = async (url: string, method: string = 'GET', body?: any) => {
@@ -95,9 +95,9 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'GET Favorites',
         getFavoritesResult.success,
-        getFavoritesResult.success 
-          ? '${getFavoritesResult.data?.data?.length || 0}'favoris trouvés'
-          : 'GET échec: ${getFavoritesResult.status}',
+        getFavoritesResult.success
+          ? `${getFavoritesResult.data?.data?.length || 0} favoris trouvés`
+          : `GET échec: ${getFavoritesResult.status}`,
         getFavoritesResult.data
       );
 
@@ -134,7 +134,7 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Verify Add (API)',
         isInApiAfterAdd,
-        'Livre ${testBookId}'${isInApiAfterAdd ? 'trouvé' : 'NON trouvé'} dans API après ajout',
+        `Livre ${testBookId} ${isInApiAfterAdd ? 'trouvé' : 'NON trouvé'} dans API après ajout`,
         { favorites: favoritesAfterAdd, searchedId: testBookId }
       );
 
@@ -146,16 +146,16 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Verify Add (Hook after refresh)',
         isInHookAfterRefresh,
-        'Livre ${testBookId}'${isInHookAfterRefresh ? 'trouvé' : 'NON trouvé'} dans hook après refresh',
+        `Livre ${testBookId} ${isInHookAfterRefresh ? 'trouvé' : 'NON trouvé'} dans hook après refresh`,
         { bookId: testBookId, isFavorite: isInHookAfterRefresh, hookFavorites: Array.from(favorites) }
       );
 
       // Test 9: Test de suppression
-      const removeResult = await testApiEndpoint('/api/favorites/${testBookId}', 'DELETE');
+      const removeResult = await testApiEndpoint(`/api/favorites/${testBookId}`, 'DELETE');
       addTestResult(
         'Remove Favorite',
         removeResult.success,
-        removeResult.success ? 'Suppression OK' : 'Suppression échec: ${removeResult.status}',
+        removeResult.success ? 'Suppression OK' : `Suppression échec: ${removeResult.status}`,
         removeResult.data
       );
 
@@ -166,12 +166,12 @@ export default function TestFavoritesCompletePage() {
       addTestResult(
         'Verify Remove (API)',
         !isInApiFinal,
-        'Livre ${testBookId}'${isInApiFinal ? 'ENCORE présent' : 'bien supprimé'} de l'API',
+        `Livre ${testBookId} ${isInApiFinal ? 'ENCORE présent' : 'bien supprimé'} de l'API`,
         { favorites: finalFavorites }
       );
 
     } catch (error) {
-      addTestResult('Test Error', false, 'Erreur durant les tests: ${error instanceof Error ? error.message : "Unknown error"}");
+      addTestResult('Test Error', false, `Erreur durant les tests: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setLoading(false);
     }
@@ -200,8 +200,8 @@ export default function TestFavoritesCompletePage() {
         
         <Card>
           <CardContent className="p-4">
-            <div className='flex items-center gap-2'>
-              <Heart className={'h-4 w-4 ${favorites.size > 0 ? 'fill-red-500 text-red-500' : "text-gray-400"}'} />
+            <div className="flex items-center gap-2">
+              <Heart className={`h-4 w-4 ${favorites.size > 0 ? 'fill-red-500 text-red-500' : "text-gray-400"}`} />
               <span className="text-sm">{favorites.size} favoris (hook)</span>
             </div>
           </CardContent>
@@ -209,8 +209,8 @@ export default function TestFavoritesCompletePage() {
         
         <Card>
           <CardContent className="p-4">
-            <div className="flex items-center gap-2'>
-              <Loader2 className={'h-4 w-4 ${favoritesLoading ? 'animate-spin" : "text-gray-400"}'} />
+            <div className="flex items-center gap-2">
+              <Loader2 className={`h-4 w-4 ${favoritesLoading ? 'animate-spin' : "text-gray-400"}`} />
               <span className="text-sm">
                 {favoritesLoading ? "Chargement..." : hasInitialLoad ? "Chargé" : "Pas encore chargé"}
               </span>
@@ -289,12 +289,12 @@ export default function TestFavoritesCompletePage() {
           </CardHeader>
           <CardContent className='max-h-96 overflow-y-auto space-y-2'>
             {testResults.map((result, index) => (
-              <div 
+              <div
                 key={index}
-                className={'p-3 rounded border text-sm ${
-                  result.success 
-                    ? 'bg-green-50 border-green-200' 
-                    : 'bg-red-50 border-red-200' }'}
+                className={`p-3 rounded border text-sm ${
+                  result.success
+                    ? 'bg-green-50 border-green-200'
+                    : 'bg-red-50 border-red-200'}`}
               >
                 <div className="flex items-start gap-2">
                   {result.success ? (

@@ -16,23 +16,23 @@ import type { FilterState, TagOption } from "./index";
 
 // Mock data pour la démo
 const mockTags: TagOption[] = [
-  { id: "1", name: "Dark Romance", color: "#8B0000', type: "GENRE", count: 45 },
-  { id: "2", name: "Spicy", color: "#FF4500', type: "GENRE", count: 32 },
-  { id: "3", name: "Enemies to Lovers", color: "#DC143C', type: "TROPE", count: 28 },
-  { id: "4", name: "Mafia", color: "#2E0854', type: "TROPE", count: 19 },
-  { id: "5", name: "Violence", color: "#B22222', type: "TRIGGER", count: 15 },
-  { id: "6", name: "Kidnapping", color: "#8B0000', type: "TRIGGER", count: 12 },
-  { id: "7", name: "Favori", color: "#6A0DAD', type: "PERSONNALISE", count: 8 },
+  { id: "1", name: "Dark Romance", color: "#8B0000", type: "GENRE", count: 45 },
+  { id: "2", name: "Spicy", color: "#FF4500", type: "GENRE", count: 32 },
+  { id: "3", name: "Enemies to Lovers", color: "#DC143C", type: "TROPE", count: 28 },
+  { id: "4", name: "Mafia", color: "#2E0854", type: "TROPE", count: 19 },
+  { id: "5", name: "Violence", color: "#B22222", type: "TRIGGER", count: 15 },
+  { id: "6", name: "Kidnapping", color: "#8B0000", type: "TRIGGER", count: 12 },
+  { id: "7", name: "Favori", color: "#6A0DAD", type: "PERSONNALISE", count: 8 },
 ];
 
 const mockGenres = [
-  { id: "1", name: "Dark Romance", color: "#8B0000', count: 45 },
-  { id: "2", name: "Contemporary Romance", color: "#FF69B4', count: 38 },
-  { id: "3", name: "Fantasy Romance", color: "#9370DB', count: 22 },
+  { id: "1", name: "Dark Romance", color: "#8B0000", count: 45 },
+  { id: "2", name: "Contemporary Romance", color: "#FF69B4", count: 38 },
+  { id: "3", name: "Fantasy Romance", color: "#9370DB", count: 22 },
 ];
 
 const mockCategories = [
-  { id: "1", name: "Mes Favoris", color: "#FFD700', count: 15 },
+  { id: "1", name: "Mes Favoris", color: "#FFD700", count: 15 },
   { id: "2", name: "À Relire", color: "#32CD32", count: 8 },
 ];
 
@@ -194,10 +194,10 @@ export function SearchDemo() {
                     {selectedTags.map((tagId) => {
                       const tag = mockTags.find(t => t.id === tagId);
                       return tag ? (
-                        <Badge 
-                          key={tagId} 
-                          style={{ 
-                            backgroundColor: "${tag.color}20', 
+                        <Badge
+                          key={tagId}
+                          style={{
+                            backgroundColor: `${tag.color}20`,
                             color: tag.color,
                             borderColor: tag.color
                           }}

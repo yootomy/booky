@@ -68,7 +68,7 @@ function NavigationCard({ link, index }: { link: typeof navigationLinks[0]; inde
           <div
             className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
             style={{
-              backgroundColor: "${link.color}15',
+              backgroundColor: `${link.color}15`,
               color: link.color
             }}
           >

@@ -54,7 +54,7 @@ interface IntelligentSearchProps {
 }
 
 interface SearchResult {
-  type: "book" | "author' | 'category' | 'tag' | 'external';
+  type: "book" | "author" | "category" | "tag" | "external";
   id: string;
   title: string;
   subtitle?: string;
@@ -221,14 +221,14 @@ function useSearchSuggestions(query: string) {
 
 export function IntelligentSearch({
   className,
-  placeholder = 'Rechercher des livres, auteurs, genres...",
+  placeholder = "Rechercher des livres, auteurs, genres...",
   onResultSelect,
   showExternalResults = false,
   maxSuggestions = 8,
   debounceMs = 300
 }: IntelligentSearchProps) {
   const router = useRouter();
-  const [query, setQuery] = useState("');
+  const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -535,9 +535,9 @@ function SearchResultItem({ result, isSelected, onClick }: SearchResultItemProps
           )}
           
           {result.metadata && (
-            <div className="text-xs text-muted-foreground truncate mt-1'>
-              {result.metadata.categories && '${result.metadata.categories}'• '}
-              {result.metadata.note && "Note: ${result.metadata.note}/10'}
+            <div className="text-xs text-muted-foreground truncate mt-1">
+              {result.metadata.categories && `${result.metadata.categories} • `}
+              {result.metadata.note && `Note: ${result.metadata.note}/10`}
             </div>
           )}
         </div>

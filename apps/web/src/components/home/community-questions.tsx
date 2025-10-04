@@ -41,12 +41,12 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
       className="group cursor-pointer"
     >
       <Link href={'/books/${question.book.id}/questions/${question.id}' as any}>
-        <div 
-          className='relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
+        <div
+          className="relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
             backdropFilter: "blur(10px)",
-            border: "1px solid rgba(139, 21, 56, 0.1)',
+            border: "1px solid rgba(139, 21, 56, 0.1)",
             boxShadow: "0 8px 32px rgba(139, 21, 56, 0.05)"
           }}
         >
@@ -116,7 +116,7 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
             <div className="w-10 h-12 relative flex-shrink-0">
               <Image
                 src={question.book.image_couverture || '/placeholder-book.svg'}
-                alt={"Couverture de ${question.book.titre}'}
+                alt={`Couverture de ${question.book.titre}`}
                 fill
                 className="object-cover rounded"
                 sizes="40px"
@@ -124,11 +124,11 @@ function QuestionCard({ question, index }: { question: CommunityQuestion; index:
             </div>
             
             <div className="flex-1 min-w-0">
-              <p 
+              <p
                 className="text-xs font-semibold mb-1 truncate"
                 style={{
                   fontFamily: "Playfair Display, serif",
-                  color: '#8B1538"
+                  color: '#8B1538'
                 }}
                 title={question.book.titre}
               >

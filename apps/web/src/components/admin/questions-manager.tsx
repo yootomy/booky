@@ -75,17 +75,12 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
 
       if (action === "ANSWERED") {
         // Répondre à la question via le proxy (pour garder les cookies)
-        const res = await apiClient.get('/api/books/${bookId}/questions/${questionId}', {
-          method: 'PUT',
-          headers: {
-            'Content-Type' : 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({ reponse: response }),
+        const res = await apiClient.put(`/api/books/${bookId}/questions/${questionId}`, {
+          reponse: response
         });
-        
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
+
+        if (!res.success) {
+          const errorData = res.data || { error: 'Unknown error' };
           
           // Extraire le message d'erreur de validation si disponible
           if (errorData.details && Array.isArray(errorData.details) && errorData.details[0]?.message) {
@@ -103,17 +98,12 @@ export function QuestionsManager({ stats, onQuestionUpdated }: QuestionsManagerP
         });
       } else {
         // Rejeter la question via le proxy (pour garder les cookies)
-        const res = await apiClient.get('/api/books/${bookId}/questions/${questionId}', {
-          method: 'PATCH',
-          headers: {
-            'Content-Type' : 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify({ status: 'REJECTED' }),
+        const res = await apiClient.patch(`/api/books/${bookId}/questions/${questionId}`, {
+          status: 'REJECTED'
         });
-        
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({ error: 'Unknown error' }));
+
+        if (!res.success) {
+          const errorData = res.data || { error: 'Unknown error' };
           
           // Extraire le message d'erreur si disponible
           if (errorData.error) {

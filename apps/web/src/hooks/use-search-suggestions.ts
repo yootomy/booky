@@ -85,16 +85,13 @@ export function useSearchSuggestions(
     setError(null);
 
     try {
-      const response = await apiClient.get('/api/search/suggest?q=${encodeURIComponent(query)}&limit=${maxSuggestions}', {
-          signal: abortControllerRef.current.signal,
-        }
-      );
+      const response = await apiClient.get(`/api/search/suggest?q=${encodeURIComponent(query)}&limit=${maxSuggestions}`);
 
-      if (!response.ok) {
+      if (!response.success) {
         throw new Error('Failed to fetch suggestions');
       }
 
-      const data = await response.json();
+      const data = response.data;
       const suggestionItems = data.items || [];
 
       // Mettre en cache

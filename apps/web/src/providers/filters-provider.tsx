@@ -208,7 +208,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
         viewMode: (params.get('view') as 'grid' | 'list') || 'grid',
       }));
     } catch (error) {
-      console.error("Erreur lors de l\"initialisation des filtres depuis l\'URL:', error);
+      console.error("Erreur lors de l'initialisation des filtres depuis l'URL:", error);
     }
   }, [searchParams, syncWithUrl]);
 
@@ -284,7 +284,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
   }, [state, updateUrl]);
 
   // Actions pour les notes
-  const setRatingFilter = React.useCallback((type: keyof FiltersState['ratingFilters",], value: number | null) => {
+  const setRatingFilter = React.useCallback((type: keyof FiltersState['ratingFilters'], value: number | null) => {
     const newState = {
       ...state,
       ratingFilters: { ...state.ratingFilters, [type]: value },
@@ -420,7 +420,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     updateUrl(newState);
   }, [state, updateUrl]);
 
-  const setSortOrder = React.useCallback((order: "asc" | "desc') => {
+  const setSortOrder = React.useCallback((order: "asc" | "desc") => {
     const newState = { ...state, sortOrder: order, page: 1 };
     setState(newState);
     updateUrl(newState);

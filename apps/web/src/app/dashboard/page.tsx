@@ -46,8 +46,8 @@ export default function Dashboard() {
       const response = await apiClient.get('/api/stats/user', {
         credentials: 'include'
       });
-      if (!response.ok) return { favoriteBooks: 0, questionsCount: 0, conseilsCount: 0 };
-      return response.json();
+      if (!response.success) return { favoriteBooks: 0, questionsCount: 0, conseilsCount: 0 };
+      return response.data;
     },
     retry: false
   });
@@ -198,7 +198,7 @@ export default function Dashboard() {
                     <div className="space-y-1">
                       <h3
                         className="font-semibold text-foreground"
-                        style={{ fontFamily: "Inter, sans-serif' }}
+                        style={{ fontFamily: "Inter, sans-serif" }}
                       >
                         {user?.nom_complet || user?.username || "Utilisateur"}
                       </h3>

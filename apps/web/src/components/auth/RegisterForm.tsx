@@ -106,7 +106,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   // Affichage du message de succès
   if (successMessage) {
     return (
-      <div className={'w-full text-center space-y-6 ${className || '}"}"}>
+      <div className={`w-full text-center space-y-6 ${className || ""}`}>
         <div className="space-y-4">
           <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30">
             <CheckCircle className="h-8 w-8 text-white" />
@@ -119,16 +119,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           </h2>
         </div>
 
-        <div className="p-6 rounded-xl border-l-4 bg-green-500/5 text-green-600 border-l-green-500" style={{ fontFamily: "Inter, sans-serif' }}>
+        <div className="p-6 rounded-xl border-l-4 bg-green-500/5 text-green-600 border-l-green-500" style={{ fontFamily: "Inter, sans-serif" }}>
           {successMessage}
         </div>
 
         <div>
-          <p className="text-sm text-foreground/70" style={{ fontFamily: "Inter, sans-serif' }}>
+          <p className="text-sm text-foreground/70" style={{ fontFamily: "Inter, sans-serif" }}>
             Vous allez être redirigé automatiquement vers votre nouvelle bibliothèque...
           </p>
           <div className="mt-3 flex justify-center">
-            <div className="animate-spin h-5 w-5 border-2 border-green-500 border-t-transparent rounded-full' />
+            <div className="animate-spin h-5 w-5 border-2 border-green-500 border-t-transparent rounded-full" />
           </div>
         </div>
       </div>
@@ -136,7 +136,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   }
 
   return (
-    <div className={"w-full space-y-6 ${className || ""}'}>
+    <div className={`w-full space-y-6 ${className || ""}`}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Affichage des erreurs */}
         {error && (

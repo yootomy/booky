@@ -137,7 +137,7 @@ export function useFavorites(): UseFavoritesReturn {
           }
         });
       } else {
-        toast.error("Impossible d"ajouter aux favoris. Erreur: ${error.message || 'Inconnue'}');
+        toast.error(`Impossible d'ajouter aux favoris. Erreur: ${error.message || 'Inconnue'}`);
       }
     }
   }, [isAuthenticated]);
@@ -157,13 +157,13 @@ export function useFavorites(): UseFavoritesReturn {
         return newSet;
       });
 
-      const response = await apiClient.delete('/api/favorites/${bookId}');
+      const response = await apiClient.delete(`/api/favorites/${bookId}`);
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to remove favorite');
       }
 
-      toast.success('Livre retiré des favoris");
+      toast.success("Livre retiré des favoris");
 
     } catch (error: any) {
       console.error("[NEW API] Error removing from favorites: ", error);

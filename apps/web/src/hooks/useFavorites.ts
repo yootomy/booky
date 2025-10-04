@@ -157,7 +157,7 @@ export function useFavorites(): UseFavoritesReturn {
         return newSet;
       });
 
-      const response = await apiClient.delete('/api/favorites/${bookId}');
+      const response = await apiClient.delete(`/api/favorites/${bookId}`);
 
       if (!response.success) {
         throw new Error(response.error || 'Failed to remove favorite');

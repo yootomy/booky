@@ -39,7 +39,7 @@ export const useLogin = (): UseLoginReturn => {
       }
     } catch (error) {
       console.error("Login hook error: ", error);
-      setError("Une erreur inattendue s\"est produite');
+      setError("Une erreur inattendue s'est produite");
       return false;
     } finally {
       setIsLoading(false);

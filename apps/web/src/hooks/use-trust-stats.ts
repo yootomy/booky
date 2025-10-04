@@ -22,13 +22,13 @@ export function useTrustStats() {
         
         // Récupérer les statistiques générales
         const response = await apiClient.get('/api/stats/general');
-        if (!response.ok) throw new Error("Failed to fetch stats");
+        if (!response.success) throw new Error(response.error || "Failed to fetch stats");
         
-        const stats = await response.json();
+        const stats = response.data;
         
         // Si l'API stats ne contient pas tout, calculer depuis l'API books
         const booksResponse = await apiClient.get('/api/books');
-        const allBooks = booksResponse.ok ? await booksResponse.json() : [];
+        const allBooks = booksResponse.success ? booksResponse.data : [];
         
         const total_books = allBooks.length || stats.total_books || 0;
         const unique_authors = new Set(allBooks.map((book: any) => book.auteur).filter(Boolean)).size || stats.unique_authors || 0;

@@ -45,17 +45,17 @@ function BookCard({ book, variant }: { book: PersonalizedBook; variant: 'suggest
 
   return (
     <div className="group cursor-pointer">
-      <Link href={"/books/${book.id}'}>
+      <Link href={`/books/${book.id}`}>
         <div className="flex items-center gap-4 p-4 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border bg-gradient-to-r"
-             style={{ 
+             style={{
                borderColor: style.borderColor,
-               background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)'
+               background: "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)"
              }}>
           
           <div className="w-12 h-16 relative flex-shrink-0">
             <Image
               src={book.image_couverture || "/placeholder-book.svg"}
-              alt={"Couverture de ${book.titre}'}
+              alt={`Couverture de ${book.titre}`}
               fill
               className="object-cover rounded"
               sizes="48px"
@@ -63,11 +63,11 @@ function BookCard({ book, variant }: { book: PersonalizedBook; variant: 'suggest
           </div>
 
           <div className="flex-1 min-w-0">
-            <h4 
+            <h4
               className="font-semibold text-sm mb-1 truncate group-hover:text-[#8B1538] transition-colors"
               style={{
                 fontFamily: "Playfair Display, serif",
-                color: '#2C1810"
+                color: '#2C1810'
               }}
               title={book.titre}
             >

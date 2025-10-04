@@ -43,15 +43,15 @@ function StatCard({
         style={{
           background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 248, 245, 0.9) 100%)',
           backdropFilter: "blur(10px)",
-          border: "1px solid rgba(139, 21, 56, 0.1)',
+          border: "1px solid rgba(139, 21, 56, 0.1)",
           boxShadow: "0 4px 20px rgba(139, 21, 56, 0.05)"
         }}
       >
         {/* Icon */}
-        <div 
-          className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110'
+        <div
+          className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110"
           style={{
-            backgroundColor: '${color}15',
+            backgroundColor: `${color}15`,
             color: color
           }}
         >

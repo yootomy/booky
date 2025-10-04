@@ -68,9 +68,9 @@ interface Question {
 }
 
 const statusConfig = {
-  PENDING: { label: "En attente", color: "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', icon: Clock },
-  APPROVED: { label: "Approuvée", color: "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800', icon: CheckCircle },
-  REJECTED: { label: "Rejetée", color: "bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800', icon: X }
+  PENDING: { label: "En attente", color: "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800", icon: Clock },
+  APPROVED: { label: "Approuvée", color: "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800", icon: CheckCircle },
+  REJECTED: { label: "Rejetée", color: "bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800", icon: X }
 };
 
 export default function QuestionsPage() {
@@ -84,8 +84,8 @@ export default function QuestionsPage() {
       const response = await apiClient.get('/api/questions?include=responses', {
         credentials: 'include'
       });
-      if (!response.ok) throw new Error("Erreur lors du chargement");
-      return response.json();
+      if (!response.success) throw new Error(response.error || "Erreur lors du chargement");
+      return response.data;
     },
     retry: false
   });
@@ -246,7 +246,7 @@ export default function QuestionsPage() {
               {/* Results count */}
               <div className="text-sm text-muted-foreground whitespace-nowrap">
                 <strong className="text-foreground">{filteredQuestions.length}</strong> question{filteredQuestions.length > 1 ? 's' : ''}
-                {searchTerm && ' trouvée${filteredQuestions.length > 1 ? 's' : ''}'}
+                {searchTerm && ` trouvée${filteredQuestions.length > 1 ? 's' : ''}`}
               </div>
             </div>
           </motion.div>
@@ -316,13 +316,13 @@ export default function QuestionsPage() {
               <Card className="bg-card/90 backdrop-blur border border-border/50 text-center py-16">
                 <CardContent>
                   <MessageCircle className="w-20 h-20 text-muted-foreground/60 mx-auto mb-6" />
-                  <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: "Playfair Display, serif' }}>
+                  <h3 className="text-xl font-semibold text-foreground mb-3" style={{ fontFamily: "Playfair Display, serif" }}>
                     {searchTerm
                       ? "Aucune question trouvée"
-                      : "Vous n"avez encore posé aucune question'
+                      : "Vous n'avez encore posé aucune question"
                     }
                   </h3>
-                  <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: "Inter, sans-serif' }}>
+                  <p className="text-muted-foreground mb-6 max-w-md mx-auto" style={{ fontFamily: "Inter, sans-serif" }}>
                     {searchTerm
                       ? "Essayez de modifier vos critères de recherche."
                       : "Commencez à explorer notre bibliothèque et posez vos premières questions sur les livres qui vous intéressent."
@@ -363,8 +363,8 @@ export default function QuestionsPage() {
                     >
                       <Card className="bg-card/90 backdrop-blur border border-border/50 hover:border-primary/40 overflow-hidden hover:shadow-xl transition-all duration-300 group">
                         <CardHeader className="pb-3">
-                          <div className="flex justify-between items-start mb-3'>
-                            <Link href={'/books/${question.book.id}'} className="flex items-center gap-3 flex-1 min-w-0 group-hover:text-primary transition-colors duration-200">
+                          <div className="flex justify-between items-start mb-3">
+                            <Link href={`/books/${question.book.id}`} className="flex items-center gap-3 flex-1 min-w-0 group-hover:text-primary transition-colors duration-200">
                               {/* Book cover */}
                               <div className="w-12 h-16 relative flex-shrink-0 rounded overflow-hidden">
                                 {question.book.image_couverture ? (

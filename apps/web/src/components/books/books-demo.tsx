@@ -30,7 +30,7 @@ const mockBooks: BookData[] = [
     niveau_spicy: 7,
     niveau_dark: 5,
     niveau_romance: 9,
-    resume_personnel: "Une histoire d"amour intense avec des personnages complexes et une tension sexuelle incroyable.',
+    resume_personnel: "Une histoire d'amour intense avec des personnages complexes et une tension sexuelle incroyable.",
     date_creation: new Date("2024-01-15"),
     date_lecture: new Date("2024-02-01"),
     nombre_pages: 320,
@@ -88,7 +88,7 @@ const mockBooks: BookData[] = [
     niveau_spicy: 9,
     niveau_dark: 10,
     niveau_romance: 6,
-    resume_personnel: "Trop dark pour moi, j"ai abandonné à la moitié.',
+    resume_personnel: "Trop dark pour moi, j'ai abandonné à la moitié.",
     date_creation: new Date("2024-01-20"),
     nombre_pages: 592,
     categories: [
@@ -104,7 +104,7 @@ const mockBooks: BookData[] = [
     statut: "LU" as BookStatusType,
     note_generale: 10,
     niveau_romance: 8,
-    resume_personnel: "Un chef-d"œuvre absolu ! L'histoire d'Evelyn est captivante du début à la fin.',
+    resume_personnel: "Un chef-d'œuvre absolu ! L'histoire d'Evelyn est captivante du début à la fin.",
     date_creation: new Date("2023-12-01"),
     date_lecture: new Date("2023-12-15"),
     nombre_pages: 400,
@@ -117,10 +117,10 @@ const mockBooks: BookData[] = [
 
 export function BooksDemo() {
   const [selectedBooks, setSelectedBooks] = useState<string[]>([]);
-  const [statusFilter, setStatusFilter] = useState<BookStatusType>("LU');
+  const [statusFilter, setStatusFilter] = useState<BookStatusType>("LU");
 
   const handleStatusChange = (book: BookData, newStatus: BookStatusType) => {
-    console.log('Changing status of "${book.titre}` to ${newStatus}');
+    console.log(`Changing status of "${book.titre}" to ${newStatus}`);
   };
 
   return (

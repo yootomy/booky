@@ -8,7 +8,7 @@ export default function UnauthorizedPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
       <UnauthorizedMessage
         title="Accès Non Autorisé"
-        message="Vous n"avez pas les permissions nécessaires pour accéder à cette page.'
+        message="Vous n'avez pas les permissions nécessaires pour accéder à cette page."
         showLogin={false}
         showRegister={false}
       />

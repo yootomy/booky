@@ -148,8 +148,8 @@ export function CustomCarousel({
             onClick={scrollLeft}
             disabled={!canScrollLeft}
             className={cn(
-              "absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 shadow-md border border-gray-200 hover:bg-white hover:shadow-lg hover:scale-110 transition-all duration-200 p-0 flex items-center justify-center',
-              !canScrollLeft ? 'opacity-0 cursor-not-allowed' : 'opacity-80 hover:opacity-100 group-hover:opacity-100'
+              "absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 shadow-md border border-gray-200 hover:bg-white hover:shadow-lg hover:scale-110 transition-all duration-200 p-0 flex items-center justify-center",
+              !canScrollLeft ? "opacity-0 cursor-not-allowed" : "opacity-80 hover:opacity-100 group-hover:opacity-100"
             )}
             aria-label="Précédent"
           >
@@ -161,8 +161,8 @@ export function CustomCarousel({
             onClick={scrollRight}
             disabled={!canScrollRight}
             className={cn(
-              'absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 shadow-md border border-gray-200 hover:bg-white hover:shadow-lg hover:scale-110 transition-all duration-200 p-0 flex items-center justify-center',
-              !canScrollRight ? 'opacity-0 cursor-not-allowed' : 'opacity-80 hover:opacity-100 group-hover:opacity-100'
+              "absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 shadow-md border border-gray-200 hover:bg-white hover:shadow-lg hover:scale-110 transition-all duration-200 p-0 flex items-center justify-center",
+              !canScrollRight ? "opacity-0 cursor-not-allowed" : "opacity-80 hover:opacity-100 group-hover:opacity-100"
             )}
             aria-label="Suivant"
           >
@@ -184,16 +184,16 @@ export function CustomCarousel({
         ref={scrollRef}
         className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory"
         style={{
-          gap: '${gap}px',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none",
+          gap: `${gap}px`,
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
       >
         {childrenArray.map((child, index) => (
           <div
             key={index}
             className="flex-shrink-0 snap-start"
-            style={{ width: '${itemWidth}px' }}
+            style={{ width: `${itemWidth}px` }}
           >
             {child}
           </div>

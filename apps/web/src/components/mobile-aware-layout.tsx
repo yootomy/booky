@@ -8,7 +8,7 @@ interface MobileAwareLayoutProps {
   className?: string;
 }
 
-export function MobileAwareLayout({ children, className = '" }: MobileAwareLayoutProps) {
+export function MobileAwareLayout({ children, className = "" }: MobileAwareLayoutProps) {
   const { isLoaded } = useMobileContext();
 
   // Scroll automatique en haut de page au chargement/changement de page
@@ -29,7 +29,7 @@ export function MobileAwareLayout({ children, className = '" }: MobileAwareLayou
   }
 
   return (
-    <div className={"w-full min-h-screen h-full bg-background ${className}'}>
+    <div className={`w-full min-h-screen h-full bg-background ${className}`}>
       {children}
     </div>
   );

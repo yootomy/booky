@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { HomeBook } from '@/lib/types/home';
+import { apiClient } from '@/lib/api-client';
 
 export function useRandomPick() {
   const [isPickingRandom, setIsPickingRandom] = useState(false);
@@ -11,15 +12,13 @@ export function useRandomPick() {
   const { data: randomBook, isLoading, error } = useQuery({
     queryKey: ['random-book', isPickingRandom],
     queryFn: async (): Promise<HomeBook> => {
-      const response = await fetch('/api/books/random', {
-        credentials: 'include',
-      });
+      const response = await apiClient.get('/api/books/random');
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch random book");
+      if (!response.success) {
+        throw new Error(response.error || "Failed to fetch random book");
       }
 
-      return response.json();
+      return response.data;
     },
     enabled: isPickingRandom,
     staleTime: 0, // Always fetch fresh for random picks

@@ -30,7 +30,7 @@ export function useTrendingNew() {
         
         // Récupérer tous les livres
         const booksResponse = await apiClient.get('/api/books');
-        const allBooks = booksResponse.ok ? await booksResponse.json() : [];
+        const allBooks = booksResponse.success ? booksResponse.data : [];
         
         // Nouveautés : triés par date de publication ou création
         const newBooksData = [...allBooks]

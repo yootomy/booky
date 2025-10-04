@@ -30,7 +30,7 @@ function LoginContent() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner message="Vérification de l"authentification...' />
+        <LoadingSpinner message="Vérification de l'authentification..." />
       </div>
     );
   }

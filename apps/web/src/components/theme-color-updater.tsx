@@ -19,7 +19,7 @@ export default function ThemeColorUpdater() {
     if (!mounted) return;
 
     // Trouver ou créer la balise meta theme-color
-    let meta = document.querySelector<HTMLMetaElement>("meta[name="theme-color"]");
+    let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
 
     if (!meta) {
       meta = document.createElement('meta');

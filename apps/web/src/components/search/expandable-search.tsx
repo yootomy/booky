@@ -71,7 +71,7 @@ export function ExpandableSearch({ className = '' }: ExpandableSearchProps) {
   }, [handleClose]);
 
   return (
-    <div className={`relative flex items-center ${className}'}>
+    <div className={`relative flex items-center ${className}`}>
       {/* Container avec largeur animée */}
       <motion.div
         className="flex items-center overflow-hidden"
