@@ -89,18 +89,15 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
       if (!response.success) throw new Error(response.error || "Failed to fetch tags");
       const result = response.data;
       // Filter for romance-related tags
-      return {
-        ...result,
-        data: result.data?.filter((tag: Tag) =>
-          tag.type === 'TROPE' || tag.type === 'GENRE'
-        ) || []
-      };
+      return result?.data?.filter((tag: Tag) =>
+        tag.type === 'TROPE' || tag.type === 'GENRE'
+      ) || [];
     },
     enabled: isOpen
   });
 
   const categories = categoriesData?.data || [];
-  const tags = tagsData?.data || [];
+  const tags = tagsData || [];
 
   const handleCategoryToggle = (categoryId: string) => {
     setSelectedCategories(prev =>
