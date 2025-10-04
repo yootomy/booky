@@ -48,10 +48,10 @@ export const useAuthGuard = (options: AuthGuardOptions = {}) => {
     // Vérifier le rôle spécifique
     if (requiredRole && !hasRole(requiredRole)) {
       if (!isAuthenticated) {
-        router.push('/login');
+        router.push('/login' as any);
       } else {
         // Utilisateur connecté mais pas le bon rôle
-        router.push('/unauthorized');
+        router.push('/unauthorized' as any);
       }
       return;
     }
@@ -60,14 +60,14 @@ export const useAuthGuard = (options: AuthGuardOptions = {}) => {
     if (allowedRoles.length > 0 && isAuthenticated) {
       const hasAllowedRole = allowedRoles.some(role => hasRole(role));
       if (!hasAllowedRole) {
-        router.push('/unauthorized');
+        router.push('/unauthorized' as any);
         return;
       }
     }
 
     // Vérifier la vérification email
     if (requireEmailVerification && isAuthenticated && !isEmailVerified) {
-      router.push('/verify-email');
+      router.push('/verify-email' as any);
       return;
     }
   }, [

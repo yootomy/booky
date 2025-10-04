@@ -231,7 +231,7 @@ export function FiltersProvider({ children, syncWithUrl = false }: FiltersProvid
     const queryString = params.toString();
     const newUrl = queryString ? `${pathname}?${queryString}` : pathname;
 
-    router.replace(newUrl, { scroll: false });
+    router.replace(newUrl as any, { scroll: false });
   }, [syncWithUrl, pathname, router]);
 
   // Actions de recherche
