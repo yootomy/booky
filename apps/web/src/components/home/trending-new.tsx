@@ -78,9 +78,9 @@ function SpicyIndicator({ level }: { level: number }) {
   return (
     <span
       className="text-xs font-medium px-2 py-1 rounded-full"
-      title={'Niveau spicy: ${level}/10'}
+      title={`Niveau spicy: ${level}/10`}
       style={{
-        backgroundColor: '${getIndicatorColor()}15',
+        backgroundColor: `${getIndicatorColor()}15`,
         color: getIndicatorColor()
       }}
     >

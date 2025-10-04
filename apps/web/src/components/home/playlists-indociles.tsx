@@ -56,10 +56,10 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
           {/* Header */}
           <div className="relative mb-6">
             <div className="flex items-center gap-3 mb-3">
-              <div 
+              <div
                 className="p-3 rounded-xl"
                 style={{
-                  backgroundColor: '${playlist.color}15',
+                  backgroundColor: `${playlist.color}15`,
                   color: playlist.color
                 }}
               >
@@ -118,10 +118,10 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
             ))}
             
             {playlist.total_count > 4 && (
-              <div 
+              <div
                 className="w-12 h-16 rounded flex items-center justify-center text-xs font-bold border-2 border-white"
                 style={{
-                  backgroundColor: '${playlist.color}20',
+                  backgroundColor: `${playlist.color}20`,
                   color: playlist.color
                 }}
               >

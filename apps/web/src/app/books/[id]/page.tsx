@@ -507,9 +507,9 @@ export default function BookDetailPage() {
                         </div>
                         <div className='w-full rounded-full h-3 bg-muted'>
                           <div
-                            className={'h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
+                            className={`h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
                             style={{
-                              width: '${(metric.value / 10) * 100}%'
+                              width: `${(metric.value / 10) * 100}%`
                             }}
                           />
                         </div>
@@ -793,9 +793,9 @@ export default function BookDetailPage() {
                       </div>
                       <div className='w-full rounded-full h-2 md:h-3 bg-muted'>
                         <div
-                          className={'h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}'}
+                          className={`h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
                           style={{
-                            width: '${(metric.value / 10) * 100}%'
+                            width: `${(metric.value / 10) * 100}%`
                           }}
                         />
                       </div>
