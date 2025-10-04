@@ -289,7 +289,7 @@ export function ListBooksManager({ listId, searchQuery, refreshTrigger, onBookRe
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align='end'>
                         <DropdownMenuItem
-                          onClick={() => router.push('/books/${book.id}')}
+                          onClick={() => router.push(`/books/${book.id}` as any)}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Voir le livre

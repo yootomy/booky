@@ -523,7 +523,7 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
                             )}
                             {tag.est_favori ? "Retirer favori" : "Marquer favori"}
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => router.push('/tags/${tag.id}' as any)}>
+                          <DropdownMenuItem onClick={() => router.push(`/tags/${tag.id}` as any)}>
                             <Eye className="h-4 w-4 mr-2" />
                             Voir les livres
                           </DropdownMenuItem>

@@ -436,7 +436,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
                       <Edit2 className="h-4 w-4 mr-2" />
                       Modifier
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/categories/${category.id}' as any)}>
+                    <DropdownMenuItem onClick={() => router.push(`/categories/${category.id}` as any)}>
                       <Eye className="h-4 w-4 mr-2" />
                       Voir les livres
                     </DropdownMenuItem>

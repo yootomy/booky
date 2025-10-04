@@ -317,7 +317,7 @@ export function BooksManager({ searchQuery }: BooksManagerProps) {
                           <Edit2 className="h-4 w-4 mr-2" />
                           Modifier
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => window.open('/books/${book.id}', '_blank')}>
+                        <DropdownMenuItem onClick={() => window.open(`/books/${book.id}`, '_blank')}>
                           <ExternalLink className="h-4 w-4 mr-2" />
                           Ouvrir dans un nouvel onglet
                         </DropdownMenuItem>
