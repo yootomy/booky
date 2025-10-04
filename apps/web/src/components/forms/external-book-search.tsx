@@ -358,7 +358,7 @@ function BookResultsList({ books, onImportClick }: BookResultsListProps) {
         <div className="space-y-4">
           {books.map((book, index) => (
             <BookResultCard
-              key={'${book.source}-${book.identifiant_externe}-${index}'}
+              key={`${book.source}-${book.identifiant_externe}-${index}`}
               book={book}
               onImportClick={() => onImportClick(book)}
             />
