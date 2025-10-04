@@ -353,7 +353,7 @@ export default function ListsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group cursor-pointer"
-                  onClick={() => router.push('/books?collection=${list.id}')}
+                  onClick={() => router.push(`/books?collection=${list.id}`)}
                 >
                   <div
                     className="relative rounded-2xl p-6 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/95 backdrop-blur-xl border border-primary/10 shadow-xl"
