@@ -193,11 +193,11 @@ export function TagSelector({
             ) : (
               <>
                 {selectedTagObjects.slice(0, 3).map((tag) => (
-                  <Badge 
-                    key={tag.id} 
+                  <Badge
+                    key={tag.id}
                     variant="secondary"
                     className="text-xs"
-                    style={{ backgroundColor: '${tag.color}20', color: tag.color }}
+                    style={{ backgroundColor: `${tag.color}20`, color: tag.color }}
                   >
                     {tag.name}
                   </Badge>

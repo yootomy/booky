@@ -79,12 +79,12 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
               <div
                 key={book.id}
                 className="aspect-[3/4] relative rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-300"
-                style={{ transitionDelay: '${bookIndex * 50}ms' }}
+                style={{ transitionDelay: `${bookIndex * 50}ms` }}
               >
                 {book.image_couverture ? (
                   <Image
                     src={book.image_couverture}
-                    alt={'Couverture de ${book.titre}'}
+                    alt={`Couverture de ${book.titre}`}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 25vw, 12vw"

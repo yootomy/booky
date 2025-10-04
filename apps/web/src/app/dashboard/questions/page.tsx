@@ -130,7 +130,7 @@ export default function QuestionsPage() {
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.PENDING;
     const IconComponent = config.icon;
     return (
-      <Badge className={'${config.color}text-xs font-medium gap-1'}>
+      <Badge className={`${config.color} text-xs font-medium gap-1`}>
         <IconComponent className="w-3 h-3" />
         {config.label}
       </Badge>

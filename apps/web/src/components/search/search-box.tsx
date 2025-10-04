@@ -380,8 +380,8 @@ export function SearchBox({
 
           {suggestions.map((suggestion, index) => (
             <div
-              key={'${suggestion.type}-${suggestion.id}'}
-              id={'suggestion-${index}'}
+              key={`${suggestion.type}-${suggestion.id}`}
+              id={`suggestion-${index}`}
               role="option"
               aria-selected={index === selectedIndex}
               className={cn(
