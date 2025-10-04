@@ -79,7 +79,7 @@ export default function ProfilePage() {
     enabled: !!user
   });
 
-  const profile: UserProfile = profileData?.data;
+  const profile: UserProfile = profileData;
 
   // Initialiser le formulaire avec les données du profil
   React.useEffect(() => {
