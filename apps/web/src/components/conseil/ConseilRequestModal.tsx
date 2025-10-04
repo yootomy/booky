@@ -96,8 +96,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
     enabled: isOpen
   });
 
-  const categories = categoriesData?.data || [];
-  const tags = tagsData || [];
+  const categories = Array.isArray(categoriesData) ? categoriesData : [];
+  const tags = Array.isArray(tagsData) ? tagsData : [];
 
   const handleCategoryToggle = (categoryId: string) => {
     setSelectedCategories(prev =>
