@@ -114,21 +114,21 @@ class ApiClient {
   private baseURL: string;
   
   constructor() {
-    // Option 2: Utiliser les routes proxy du frontend
-    this.baseURL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
+    // Appel direct au serveur API (plus de proxy)
+    this.baseURL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
-    // Appel via proxy frontend
+    // Appel direct au serveur - plus de proxy
     let cleanEndpoint = endpoint;
-    // Supprimer le /api s'il est au début pour éviter les doublons
-    if (cleanEndpoint.startsWith('/api/')) {
-      cleanEndpoint = cleanEndpoint.substring(4);
+    // S'assurer que l'endpoint commence par /api
+    if (!cleanEndpoint.startsWith('/api/')) {
+      cleanEndpoint = `/api${cleanEndpoint}`;
     }
-    const url = `${this.baseURL}${cleanEndpoint.startsWith('/proxy') ? `/api${cleanEndpoint}` : `/api/proxy${cleanEndpoint}`}`;
+    const url = `${this.baseURL}${cleanEndpoint}`;
 
     const config: RequestInit = {
       credentials: 'include',
