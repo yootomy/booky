@@ -456,7 +456,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                   <div
                     className="h-1 rounded-full transition-all duration-500"
                     style={{
-                      width: '${(currentStep / STEPS.CONFIRMATION) * 100}%',
+                      width: `${(currentStep / STEPS.CONFIRMATION) * 100}%`,
                       background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'
                     }}
                   />

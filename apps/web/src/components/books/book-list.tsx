@@ -327,7 +327,7 @@ export function BookList({
                 variant="secondary"
                 className="text-xs px-1.5 py-0.5"
                 style={{
-                  backgroundColor: '${cat.category.couleur}20',
+                  backgroundColor: `${cat.category.couleur}20`,
                   color: cat.category.couleur
                 }}
               >

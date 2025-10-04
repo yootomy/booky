@@ -402,16 +402,16 @@ export default function ListsPage() {
                           <div
                             key={book.id}
                             className="aspect-[2/3] relative rounded-lg overflow-hidden group-hover:scale-105 transition-transform duration-300"
-                            style={{ transitionDelay: '${bookIndex * 50}ms' }}
+                            style={{ transitionDelay: `${bookIndex * 50}ms` }}
                             onClick={(e) => {
                               e.stopPropagation();
-                              router.push('/books/${book.id}');
+                              router.push(`/books/${book.id}`);
                             }}
                           >
                             {book.image_couverture ? (
                               <img
                                 src={book.image_couverture}
-                                alt={'Couverture de ${book.titre}'}
+                                alt={`Couverture de ${book.titre}`}
                                 className="w-full h-full object-contain bg-gray-50"
                               />
                             ) : (

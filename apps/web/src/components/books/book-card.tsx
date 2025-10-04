@@ -443,7 +443,7 @@ export function BookCard({
                     variant="secondary"
                     className="text-xs px-2 py-0.5"
                     style={{
-                      backgroundColor: '${cat.category.couleur}20',
+                      backgroundColor: `${cat.category.couleur}20`,
                       color: cat.category.couleur,
                       borderColor: cat.category.couleur
                     }}

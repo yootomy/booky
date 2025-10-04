@@ -457,7 +457,7 @@ export function CategoriesManager({ searchQuery }: CategoriesManagerProps) {
                   variant="secondary"
                   className="text-xs"
                   style={{
-                    backgroundColor: '${category.couleur}20',
+                    backgroundColor: `${category.couleur}20`,
                     color: category.couleur
                   }}
                 >

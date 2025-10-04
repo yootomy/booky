@@ -166,7 +166,7 @@ export function BookCover({
             priority={priority}
             onLoad={handleImageLoad}
             onError={handleImageError}
-            sizes={'${dimensions.width}px'}
+            sizes={`${dimensions.width}px`}
           />
           
           {/* Loader pendant le chargement */}
