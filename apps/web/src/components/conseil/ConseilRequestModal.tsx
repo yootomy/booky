@@ -88,10 +88,10 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
       const response = await apiClient.get('/api/tags');
       if (!response.success) throw new Error(response.error || "Failed to fetch tags");
       const result = response.data;
-      // Filter for romance-related tags
-      return result?.data?.filter((tag: Tag) =>
+      // Filter for romance-related tags (result is already the array)
+      return Array.isArray(result) ? result.filter((tag: Tag) =>
         tag.type === 'TROPE' || tag.type === 'GENRE'
-      ) || [];
+      ) : [];
     },
     enabled: isOpen
   });
