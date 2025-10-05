@@ -43,7 +43,7 @@ export default function AdminSettings() {
     queryKey: ['all-books-for-featured'],
     queryFn: async () => {
       const response = await apiClient.get('/api/books', {
-        limit: 500, // Récupérer beaucoup de livres
+        limit: 100, // Limite maximale acceptée par le serveur
         page: 1
       });
       return response;
