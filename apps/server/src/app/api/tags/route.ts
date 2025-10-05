@@ -20,7 +20,7 @@ import {
   createSearchInfo,
   getAppliedFilters
 } from "@/utils/serializers";
-import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 
 // =============================================================================
 // 🏷️ API ROUTE TAGS PRINCIPALE - /api/tags
@@ -141,173 +141,157 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
 });
 
 // POST /api/tags - Créer un nouveau tag (protégé)
-export const POST = withErrorHandler(async (request: NextRequest) => {
-  const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: TagErrorMessages[lang].UNAUTHORIZED,
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-  
-  // Parser et valider les données
-  const body = await request.json();
-  const validatedData = CreateTagSchema.parse(body);
-  
-  // Nettoyer les données
-  const cleanedData = sanitizeTagData(validatedData);
-  
-  // Vérifier l'unicité du nom
-  const existingTag = await db.tag.findFirst({
-    where: {
-      nom: {
-        equals: cleanedData.nom,
-        mode: 'insensitive',
-      },
-    },
-  });
-  
-  if (existingTag) {
-    return NextResponse.json({
-      success: false,
-      error: TagErrorMessages[lang].TAG_NAME_EXISTS,
-      code: 'TAG_NAME_EXISTS',
-      field: 'nom',
-    }, { status: 409 });
-  }
-  
-  // Créer le tag
-  const newTag = await db.tag.create({
-    data: {
-      ...cleanedData,
-      utilisation_count: 0, // Initialiser à 0
-    },
-    include: {
-      _count: {
-        select: { book_tag: true }
-      }
-    }
-  });
-  
-  // Sérialiser la réponse
-  const serializedTag = serializeTags([newTag], { includeBookCount: true })[0];
-  
-  return NextResponse.json({
-    success: true,
-    data: serializedTag,
-    message: lang === 'fr' ? 'Tag créé avec succès' : 'Tag created successfully',
-    execution_time_ms: Date.now() - startTime,
-  }, { status: 201 });
-});
+export async function POST(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
+    const startTime = Date.now();
+    const lang = detectLanguageFromHeaders(req.headers);
 
-// DELETE /api/tags - Suppression en masse des tags (protégé)
-export const DELETE = withErrorHandler(async (request: NextRequest) => {
-  const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: TagErrorMessages[lang].UNAUTHORIZED,
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-  
-  // Récupérer les paramètres
-  const { searchParams } = new URL(request.url);
-  const tagIds = searchParams.get('tag_ids')?.split(',');
-  const force = searchParams.get('force') === 'true';
-  
-  if (!tagIds || tagIds.length === 0) {
-    return NextResponse.json({
-      success: false,
-      error: "Une liste d'IDs de tags est requise",
-      code: 'INVALID_TAG_IDS',
-    }, { status: 400 });
-  }
-  
-  // Vérifier que tous les tags existent
-  const existingTags = await db.tag.findMany({
-    where: {
-      id: { in: tagIds },
-    },
-    include: {
-      _count: {
-        select: { book_tag: true }
-      }
-    }
-  });
-  
-  if (existingTags.length !== tagIds.length) {
-    const foundIds = existingTags.map(tag => tag.id);
-    const missingIds = tagIds.filter(id => !foundIds.includes(id));
+    // Parser et valider les données
+    const body = await req.json();
+    const validatedData = CreateTagSchema.parse(body);
     
-    return NextResponse.json({
-      success: false,
-      error: "Certains tags n'ont pas été trouvés",
-      code: 'TAGS_NOT_FOUND',
-      missing_tag_ids: missingIds,
-    }, { status: 404 });
-  }
-  
-  // Vérifier si des tags sont utilisés
-  const tagsInUse = existingTags.filter(tag => tag._count.book_tag > 0);
-  
-  if (tagsInUse.length > 0 && !force) {
-    return NextResponse.json({
-      success: false,
-      error: TagErrorMessages[lang].TAG_IN_USE,
-      code: 'TAGS_IN_USE',
-      metadata: {
-        tags_in_use: tagsInUse.map(tag => ({
-          id: tag.id,
-          nom: tag.nom,
-          book_count: tag._count.book_tag,
-        })),
-        can_force_delete: true,
-      },
-    }, { status: 409 });
-  }
-  
-  // Si force=true, dissocier d'abord tous les livres
-  if (force && tagsInUse.length > 0) {
-    await db.book_tag.deleteMany({
+    // Nettoyer les données
+    const cleanedData = sanitizeTagData(validatedData);
+    
+    // Vérifier l'unicité du nom
+    const existingTag = await db.tag.findFirst({
       where: {
-        tagId: { in: tagsInUse.map(tag => tag.id) },
+        nom: {
+          equals: cleanedData.nom,
+          mode: 'insensitive',
+        },
       },
     });
-  }
-  
-  // Supprimer les tags
-  const deletedCount = await db.tag.deleteMany({
-    where: {
-      id: { in: tagIds },
-    },
+    
+    if (existingTag) {
+      return NextResponse.json({
+        success: false,
+        error: TagErrorMessages[lang].TAG_NAME_EXISTS,
+        code: 'TAG_NAME_EXISTS',
+        field: 'nom',
+      }, { status: 409 });
+    }
+    
+    // Créer le tag
+    const newTag = await db.tag.create({
+      data: {
+        ...cleanedData,
+        utilisation_count: 0, // Initialiser à 0
+      },
+      include: {
+        _count: {
+          select: { book_tag: true }
+        }
+      }
+    });
+    
+    // Sérialiser la réponse
+    const serializedTag = serializeTags([newTag], { includeBookCount: true })[0];
+    
+    return NextResponse.json({
+      success: true,
+      data: serializedTag,
+      message: lang === 'fr' ? 'Tag créé avec succès' : 'Tag created successfully',
+      execution_time_ms: Date.now() - startTime,
+    }, { status: 201 });
   });
-  
-  return NextResponse.json({
-    success: true,
-    data: {
-      deleted_count: deletedCount.count,
-      deleted_tags: existingTags.map(tag => ({
-        id: tag.id,
-        nom: tag.nom,
-      })),
-    },
-    message: lang === 'fr' 
-      ? `${deletedCount.count} tag(s) supprimé(s) avec succès` 
-      : `${deletedCount.count} tag(s) deleted successfully`,
-    metadata: {
-      forced_deletion: force,
-      books_dissociated: force ? tagsInUse.reduce((sum, tag) => sum + tag._count.book_tag, 0) : 0,
-    },
-    execution_time_ms: Date.now() - startTime,
+}
+
+// DELETE /api/tags - Suppression en masse des tags (protégé)
+export async function DELETE(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
+    const startTime = Date.now();
+    const lang = detectLanguageFromHeaders(req.headers);
+
+    // Récupérer les paramètres
+    const { searchParams } = new URL(req.url);
+    const tagIds = searchParams.get('tag_ids')?.split(',');
+    const force = searchParams.get('force') === 'true';
+    
+    if (!tagIds || tagIds.length === 0) {
+      return NextResponse.json({
+        success: false,
+        error: "Une liste d'IDs de tags est requise",
+        code: 'INVALID_TAG_IDS',
+      }, { status: 400 });
+    }
+    
+    // Vérifier que tous les tags existent
+    const existingTags = await db.tag.findMany({
+      where: {
+        id: { in: tagIds },
+      },
+      include: {
+        _count: {
+          select: { book_tag: true }
+        }
+      }
+    });
+    
+    if (existingTags.length !== tagIds.length) {
+      const foundIds = existingTags.map(tag => tag.id);
+      const missingIds = tagIds.filter(id => !foundIds.includes(id));
+      
+      return NextResponse.json({
+        success: false,
+        error: "Certains tags n'ont pas été trouvés",
+        code: 'TAGS_NOT_FOUND',
+        missing_tag_ids: missingIds,
+      }, { status: 404 });
+    }
+    
+    // Vérifier si des tags sont utilisés
+    const tagsInUse = existingTags.filter(tag => tag._count.book_tag > 0);
+    
+    if (tagsInUse.length > 0 && !force) {
+      return NextResponse.json({
+        success: false,
+        error: TagErrorMessages[lang].TAG_IN_USE,
+        code: 'TAGS_IN_USE',
+        metadata: {
+          tags_in_use: tagsInUse.map(tag => ({
+            id: tag.id,
+            nom: tag.nom,
+            book_count: tag._count.book_tag,
+          })),
+          can_force_delete: true,
+        },
+      }, { status: 409 });
+    }
+    
+    // Si force=true, dissocier d'abord tous les livres
+    if (force && tagsInUse.length > 0) {
+      await db.book_tag.deleteMany({
+        where: {
+          tagId: { in: tagsInUse.map(tag => tag.id) },
+        },
+      });
+    }
+    
+    // Supprimer les tags
+    const deletedCount = await db.tag.deleteMany({
+      where: {
+        id: { in: tagIds },
+      },
+    });
+    
+    return NextResponse.json({
+      success: true,
+      data: {
+        deleted_count: deletedCount.count,
+        deleted_tags: existingTags.map(tag => ({
+          id: tag.id,
+          nom: tag.nom,
+        })),
+      },
+      message: lang === 'fr' 
+        ? `${deletedCount.count} tag(s) supprimé(s) avec succès` 
+        : `${deletedCount.count} tag(s) deleted successfully`,
+      metadata: {
+        forced_deletion: force,
+        books_dissociated: force ? tagsInUse.reduce((sum, tag) => sum + tag._count.book_tag, 0) : 0,
+      },
+      execution_time_ms: Date.now() - startTime,
+    });
   });
-});
+}
