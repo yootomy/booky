@@ -172,13 +172,13 @@ export default function AdminSettings() {
                     <div className="h-3 bg-gray-300 rounded w-1/2"></div>
                   </div>
                 </div>
-              ) : currentFeaturedBook?.data ? (
+              ) : currentFeaturedBook ? (
                 <div className="flex items-center space-x-4 p-4 rounded-lg bg-gradient-to-r from-red-50 to-pink-50 border border-red-200">
                   <div className="w-16 h-20 relative rounded overflow-hidden flex-shrink-0">
-                    {currentFeaturedBook.data.image_couverture ? (
+                    {currentFeaturedBook.image_couverture ? (
                       <img
-                        src={currentFeaturedBook.data.image_couverture}
-                        alt={currentFeaturedBook.data.titre}
+                        src={currentFeaturedBook.image_couverture}
+                        alt={currentFeaturedBook.titre}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -188,11 +188,11 @@ export default function AdminSettings() {
                     )}
                   </div>
                   <div className="flex-1 space-y-1">
-                    <h4 className="font-semibold text-gray-900">{currentFeaturedBook.data.titre}</h4>
-                    <p className="text-sm text-gray-600">par {currentFeaturedBook.data.auteur}</p>
+                    <h4 className="font-semibold text-gray-900">{currentFeaturedBook.titre}</h4>
+                    <p className="text-sm text-gray-600">par {currentFeaturedBook.auteur}</p>
                     <div className="flex items-center space-x-2">
                       <Badge variant="outline" className="text-xs">
-                        ⭐ {currentFeaturedBook.data.note_generale}/10
+                        ⭐ {currentFeaturedBook.note_generale}/10
                       </Badge>
                       {currentFeaturedBook.isDefault && (
                         <Badge variant="secondary" className="text-xs">
