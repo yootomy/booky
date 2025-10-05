@@ -41,9 +41,15 @@ export default function AdminSettings() {
     queryKey: ['book-search', bookSearchQuery],
     queryFn: async () => {
       if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
-      const response = await apiClient.get(`/api/books?search=${encodeURIComponent(bookSearchQuery)}&limit=10`);
+
+      console.log('🔍 Recherche de livres:', bookSearchQuery);
+      const response = await apiClient.get(`/api/books?q=${encodeURIComponent(bookSearchQuery)}&limit=10`);
+      console.log('📚 Résultats recherche:', response);
+
       if (!response.success) throw new Error(response.error || "Failed to search books");
-      return response.data;
+
+      // L'API retourne directement le tableau de livres
+      return Array.isArray(response.data) ? { data: response.data } : response;
     },
     enabled: bookSearchQuery.length >= 2
   });
