@@ -90,27 +90,22 @@ export const UserMenu: React.FC = () => {
           </DropdownMenuLabel>
           
           <DropdownMenuSeparator />
-          
-          {/* Actions communes */}
-          <DropdownMenuItem asChild>
-            <Link href="/dashboard">
-              <LayoutDashboard className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
-            </Link>
-          </DropdownMenuItem>
-          
-          {/* Actions admin uniquement */}
-          {isAdmin && (
-            <>
-              <DropdownMenuSeparator />
-              
-              <DropdownMenuItem asChild>
-                <Link href="/admin/dashboard">
-                  <Crown className="mr-2 h-4 w-4" />
-                  <span>Dashboard Admin</span>
-                </Link>
-              </DropdownMenuItem>
-            </>
+
+          {/* Dashboard selon le rôle */}
+          {isAdmin ? (
+            <DropdownMenuItem asChild>
+              <Link href="/admin/dashboard">
+                <Crown className="mr-2 h-4 w-4" />
+                <span>Dashboard Admin</span>
+              </Link>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard">
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
           )}
           
           <DropdownMenuSeparator />
