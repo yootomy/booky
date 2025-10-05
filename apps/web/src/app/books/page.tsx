@@ -319,7 +319,7 @@ function BooksPageContent() {
 
     // Ne pas envoyer de recherche si moins de 2 caractères (évite les requêtes inutiles)
     if (debouncedSearch && debouncedSearch.trim().length >= 2) {
-      params.q = debouncedSearch.trim(); // Utiliser 'q' pour l'API de recherche
+      params.search = debouncedSearch.trim(); // Utiliser 'search' pour l'API books
     }
     if (filters.statut && filters.statut !== 'ALL') params.statut = filters.statut;
     if (filters.auteur) params.auteur = filters.auteur;
@@ -369,10 +369,7 @@ function BooksPageContent() {
       // Choisir l'endpoint selon les paramètres
       const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
       let endpoint;
-      if (queryParams.q) {
-        // API de recherche pour les recherches textuelles
-        endpoint = `${API_URL}/api/search?${searchParams}`;
-      } else if (queryParams.liste_id) {
+      if (queryParams.liste_id) {
         // API spécifique pour les collections
         const listId = Array.isArray(queryParams.liste_id) ? queryParams.liste_id[0] : queryParams.liste_id;
         console.log('Using collection API for listId:', listId);
