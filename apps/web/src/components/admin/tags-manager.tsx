@@ -123,10 +123,11 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
       });
       resetForm();
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.error || error?.message || "Impossible de créer le tag";
       toast({
         title: "Erreur",
-        description: "Impossible de créer le tag",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -143,10 +144,11 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
       });
       resetForm();
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.error || error?.message || "Impossible de mettre à jour le tag";
       toast({
         title: "Erreur",
-        description: "Impossible de mettre à jour le tag",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -161,10 +163,11 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
         description: "Le tag a été supprimé avec succès",
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      const errorMessage = error?.response?.data?.error || error?.message || "Impossible de supprimer le tag";
       toast({
         title: "Erreur",
-        description: "Impossible de supprimer le tag",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -269,13 +272,12 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
       } else {
         await createTagMutation.mutateAsync(formData);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erreur lors de la soumission:", error);
+      const errorMessage = error?.response?.data?.error || error?.message || "Une erreur inattendue s'est produite";
       toast({
         title: "Erreur",
-        description: typeof error === "object" && error && "message" in error
-          ? (error as any).message
-          : "Une erreur inattendue s'est produite",
+        description: errorMessage,
         variant: "destructive",
       });
     }
