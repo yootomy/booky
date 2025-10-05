@@ -124,7 +124,21 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
       resetForm();
     },
     onError: (error: any) => {
-      const errorMessage = error?.response?.data?.error || error?.message || "Impossible de créer le tag";
+      console.log("🔴 Erreur création tag - objet complet:", error);
+      console.log("🔴 error.response:", error?.response);
+      console.log("🔴 error.response?.data:", error?.response?.data);
+      console.log("🔴 error.data:", error?.data);
+
+      const errorMessage =
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        error?.data?.error ||
+        error?.data?.message ||
+        error?.message ||
+        "Impossible de créer le tag";
+
+      console.log("🔴 Message affiché:", errorMessage);
+
       toast({
         title: "Erreur",
         description: errorMessage,
