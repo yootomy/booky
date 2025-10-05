@@ -274,26 +274,17 @@ export function TagsManager({ searchQuery }: TagsManagerProps) {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      if (editingTag) {
-        await updateTagMutation.mutateAsync({
-          id: editingTag.id,
-          ...formData
-        });
-      } else {
-        await createTagMutation.mutateAsync(formData);
-      }
-    } catch (error: any) {
-      console.error("Erreur lors de la soumission:", error);
-      const errorMessage = error?.response?.data?.error || error?.message || "Une erreur inattendue s'est produite";
-      toast({
-        title: "Erreur",
-        description: errorMessage,
-        variant: "destructive",
+    if (editingTag) {
+      updateTagMutation.mutate({
+        id: editingTag.id,
+        ...formData
       });
+    } else {
+      console.log("📝 Tentative de création du tag:", formData);
+      createTagMutation.mutate(formData);
     }
   };
 
