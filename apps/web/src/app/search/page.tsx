@@ -238,7 +238,7 @@ function SearchPageContent() {
     // Mettre à jour l'URL
     const params = new URLSearchParams();
     params.set('q', searchQuery);
-    router.push('/search?${params.toString()}');
+    router.push(`/search?${params.toString()}`);
   };
 
   const clearSearch = () => {
