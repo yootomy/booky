@@ -3,6 +3,7 @@
 import React from 'react';
 import { HeroSection } from '@/components/home/hero-section';
 import { AboutBruna } from '@/components/home/about-bruna';
+import { LatestAdditions } from '@/components/home/latest-additions';
 import { RecentBooks } from '@/components/home/recent-books';
 import { SpotlightBook } from '@/components/home/spotlight-book';
 
@@ -14,6 +15,9 @@ export default function HomePage() {
 
       {/* À propos de Bruna */}
       <AboutBruna />
+
+      {/* Nouveautés - 4 derniers livres ajoutés */}
+      <LatestAdditions />
 
       {/* Derniers livres ajoutés */}
       <RecentBooks />

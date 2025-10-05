@@ -4,6 +4,7 @@ import "../index.css";
 import "../styles/dark-romance.css";
 import Providers from "@/components/providers";
 import Header from "@/components/header";
+import Footer from "@/components/footer";
 
 const inter = Inter({
 	variable: "--font-inter",
@@ -66,11 +67,12 @@ export default function RootLayout({
 				className={`${inter.variable} ${playfair.variable} antialiased bg-background text-foreground`}
 			>
 				<Providers>
-					<div className="min-h-svh bg-background transition-colors duration-300 w-full overflow-x-hidden">
+					<div className="min-h-svh bg-background transition-colors duration-300 w-full overflow-x-hidden flex flex-col">
 						<Header />
-						<div className="w-full overflow-x-hidden pt-16 sm:pt-20">
+						<div className="w-full overflow-x-hidden pt-16 sm:pt-20 flex-1">
 							{children}
 						</div>
+						<Footer />
 					</div>
 				</Providers>
 			</body>
