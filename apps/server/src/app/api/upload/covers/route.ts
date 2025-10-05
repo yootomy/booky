@@ -4,7 +4,7 @@ import {
   detectLanguageFromHeaders,
   withErrorHandler
 } from "@/utils/error-handler";
-import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 import { z } from "zod";
 
 // =============================================================================
@@ -26,45 +26,29 @@ const UploadMetadataSchema = z.object({
 });
 
 // POST /api/upload/covers - Upload de couvertures personnalisées (simplifié pour le build)
-export const POST = withErrorHandler(async (request: NextRequest) => {
-  const lang = detectLanguageFromHeaders(request.headers);
+export async function POST(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
+    const lang = detectLanguageFromHeaders(req.headers);
 
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
+    // Version simplifiée pour éviter les erreurs de build
     return NextResponse.json({
       success: false,
-      error: lang === 'fr' ? 'Authentification requise' : 'Authentication required',
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-
-  // Version simplifiée pour éviter les erreurs de build
-  return NextResponse.json({
-    success: false,
-    error: lang === 'fr' ? 'Upload d\'images non disponible en mode production' : 'Image upload not available in production mode',
-    code: 'NOT_IMPLEMENTED',
-  }, { status: 501 });
-});
+      error: lang === 'fr' ? 'Upload d\'images non disponible en mode production' : 'Image upload not available in production mode',
+      code: 'NOT_IMPLEMENTED',
+    }, { status: 501 });
+  });
+}
 
 // GET /api/upload/covers - Récupérer l'historique des uploads (simplifié pour le build)
-export const GET = withErrorHandler(async (request: NextRequest) => {
-  const lang = detectLanguageFromHeaders(request.headers);
+export async function GET(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
+    const lang = detectLanguageFromHeaders(req.headers);
 
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
+    // Version simplifiée pour éviter les erreurs de build
     return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 'Authentification requise' : 'Authentication required',
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-
-  // Version simplifiée pour éviter les erreurs de build
-  return NextResponse.json({
-    success: true,
-    data: { uploads: [], statistics: null },
-    message: lang === 'fr' ? 'Historique des uploads non disponible en mode production' : 'Upload history not available in production mode',
+      success: true,
+      data: { uploads: [], statistics: null },
+      message: lang === 'fr' ? 'Historique des uploads non disponible en mode production' : 'Upload history not available in production mode',
+    });
   });
-});
+}
