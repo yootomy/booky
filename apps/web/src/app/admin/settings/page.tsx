@@ -44,15 +44,18 @@ export default function AdminSettings() {
       if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
 
       console.log('🔍 Recherche de livres:', bookSearchQuery);
-      // Utiliser booksApi.getAll avec le filtre de recherche
-      const response = await booksApi.getAll({
+
+      // Utiliser directement apiClient pour avoir le contrôle complet
+      const response = await apiClient.get('/api/books', {
         q: bookSearchQuery,
         limit: 10,
         page: 1
       });
-      console.log('📚 Résultats recherche:', response);
 
-      // booksApi.getAll retourne PaginatedResponse<Book>
+      console.log('📚 Résultats recherche:', response);
+      console.log('📚 Nombre de résultats:', response?.data?.length || 0);
+
+      // apiClient.get retourne ApiResponse avec data qui est le tableau
       return response;
     },
     enabled: bookSearchQuery.length >= 2
