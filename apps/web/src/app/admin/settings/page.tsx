@@ -48,14 +48,25 @@ export default function AdminSettings() {
       // Utiliser directement apiClient pour avoir le contrôle complet
       const response = await apiClient.get('/api/books', {
         q: bookSearchQuery,
-        limit: 10,
+        limit: 50, // Augmenter la limite pour avoir plus de choix
         page: 1
       });
 
       console.log('📚 Résultats recherche:', response);
-      console.log('📚 Nombre de résultats:', response?.data?.length || 0);
 
-      // apiClient.get retourne ApiResponse avec data qui est le tableau
+      // Filtrer côté client pour plus de précision (titre ou auteur uniquement)
+      if (response.data && Array.isArray(response.data)) {
+        const query = bookSearchQuery.toLowerCase();
+        const filtered = response.data.filter((book: any) =>
+          book.titre?.toLowerCase().includes(query) ||
+          book.auteur?.toLowerCase().includes(query)
+        );
+
+        console.log('📚 Résultats filtrés:', filtered.length, 'sur', response.data.length);
+
+        return { ...response, data: filtered.slice(0, 10) }; // Limiter à 10 résultats
+      }
+
       return response;
     },
     enabled: bookSearchQuery.length >= 2
