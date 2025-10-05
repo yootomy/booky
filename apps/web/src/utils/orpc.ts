@@ -79,7 +79,7 @@ export const queryClient = new QueryClient({
       }
       
       // Erreur générique
-      toast.error('Erreur: ${apiError.error || (error as Error).message}', {
+      toast.error(`Erreur: ${apiError.error || (error as Error).message}`, {
         action: {
           label: "Réessayer",
           onClick: () => {
