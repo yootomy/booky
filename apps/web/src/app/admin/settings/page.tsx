@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AdminGuard } from '@/components/auth/AdminGuard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -38,39 +38,35 @@ export default function AdminSettings() {
     }
   });
 
-  const { data: searchResults } = useQuery({
-    queryKey: ['book-search', bookSearchQuery],
+  // Récupérer tous les livres au chargement
+  const { data: allBooksResponse, isLoading: loadingAllBooks } = useQuery({
+    queryKey: ['all-books-for-featured'],
     queryFn: async () => {
-      if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
-
-      console.log('🔍 Recherche de livres:', bookSearchQuery);
-
-      // Utiliser directement apiClient pour avoir le contrôle complet
       const response = await apiClient.get('/api/books', {
-        q: bookSearchQuery,
-        limit: 50, // Augmenter la limite pour avoir plus de choix
+        limit: 500, // Récupérer beaucoup de livres
         page: 1
       });
-
-      console.log('📚 Résultats recherche:', response);
-
-      // Filtrer côté client pour plus de précision (titre ou auteur uniquement)
-      if (response.data && Array.isArray(response.data)) {
-        const query = bookSearchQuery.toLowerCase();
-        const filtered = response.data.filter((book: any) =>
-          book.titre?.toLowerCase().includes(query) ||
-          book.auteur?.toLowerCase().includes(query)
-        );
-
-        console.log('📚 Résultats filtrés:', filtered.length, 'sur', response.data.length);
-
-        return { ...response, data: filtered.slice(0, 10) }; // Limiter à 10 résultats
-      }
-
       return response;
     },
-    enabled: bookSearchQuery.length >= 2
+    enabled: showBookSearch // Charger seulement quand on ouvre la recherche
   });
+
+  // Filtrer les livres côté client selon la recherche
+  const filteredBooks = React.useMemo(() => {
+    if (!allBooksResponse?.data || !Array.isArray(allBooksResponse.data)) {
+      return [];
+    }
+
+    if (!bookSearchQuery) {
+      return allBooksResponse.data;
+    }
+
+    const query = bookSearchQuery.toLowerCase();
+    return allBooksResponse.data.filter((book: any) =>
+      book.titre?.toLowerCase().includes(query) ||
+      book.auteur?.toLowerCase().includes(query)
+    );
+  }, [allBooksResponse, bookSearchQuery]);
 
   // Functions for featured book management
   const setFeaturedBook = async (bookId: string) => {
@@ -267,43 +263,59 @@ export default function AdminSettings() {
                     />
                   </div>
 
-                  {/* Search Results */}
-                  {searchResults?.data && searchResults.data.length > 0 && (
-                    <div className="max-h-64 overflow-y-auto space-y-2">
-                      {searchResults.data.map((book: any) => (
-                        <div
-                          key={book.id}
-                          className="flex items-center space-x-3 p-3 rounded-lg bg-white border border-gray-200 hover:border-red-300 cursor-pointer transition-colors"
-                          onClick={() => setFeaturedBook(book.id)}
-                        >
-                          <div className="w-12 h-16 relative rounded overflow-hidden flex-shrink-0">
-                            {book.image_couverture ? (
-                              <img
-                                src={book.image_couverture}
-                                alt={book.titre}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                <BookOpen className="w-4 h-4 text-gray-400" />
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 space-y-1">
-                            <h5 className="font-medium text-sm">{book.titre}</h5>
-                            <p className="text-xs text-gray-600">par {book.auteur}</p>
-                            <Badge variant="outline" className="text-xs">
-                              ⭐ {book.note_generale}/10
-                            </Badge>
-                          </div>
-                        </div>
-                      ))}
+                  {/* Loading state */}
+                  {loadingAllBooks && (
+                    <div className="text-center py-8">
+                      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
+                      <p className="text-sm text-muted-foreground mt-2">Chargement des livres...</p>
                     </div>
                   )}
 
-                  {bookSearchQuery.length >= 2 && (!searchResults?.data || searchResults.data.length === 0) && (
+                  {/* Book List */}
+                  {!loadingAllBooks && filteredBooks.length > 0 && (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-2">
+                        {filteredBooks.length} livre{filteredBooks.length > 1 ? 's' : ''} {bookSearchQuery ? `trouvé${filteredBooks.length > 1 ? 's' : ''}` : 'disponible'}
+                      </p>
+                      <div className="max-h-96 overflow-y-auto space-y-2">
+                        {filteredBooks.map((book: any) => (
+                          <div
+                            key={book.id}
+                            className="flex items-center space-x-3 p-3 rounded-lg bg-white border border-gray-200 hover:border-red-300 cursor-pointer transition-colors"
+                            onClick={() => setFeaturedBook(book.id)}
+                          >
+                            <div className="w-12 h-16 relative rounded overflow-hidden flex-shrink-0">
+                              {book.image_couverture ? (
+                                <img
+                                  src={book.image_couverture}
+                                  alt={book.titre}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                  <BookOpen className="w-4 h-4 text-gray-400" />
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-1 space-y-1">
+                              <h5 className="font-medium text-sm">{book.titre}</h5>
+                              <p className="text-xs text-gray-600">par {book.auteur}</p>
+                              <Badge variant="outline" className="text-xs">
+                                ⭐ {book.note_generale}/10
+                              </Badge>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {!loadingAllBooks && filteredBooks.length === 0 && (
                     <p className="text-sm text-muted-foreground text-center py-4">
-                      Aucun livre trouvé pour "{bookSearchQuery}"
+                      {bookSearchQuery
+                        ? `Aucun livre trouvé pour "${bookSearchQuery}"`
+                        : "Aucun livre disponible"
+                      }
                     </p>
                   )}
                 </div>
