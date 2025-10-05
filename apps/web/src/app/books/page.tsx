@@ -155,9 +155,7 @@ const sortOptions = [
   { value: 'titre', label: 'Titre' },
   { value: 'auteur', label: 'Auteur' },
   { value: 'note_generale', label: 'Note' },
-  { value: 'date_lecture', label: 'Date de lecture' },
-  { value: 'views_count', label: 'Popularité' },
-  { value: 'trending', label: 'Tendance' }
+  { value: 'date_lecture', label: 'Date de lecture' }
 ];
 
 // Skeleton Loader Component
