@@ -133,12 +133,6 @@ export function RecentActivity({ stats }: RecentActivityProps) {
       href: "/admin/users"
     },
     {
-      title: "Exporter les données",
-      description: "Backup et export",
-      icon: Download,
-      href: "/admin/export"
-    },
-    {
       title: "Activité système",
       description: "Logs et historique",
       icon: BarChart3,
