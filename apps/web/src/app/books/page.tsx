@@ -427,10 +427,10 @@ function BooksPageContent() {
         if (!response.success) {
           throw new Error(response.error || 'HTTP error!');
         }
-        return response.data;
+        return response;
       } catch (error) {
         console.error('Error fetching categories:', error);
-        return { data: [] };
+        return { success: false, data: [] };
       }
     }
   });
@@ -444,10 +444,10 @@ function BooksPageContent() {
         if (!response.success) {
           throw new Error(response.error || 'HTTP error!');
         }
-        return response.data;
+        return response;
       } catch (error) {
         console.error('Error fetching tags:', error);
-        return { data: [] };
+        return { success: false, data: [] };
       }
     }
   });
@@ -460,7 +460,7 @@ function BooksPageContent() {
       if (!response.success) {
         throw new Error(response.error || 'Failed to fetch collections');
       }
-      return response.data;
+      return response;
     }
   });
 
