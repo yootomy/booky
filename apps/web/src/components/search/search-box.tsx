@@ -174,7 +174,7 @@ export function SearchBox({
         break;
 
       case "category":
-        router.push('/books?category=${suggestion.id}');
+        router.push(`/books?category=${suggestion.id}`);
         break;
     }
 
@@ -187,7 +187,7 @@ export function SearchBox({
     
     setShowSuggestions(false);
     setSelectedIndex(-1);
-    router.push('/books?q=${encodeURIComponent(query.trim())}');
+    router.push(`/books?q=${encodeURIComponent(query.trim())}`);
     onSearchComplete?.(query);
   }, [router, onSearchComplete]);
 

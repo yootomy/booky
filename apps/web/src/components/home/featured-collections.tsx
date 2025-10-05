@@ -30,7 +30,7 @@ function CollectionCard({ collection, index }: { collection: Collection; index: 
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={'/collections/${collection.id}' as any}>
+      <Link href={`/collections/${collection.id}` as any}>
         <div
           className="relative rounded-2xl p-8 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
           style={{

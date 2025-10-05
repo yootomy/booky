@@ -134,7 +134,7 @@ export const googleBooksApi = {
     searchParams.append('filter', EXTERNAL_API_CONFIG.GOOGLE_BOOKS.defaultFilter);
     
     return apiClient.get<ExternalSearchResult>(
-      '/external/google-books/search?${searchParams.toString()}'
+      `/external/google-books/search?${searchParams.toString()}`
     );
   },
 
@@ -200,7 +200,7 @@ export const googleBooksApi = {
   // Obtenir les détails d'un livre spécifique
   async getBookDetails(googleBooksId: string): Promise<ApiResponse<ExternalBookResult>> {
     return apiClient.get<ApiResponse<ExternalBookResult>>(
-      '/external/google-books/book/${googleBooksId}'
+      `/external/google-books/book/${googleBooksId}`
     );
   },
 
@@ -242,7 +242,7 @@ export const openLibraryApi = {
     });
     
     return apiClient.get<ExternalSearchResult>(
-      '/external/open-library/search?${searchParams.toString()}'
+      `/external/open-library/search?${searchParams.toString()}`
     );
   },
 

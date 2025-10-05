@@ -181,7 +181,7 @@ function PersonalizedSubSection({
       {books.length > 3 && (
         <div className="mt-4 text-center">
           <Link
-            href={'/dashboard/books?filter=${variant}' as any}
+            href={`/dashboard/books?filter=${variant}` as any}
             className="text-sm font-medium hover:text-[#8B1538] transition-colors"
             style={{
               fontFamily: 'Inter, sans-serif',

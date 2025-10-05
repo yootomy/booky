@@ -35,7 +35,7 @@ function PlaylistCard({ playlist, index }: { playlist: Playlist; index: number }
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="group cursor-pointer"
     >
-      <Link href={'/books?playlist=${playlist.id}'}>
+      <Link href={`/books?playlist=${playlist.id}`}>
         <div 
           className="relative p-6 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl overflow-hidden"
           style={{

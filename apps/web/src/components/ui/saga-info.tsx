@@ -161,7 +161,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
             <div className="min-w-0">
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <Link
-                  href={'/sagas/${saga.slug}' as any}
+                  href={`/sagas/${saga.slug}` as any}
                   className="group transition-all duration-300"
                 >
                   <h2
@@ -263,7 +263,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
                       aria-selected={isCurrentBook}
                       onClick={() => setActiveCardIndex(index)}
                     >
-                      <Link href={'/books/${book.id}'} className="block h-full flex flex-col">
+                      <Link href={`/books/${book.id}`} className="block h-full flex flex-col">
                         <div className="relative mb-2 mx-auto flex-shrink-0 w-full flex justify-center">
                           {/* Loading skeleton */}
                           {isLoading && (
