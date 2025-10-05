@@ -17,6 +17,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
+import { booksApi } from '@/utils/orpc';
 
 export default function AdminSettings() {
   const { toast } = useToast();
@@ -43,13 +44,12 @@ export default function AdminSettings() {
       if (!bookSearchQuery || bookSearchQuery.length < 2) return { data: [] };
 
       console.log('🔍 Recherche de livres:', bookSearchQuery);
-      const response = await apiClient.get(`/api/books?q=${encodeURIComponent(bookSearchQuery)}&limit=10`);
+      const response = await booksApi.search(bookSearchQuery, { limit: 10 });
       console.log('📚 Résultats recherche:', response);
 
-      if (!response.success) throw new Error(response.error || "Failed to search books");
-
-      // L'API retourne directement le tableau de livres
-      return Array.isArray(response.data) ? { data: response.data } : response;
+      // booksApi.search retourne PaginatedResponse<Book>
+      // Structure: { success, data: Book[], total, page, limit }
+      return response;
     },
     enabled: bookSearchQuery.length >= 2
   });
