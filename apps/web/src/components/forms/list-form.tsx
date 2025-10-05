@@ -190,6 +190,7 @@ export function ListForm({ initialData, onSuccess, onCancel, isEditing = false }
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include', // IMPORTANT: envoie les cookies de session
         body: JSON.stringify({
           ...listData,
           books: selectedBookIds, // Utiliser selectedBookIds au lieu de selectedBooks
