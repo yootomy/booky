@@ -40,43 +40,26 @@ export default function AdminTagsPage() {
               </p>
             </div>
             
-            <div className="flex items-center space-x-2">
-              <Button
-                onClick={() => router.push("/admin/tags/new")}
-                className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Nouveau Tag
-              </Button>
-              <Button variant="outline" size="sm">
-                <Hash className="h-4 w-4 mr-2" />
-                Bulk Edit
-              </Button>
-            </div>
+            <Button
+              onClick={() => router.push("/admin/tags/new")}
+              className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary text-primary-foreground"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Nouveau Tag
+            </Button>
           </div>
 
-          {/* Search and Filters */}
+          {/* Search */}
           <Card className="mb-6">
             <CardContent className="pt-6">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Rechercher par nom, type, couleur..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filtres
-                  </Button>
-                  <Badge variant="secondary" className="px-3 py-1">
-                    Tous les tags
-                  </Badge>
-                </div>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Rechercher par nom, type, couleur..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
               </div>
             </CardContent>
           </Card>
