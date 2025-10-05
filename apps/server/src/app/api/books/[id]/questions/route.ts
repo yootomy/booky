@@ -160,7 +160,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           question: validatedData.question,
           bookId,
           authorId: user.id,
-          status: 'PENDING'
+          status: 'PENDING',
+          is_public: true
         },
         include: {
           user_book_question_authorIdTouser: {

@@ -10,6 +10,7 @@ import {
   CategoryWithRelations
 } from "@/utils/category-serializers";
 import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 
 // =============================================================================
 // 📊 API ROUTE CATEGORY STATISTICS - /api/categories/stats
@@ -149,104 +150,96 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
 });
 
 // POST /api/categories/stats/refresh - Recalculer et actualiser les statistiques (protégé)
-export const POST = withErrorHandler(async (request: NextRequest) => {
+export async function POST(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
   const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 'Authentification requise' : 'Authentication required',
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-  
-  try {
-    // Recalculer les ordres d'affichage basés sur l'usage
-    const categories = await db.category.findMany({
-      include: {
-        _count: {
-          select: { book_category: true }
-        }
-      }
-    });
-    
-    // Trier par usage décroissant puis par nom
-    const sortedCategories = categories.sort((a, b) => {
-      if (b._count.book_category !== a._count.book_category) {
-        return b._count.book_category - a._count.book_category;
-      }
-      return a.nom.localeCompare(b.nom);
-    });
-    
-    // Mettre à jour les ordres d'affichage
-    const updates = sortedCategories.map((cat, index) => 
-      db.category.update({
-        where: { id: cat.id },
-        data: { 
-          ordre_affichage: index,
-          date_modification: new Date(),
-        }
-      })
-    );
-    
-    await Promise.all(updates);
-    
-    // Nettoyer les catégories orphelines (sans livres depuis plus de 90 jours)
-    const ninetyDaysAgo = new Date();
-    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-    
-    const orphanedCategories = await db.category.findMany({
-      where: {
-        est_actif: true,
-        book_category: {
-          none: {}
-        },
-        date_creation: {
-          lt: ninetyDaysAgo
-        }
-      },
-      select: { id: true, nom: true }
-    });
-    
-    // Marquer les catégories orphelines comme inactives (ne pas les supprimer)
-    if (orphanedCategories.length > 0) {
-      await db.category.updateMany({
-        where: {
-          id: { in: orphanedCategories.map(cat => cat.id) }
-        },
-        data: {
-          est_actif: false,
-          date_modification: new Date(),
+  const lang = detectLanguageFromHeaders(req.headers);
+
+    try {
+      // Recalculer les ordres d'affichage basés sur l'usage
+      const categories = await db.category.findMany({
+        include: {
+          _count: {
+            select: { book_category: true }
+          }
         }
       });
+      
+      // Trier par usage décroissant puis par nom
+      const sortedCategories = categories.sort((a, b) => {
+        if (b._count.book_category !== a._count.book_category) {
+          return b._count.book_category - a._count.book_category;
+        }
+        return a.nom.localeCompare(b.nom);
+      });
+      
+      // Mettre à jour les ordres d'affichage
+      const updates = sortedCategories.map((cat, index) => 
+        db.category.update({
+          where: { id: cat.id },
+          data: { 
+            ordre_affichage: index,
+            date_modification: new Date(),
+          }
+        })
+      );
+      
+      await Promise.all(updates);
+      
+      // Nettoyer les catégories orphelines (sans livres depuis plus de 90 jours)
+      const ninetyDaysAgo = new Date();
+      ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+      
+      const orphanedCategories = await db.category.findMany({
+        where: {
+          est_actif: true,
+          book_category: {
+            none: {}
+          },
+          date_creation: {
+            lt: ninetyDaysAgo
+          }
+        },
+        select: { id: true, nom: true }
+      });
+      
+      // Marquer les catégories orphelines comme inactives (ne pas les supprimer)
+      if (orphanedCategories.length > 0) {
+        await db.category.updateMany({
+          where: {
+            id: { in: orphanedCategories.map(cat => cat.id) }
+          },
+          data: {
+            est_actif: false,
+            date_modification: new Date(),
+          }
+        });
+      }
+      
+      return NextResponse.json({
+        success: true,
+        data: {
+          categories_reordered: sortedCategories.length,
+          orphaned_categories_deactivated: orphanedCategories.length,
+          orphaned_categories: orphanedCategories.map(cat => ({
+            id: cat.id,
+            nom: cat.nom,
+          })),
+        },
+        message: lang === 'fr' ? 
+          'Statistiques des catégories actualisées avec succès' : 
+          'Category statistics refreshed successfully',
+        execution_time_ms: Date.now() - startTime,
+      });
+      
+    } catch (error) {
+      return NextResponse.json({
+        success: false,
+        error: lang === 'fr' ?
+          'Erreur lors de l\'actualisation des statistiques' :
+          'Error refreshing statistics',
+        code: 'REFRESH_ERROR',
+      }, { status: 500 });
     }
-    
-    return NextResponse.json({
-      success: true,
-      data: {
-        categories_reordered: sortedCategories.length,
-        orphaned_categories_deactivated: orphanedCategories.length,
-        orphaned_categories: orphanedCategories.map(cat => ({
-          id: cat.id,
-          nom: cat.nom,
-        })),
-      },
-      message: lang === 'fr' ? 
-        'Statistiques des catégories actualisées avec succès' : 
-        'Category statistics refreshed successfully',
-      execution_time_ms: Date.now() - startTime,
-    });
-    
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 
-        'Erreur lors de l\'actualisation des statistiques' : 
-        'Error refreshing statistics',
-      code: 'REFRESH_ERROR',
-    }, { status: 500 });
-  }
-});
+  });
+}

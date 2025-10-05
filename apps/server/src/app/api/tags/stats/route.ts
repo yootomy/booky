@@ -12,6 +12,7 @@ import {
   TagWithRelations
 } from "@/utils/tag-serializers";
 import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 
 // =============================================================================
 // 📊 API ROUTE TAG STATISTICS - /api/tags/stats
@@ -178,233 +179,217 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
 });
 
 // POST /api/tags/stats/refresh - Recalculer et actualiser les statistiques (protégé)
-export const POST = withErrorHandler(async (request: NextRequest) => {
+export async function POST(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
   const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 'Authentification requise' : 'Authentication required',
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-  
-  try {
-    // Recalculer les compteurs d'utilisation pour tous les tags
-    const tags = await db.tag.findMany({
-      select: { id: true, nom: true }
-    });
-    
-    let updatedCount = 0;
-    const tagUpdates = [];
-    
-    for (const tag of tags) {
-      // Compter le nombre réel d'utilisations
-      const realCount = await db.book_tag.count({
-        where: { tagId: tag.id }
+  const lang = detectLanguageFromHeaders(req.headers);
+
+    try {
+      // Recalculer les compteurs d'utilisation pour tous les tags
+      const tags = await db.tag.findMany({
+        select: { id: true, nom: true }
       });
       
-      // Mettre à jour seulement si différent
-      const currentTag = await db.tag.findUnique({
-        where: { id: tag.id },
-        select: { utilisation_count: true }
-      });
+      let updatedCount = 0;
+      const tagUpdates = [];
       
-      if (currentTag && currentTag.utilisation_count !== realCount) {
-        tagUpdates.push(
-          db.tag.update({
-            where: { id: tag.id },
-            data: { 
-              utilisation_count: realCount,
-              date_modification: new Date(),
-            }
-          })
-        );
-        updatedCount++;
+      for (const tag of tags) {
+        // Compter le nombre réel d'utilisations
+        const realCount = await db.book_tag.count({
+          where: { tagId: tag.id }
+        });
+        
+        // Mettre à jour seulement si différent
+        const currentTag = await db.tag.findUnique({
+          where: { id: tag.id },
+          select: { utilisation_count: true }
+        });
+        
+        if (currentTag && currentTag.utilisation_count !== realCount) {
+          tagUpdates.push(
+            db.tag.update({
+              where: { id: tag.id },
+              data: { 
+                utilisation_count: realCount,
+                date_modification: new Date(),
+              }
+            })
+          );
+          updatedCount++;
+        }
       }
+      
+      // Exécuter toutes les mises à jour
+      if (tagUpdates.length > 0) {
+        await Promise.all(tagUpdates);
+      }
+      
+      // Nettoyer les tags orphelins (non utilisés depuis plus de 90 jours et non favoris)
+      const ninetyDaysAgo = new Date();
+      ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+      
+      const orphanedTags = await db.tag.findMany({
+        where: {
+          utilisation_count: 0,
+          est_favori: false,
+          book_tag: {
+            none: {}
+          },
+          date_creation: {
+            lt: ninetyDaysAgo
+          }
+        },
+        select: { id: true, nom: true }
+      });
+      
+      // Marquer les tags orphelins pour suppression potentielle (on ne les supprime pas automatiquement)
+      let orphanedCount = 0;
+      if (orphanedTags.length > 0) {
+        // On pourrait ajouter un champ "marked_for_deletion" ou similaire
+        // Pour l'instant, on les compte simplement
+        orphanedCount = orphanedTags.length;
+      }
+      
+      // Recalculer les statistiques de répartition des couleurs
+      const colorStats = await db.tag.groupBy({
+        by: ['couleur'],
+        _count: {
+          id: true
+        }
+      });
+      
+      const typeStats = await db.tag.groupBy({
+        by: ['type'],
+        _count: {
+          id: true
+        }
+      });
+      
+      return NextResponse.json({
+        success: true,
+        data: {
+          tags_updated: updatedCount,
+          total_tags: tags.length,
+          orphaned_tags_found: orphanedCount,
+          orphaned_tags: orphanedTags.map(tag => ({
+            id: tag.id,
+            nom: tag.nom,
+          })),
+          color_distribution: colorStats.reduce((acc, stat) => {
+            acc[stat.couleur] = stat._count.id;
+            return acc;
+          }, {} as { [color: string]: number }),
+          type_distribution: typeStats.reduce((acc, stat) => {
+            acc[stat.type] = stat._count.id;
+            return acc;
+          }, {} as { [type: string]: number }),
+        },
+        message: lang === 'fr' ? 
+          'Statistiques des tags actualisées avec succès' : 
+          'Tag statistics refreshed successfully',
+        execution_time_ms: Date.now() - startTime,
+      });
+      
+    } catch (error) {
+      return NextResponse.json({
+        success: false,
+        error: lang === 'fr' ?
+          'Erreur lors de l\'actualisation des statistiques' :
+          'Error refreshing statistics',
+        code: 'REFRESH_ERROR',
+      }, { status: 500 });
     }
+  });
+}
+
+// DELETE /api/tags/stats/cleanup - Nettoyer les tags non utilisés (protégé)
+export async function DELETE(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
+  const startTime = Date.now();
+  const lang = detectLanguageFromHeaders(req.headers);
+
+  const { searchParams } = new URL(req.url);
+    const daysOld = parseInt(searchParams.get('days_old') || '90');
+    const includeFavorites = searchParams.get('include_favorites') === 'true';
     
-    // Exécuter toutes les mises à jour
-    if (tagUpdates.length > 0) {
-      await Promise.all(tagUpdates);
-    }
-    
-    // Nettoyer les tags orphelins (non utilisés depuis plus de 90 jours et non favoris)
-    const ninetyDaysAgo = new Date();
-    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
-    
-    const orphanedTags = await db.tag.findMany({
-      where: {
+    try {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+      
+      // Trouver les tags à nettoyer
+      const whereCondition: any = {
         utilisation_count: 0,
-        est_favori: false,
         book_tag: {
           none: {}
         },
         date_creation: {
-          lt: ninetyDaysAgo
+          lt: cutoffDate
         }
-      },
-      select: { id: true, nom: true }
-    });
-    
-    // Marquer les tags orphelins pour suppression potentielle (on ne les supprime pas automatiquement)
-    let orphanedCount = 0;
-    if (orphanedTags.length > 0) {
-      // On pourrait ajouter un champ "marked_for_deletion" ou similaire
-      // Pour l'instant, on les compte simplement
-      orphanedCount = orphanedTags.length;
-    }
-    
-    // Recalculer les statistiques de répartition des couleurs
-    const colorStats = await db.tag.groupBy({
-      by: ['couleur'],
-      _count: {
-        id: true
+      };
+      
+      // Exclure les favoris sauf si explicitement demandé
+      if (!includeFavorites) {
+        whereCondition.est_favori = false;
       }
-    });
-    
-    const typeStats = await db.tag.groupBy({
-      by: ['type'],
-      _count: {
-        id: true
+      
+      const tagsToCleanup = await db.tag.findMany({
+        where: whereCondition,
+        select: { id: true, nom: true, type: true, est_favori: true }
+      });
+      
+      if (tagsToCleanup.length === 0) {
+        return NextResponse.json({
+          success: true,
+          data: {
+            deleted_count: 0,
+            deleted_tags: [],
+          },
+          message: lang === 'fr' ? 
+            'Aucun tag à nettoyer trouvé' : 
+            'No tags found for cleanup',
+          execution_time_ms: Date.now() - startTime,
+        });
       }
-    });
-    
-    return NextResponse.json({
-      success: true,
-      data: {
-        tags_updated: updatedCount,
-        total_tags: tags.length,
-        orphaned_tags_found: orphanedCount,
-        orphaned_tags: orphanedTags.map(tag => ({
-          id: tag.id,
-          nom: tag.nom,
-        })),
-        color_distribution: colorStats.reduce((acc, stat) => {
-          acc[stat.couleur] = stat._count.id;
-          return acc;
-        }, {} as { [color: string]: number }),
-        type_distribution: typeStats.reduce((acc, stat) => {
-          acc[stat.type] = stat._count.id;
-          return acc;
-        }, {} as { [type: string]: number }),
-      },
-      message: lang === 'fr' ? 
-        'Statistiques des tags actualisées avec succès' : 
-        'Tag statistics refreshed successfully',
-      execution_time_ms: Date.now() - startTime,
-    });
-    
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 
-        'Erreur lors de l\'actualisation des statistiques' : 
-        'Error refreshing statistics',
-      code: 'REFRESH_ERROR',
-    }, { status: 500 });
-  }
-});
-
-// DELETE /api/tags/stats/cleanup - Nettoyer les tags non utilisés (protégé)
-export const DELETE = withErrorHandler(async (request: NextRequest) => {
-  const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 'Authentification requise' : 'Authentication required',
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-  
-  const { searchParams } = new URL(request.url);
-  const daysOld = parseInt(searchParams.get('days_old') || '90');
-  const includeFavorites = searchParams.get('include_favorites') === 'true';
-  
-  try {
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
-    
-    // Trouver les tags à nettoyer
-    const whereCondition: any = {
-      utilisation_count: 0,
-      book_tag: {
-        none: {}
-      },
-      date_creation: {
-        lt: cutoffDate
-      }
-    };
-    
-    // Exclure les favoris sauf si explicitement demandé
-    if (!includeFavorites) {
-      whereCondition.est_favori = false;
-    }
-    
-    const tagsToCleanup = await db.tag.findMany({
-      where: whereCondition,
-      select: { id: true, nom: true, type: true, est_favori: true }
-    });
-    
-    if (tagsToCleanup.length === 0) {
+      
+      // Supprimer les tags
+      const deletedResult = await db.tag.deleteMany({
+        where: {
+          id: { in: tagsToCleanup.map(t => t.id) }
+        }
+      });
+      
       return NextResponse.json({
         success: true,
         data: {
-          deleted_count: 0,
-          deleted_tags: [],
+          deleted_count: deletedResult.count,
+          deleted_tags: tagsToCleanup.map(tag => ({
+            id: tag.id,
+            nom: tag.nom,
+            type: tag.type,
+            was_favorite: tag.est_favori,
+          })),
         },
         message: lang === 'fr' ? 
-          'Aucun tag à nettoyer trouvé' : 
-          'No tags found for cleanup',
+          `${deletedResult.count} tag(s) nettoyé(s) avec succès` : 
+          `${deletedResult.count} tag(s) cleaned up successfully`,
+        metadata: {
+          cleanup_criteria: {
+            days_old: daysOld,
+            include_favorites: includeFavorites,
+            cutoff_date: cutoffDate.toISOString(),
+          }
+        },
         execution_time_ms: Date.now() - startTime,
       });
+      
+    } catch (error) {
+      return NextResponse.json({
+        success: false,
+        error: lang === 'fr' ?
+          'Erreur lors du nettoyage des tags' :
+          'Error during tag cleanup',
+        code: 'CLEANUP_ERROR',
+      }, { status: 500 });
     }
-    
-    // Supprimer les tags
-    const deletedResult = await db.tag.deleteMany({
-      where: {
-        id: { in: tagsToCleanup.map(t => t.id) }
-      }
-    });
-    
-    return NextResponse.json({
-      success: true,
-      data: {
-        deleted_count: deletedResult.count,
-        deleted_tags: tagsToCleanup.map(tag => ({
-          id: tag.id,
-          nom: tag.nom,
-          type: tag.type,
-          was_favorite: tag.est_favori,
-        })),
-      },
-      message: lang === 'fr' ? 
-        `${deletedResult.count} tag(s) nettoyé(s) avec succès` : 
-        `${deletedResult.count} tag(s) cleaned up successfully`,
-      metadata: {
-        cleanup_criteria: {
-          days_old: daysOld,
-          include_favorites: includeFavorites,
-          cutoff_date: cutoffDate.toISOString(),
-        }
-      },
-      execution_time_ms: Date.now() - startTime,
-    });
-    
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 
-        'Erreur lors du nettoyage des tags' : 
-        'Error during tag cleanup',
-      code: 'CLEANUP_ERROR',
-    }, { status: 500 });
-  }
-});
+  });
+}

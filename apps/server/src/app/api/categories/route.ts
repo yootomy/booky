@@ -23,7 +23,7 @@ import {
   createPaginatedResponse,
   calculatePagination
 } from "@/utils/serializers";
-import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 
 // =============================================================================
 // 📂 API ROUTE CATEGORIES
@@ -121,70 +121,62 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
 });
 
 // POST /api/categories - Créer une nouvelle catégorie (protégé)
-export const POST = withErrorHandler(async (request: NextRequest) => {
+export async function POST(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
   const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: CategoryErrorMessages[lang].UNAUTHORIZED,
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
+  const lang = detectLanguageFromHeaders(req.headers);
 
   // Parser et valider les données
-  const body = await request.json();
-  const validatedData = CreateCategorySchema.parse(body);
-  
-  // Nettoyer les données
-  const cleanedData = sanitizeCategoryData(validatedData);
-  
-  // Vérifier l'unicité du nom
-  const existingCategory = await db.category.findFirst({
-    where: {
-      nom: {
-        equals: cleanedData.nom,
-        mode: 'insensitive',
+  const body = await req.json();
+    const validatedData = CreateCategorySchema.parse(body);
+    
+    // Nettoyer les données
+    const cleanedData = sanitizeCategoryData(validatedData);
+    
+    // Vérifier l'unicité du nom
+    const existingCategory = await db.category.findFirst({
+      where: {
+        nom: {
+          equals: cleanedData.nom,
+          mode: 'insensitive',
+        },
       },
-    },
-  });
-  
-  if (existingCategory) {
-    return NextResponse.json({
-      success: false,
-      error: CategoryErrorMessages[lang].CATEGORY_NAME_EXISTS,
-      code: 'CATEGORY_NAME_EXISTS',
-      field: 'nom',
-    }, { status: 409 });
-  }
-  
-  // Créer la catégorie
-  const category = await db.category.create({
-    data: {
-      id: randomUUID(),
-      ...cleanedData,
-      date_creation: new Date(),
-      date_modification: new Date(),
-    },
-    include: {
-      _count: {
-        select: { book_category: true }
-      }
+    });
+    
+    if (existingCategory) {
+      return NextResponse.json({
+        success: false,
+        error: CategoryErrorMessages[lang].CATEGORY_NAME_EXISTS,
+        code: 'CATEGORY_NAME_EXISTS',
+        field: 'nom',
+      }, { status: 409 });
     }
+    
+    // Créer la catégorie
+    const category = await db.category.create({
+      data: {
+        id: randomUUID(),
+        ...cleanedData,
+        date_creation: new Date(),
+        date_modification: new Date(),
+      },
+      include: {
+        _count: {
+          select: { book_category: true }
+        }
+      }
+    });
+  
+    // Sérialiser la réponse
+    const serializedCategory = serializeCategory(category, {
+      includeBookCount: true,
+    });
+  
+    return NextResponse.json({
+      success: true,
+      data: serializedCategory,
+      message: lang === 'fr' ? 'Catégorie créée avec succès' : 'Category created successfully',
+      execution_time_ms: Date.now() - startTime,
+    }, { status: 201 });
   });
-
-  // Sérialiser la réponse
-  const serializedCategory = serializeCategory(category, {
-    includeBookCount: true,
-  });
-
-  return NextResponse.json({
-    success: true,
-    data: serializedCategory,
-    message: lang === 'fr' ? 'Catégorie créée avec succès' : 'Category created successfully',
-    execution_time_ms: Date.now() - startTime,
-  }, { status: 201 });
-});
+}

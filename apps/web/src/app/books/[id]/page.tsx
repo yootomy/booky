@@ -202,9 +202,8 @@ export default function BookDetailPage() {
       if (!response.success) {
         throw new Error(response.error || 'HTTP error!');
       }
-      const data = response.data;
-      if (!data.data) throw new Error('Erreur lors de l\'envoi');
-      return data.data;
+      if (!response.data) throw new Error('Erreur lors de l\'envoi');
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['questions', bookId] });
