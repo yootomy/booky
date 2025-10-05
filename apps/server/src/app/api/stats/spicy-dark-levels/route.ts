@@ -4,7 +4,7 @@ import {
   detectLanguageFromHeaders, 
   withErrorHandler 
 } from "@/utils/error-handler";
-import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 import { z } from "zod";
 
 // =============================================================================
@@ -21,12 +21,13 @@ const SpicyDarkStatsSchema = z.object({
 });
 
 // GET /api/stats/spicy-dark-levels - Statistiques des niveaux spicy et dark
-export const GET = withErrorHandler(async (request: NextRequest) => {
+export async function GET(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
   const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
+  const lang = detectLanguageFromHeaders(req.headers);
   
   // Vérifier l'authentification
-  const user = await getTypedSession(request);
+  
   if (!user?.id) {
     return NextResponse.json({
       success: false,
@@ -38,7 +39,7 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
   const userId = user?.id;
 
   // Parser les paramètres
-  const { searchParams } = new URL(request.url);
+  const { searchParams } = new URL(req.url);
   const queryObject = Object.fromEntries(searchParams.entries());
   
   const transformedQuery = {

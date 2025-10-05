@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/utils/db";
-import { 
-  detectLanguageFromHeaders, 
-  withErrorHandler 
+import {
+  detectLanguageFromHeaders,
+  withErrorHandler
 } from "@/utils/error-handler";
-import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 import { z } from "zod";
 
 // =============================================================================
@@ -20,24 +20,14 @@ const RatingsStatsSchema = z.object({
 });
 
 // GET /api/stats/ratings - Statistiques détaillées des notes
-export const GET = withErrorHandler(async (request: NextRequest) => {
-  const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 'Authentification requise' : 'Authentication required',
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
+export async function GET(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
+    const startTime = Date.now();
+    const lang = detectLanguageFromHeaders(req.headers);
+    const userId = user.id;
 
-  const userId = user?.id;
-
-  // Parser les paramètres
-  const { searchParams } = new URL(request.url);
+    // Parser les paramètres
+    const { searchParams } = new URL(req.url);
   const queryObject = Object.fromEntries(searchParams.entries());
   
   const transformedQuery = {
@@ -420,5 +410,6 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     execution_time_ms: Date.now() - startTime,
   };
 
-  return NextResponse.json(response);
-});
+    return NextResponse.json(response);
+  });
+}
