@@ -1,31 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/utils/db";
-import { 
-  detectLanguageFromHeaders, 
-  withErrorHandler 
+import {
+  detectLanguageFromHeaders,
+  withErrorHandler
 } from "@/utils/error-handler";
-import { getTypedSession } from "@/utils/auth-helpers";
+import { withBetterAuth } from "@/middlewares/auth-improved";
 
 // =============================================================================
 // 📊 API ROUTE GENERAL STATS - /api/stats/general
 // =============================================================================
 
 // GET /api/stats/general - Statistiques générales de l'utilisateur
-export const GET = withErrorHandler(async (request: NextRequest) => {
-  const startTime = Date.now();
-  const lang = detectLanguageFromHeaders(request.headers);
-  
-  // Vérifier l'authentification
-  const user = await getTypedSession(request);
-  if (!user?.id) {
-    return NextResponse.json({
-      success: false,
-      error: lang === 'fr' ? 'Authentification requise' : 'Authentication required',
-      code: 'UNAUTHORIZED',
-    }, { status: 401 });
-  }
-
-  const userId = user?.id;
+export async function GET(request: NextRequest) {
+  return withBetterAuth(request, async (req, user) => {
+    const startTime = Date.now();
+    const lang = detectLanguageFromHeaders(req.headers);
+    const userId = user.id;
 
   // Récupérer toutes les statistiques en parallèle pour optimiser les performances
   const [
@@ -315,5 +305,6 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
     execution_time_ms: Date.now() - startTime,
   };
 
-  return NextResponse.json(response);
-});
+    return NextResponse.json(response);
+  });
+}
