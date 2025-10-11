@@ -98,7 +98,7 @@ export function ConseilDetailsModal({
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-background rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden border border-border"
+              className="bg-background rounded-xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden border border-border"
             >
               {/* Header */}
               <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border px-6 py-4 flex items-center justify-between">
@@ -238,7 +238,7 @@ export function ConseilDetailsModal({
                               <Link
                                 key={bookId}
                                 href={`/books/${bookId}`}
-                                className="group flex items-center gap-3 p-3 bg-background rounded-lg border border-border/50 hover:border-primary/60 hover:shadow-md transition-all duration-200"
+                                className="group flex items-center gap-3 p-3 bg-background rounded-lg border border-border/50 hover:border-primary/60 hover:shadow-md transition-all duration-300"
                               >
                                 {/* Book Cover */}
                                 <div className="relative w-16 h-24 flex-shrink-0 rounded overflow-hidden bg-muted">
@@ -247,7 +247,7 @@ export function ConseilDetailsModal({
                                       src={book.image_couverture}
                                       alt={book.titre}
                                       fill
-                                      className="object-cover group-hover:scale-105 transition-transform duration-200"
+                                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                                       sizes="64px"
                                     />
                                   ) : (

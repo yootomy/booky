@@ -107,7 +107,7 @@ export default function Header() {
                         "flex items-center space-x-2 px-4 py-2 rounded-full text-base font-medium transition-all duration-300 relative group",
                         isActive
                           ? "bg-primary/15 text-primary border-2 border-primary/40 font-semibold shadow-sm dark:bg-primary/20 dark:text-primary dark:border-primary/30"
-                          : "text-foreground hover:bg-card/70 hover:backdrop-blur-lg border border-transparent hover:border-accent/20"
+                          : "text-foreground hover:bg-card/90 hover:backdrop-blur-lg border border-transparent hover:border-accent/20"
                       )}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -258,7 +258,7 @@ export default function Header() {
 
             {/* Menu mobile hamburger */}
             <motion.button
-              className="md:hidden p-2 rounded-full transition-all duration-300 bg-card/70 backdrop-blur-lg border border-accent/20 text-foreground"
+              className="md:hidden p-2 rounded-full transition-all duration-300 bg-card/90 backdrop-blur-lg border border-accent/20 text-foreground"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}

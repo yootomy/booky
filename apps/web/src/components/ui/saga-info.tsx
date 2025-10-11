@@ -141,7 +141,7 @@ export function SagaInfo({ saga, sagaOrder, sagaNeighbors }: SagaInfoProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="mb-4 sm:mb-6 md:mb-8 relative overflow-hidden bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-lg"
+      className="mb-4 sm:mb-6 md:mb-8 relative overflow-hidden bg-card/90 backdrop-blur-xl border border-border rounded-xl shadow-lg"
     >
 
       <CardContent className="p-3 sm:p-4 md:p-6 relative">

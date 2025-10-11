@@ -10,7 +10,7 @@ export function HeroSection() {
   const libraryOwner = 'Bruna';
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-background transition-colors duration-500">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-background transition-colors duration-300">
       {/* Background Image avec overlay adaptatif au thème */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full"
@@ -55,7 +55,7 @@ export function HeroSection() {
 
           {/* Titre principal majestueux */}
           <h1
-            className="text-foreground font-normal"
+            className="text-foreground font-bold"
             style={{
               fontFamily: 'Playfair Display, serif',
               fontSize: "clamp(2.5rem, 6vw, 5rem)",
@@ -128,7 +128,7 @@ export function HeroSection() {
                 }}
               >
                 Surprends-moi...
-                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-500" />
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-gradient-to-r from-primary to-accent group-hover:w-full transition-all duration-300" />
               </span>
             </button>
           </motion.div>
