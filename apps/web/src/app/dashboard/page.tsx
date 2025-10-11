@@ -7,30 +7,87 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useRoleCheck } from "@/hooks/useRoleCheck";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import Image from "next/image";
 import { apiClient } from "@/lib/api-client";
 import {
   BookOpen,
   MessageCircle,
   Settings,
   Heart,
-  BarChart3,
   User,
-  Crown,
+  ChevronDown,
   ChevronRight,
+  Search,
+  MessageSquare,
+  Book,
+  CheckCircle,
+  Clock,
+  Shield,
   Sparkles,
-  Calendar,
-  Activity,
-  TrendingUp
+  Calendar
 } from "lucide-react";
+import { ConseilDetailsModal } from "@/components/conseil/ConseilDetailsModal";
+
+// Types
+interface Response {
+  id: string;
+  contenu: string;
+  date_creation: string;
+  author: {
+    nom_complet: string;
+    username: string;
+    avatar?: string;
+    role?: string;
+  };
+}
+
+interface Question {
+  id: string;
+  contenu: string;
+  status: string;
+  date_creation: string;
+  book: {
+    id: string;
+    titre: string;
+    auteur: string;
+    image_couverture?: string;
+  };
+  responses: Response[];
+  _count: {
+    responses: number;
+  };
+}
+
+interface Conseil {
+  id: string;
+  message?: string;
+  status: string;
+  date_creation: string;
+  date_reponse?: string;
+  reponse_bruna?: string;
+  livres_recommandes?: string;
+  user?: {
+    nom_complet?: string;
+    username?: string;
+  };
+}
+
+type TabType = 'questions' | 'conseils';
 
 export default function Dashboard() {
   const { user } = useAuth();
   const { isAdmin } = useRoleCheck();
   const router = useRouter();
+
+  const [activeTab, setActiveTab] = useState<TabType>('questions');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set());
+  const [selectedConseil, setSelectedConseil] = useState<Conseil | null>(null);
 
   // Rediriger les admins vers leur dashboard dédié
   useEffect(() => {
@@ -39,13 +96,24 @@ export default function Dashboard() {
     }
   }, [isAdmin, router]);
 
-  // Hook pour récupérer les stats utilisateur
-  const { data: userStats, isLoading: statsLoading } = useQuery({
-    queryKey: ['user-stats'],
+  // Hook pour récupérer les questions
+  const { data: questions = [], isLoading: questionsLoading } = useQuery({
+    queryKey: ['user-questions'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/profile');
-      if (!response.success) return { favoriteBooks: 0, questionsCount: 0, conseilsCount: 0 };
-      return response.data;
+      const response = await apiClient.get('/api/questions/user');
+      if (!response.success) return [];
+      return response.data || [];
+    },
+    retry: false
+  });
+
+  // Hook pour récupérer les conseils
+  const { data: conseils = [], isLoading: conseilsLoading } = useQuery({
+    queryKey: ['user-conseils'],
+    queryFn: async () => {
+      const response = await apiClient.get('/api/conseils/user');
+      if (!response.success) return [];
+      return response.data || [];
     },
     retry: false
   });
@@ -66,47 +134,63 @@ export default function Dashboard() {
     return 'U';
   };
 
+  const toggleQuestionExpansion = (questionId: string) => {
+    setExpandedQuestions((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(questionId)) {
+        newSet.delete(questionId);
+      } else {
+        newSet.add(questionId);
+      }
+      return newSet;
+    });
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"><Clock className="w-3 h-3 mr-1" />En attente</Badge>;
+      case 'ANSWERED':
+        return <Badge variant="outline" className="bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800"><CheckCircle className="w-3 h-3 mr-1" />Répondue</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
+
+  const getConseilStatusBadge = (status: string) => {
+    switch (status) {
+      case 'EN_ATTENTE':
+        return <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"><Clock className="w-3 h-3 mr-1" />En attente</Badge>;
+      case 'REPONDU':
+        return <Badge variant="outline" className="bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800"><CheckCircle className="w-3 h-3 mr-1" />Répondu</Badge>;
+      default:
+        return <Badge variant="outline">{status}</Badge>;
+    }
+  };
+
+  // Filter questions
+  const filteredQuestions = questions.filter((q: Question) =>
+    q.contenu.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    q.book.titre.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Filter conseils
+  const filteredConseils = conseils.filter((c: Conseil) =>
+    c.message?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.reponse_bruna?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // Ne pas afficher le dashboard si l'utilisateur est admin (redirection en cours)
   if (isAdmin) {
     return null;
   }
 
-  // Cards de navigation principales
-  const navigationCards = [
-    {
-      id: "questions",
-      title: "Mes questions",
-      description: "Questions et réponses de Bruna",
-      icon: MessageCircle,
-      href: '/dashboard/questions',
-      color: 'from-purple-600 to-purple-700',
-      bgColor: 'bg-purple-50 dark:bg-purple-950/20',
-      borderColor: 'border-purple-200 dark:border-purple-800',
-      count: userStats?.questionsCount || 0,
-      countLabel: 'questions'
-    },
-    {
-      id: "conseils",
-      title: "Demandes de conseils",
-      description: "Échanges personnalisés avec Bruna",
-      icon: Heart,
-      href: '/dashboard/conseils',
-      color: 'from-pink-600 to-rose-600',
-      bgColor: 'bg-pink-50 dark:bg-pink-950/20',
-      borderColor: 'border-pink-200 dark:border-pink-800',
-      count: userStats?.conseilsCount || 0,
-      countLabel: "demandes"
-    }
-  ];
-
-
   return (
     <AuthGuard requireAuth={true}>
       <div className="min-h-screen bg-background transition-colors duration-300">
-        {/* Container principal avec padding responsive */}
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
 
-          {/* Header Section - Hero moderne */}
+          {/* Header Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -114,7 +198,6 @@ export default function Dashboard() {
             className="mb-8 sm:mb-12"
           >
             <div className="text-center space-y-4 sm:space-y-6">
-              {/* Avatar et greeting */}
               <div className="flex flex-col items-center space-y-4">
                 {user?.avatar ? (
                   <motion.img
@@ -154,7 +237,7 @@ export default function Dashboard() {
                     className="text-sm sm:text-base text-muted-foreground"
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
-                    Que souhaitez-vous explorer aujourd'hui ?
+                    Gérez vos questions et demandes de conseils
                   </motion.p>
                 </div>
               </div>
@@ -225,55 +308,325 @@ export default function Dashboard() {
             </Card>
           </motion.div>
 
-          {/* Questions et Conseils - Liste compacte */}
+          {/* Tabs Navigation */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="mb-6"
+          >
+            <Card className="bg-card/90 backdrop-blur-lg border-border shadow-lg">
+              <CardContent className="p-2">
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveTab('questions')}
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all duration-300 ${
+                      activeTab === 'questions'
+                        ? 'bg-primary text-primary-foreground shadow-md'
+                        : 'bg-transparent text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span className="font-semibold">Mes questions</span>
+                    <Badge variant={activeTab === 'questions' ? 'secondary' : 'outline'} className="ml-2">
+                      {questions.length}
+                    </Badge>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('conseils')}
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all duration-300 ${
+                      activeTab === 'conseils'
+                        ? 'bg-primary text-primary-foreground shadow-md'
+                        : 'bg-transparent text-foreground hover:bg-muted'
+                    }`}
+                  >
+                    <Heart className="w-4 h-4" />
+                    <span className="font-semibold">Demandes de conseils</span>
+                    <Badge variant={activeTab === 'conseils' ? 'secondary' : 'outline'} className="ml-2">
+                      {conseils.length}
+                    </Badge>
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Search Bar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
-            className="space-y-3 mb-6"
+            className="mb-6"
           >
-            {navigationCards.map((card, index) => (
-              <motion.div
-                key={card.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.8 + index * 0.1, duration: 0.4 }}
-                className="group"
-              >
-                <Link href={card.href as any}>
-                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-card/50 border border-border/30 hover:border-primary/40 hover:bg-card/70 transition-all duration-200 cursor-pointer">
-                    <div className={'p-2 rounded-lg ${card.bgColor}flex-shrink-0'}>
-                      <card.icon className="w-4 h-4 text-primary" />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h3
-                          className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200"
-                          style={{ fontFamily: "Inter, sans-serif" }}
-                        >
-                          {card.title}
-                        </h3>
-                        {!statsLoading && card.count > 0 && (
-                          <Badge variant="secondary" className="text-xs ml-2">
-                            {card.count}
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {card.description}
-                      </p>
-                    </div>
-
-                    <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 flex-shrink-0" />
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder={activeTab === 'questions' ? "Rechercher une question..." : "Rechercher une demande..."}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 h-12 bg-card/90 backdrop-blur-lg border-border"
+              />
+            </div>
           </motion.div>
 
+          {/* Content Area */}
+          <AnimatePresence mode="wait">
+            {activeTab === 'questions' && (
+              <motion.div
+                key="questions"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {questionsLoading ? (
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Chargement de vos questions...</p>
+                  </div>
+                ) : filteredQuestions.length === 0 ? (
+                  <Card className="bg-card/90 backdrop-blur-lg border-border">
+                    <CardContent className="py-12 text-center">
+                      <MessageCircle className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-lg font-semibold mb-2">Aucune question</h3>
+                      <p className="text-muted-foreground mb-4">
+                        {searchQuery ? "Aucune question ne correspond à votre recherche" : "Vous n'avez pas encore posé de questions"}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="space-y-3">
+                    {filteredQuestions.map((question: Question) => (
+                      <motion.div
+                        key={question.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Card className="bg-card/90 backdrop-blur-lg border border-border hover:border-primary/40 transition-all duration-300">
+                          <CardContent className="p-4">
+                            <div className="flex items-start gap-3">
+                              {/* Book Cover */}
+                              <Link href={`/books/${question.book.id}`} className="flex-shrink-0">
+                                <div className="w-12 h-16 relative rounded overflow-hidden bg-muted">
+                                  {question.book.image_couverture ? (
+                                    <Image
+                                      src={question.book.image_couverture}
+                                      alt={question.book.titre}
+                                      fill
+                                      className="object-cover"
+                                      sizes="48px"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
+                                      <Book className="w-6 h-6 text-primary" />
+                                    </div>
+                                  )}
+                                </div>
+                              </Link>
+
+                              {/* Question Content */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-start justify-between gap-2 mb-2">
+                                  <div className="flex-1">
+                                    <Link
+                                      href={`/books/${question.book.id}`}
+                                      className="text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                                    >
+                                      {question.book.titre}
+                                    </Link>
+                                    <p className="text-xs text-muted-foreground">{question.book.auteur}</p>
+                                  </div>
+                                  {getStatusBadge(question.status)}
+                                </div>
+
+                                <p className="text-base text-foreground mb-2 leading-relaxed">
+                                  {question.contenu}
+                                </p>
+
+                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                                  <span className="flex items-center gap-1">
+                                    <Calendar className="w-3 h-3" />
+                                    {new Date(question.date_creation).toLocaleDateString('fr-FR')}
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <MessageSquare className="w-3 h-3" />
+                                    {question._count.responses} réponse{question._count.responses > 1 ? 's' : ''}
+                                  </span>
+                                </div>
+
+                                {/* Responses Toggle */}
+                                {question._count.responses > 0 && (
+                                  <button
+                                    onClick={() => toggleQuestionExpansion(question.id)}
+                                    className="mt-3 flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors"
+                                  >
+                                    {expandedQuestions.has(question.id) ? (
+                                      <>
+                                        <ChevronDown className="w-4 h-4" />
+                                        Masquer les réponses
+                                      </>
+                                    ) : (
+                                      <>
+                                        <ChevronRight className="w-4 h-4" />
+                                        Voir les réponses
+                                      </>
+                                    )}
+                                  </button>
+                                )}
+
+                                {/* Expanded Responses */}
+                                <AnimatePresence>
+                                  {expandedQuestions.has(question.id) && (
+                                    <motion.div
+                                      initial={{ opacity: 0, height: 0 }}
+                                      animate={{ opacity: 1, height: 'auto' }}
+                                      exit={{ opacity: 0, height: 0 }}
+                                      transition={{ duration: 0.3 }}
+                                      className="mt-3 space-y-3 border-t border-border pt-3"
+                                    >
+                                      {question.responses.map((response: Response) => (
+                                        <div
+                                          key={response.id}
+                                          className="bg-muted/50 rounded-lg p-3"
+                                        >
+                                          <div className="flex items-start gap-2 mb-2">
+                                            <div className="flex items-center gap-2">
+                                              {response.author.avatar ? (
+                                                <img
+                                                  src={response.author.avatar}
+                                                  alt={response.author.nom_complet}
+                                                  className="w-6 h-6 rounded-full"
+                                                />
+                                              ) : (
+                                                <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
+                                                  <User className="w-3 h-3 text-primary" />
+                                                </div>
+                                              )}
+                                              <span className="text-sm font-semibold text-foreground flex items-center gap-1">
+                                                {response.author.nom_complet || response.author.username}
+                                                {response.author.role === 'ADMIN' && (
+                                                  <Shield className="w-3 h-3 text-primary" />
+                                                )}
+                                              </span>
+                                            </div>
+                                            <span className="text-xs text-muted-foreground ml-auto">
+                                              {new Date(response.date_creation).toLocaleDateString('fr-FR')}
+                                            </span>
+                                          </div>
+                                          <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                                            {response.contenu}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'conseils' && (
+              <motion.div
+                key="conseils"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {conseilsLoading ? (
+                  <div className="text-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Chargement de vos demandes...</p>
+                  </div>
+                ) : filteredConseils.length === 0 ? (
+                  <Card className="bg-card/90 backdrop-blur-lg border-border">
+                    <CardContent className="py-12 text-center">
+                      <Heart className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-lg font-semibold mb-2">Aucune demande</h3>
+                      <p className="text-muted-foreground mb-4">
+                        {searchQuery ? "Aucune demande ne correspond à votre recherche" : "Vous n'avez pas encore fait de demande de conseil"}
+                      </p>
+                      <Button asChild>
+                        <Link href="/dashboard/conseils">
+                          <Sparkles className="w-4 h-4 mr-2" />
+                          Faire une demande
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="space-y-3">
+                    {filteredConseils.map((conseil: Conseil) => (
+                      <motion.div
+                        key={conseil.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Card className="bg-card/90 backdrop-blur-lg border border-border hover:border-primary/40 transition-all duration-300">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between gap-3 mb-3">
+                              <div className="flex items-center gap-2">
+                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                  <Heart className="w-5 h-5 text-primary" />
+                                </div>
+                                <div>
+                                  <h3 className="text-base font-semibold text-foreground">
+                                    Demande de conseil
+                                  </h3>
+                                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                    <Calendar className="w-3 h-3" />
+                                    {new Date(conseil.date_creation).toLocaleDateString('fr-FR')}
+                                  </p>
+                                </div>
+                              </div>
+                              {getConseilStatusBadge(conseil.status)}
+                            </div>
+
+                            {conseil.message && (
+                              <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                                {conseil.message}
+                              </p>
+                            )}
+
+                            {conseil.status === 'REPONDU' && (
+                              <button
+                                onClick={() => setSelectedConseil(conseil)}
+                                className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+                              >
+                                <Sparkles className="w-4 h-4" />
+                                Voir les détails
+                              </button>
+                            )}
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
+
+      {/* Conseil Details Modal */}
+      {selectedConseil && (
+        <ConseilDetailsModal
+          conseil={selectedConseil}
+          isOpen={!!selectedConseil}
+          onClose={() => setSelectedConseil(null)}
+        />
+      )}
     </AuthGuard>
   );
 }
