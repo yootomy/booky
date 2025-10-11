@@ -715,7 +715,7 @@ export default function BookDetailPage() {
             {/* Onglet Statistiques */}
             {activeTab === 'stats' && (
               <div className="space-y-4 md:space-y-8">
-                <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-8 flex items-center gap-2 md:gap-3 text-foreground"
+                <h3 className="text-lg sm:text-xl font-bold mb-4 md:mb-8 flex items-center gap-2 md:gap-3 text-foreground"
                   style={{
                     fontFamily: 'Playfair Display, serif'
                   }}
@@ -807,7 +807,7 @@ export default function BookDetailPage() {
             {/* Onglet Genres & Tropes */}
             {activeTab === 'genres' && (
               <div className="space-y-4 sm:space-y-6 md:space-y-8">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
+                <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
                   style={{
                     fontFamily: 'Playfair Display, serif'
                   }}
@@ -922,7 +922,7 @@ export default function BookDetailPage() {
             {/* Onglet Informations */}
             {activeTab === "info" && (
               <div className="space-y-4 sm:space-y-6 md:space-y-8">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
+                <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 md:mb-6 flex items-center gap-2 sm:gap-3 text-foreground"
                   style={{
                     fontFamily: 'Playfair Display, serif'
                   }}
@@ -971,7 +971,7 @@ export default function BookDetailPage() {
             {activeTab === 'faq' && (
               <div className="space-y-6 md:space-y-8">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-                  <h3 className="text-xl sm:text-2xl font-bold flex items-center gap-2 sm:gap-3 text-foreground"
+                  <h3 className="text-lg sm:text-xl font-bold flex items-center gap-2 sm:gap-3 text-foreground"
                     style={{
                       fontFamily: 'Playfair Display, serif',
                     }}
@@ -1180,7 +1180,7 @@ export default function BookDetailPage() {
                   <MessageCircle className="w-20 h-20 mx-auto mb-6 text-primary/50"
                   />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-foreground"
+                <h3 className="text-lg sm:text-xl font-bold mb-4 text-foreground"
                   style={{
                     fontFamily: 'Playfair Display, serif'
                   }}
