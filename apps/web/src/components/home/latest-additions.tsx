@@ -166,7 +166,7 @@ export function LatestAdditions() {
               style={{
                 fontFamily: 'Playfair Display, serif',
                 fontSize: "clamp(2rem, 4vw, 2.5rem)",
-                fontWeight: 700
+                fontWeight: 400
               }}
             >
               Fraîchement arrivés

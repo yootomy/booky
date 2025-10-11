@@ -11,7 +11,7 @@ const inter = Inter({
 	subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
+const playfairDisplay = Playfair_Display({
 	variable: "--font-playfair",
 	subsets: ["latin"],
 });
@@ -64,7 +64,8 @@ export default function RootLayout({
 				/>
 			</head>
 			<body
-				className={`${inter.variable} ${playfair.variable} antialiased bg-background text-foreground`}
+				className={`${inter.variable} ${playfairDisplay.variable} antialiased bg-background text-foreground`}
+				style={{ fontFamily: 'var(--font-playfair), serif' }}
 			>
 				<Providers>
 					<div className="min-h-svh bg-background transition-colors duration-300 w-full overflow-x-hidden flex flex-col">

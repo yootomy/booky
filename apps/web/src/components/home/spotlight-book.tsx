@@ -116,7 +116,7 @@ export function SpotlightBook() {
           className="text-center mb-12"
         >
           <h2
-            className="text-4xl font-bold mb-4 text-foreground"
+            className="text-4xl font-normal mb-4 text-foreground"
             style={{
               fontFamily: 'Playfair Display, serif'
             }}

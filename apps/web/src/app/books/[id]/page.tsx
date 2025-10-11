@@ -461,7 +461,7 @@ export default function BookDetailPage() {
                 {/* Informations */}
                 <div className="lg:col-span-3 space-y-3 sm:space-y-4 md:space-y-6">
                   <div className="text-center md:text-left">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground"
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal mb-2 sm:mb-3 md:mb-4 text-foreground"
                       style={{
                         fontFamily: 'Playfair Display, serif',
                         lineHeight: "1.2"
@@ -591,7 +591,7 @@ export default function BookDetailPage() {
                     >
                       <div className="flex items-center gap-3">
                         <BookOpen className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Résumé officiel
                         </h3>
                       </div>
@@ -622,7 +622,7 @@ export default function BookDetailPage() {
                     >
                       <div className="flex items-center gap-3">
                         <Heart className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Critique de {book.user?.nom_complet || 'Bruna'}
                         </h3>
                       </div>
@@ -639,7 +639,7 @@ export default function BookDetailPage() {
                         </p>
                         {book.resume_personnel && (
                           <div className="mt-4 p-4 rounded-lg bg-muted/50">
-                            <h4 className="font-semibold mb-2 text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                            <h4 className="font-normal mb-2 text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                               💝 Avis personnel
                             </h4>
                             <p className="text-foreground/80" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -661,7 +661,7 @@ export default function BookDetailPage() {
                     >
                       <div className="flex items-center gap-3">
                         <Quote className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Citations favorites
                         </h3>
                       </div>
@@ -690,7 +690,7 @@ export default function BookDetailPage() {
                     >
                       <div className="flex items-center gap-3">
                         <ThumbsUp className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Pourquoi vous allez l'aimer
                         </h3>
                       </div>
@@ -859,7 +859,7 @@ export default function BookDetailPage() {
                         <div className="mb-4 last:mb-0">
                           <div className="flex items-center gap-2 mb-3">
                             <span className="text-lg">📚</span>
-                            <h4 className="text-sm font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            <h4 className="text-sm font-normal text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
                               Genres
                             </h4>
                           </div>
@@ -891,7 +891,7 @@ export default function BookDetailPage() {
                         <div>
                           <div className="flex items-center gap-2 mb-3">
                             <span className="text-lg">🏷️</span>
-                            <h4 className="text-sm font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            <h4 className="text-sm font-normal text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
                               Tropes & Thèmes
                             </h4>
                           </div>
@@ -956,7 +956,7 @@ export default function BookDetailPage() {
                           <div className="text-sm text-muted-foreground font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
                             {item.label}
                           </div>
-                          <div className="text-base font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                          <div className="text-base font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                             {item.value}
                           </div>
                         </div>

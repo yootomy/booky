@@ -246,7 +246,7 @@ export default function ListsPage() {
         <div className="text-center mb-12 space-y-6">
           <div className="space-y-4">
             <h1
-              className="text-5xl md:text-6xl font-bold text-foreground"
+              className="text-5xl md:text-6xl font-normal text-foreground"
               style={{
                 fontFamily: 'Playfair Display, serif'
               }}
@@ -267,7 +267,7 @@ export default function ListsPage() {
             <p
               className="text-xl max-w-3xl mx-auto leading-relaxed text-muted-foreground"
             >
-              Plongez dans mes univers soigneusement sélectionnés de dark romance,
+              Plongez dans mes univers soigneusement sélectionnés de romances intenses,
               où chaque liste raconte une histoire et révèle mes coups de cœur littéraires.
             </p>
           </div>
@@ -327,7 +327,7 @@ export default function ListsPage() {
               </div>
               <div className="space-y-2">
                 <h3
-                  className="text-2xl font-semibold text-foreground"
+                  className="text-2xl font-normal text-foreground"
                   style={{
                     fontFamily: "Playfair Display, serif"
                   }}
@@ -337,7 +337,7 @@ export default function ListsPage() {
                 <p className="text-muted-foreground">
                   {searchQuery
                     ? "Aucune collection ne correspond à votre recherche."
-                    : "Je prépare avec soin mes sélections pour vous offrir le meilleur de la dark romance."}
+                    : "Je prépare avec soin mes sélections pour vous offrir le meilleur des romances intenses."}
                 </p>
               </div>
             </div>
@@ -377,7 +377,7 @@ export default function ListsPage() {
                       {/* Header */}
                       <div className="relative mb-6">
                         <h3
-                          className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors duration-300"
+                          className="text-xl font-normal mb-2 text-foreground group-hover:text-primary transition-colors duration-300"
                           style={{
                             fontFamily: "Playfair Display, serif"
                           }}
@@ -479,7 +479,7 @@ export default function ListsPage() {
               </div>
               <div className="space-y-4">
                 <h3
-                  className="text-3xl font-bold text-foreground"
+                  className="text-3xl font-normal text-foreground"
                   style={{
                     fontFamily: 'Playfair Display, serif'
                   }}

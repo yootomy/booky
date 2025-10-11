@@ -644,7 +644,7 @@ function BooksPageContent() {
                   backgroundClip: "text"
                 }}
               >
-                Dark Romance
+                Romances Intenses
               </span>
             </h1>
             <p

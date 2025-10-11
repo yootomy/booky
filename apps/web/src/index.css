@@ -148,9 +148,30 @@ body {
 	* {
 		@apply border-border outline-ring/50;
 		box-sizing: border-box;
+		font-family: var(--font-playfair), serif !important;
 	}
+
 	body {
 		@apply bg-background text-foreground;
+		font-family: var(--font-playfair), serif !important;
+	}
+
+	/* Inter UNIQUEMENT pour les zones de contenu que tu saisis */
+	.content-editable,
+	[class*="resume"],
+	[class*="critique"],
+	[class*="description"],
+	[class*="pourquoi"],
+	[class*="citation"],
+	[class*="question"],
+	[class*="recommandation"],
+	textarea[name*="resume"],
+	textarea[name*="critique"],
+	textarea[name*="description"],
+	div[class*="resume"] p,
+	div[class*="critique"] p,
+	div[class*="description"] p {
+		font-family: var(--font-inter), sans-serif !important;
 	}
 
 	/* Empêche les débordements sur mobile */

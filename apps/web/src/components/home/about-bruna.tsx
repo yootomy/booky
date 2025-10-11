@@ -6,7 +6,7 @@ import { Heart, BookOpen, Sparkles, Quote } from 'lucide-react';
 
 export function AboutBruna() {
   return (
-    <section className="py-16 px-4 sm:px-8 lg:px-20 bg-background transition-colors duration-300">
+    <section className="pt-20 pb-16 px-4 sm:px-8 lg:px-20 bg-background transition-colors duration-300">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -19,7 +19,7 @@ export function AboutBruna() {
             style={{
               fontFamily: 'Playfair Display, serif',
               fontSize: "clamp(2rem, 4vw, 2.5rem)",
-              fontWeight: 700
+              fontWeight: 400
             }}
           >
             À propos de Bruna
@@ -34,7 +34,7 @@ export function AboutBruna() {
               lineHeight: "1.6"
             }}
           >
-            La passionnée derrière cette collection de dark romance
+            La passionnée derrière cette collection de romances intenses
           </p>
         </motion.div>
 
@@ -88,7 +88,7 @@ export function AboutBruna() {
                   lineHeight: '1.6'
                 }}
               >
-                Passionnée de dark romance depuis toujours, j'ai créé cette collection pour partager les histoires qui m'ont fait vibrer. Entre anti-héros irrésistibles et héroïnes fortes, ma mission est simple : vous aider à trouver votre prochaine obsession littéraire.
+                Passionnée de romances intenses depuis toujours, j'ai créé cette collection pour partager les histoires qui m'ont fait vibrer. Entre anti-héros irrésistibles et héroïnes fortes, ma mission est simple : vous aider à trouver votre prochaine obsession littéraire.
               </p>
               </div>
             </div>

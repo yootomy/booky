@@ -94,18 +94,6 @@ const PUBLIC_NAV_ITEMS: NavItem[] = [
     description: "Catalogue des livres"
   },
   {
-    href: '/categories',
-    label: "Catégories",
-    icon: Folder,
-    description: "Explorez par genres"
-  },
-  {
-    href: '/tags',
-    label: "Tags",
-    icon: Tag,
-    description: "Tropes et avertissements"
-  },
-  {
     href: '/lists',
     label: "Collections",
     icon: List,
@@ -116,12 +104,6 @@ const PUBLIC_NAV_ITEMS: NavItem[] = [
     label: "Recherche",
     icon: Search,
     description: "Recherche globale"
-  },
-  {
-    href: '/lists',
-    label: "Listes",
-    icon: List,
-    description: "Listes personnalisées de Bruna"
   }
 ];
 
@@ -245,7 +227,7 @@ function MobileMenu({
             Booky
           </SheetTitle>
           <SheetDescription>
-            Votre bibliothèque Dark Romance
+            Votre bibliothèque des Tentations
           </SheetDescription>
         </SheetHeader>
         

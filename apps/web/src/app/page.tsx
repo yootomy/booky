@@ -13,6 +13,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <HeroSection />
 
+
       {/* À propos de Bruna */}
       <AboutBruna />
 

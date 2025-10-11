@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ConseilRequestModal } from '@/components/conseil/ConseilRequestModal';
+import { ConseilDetailsModal } from '@/components/conseil/ConseilDetailsModal';
 import {
   Heart,
   Clock,
@@ -50,7 +52,8 @@ export default function ConseilsPage() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+  const [showConseilModal, setShowConseilModal] = useState(false);
+  const [selectedConseil, setSelectedConseil] = useState<ConseilRequest | null>(null);
 
   // Fetch user's conseil requests
   const { data: conseilsData, isLoading, error } = useQuery({
@@ -58,7 +61,7 @@ export default function ConseilsPage() {
     queryFn: async () => {
       if (!user?.id) return { data: [] };
 
-      const response = await apiClient.get(`/api/conseil-requests?userId=${user.id}`);
+      const response = await apiClient.get('/api/conseil-requests');
       if (!response.success) throw new Error(response.error || "Failed to fetch conseil requests");
       return response.data;
     },
@@ -94,10 +97,10 @@ export default function ConseilsPage() {
     }
   });
 
-  const conseils = conseilsData?.data || [];
-  const categories = categoriesData?.data || [];
-  const tags = tagsData?.data || [];
-  const books = booksData?.data || [];
+  const conseils = conseilsData || [];
+  const categories = categoriesData || [];
+  const tags = tagsData || [];
+  const books = booksData || [];
 
   // Filtrage des conseils
   const filteredConseils = conseils.filter((conseil: ConseilRequest) => {
@@ -110,18 +113,6 @@ export default function ConseilsPage() {
 
     return matchesSearch && matchesStatus;
   });
-
-  const toggleCardExpansion = (conseilId: string) => {
-    setExpandedCards(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(conseilId)) {
-        newSet.delete(conseilId);
-      } else {
-        newSet.add(conseilId);
-      }
-      return newSet;
-    });
-  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -261,11 +252,12 @@ export default function ConseilsPage() {
                 </p>
               </div>
 
-              <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto">
-                <Link href="/">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Nouvelle demande
-                </Link>
+              <Button
+                onClick={() => setShowConseilModal(true)}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Nouvelle demande
               </Button>
             </motion.div>
 
@@ -335,11 +327,12 @@ export default function ConseilsPage() {
                       }
                     </p>
                     {!searchTerm && statusFilter === "all" && (
-                      <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-                        <Link href="/">
-                          <Sparkles className="w-4 h-4 mr-2" />
-                          Faire une demande
-                        </Link>
+                      <Button
+                        onClick={() => setShowConseilModal(true)}
+                        className="bg-primary text-primary-foreground hover:bg-primary/90"
+                      >
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Faire une demande
                       </Button>
                     )}
                   </CardContent>
@@ -441,141 +434,21 @@ export default function ConseilsPage() {
                             </div>
                           )}
 
-                          {/* Comments Section - Preview */}
-                          {conseil.commentaires && (
-                            <div>
-                              <div className="flex items-center gap-2 mb-3">
-                                <MessageCircle className="w-4 h-4 text-muted-foreground" />
-                                <h4 className="text-sm font-medium text-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
-                                  Votre message
-                                </h4>
-                              </div>
-                              <div className="bg-muted/50 rounded-lg p-3">
-                                <p className="text-sm text-foreground/80 line-clamp-2" style={{ fontFamily: "Inter, sans-serif" }}>
-                                  "{conseil.commentaires}"
-                                </p>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Expand Button */}
-                          <div className="pt-3 border-t border-border/50">
+                          {/* View Details Button */}
+                          <div className="pt-4">
                             <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => toggleCardExpansion(conseil.id)}
-                              className="w-full justify-between hover:bg-primary/5"
+                              onClick={() => setSelectedConseil(conseil)}
+                              className="w-full justify-center gap-2 text-white hover:opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+                              style={{
+                                background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)',
+                                fontFamily: 'Inter, sans-serif',
+                                fontWeight: 600
+                              }}
                             >
-                              <span className="text-sm font-medium">
-                                {expandedCards.has(conseil.id) ? "Voir moins" : "Voir les détails"}
-                              </span>
-                              {expandedCards.has(conseil.id) ?
-                                <ChevronUp className="w-4 h-4" /> :
-                                <ChevronDown className="w-4 h-4" />
-                              }
+                              <Eye className="w-4 h-4" />
+                              <span>Voir les détails</span>
                             </Button>
                           </div>
-
-                          {/* Expandable Content */}
-                          {expandedCards.has(conseil.id) && (
-                            <div className="space-y-4 pt-4 border-t border-border/50">
-                                {/* Full Categories List */}
-                                {conseil.categories.length > 4 && (
-                                  <div>
-                                    <h4 className="text-sm font-medium text-foreground mb-3" style={{ fontFamily: 'Inter, sans-serif' }}>
-                                      Tous les genres sélectionnés
-                                    </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                      {conseil.categories.map((categoryId) => (
-                                        <Badge
-                                          key={categoryId}
-                                          variant="secondary"
-                                          className="bg-primary/10 text-primary border-primary/20 text-xs"
-                                        >
-                                          {getCategoryName(categoryId)}
-                                        </Badge>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Full Tags List */}
-                                {conseil.tags.length > 6 && (
-                                  <div>
-                                    <h4 className="text-sm font-medium text-foreground mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
-                                      Tous les tropes préférés
-                                    </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                      {conseil.tags.map((tagId) => (
-                                        <Badge
-                                          key={tagId}
-                                          variant="outline"
-                                          className="text-xs"
-                                        >
-                                          {getTagName(tagId)}
-                                        </Badge>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Full Comments */}
-                                {conseil.commentaires && (
-                                  <div>
-                                    <h4 className="text-sm font-medium text-foreground mb-3" style={{ fontFamily: "Inter, sans-serif" }}>
-                                      Votre message complet
-                                    </h4>
-                                    <div className="bg-muted/50 rounded-lg p-4">
-                                      <p className="text-sm text-foreground leading-relaxed" style={{ fontFamily: "Inter, sans-serif" }}>
-                                        "{conseil.commentaires}"
-                                      </p>
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Bruna's Response */}
-                                {conseil.status === 'TRAITE' && conseil.reponse_bruna && (
-                                  <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4">
-                                    <div className="flex items-center gap-2 mb-3">
-                                      <CheckCircle className="w-5 h-5 text-emerald-600" />
-                                      <h4 className="font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
-                                        Réponse de Bruna
-                                      </h4>
-                                      {conseil.date_reponse && (
-                                        <span className="text-xs text-muted-foreground ml-auto">
-                                          {new Date(conseil.date_reponse).toLocaleDateString("fr-FR")}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <p className="text-sm leading-relaxed text-foreground mb-4" style={{ fontFamily: "Inter, sans-serif" }}>
-                                      {conseil.reponse_bruna}
-                                    </p>
-
-                                    {/* Recommended Books */}
-                                    {conseil.livres_recommandes.length > 0 && (
-                                      <div>
-                                        <h5 className="font-medium text-sm mb-3 text-foreground">
-                                          Livres recommandés
-                                        </h5>
-                                        <div className="space-y-2">
-                                          {conseil.livres_recommandes.map((bookId) => (
-                                            <div
-                                              key={bookId}
-                                              className="flex items-center gap-2 p-3 bg-background/50 rounded-lg border border-border/50"
-                                            >
-                                              <BookOpen className="w-4 h-4 text-primary flex-shrink-0" />
-                                              <span className="text-sm text-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
-                                                {getBookTitle(bookId)}
-                                              </span>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-                            </div>
-                          )}
                         </CardContent>
                       </Card>
                     </motion.div>
@@ -585,6 +458,22 @@ export default function ConseilsPage() {
             )}
           </div>
         </div>
+
+        {/* Conseil Request Modal */}
+        <ConseilRequestModal
+          isOpen={showConseilModal}
+          onClose={() => setShowConseilModal(false)}
+        />
+
+        {/* Conseil Details Modal */}
+        <ConseilDetailsModal
+          conseil={selectedConseil}
+          isOpen={!!selectedConseil}
+          onClose={() => setSelectedConseil(null)}
+          getCategoryName={getCategoryName}
+          getTagName={getTagName}
+          books={books}
+        />
       </div>
     </AuthGuard>
   );
