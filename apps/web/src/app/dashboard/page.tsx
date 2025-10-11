@@ -57,10 +57,16 @@ interface Question {
     auteur: string;
     image_couverture?: string;
   };
-  responses: Response[];
-  _count: {
-    responses: number;
+  author: {
+    nom_complet: string;
+    username: string;
+    avatar?: string;
   };
+  stats: {
+    likes_count: number;
+    responses_count: number;
+  };
+  responses?: Response[];
 }
 
 interface Conseil {
@@ -460,12 +466,12 @@ export default function Dashboard() {
                                   </span>
                                   <span className="flex items-center gap-1">
                                     <MessageSquare className="w-3 h-3" />
-                                    {question._count.responses} réponse{question._count.responses > 1 ? 's' : ''}
+                                    {question.stats.responses_count} réponse{question.stats.responses_count > 1 ? 's' : ''}
                                   </span>
                                 </div>
 
                                 {/* Responses Toggle */}
-                                {question._count.responses > 0 && (
+                                {question.stats.responses_count > 0 && (
                                   <button
                                     onClick={() => toggleQuestionExpansion(question.id)}
                                     className="mt-3 flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors"
@@ -494,7 +500,7 @@ export default function Dashboard() {
                                       transition={{ duration: 0.3 }}
                                       className="mt-3 space-y-3 border-t border-border pt-3"
                                     >
-                                      {question.responses.map((response: Response) => (
+                                      {(question.responses || []).map((response: Response) => (
                                         <div
                                           key={response.id}
                                           className="bg-muted/50 rounded-lg p-3"
