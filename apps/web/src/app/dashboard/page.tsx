@@ -616,13 +616,14 @@ export default function Dashboard() {
                             )}
 
                             {(conseil.status === 'REPONDU' || conseil.status === 'TRAITE') && (
-                              <button
+                              <Button
                                 onClick={() => setSelectedConseil(conseil)}
-                                className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+                                variant="outline"
+                                size="sm"
+                                className="w-full mt-2"
                               >
-                                <Sparkles className="w-4 h-4" />
                                 Voir les détails
-                              </button>
+                              </Button>
                             )}
                           </CardContent>
                         </Card>

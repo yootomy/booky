@@ -32,18 +32,18 @@ interface ConseilDetailsModalProps {
   conseil: ConseilRequest | null;
   isOpen: boolean;
   onClose: () => void;
-  getCategoryName: (id: string) => string;
-  getTagName: (id: string) => string;
-  books: Book[];
+  getCategoryName?: (id: string) => string;
+  getTagName?: (id: string) => string;
+  books?: Book[];
 }
 
 export function ConseilDetailsModal({
   conseil,
   isOpen,
   onClose,
-  getCategoryName,
-  getTagName,
-  books
+  getCategoryName = (id: string) => id,
+  getTagName = (id: string) => id,
+  books = []
 }: ConseilDetailsModalProps) {
   if (!conseil) return null;
 
