@@ -296,7 +296,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
                     style={{ backgroundColor: list.couleur }}
                   />
                   <div className="space-y-2">
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                       {list.nom}
                     </h1>
                     {list.description && (
@@ -339,7 +339,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         {/* Liste des livres */}
         {books.length === 0 ? (
           <Card>
-            <CardContent className="py-16">
+            <CardContent className="py-6 sm:py-8 lg:py-12">
               <div className="text-center space-y-4">
                 <BookOpen className="h-12 w-12 mx-auto text-muted-foreground" />
                 <div className="space-y-2">

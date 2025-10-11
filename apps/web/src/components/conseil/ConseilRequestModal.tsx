@@ -196,14 +196,14 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
             </div>
 
             <div className="flex gap-3">
-              <div className="flex-1 p-3 bg-card/60 rounded-lg border border-border">
+              <div className="flex-1 p-3 bg-card/90 rounded-lg border border-border">
                 <div className="flex items-center gap-2 mb-1">
                   <Heart className="w-4 h-4 text-red-500" />
                   <span className="font-medium text-sm">Personnalisé</span>
                 </div>
                 <p className="text-xs text-foreground/70">Selon vos préférences</p>
               </div>
-              <div className="flex-1 p-3 bg-card/60 rounded-lg border border-border">
+              <div className="flex-1 p-3 bg-card/90 rounded-lg border border-border">
                 <div className="flex items-center gap-2 mb-1">
                   <Sparkles className="w-4 h-4 text-amber-500" />
                   <span className="font-medium text-sm">Expert</span>
@@ -237,8 +237,8 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
                     className={`cursor-pointer transition-all duration-300 ${
                       selectedCategories.includes(category.id)
                         ? 'ring-2 ring-primary/50 bg-primary/10'
-                        : 'bg-card/60'
-                    } border border-border hover:bg-card/80`}
+                        : 'bg-card/90'
+                    } border border-border hover:bg-card/90`}
                     style={{ borderRadius: "12px" }}
                     onClick={() => handleCategoryToggle(category.id)}
                   >
@@ -454,7 +454,7 @@ export function ConseilRequestModal({ isOpen, onClose }: ConseilRequestModalProp
               <div className="flex items-center gap-2 mt-1">
                 <div className="w-full bg-muted rounded-full h-1">
                   <div
-                    className="h-1 rounded-full transition-all duration-500"
+                    className="h-1 rounded-full transition-all duration-300"
                     style={{
                       width: `${(currentStep / STEPS.CONFIRMATION) * 100}%`,
                       background: 'linear-gradient(135deg, #8B1538 0%, #6B4C7B 100%)'

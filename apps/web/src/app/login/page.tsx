@@ -50,7 +50,7 @@ function LoginContent() {
         {/* Header simple */}
         <div className="text-center space-y-4">
           <h1
-            className="text-3xl font-bold text-foreground"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground"
             style={{
               fontFamily: 'Playfair Display, serif'
             }}

@@ -260,7 +260,7 @@ function SearchPageContent() {
     <div className='container mx-auto py-8 px-4 max-w-6xl'>
       {/* En-tête */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
           Recherche globale
         </h1>
         <p className="text-gray-300">
