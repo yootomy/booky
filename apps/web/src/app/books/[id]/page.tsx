@@ -407,7 +407,7 @@ export default function BookDetailPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 md:py-8">
 
           {/* Hero Section */}
-          <div className="mb-4 sm:mb-6 md:mb-8 rounded-3xl overflow-hidden shadow-xl bg-card/95 backdrop-blur-xl border border-border"
+          <div className="mb-4 sm:mb-6 md:mb-8 rounded-xl overflow-hidden shadow-xl bg-card/90 backdrop-blur-xl border border-border"
           >
             <div className="p-3 sm:p-4 md:p-8">
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
@@ -420,7 +420,7 @@ export default function BookDetailPage() {
                         <img
                           src={book.image_couverture}
                           alt={book.titre}
-                          className="w-48 sm:w-56 md:w-64 lg:w-full h-auto object-contain rounded-2xl shadow-2xl"
+                          className="w-48 sm:w-56 md:w-64 lg:w-full h-auto object-contain rounded-xl shadow-2xl"
                         />
 
                         {/* Status badge */}
@@ -442,7 +442,7 @@ export default function BookDetailPage() {
                         )}
                       </div>
                     ) : (
-                      <div className="w-44 md:w-52 flex items-center justify-center rounded-2xl shadow-2xl relative bg-gradient-to-br from-primary to-primary/80"
+                      <div className="w-44 md:w-52 flex items-center justify-center rounded-xl shadow-2xl relative bg-gradient-to-br from-primary to-primary/80"
                         style={{
                           aspectRatio: "2/3"
                         }}
@@ -461,7 +461,7 @@ export default function BookDetailPage() {
                 {/* Informations */}
                 <div className="lg:col-span-3 space-y-3 sm:space-y-4 md:space-y-6">
                   <div className="text-center md:text-left">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal mb-2 sm:mb-3 md:mb-4 text-foreground"
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground"
                       style={{
                         fontFamily: 'Playfair Display, serif',
                         lineHeight: "1.2"
@@ -531,7 +531,7 @@ export default function BookDetailPage() {
           )}
 
           {/* Navigation des onglets avec style cohérent */}
-          <div className="mb-3 sm:mb-4 md:mb-8 rounded-2xl overflow-hidden shadow-lg bg-card/95 backdrop-blur-xl border border-border"
+          <div className="mb-3 sm:mb-4 md:mb-8 rounded-xl overflow-hidden shadow-lg bg-card/90 backdrop-blur-xl border border-border"
           >
             <div className="p-2 sm:p-3 md:p-6">
               <nav className="flex flex-wrap gap-1 sm:gap-2 md:gap-3">
@@ -575,7 +575,7 @@ export default function BookDetailPage() {
           </div>
 
           {/* Contenu des onglets avec style cohérent */}
-          <div className="rounded-3xl overflow-hidden shadow-xl bg-card/95 backdrop-blur-xl border border-border mb-24 sm:mb-32"
+          <div className="rounded-xl overflow-hidden shadow-xl bg-card/90 backdrop-blur-xl border border-border mb-24 sm:mb-32"
           >
             <div className="p-3 sm:p-4 md:p-6 lg:p-12">
 
@@ -725,7 +725,7 @@ export default function BookDetailPage() {
                 </h3>
 
                 {/* Note générale - Version compacte mobile */}
-                <div className="text-center py-3 md:py-8 rounded-xl md:rounded-2xl"
+                <div className="text-center py-3 md:py-8 rounded-xl"
                   style={{
                     background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%)',
                     border: "2px solid rgba(212, 175, 55, 0.2)"
@@ -772,7 +772,7 @@ export default function BookDetailPage() {
                     { label: '🔥 Violence', value: book.violence, colorClass: 'text-red-700 dark:text-red-300', bgClass: 'from-red-700 to-red-600' },
                     { label: '🌟 Originalité', value: book.originalite, colorClass: 'text-yellow-700 dark:text-yellow-300', bgClass: 'from-yellow-600 to-yellow-500' }
                   ].map((metric, index) => (
-                    <div key={index} className="p-3 md:p-6 rounded-xl md:rounded-2xl bg-card/90 backdrop-blur-lg border border-border shadow-lg"
+                    <div key={index} className="p-3 md:p-6 rounded-xl bg-card/90 backdrop-blur-lg border border-border shadow-lg"
                     >
                       <div className="flex items-center justify-between mb-2 md:mb-4">
                         <span className='text-sm md:text-lg font-medium'
@@ -990,7 +990,7 @@ export default function BookDetailPage() {
 
                 {/* Formulaire pour poser une question */}
                 {isAuthenticated ? (
-                  <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-primary/10 border border-primary/20"
+                  <div className="p-4 sm:p-6 rounded-xl bg-primary/10 border border-primary/20"
                   >
                     <h4 className="font-bold mb-3 sm:mb-4 text-lg sm:text-xl text-foreground"
                       style={{
@@ -1023,7 +1023,7 @@ export default function BookDetailPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center bg-primary/10 border border-primary/20"
+                  <div className="p-4 sm:p-6 rounded-xl text-center bg-primary/10 border border-primary/20"
                   >
                     <p className="mb-3 sm:mb-4 text-base sm:text-lg text-foreground/80"
                       style={{
@@ -1045,7 +1045,7 @@ export default function BookDetailPage() {
                 {/* Liste des questions */}
                 <div className="space-y-6">
                   {questions.length === 0 ? (
-                    <div className="text-center py-12 rounded-2xl bg-card/90 backdrop-blur-lg border border-border"
+                    <div className="text-center py-12 rounded-xl bg-card/90 backdrop-blur-lg border border-border"
                     >
                       <MessageCircle className="w-16 h-16 mx-auto mb-4 text-primary" />
                       <p className="text-xl mb-2"
@@ -1065,7 +1065,7 @@ export default function BookDetailPage() {
                     </div>
                   ) : (
                     questions.map((question) => (
-                      <div key={question.id} className="bg-card/90 backdrop-blur-lg border border-border/50 rounded-2xl overflow-hidden shadow-lg"
+                      <div key={question.id} className="bg-card/90 backdrop-blur-lg border border-border/50 rounded-xl overflow-hidden shadow-lg"
                       >
                         {/* Header with user info and like button */}
                         <div className="flex items-center justify-between p-4 border-b border-border/30">
