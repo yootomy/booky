@@ -40,7 +40,7 @@ export function RecentBooks() {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-8 lg:px-20 bg-background transition-colors duration-300">
+      <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 bg-background transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           {/* Header Placeholder */}
           <div className="text-center mb-12">
@@ -55,7 +55,7 @@ export function RecentBooks() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {[...Array(6)].map((_, index) => (
               <div key={index} className="animate-pulse">
-                <div className="rounded-2xl overflow-hidden bg-card/60 backdrop-blur-xl border border-border shadow-lg">
+                <div className="rounded-xl overflow-hidden bg-card/90 backdrop-blur-xl border border-border shadow-lg">
                   {/* Book Cover Placeholder */}
                   <div className="h-48 bg-muted"></div>
 
@@ -107,7 +107,7 @@ export function RecentBooks() {
   };
 
   return (
-    <section className="py-16 px-4 sm:px-8 lg:px-20 bg-background transition-colors duration-300">
+    <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 bg-background transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -119,11 +119,9 @@ export function RecentBooks() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Clock className="w-6 h-6 text-primary" />
             <h2
-              className="text-foreground"
+              className="text-xl sm:text-2xl font-bold text-foreground"
               style={{
-                fontFamily: 'Playfair Display, serif',
-                fontSize: "clamp(2rem, 4vw, 2.5rem)",
-                fontWeight: 700
+                fontFamily: 'Playfair Display, serif'
               }}
             >
               Dernières découvertes
@@ -159,7 +157,7 @@ export function RecentBooks() {
               className="group cursor-pointer"
               onClick={() => window.location.href = "/books/${book.id}"}
             >
-              <div className="relative rounded-xl overflow-hidden transition-all duration-200 group-hover:shadow-lg bg-card/60 backdrop-blur-xl border border-border shadow-md">
+              <div className="relative rounded-xl overflow-hidden transition-all duration-300 group-hover:shadow-lg bg-card/90 backdrop-blur-xl border border-border shadow-lg">
                 {/* Book Cover */}
                 <div className="relative aspect-[2/3] overflow-hidden">
                   {book.image_couverture ? (

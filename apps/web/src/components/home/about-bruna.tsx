@@ -6,7 +6,7 @@ import { Heart, BookOpen, Sparkles, Quote } from 'lucide-react';
 
 export function AboutBruna() {
   return (
-    <section className="pt-20 pb-16 px-4 sm:px-8 lg:px-20 bg-background transition-colors duration-300">
+    <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 bg-background transition-colors duration-300">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -15,11 +15,9 @@ export function AboutBruna() {
           className="text-center mb-8"
         >
           <h2
-            className="text-foreground"
+            className="text-xl sm:text-2xl font-bold text-foreground"
             style={{
-              fontFamily: 'Playfair Display, serif',
-              fontSize: "clamp(2rem, 4vw, 2.5rem)",
-              fontWeight: 400
+              fontFamily: 'Playfair Display, serif'
             }}
           >
             À propos de Bruna
@@ -42,7 +40,7 @@ export function AboutBruna() {
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="rounded-2xl p-6 lg:p-8 transition-all duration-500 bg-card/60 backdrop-blur-xl border border-border shadow-lg"
+          className="rounded-xl p-4 sm:p-6 md:p-8 transition-all duration-300 bg-card/90 backdrop-blur-xl border border-border shadow-lg"
         >
           {/* Layout mobile-first avec proportions équilibrées */}
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-center">

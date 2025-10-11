@@ -50,7 +50,7 @@ export function SpotlightBook() {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background transition-colors duration-300">
+      <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 bg-background transition-colors duration-300">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -62,7 +62,7 @@ export function SpotlightBook() {
             <div className="h-6 w-96 bg-muted/70 rounded mx-auto animate-pulse"></div>
           </motion.div>
 
-          <div className="relative rounded-3xl overflow-hidden animate-pulse bg-card/60 backdrop-blur-xl border border-border shadow-lg">
+          <div className="relative rounded-xl overflow-hidden animate-pulse bg-card/90 backdrop-blur-xl border border-border shadow-lg">
             <div className="flex flex-col lg:flex-row">
               {/* Cover placeholder */}
               <div className="lg:w-1/3 relative">
@@ -107,7 +107,7 @@ export function SpotlightBook() {
   const excerpt = book.resume_personnel || book.pourquoi_aimer;
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background transition-colors duration-300">
+    <section className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 bg-background transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -116,7 +116,7 @@ export function SpotlightBook() {
           className="text-center mb-12"
         >
           <h2
-            className="text-4xl font-normal mb-4 text-foreground"
+            className="text-xl sm:text-2xl font-bold mb-4 text-foreground"
             style={{
               fontFamily: 'Playfair Display, serif'
             }}
@@ -137,7 +137,7 @@ export function SpotlightBook() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="rounded-2xl p-4 sm:p-6 lg:p-10 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/60 backdrop-blur-xl border border-border shadow-lg"
+          className="rounded-xl p-4 sm:p-6 lg:p-10 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl bg-card/90 backdrop-blur-xl border border-border shadow-lg"
         >
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8">
             {/* Book Cover */}
