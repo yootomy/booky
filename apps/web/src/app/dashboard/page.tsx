@@ -131,6 +131,18 @@ export default function Dashboard() {
 
   const conseils = conseilsData || [];
 
+  // Hook pour récupérer les livres (pour les recommandations)
+  const { data: booksData } = useQuery({
+    queryKey: ['books'],
+    queryFn: async () => {
+      const response = await apiClient.get('/api/books');
+      if (!response.success) throw new Error(response.error || "Failed to fetch books");
+      return response.data;
+    }
+  });
+
+  const books = booksData || [];
+
   // Générer les initiales de l'utilisateur
   const getUserInitials = (user: any) => {
     if (user?.nom_complet) {
@@ -643,6 +655,7 @@ export default function Dashboard() {
           conseil={selectedConseil}
           isOpen={!!selectedConseil}
           onClose={() => setSelectedConseil(null)}
+          books={books}
         />
       )}
     </AuthGuard>
