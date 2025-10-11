@@ -506,7 +506,7 @@ export default function BookDetailPage() {
                         </div>
                         <div className='w-full rounded-full h-3 bg-muted'>
                           <div
-                            className={`h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
+                            className={`h-3 rounded-full transition-all duration-300 bg-gradient-to-r ${metric.bgClass}`}
                             style={{
                               width: `${(metric.value / 10) * 100}%`
                             }}
@@ -584,14 +584,14 @@ export default function BookDetailPage() {
               <div className="space-y-4">
                 {/* Résumé officiel */}
                 {book.resume_officiel && (
-                  <div className="border border-border rounded-xl bg-card">
+                  <div className="border border-border rounded-xl bg-card/90 backdrop-blur-lg">
                     <button
                       onClick={() => toggleSection("resume_officiel")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <BookOpen className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Résumé officiel
                         </h3>
                       </div>
@@ -615,14 +615,14 @@ export default function BookDetailPage() {
 
                 {/* Critique de Bruna */}
                 {book.critique_detaillee && (
-                  <div className="border border-border rounded-xl bg-card">
+                  <div className="border border-border rounded-xl bg-card/90 backdrop-blur-lg">
                     <button
                       onClick={() => toggleSection("critique_detaillee")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <Heart className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Critique de {book.user?.nom_complet || 'Bruna'}
                         </h3>
                       </div>
@@ -639,7 +639,7 @@ export default function BookDetailPage() {
                         </p>
                         {book.resume_personnel && (
                           <div className="mt-4 p-4 rounded-lg bg-muted/50">
-                            <h4 className="font-normal mb-2 text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                            <h4 className="font-semibold mb-2 text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                               💝 Avis personnel
                             </h4>
                             <p className="text-foreground/80" style={{ fontFamily: "Inter, sans-serif" }}>
@@ -654,14 +654,14 @@ export default function BookDetailPage() {
 
                 {/* Citations favorites */}
                 {book.citations_favorites && (
-                  <div className="border border-border rounded-xl bg-card">
+                  <div className="border border-border rounded-xl bg-card/90 backdrop-blur-lg">
                     <button
                       onClick={() => toggleSection("citations_favorites")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <Quote className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Citations favorites
                         </h3>
                       </div>
@@ -683,14 +683,14 @@ export default function BookDetailPage() {
 
                 {/* Pourquoi vous allez l'aimer */}
                 {book.pourquoi_aimer && (
-                  <div className="border border-border rounded-xl bg-card">
+                  <div className="border border-border rounded-xl bg-card/90 backdrop-blur-lg">
                     <button
                       onClick={() => toggleSection("pourquoi_aimer")}
                       className="w-full p-4 flex items-center justify-between hover:bg-muted/50 transition-colors rounded-t-xl"
                     >
                       <div className="flex items-center gap-3">
                         <ThumbsUp className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-normal text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                        <h3 className="text-lg font-semibold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                           Pourquoi vous allez l'aimer
                         </h3>
                       </div>
@@ -792,7 +792,7 @@ export default function BookDetailPage() {
                       </div>
                       <div className='w-full rounded-full h-2 md:h-3 bg-muted'>
                         <div
-                          className={`h-2 md:h-3 rounded-full transition-all duration-500 bg-gradient-to-r ${metric.bgClass}`}
+                          className={`h-2 md:h-3 rounded-full transition-all duration-300 bg-gradient-to-r ${metric.bgClass}`}
                           style={{
                             width: `${(metric.value / 10) * 100}%`
                           }}
@@ -853,13 +853,13 @@ export default function BookDetailPage() {
 
                   {/* Genres et Tropes - Section compacte */}
                   {(book.categories.length > 0 || book.tags.length > 0) && (
-                    <div className="bg-card border border-border rounded-xl p-4">
+                    <div className="bg-card/90 backdrop-blur-lg border border-border rounded-xl p-4">
                       {/* Genres */}
                       {book.categories.length > 0 && (
                         <div className="mb-4 last:mb-0">
                           <div className="flex items-center gap-2 mb-3">
                             <span className="text-lg">📚</span>
-                            <h4 className="text-sm font-normal text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            <h4 className="text-sm font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
                               Genres
                             </h4>
                           </div>
@@ -891,7 +891,7 @@ export default function BookDetailPage() {
                         <div>
                           <div className="flex items-center gap-2 mb-3">
                             <span className="text-lg">🏷️</span>
-                            <h4 className="text-sm font-normal text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
+                            <h4 className="text-sm font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
                               Tropes & Thèmes
                             </h4>
                           </div>
@@ -931,7 +931,7 @@ export default function BookDetailPage() {
                   Informations détaillées
                 </h3>
 
-                <div className="bg-card border border-border rounded-xl p-4">
+                <div className="bg-card/90 backdrop-blur-lg border border-border rounded-xl p-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
                       { label: "Auteur", value: book.auteur, icon: "👤" },
