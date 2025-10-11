@@ -71,16 +71,15 @@ interface Question {
 
 interface Conseil {
   id: string;
-  message?: string;
-  status: string;
+  nom_utilisateur: string;
+  categories: string[];
+  tags: string[];
+  commentaires?: string;
+  status: 'EN_ATTENTE' | 'TRAITE' | 'REJETE';
   date_creation: string;
   date_reponse?: string;
   reponse_bruna?: string;
-  livres_recommandes?: string;
-  user?: {
-    nom_complet?: string;
-    username?: string;
-  };
+  livres_recommandes: string[];
 }
 
 type TabType = 'questions' | 'conseils';
@@ -175,8 +174,11 @@ export default function Dashboard() {
     switch (status) {
       case 'EN_ATTENTE':
         return <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"><Clock className="w-3 h-3 mr-1" />En attente</Badge>;
+      case 'TRAITE':
       case 'REPONDU':
         return <Badge variant="outline" className="bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800"><CheckCircle className="w-3 h-3 mr-1" />Répondu</Badge>;
+      case 'REJETE':
+        return <Badge variant="outline" className="bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800">Rejeté</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -190,8 +192,9 @@ export default function Dashboard() {
 
   // Filter conseils
   const filteredConseils = conseils.filter((c: Conseil) =>
-    c.message?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.reponse_bruna?.toLowerCase().includes(searchQuery.toLowerCase())
+    c.commentaires?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.reponse_bruna?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.nom_utilisateur?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Ne pas afficher le dashboard si l'utilisateur est admin (redirection en cours)
@@ -606,13 +609,13 @@ export default function Dashboard() {
                               {getConseilStatusBadge(conseil.status)}
                             </div>
 
-                            {conseil.message && (
+                            {conseil.commentaires && (
                               <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                                {conseil.message}
+                                {conseil.commentaires}
                               </p>
                             )}
 
-                            {conseil.status === 'REPONDU' && (
+                            {(conseil.status === 'REPONDU' || conseil.status === 'TRAITE') && (
                               <button
                                 onClick={() => setSelectedConseil(conseil)}
                                 className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
