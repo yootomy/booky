@@ -159,7 +159,7 @@ export default function ListsPage() {
         minHeight: "100vh",
         height: "100%"
       }}>
-        <div className="container mx-auto py-12 px-4 sm:px-8 lg:px-20 min-h-screen">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 min-h-screen">
           {/* Header Hero Placeholder */}
           <div className="text-center mb-12 space-y-6">
             <div className="space-y-4">
@@ -190,7 +190,7 @@ export default function ListsPage() {
                 className="group cursor-pointer animate-pulse"
               >
                 <Card
-                  className="overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/95 backdrop-blur-xl border border-primary/10 shadow-xl"
+                  className="overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl bg-card/90 backdrop-blur-xl border border-primary/10 shadow-xl"
                 >
                   <CardContent className="p-6">
                     {/* Header */}
@@ -241,12 +241,12 @@ export default function ListsPage() {
       minHeight: "100vh",
       height: "100%"
     }}>
-      <div className="container mx-auto py-12 px-4 sm:px-8 lg:px-20 min-h-screen">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12 min-h-screen">
         {/* Header Hero */}
         <div className="text-center mb-12 space-y-6">
           <div className="space-y-4">
             <h1
-              className="text-5xl md:text-6xl font-normal text-foreground"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground"
               style={{
                 fontFamily: 'Playfair Display, serif'
               }}
@@ -327,7 +327,7 @@ export default function ListsPage() {
               </div>
               <div className="space-y-2">
                 <h3
-                  className="text-2xl font-normal text-foreground"
+                  className="text-xl sm:text-2xl font-bold text-foreground"
                   style={{
                     fontFamily: "Playfair Display, serif"
                   }}
@@ -356,7 +356,7 @@ export default function ListsPage() {
                   onClick={() => router.push(`/books?collection=${list.id}`)}
                 >
                   <div
-                    className="relative rounded-2xl p-6 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl bg-card/95 backdrop-blur-xl border border-primary/10 shadow-xl"
+                    className="relative rounded-xl p-6 overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl bg-card/90 backdrop-blur-xl border border-primary/10 shadow-xl"
                   >
                     {/* Decorative background element */}
                     <div
@@ -377,7 +377,7 @@ export default function ListsPage() {
                       {/* Header */}
                       <div className="relative mb-6">
                         <h3
-                          className="text-xl font-normal mb-2 text-foreground group-hover:text-primary transition-colors duration-300"
+                          className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors duration-300"
                           style={{
                             fontFamily: "Playfair Display, serif"
                           }}
@@ -466,7 +466,7 @@ export default function ListsPage() {
         {/* Call to action élégant */}
         <div className="mt-20 text-center">
           <div
-            className="max-w-4xl mx-auto p-12 rounded-3xl shadow-lg bg-card/80 backdrop-blur-xl border border-primary/20"
+            className="max-w-4xl mx-auto p-12 rounded-xl shadow-lg bg-card/90 backdrop-blur-xl border border-primary/20"
           >
             <div className="space-y-6">
               <div
@@ -479,7 +479,7 @@ export default function ListsPage() {
               </div>
               <div className="space-y-4">
                 <h3
-                  className="text-3xl font-normal text-foreground"
+                  className="text-xl sm:text-2xl font-bold text-foreground"
                   style={{
                     fontFamily: 'Playfair Display, serif'
                   }}
