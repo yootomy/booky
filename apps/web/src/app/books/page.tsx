@@ -631,7 +631,7 @@ function BooksPageContent() {
         <div className="text-center mb-12 space-y-6 pt-8">
           <div className="space-y-4">
             <h1
-              className="text-5xl md:text-6xl font-bold text-foreground"
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground"
               style={{ fontFamily: 'Playfair Display, serif' }}
             >
               Mon Catalogue de{' '}
@@ -829,12 +829,12 @@ function BooksPageContent() {
             z-index: 1;
           }
         `}</style>
-        <div className="container mx-auto max-w-7xl px-4 py-4">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         
         {/* Barre d'outils STICKY - Mobile Simple / Desktop Complète */}
         <div className="mb-6">
           <div
-            className="sticky top-16 z-30 py-4 md:py-6 mx-2 md:-mx-4 px-4 md:px-8 mb-6 rounded-2xl bg-background/95 backdrop-blur-xl border border-border shadow-lg"
+            className="sticky top-16 z-30 py-4 md:py-6 mx-2 md:-mx-4 px-4 md:px-8 mb-6 rounded-xl bg-background/95 backdrop-blur-xl border border-border shadow-lg"
           >
             {/* VERSION MOBILE - Simplifiée */}
             <div className="flex md:hidden items-center gap-3">
@@ -854,7 +854,7 @@ function BooksPageContent() {
               {/* Bouton Filtrer mobile */}
               <button
                 onClick={() => setIsMobileFiltersOpen(true)}
-                className="group px-4 py-3 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-2 bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-medium text-base min-h-[48px] whitespace-nowrap"
+                className="group px-4 py-3 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-2 bg-card/90 border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-medium text-base min-h-[48px] whitespace-nowrap"
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
                 <Filter className="w-4 h-4" />
@@ -888,7 +888,7 @@ function BooksPageContent() {
               {/* Filtres rapides desktop */}
               <button
                 onClick={() => setFiltersOpen(!filtersOpen)}
-                className="group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-medium text-sm"
+                className="group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 bg-card/90 border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50 font-medium text-sm"
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
                 <Filter className="w-4 h-4" />
@@ -962,7 +962,7 @@ function BooksPageContent() {
                 disabled={!isAuthenticated || (favoritesLoading && !hasInitialLoad)}
                 className={`group px-6 py-4 rounded-full transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/20 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-base ${
                   filters.favoritesOnly
-                    ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg' : 'bg-card border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50'
+                    ? 'bg-gradient-to-r from-primary to-accent text-white shadow-lg' : 'bg-card/90 border-2 border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50'
                 }`}
                 style={{ fontFamily: 'Inter, sans-serif' }}
                 title={isAuthenticated ?
@@ -987,7 +987,7 @@ function BooksPageContent() {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <Card className="bg-card/95 backdrop-blur-xl border border-border shadow-xl rounded-3xl overflow-hidden relative z-40">
+                <Card className="bg-card/90 backdrop-blur-xl border border-border shadow-xl rounded-xl overflow-hidden relative z-40">
                   <CardContent className="p-3 md:p-8">
                     
                     {/* Header */}
@@ -1717,7 +1717,7 @@ function BooksPageContent() {
               initial={{ opacity: 0, y: "100%" }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: "100%" }}
-              className="w-full h-full md:h-auto overflow-hidden md:rounded-lg md:max-w-lg md:w-full md:max-h-[80vh] md:border md:mx-4 flex flex-col md:bg-card"
+              className="w-full h-full md:h-auto overflow-hidden md:rounded-xl md:max-w-lg md:w-full md:max-h-[80vh] md:border md:mx-4 flex flex-col md:bg-card/90"
               style={{
                 height: '100dvh',
                 maxHeight: '100dvh',
@@ -2107,7 +2107,7 @@ function BooksPageContent() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-card rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] md:max-h-[80vh] overflow-hidden border border-border"
+              className="bg-card/90 rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] md:max-h-[80vh] overflow-hidden border border-border"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
