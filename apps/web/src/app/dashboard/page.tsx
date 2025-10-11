@@ -97,26 +97,34 @@ export default function Dashboard() {
   }, [isAdmin, router]);
 
   // Hook pour récupérer les questions
-  const { data: questions = [], isLoading: questionsLoading } = useQuery({
-    queryKey: ['user-questions'],
+  const { data: questionsData, isLoading: questionsLoading } = useQuery({
+    queryKey: ['questions'],
     queryFn: async () => {
-      const response = await apiClient.get('/api/questions/user');
-      if (!response.success) return [];
-      return response.data || [];
+      const response = await apiClient.get('/api/questions', {
+        include: 'responses'
+      });
+      if (!response.success) throw new Error(response.error || "Erreur lors du chargement");
+      return response.data;
     },
     retry: false
   });
 
+  const questions: Question[] = Array.isArray(questionsData) ? questionsData : (questionsData?.data || []);
+
   // Hook pour récupérer les conseils
-  const { data: conseils = [], isLoading: conseilsLoading } = useQuery({
-    queryKey: ['user-conseils'],
+  const { data: conseilsData, isLoading: conseilsLoading } = useQuery({
+    queryKey: ['conseil-requests', user?.id],
     queryFn: async () => {
-      const response = await apiClient.get('/api/conseils/user');
-      if (!response.success) return [];
-      return response.data || [];
+      if (!user?.id) return { data: [] };
+      const response = await apiClient.get('/api/conseil-requests');
+      if (!response.success) throw new Error(response.error || "Failed to fetch conseil requests");
+      return response.data;
     },
+    enabled: !!user?.id,
     retry: false
   });
+
+  const conseils = conseilsData || [];
 
   // Générer les initiales de l'utilisateur
   const getUserInitials = (user: any) => {
