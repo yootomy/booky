@@ -54,13 +54,13 @@ export function ConseilDetailsModal({
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'EN_ATTENTE':
-        return <Clock className="w-5 h-5" style={{ color: "#F59E0B" }} />;
+        return <Clock className="w-5 h-5 text-amber-600" />;
       case 'TRAITE':
-        return <CheckCircle className="w-5 h-5" style={{ color: "#10B981" }} />;
+        return <CheckCircle className="w-5 h-5 text-primary" />;
       case 'REJETE':
-        return <MessageCircle className="w-5 h-5" style={{ color: "#EF4444" }} />;
+        return <MessageCircle className="w-5 h-5 text-red-600" />;
       default:
-        return <Clock className="w-5 h-5" style={{ color: "#6B7280" }} />;
+        return <Clock className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -121,7 +121,7 @@ export function ConseilDetailsModal({
                   </div>
                   <Badge className={
                     conseil.status === "EN_ATTENTE" ? "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800" :
-                    conseil.status === "TRAITE" ? "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800" :
+                    conseil.status === "TRAITE" ? "bg-primary/10 text-primary border-primary/20" :
                     "bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"
                   }>
                     {getStatusIcon(conseil.status)}
