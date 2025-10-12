@@ -176,7 +176,7 @@ export default function Dashboard() {
       case 'PENDING':
         return <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"><Clock className="w-3 h-3 mr-1" />En attente</Badge>;
       case 'ANSWERED':
-        return <Badge variant="outline" className="bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800"><CheckCircle className="w-3 h-3 mr-1" />Répondue</Badge>;
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20"><CheckCircle className="w-3 h-3 mr-1" />Répondue</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -188,7 +188,7 @@ export default function Dashboard() {
         return <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"><Clock className="w-3 h-3 mr-1" />En attente</Badge>;
       case 'TRAITE':
       case 'REPONDU':
-        return <Badge variant="outline" className="bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800"><CheckCircle className="w-3 h-3 mr-1" />Répondu</Badge>;
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20"><CheckCircle className="w-3 h-3 mr-1" />Répondu</Badge>;
       case 'REJETE':
         return <Badge variant="outline" className="bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800">Rejeté</Badge>;
       default:
