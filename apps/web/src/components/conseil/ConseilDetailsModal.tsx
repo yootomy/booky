@@ -87,7 +87,7 @@ export function ConseilDetailsModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+            className="fixed inset-0 bg-black/60 z-[100]"
           />
 
           {/* Modal */}
@@ -202,9 +202,9 @@ export function ConseilDetailsModal({
 
                 {/* Bruna's Response */}
                 {conseil.status === 'TRAITE' && conseil.reponse_bruna && (
-                  <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-5">
+                  <div className="bg-card/90 backdrop-blur-lg border border-border rounded-xl p-5">
                     <div className="flex items-center gap-2 mb-4">
-                      <CheckCircle className="w-5 h-5 text-emerald-600" />
+                      <CheckCircle className="w-5 h-5 text-primary" />
                       <h3 className="font-semibold text-foreground" style={{ fontFamily: 'Playfair Display, serif' }}>
                         Réponse de Bruna
                       </h3>
