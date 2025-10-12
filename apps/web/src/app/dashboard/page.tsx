@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRoleCheck } from "@/hooks/useRoleCheck";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -29,7 +30,8 @@ import {
   Clock,
   Shield,
   Sparkles,
-  Calendar
+  Calendar,
+  Filter
 } from "lucide-react";
 import { ConseilDetailsModal } from "@/components/conseil/ConseilDetailsModal";
 
@@ -91,6 +93,8 @@ export default function Dashboard() {
 
   const [activeTab, setActiveTab] = useState<TabType>('questions');
   const [searchQuery, setSearchQuery] = useState("");
+  const [questionStatusFilter, setQuestionStatusFilter] = useState<string>('all');
+  const [conseilStatusFilter, setConseilStatusFilter] = useState<string>('all');
   const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set());
   const [selectedConseil, setSelectedConseil] = useState<Conseil | null>(null);
 
@@ -176,7 +180,8 @@ export default function Dashboard() {
       case 'PENDING':
         return <Badge variant="outline" className="bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"><Clock className="w-3 h-3 mr-1" />En attente</Badge>;
       case 'ANSWERED':
-        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20"><CheckCircle className="w-3 h-3 mr-1" />Répondue</Badge>;
+      case 'APPROVED':
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20"><CheckCircle className="w-3 h-3 mr-1" />Répondu</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -197,17 +202,21 @@ export default function Dashboard() {
   };
 
   // Filter questions
-  const filteredQuestions = questions.filter((q: Question) =>
-    q.contenu.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    q.book.titre.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredQuestions = questions.filter((q: Question) => {
+    const matchesSearch = q.contenu.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         q.book.titre.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = questionStatusFilter === 'all' || q.status === questionStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   // Filter conseils
-  const filteredConseils = conseils.filter((c: Conseil) =>
-    c.commentaires?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.reponse_bruna?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.nom_utilisateur?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredConseils = conseils.filter((c: Conseil) => {
+    const matchesSearch = c.commentaires?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         c.reponse_bruna?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         c.nom_utilisateur?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = conseilStatusFilter === 'all' || c.status === conseilStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   // Ne pas afficher le dashboard si l'utilisateur est admin (redirection en cours)
   if (isAdmin) {
@@ -380,22 +389,49 @@ export default function Dashboard() {
             </Card>
           </motion.div>
 
-          {/* Search Bar */}
+          {/* Search Bar and Filter */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.6 }}
             className="mb-6"
           >
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder={activeTab === 'questions' ? "Rechercher une question..." : "Rechercher une demande..."}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-card/90 backdrop-blur-lg border-border"
-              />
+            <div className="flex gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder={activeTab === 'questions' ? "Rechercher une question..." : "Rechercher une demande..."}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 h-12 bg-card/90 backdrop-blur-lg border-border"
+                />
+              </div>
+              <Select
+                value={activeTab === 'questions' ? questionStatusFilter : conseilStatusFilter}
+                onValueChange={(value) => activeTab === 'questions' ? setQuestionStatusFilter(value) : setConseilStatusFilter(value)}
+              >
+                <SelectTrigger className="w-[180px] h-12 bg-card/90 backdrop-blur-lg border-border">
+                  <Filter className="w-4 h-4 mr-2" />
+                  <SelectValue placeholder="Statut" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous</SelectItem>
+                  {activeTab === 'questions' ? (
+                    <>
+                      <SelectItem value="PENDING">En attente</SelectItem>
+                      <SelectItem value="ANSWERED">Répondu</SelectItem>
+                      <SelectItem value="APPROVED">Répondu</SelectItem>
+                    </>
+                  ) : (
+                    <>
+                      <SelectItem value="EN_ATTENTE">En attente</SelectItem>
+                      <SelectItem value="TRAITE">Répondu</SelectItem>
+                      <SelectItem value="REJETE">Rejeté</SelectItem>
+                    </>
+                  )}
+                </SelectContent>
+              </Select>
             </div>
           </motion.div>
 
