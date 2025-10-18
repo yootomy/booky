@@ -147,6 +147,39 @@ export default function Dashboard() {
 
   const books = booksData || [];
 
+  // Hook pour récupérer les catégories et tags
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const response = await apiClient.get('/api/categories');
+      if (!response.success) throw new Error(response.error || "Failed to fetch categories");
+      return response.data;
+    }
+  });
+
+  const { data: tagsData } = useQuery({
+    queryKey: ['tags'],
+    queryFn: async () => {
+      const response = await apiClient.get('/api/tags');
+      if (!response.success) throw new Error(response.error || "Failed to fetch tags");
+      return response.data;
+    }
+  });
+
+  const categories = categoriesData || [];
+  const tags = tagsData || [];
+
+  // Fonctions pour obtenir les noms des catégories et tags
+  const getCategoryName = (categoryId: string) => {
+    const category = categories.find((cat: any) => cat.id === categoryId);
+    return category?.nom || categoryId;
+  };
+
+  const getTagName = (tagId: string) => {
+    const tag = tags.find((t: any) => t.id === tagId);
+    return tag?.nom || tagId;
+  };
+
   // Générer les initiales de l'utilisateur
   const getUserInitials = (user: any) => {
     if (user?.nom_complet) {
@@ -397,14 +430,13 @@ export default function Dashboard() {
             className="mb-6"
           >
             <div className="flex gap-3">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <div className="flex-1">
                 <Input
                   type="text"
                   placeholder={activeTab === 'questions' ? "Rechercher une question..." : "Rechercher une demande..."}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-12 bg-card/90 backdrop-blur-lg border-border"
+                  className="h-12 bg-card/90 backdrop-blur-lg border-border px-3"
                 />
               </div>
               <Select
@@ -421,13 +453,11 @@ export default function Dashboard() {
                     <>
                       <SelectItem value="PENDING">En attente</SelectItem>
                       <SelectItem value="ANSWERED">Répondu</SelectItem>
-                      <SelectItem value="APPROVED">Répondu</SelectItem>
                     </>
                   ) : (
                     <>
                       <SelectItem value="EN_ATTENTE">En attente</SelectItem>
                       <SelectItem value="TRAITE">Répondu</SelectItem>
-                      <SelectItem value="REJETE">Rejeté</SelectItem>
                     </>
                   )}
                 </SelectContent>
@@ -691,6 +721,8 @@ export default function Dashboard() {
           conseil={selectedConseil}
           isOpen={!!selectedConseil}
           onClose={() => setSelectedConseil(null)}
+          getCategoryName={getCategoryName}
+          getTagName={getTagName}
           books={books}
         />
       )}

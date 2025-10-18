@@ -461,14 +461,26 @@ export default function BookDetailPage() {
                 {/* Informations */}
                 <div className="lg:col-span-3 space-y-3 sm:space-y-4 md:space-y-6">
                   <div className="text-center md:text-left">
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-4 text-foreground"
-                      style={{
-                        fontFamily: 'Playfair Display, serif',
-                        lineHeight: "1.2"
-                      }}
-                    >
-                      {book.titre}
-                    </h1>
+                    <div className="flex flex-col md:flex-row items-center md:items-center gap-3 md:gap-4 justify-center md:justify-between mb-2 sm:mb-3 md:mb-4">
+                      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground"
+                        style={{
+                          fontFamily: 'Playfair Display, serif',
+                          lineHeight: "1.2"
+                        }}
+                      >
+                        {book.titre}
+                      </h1>
+                      <a
+                        href={`https://www.amazon.fr/s?k=${encodeURIComponent(book.titre + ' ' + book.auteur)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm transition-all duration-200 shadow-md hover:shadow-lg whitespace-nowrap flex-shrink-0"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Voir sur Amazon
+                      </a>
+                    </div>
                     <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-3 sm:mb-4 md:mb-6 text-foreground/80"
                       style={{
                         fontFamily: 'Inter, sans-serif',

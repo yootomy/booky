@@ -111,7 +111,16 @@ export default function ProfilePage() {
       window.location.reload();
     },
     onError: (error: any) => {
-      toast.error(error.message || "Erreur lors de la mise à jour");
+      // Gérer les erreurs spécifiques
+      const errorMessage = error.message || "Erreur lors de la mise à jour";
+
+      if (errorMessage.toLowerCase().includes('username') || errorMessage.toLowerCase().includes('nom d\'utilisateur')) {
+        toast.error("Ce nom d'utilisateur existe déjà");
+      } else if (errorMessage.toLowerCase().includes('email')) {
+        toast.error("Cet email existe déjà");
+      } else {
+        toast.error(errorMessage);
+      }
     }
   });
 
@@ -250,60 +259,61 @@ export default function ProfilePage() {
             </Button>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Profil principal */}
-            <div className="lg:col-span-2 space-y-6">
-              
-              {/* Informations personnelles */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
-                      <User className="w-5 h-5 text-primary" />
-                      Informations personnelles
-                    </CardTitle>
-                    <CardDescription className="text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
-                      {isEditing ? "Modifiez vos informations" : "Vos informations de profil"}
-                    </CardDescription>
-                  </CardHeader>
+          <div className="max-w-3xl mx-auto space-y-6">
+            {/* Informations personnelles */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
+                    <User className="w-5 h-5 text-primary" />
+                    Informations personnelles
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
+                    {isEditing ? "Modifiez vos informations" : "Vos informations de profil"}
+                  </CardDescription>
+                </CardHeader>
                 <CardContent>
                   {isEditing ? (
-                    <motion.form 
+                    <motion.form
                       onSubmit={handleSubmit}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       className="space-y-4"
                     >
-                      <div>
-                        <Label htmlFor="nom_complet">Nom complet</Label>
-                        <Input
-                          id="nom_complet"
-                          type="text"
-                          value={formData.nom_complet}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            nom_complet: e.target.value
-                          }))}
-                          placeholder="Votre nom complet"
-                        />
-                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="nom_complet">Nom complet</Label>
+                          <Input
+                            id="nom_complet"
+                            type="text"
+                            value={formData.nom_complet}
+                            onChange={(e) => setFormData(prev => ({
+                              ...prev,
+                              nom_complet: e.target.value
+                            }))}
+                            placeholder="Votre nom complet"
+                            className="mt-1.5"
+                          />
+                        </div>
 
-                      <div>
-                        <Label htmlFor="username">Nom d"utilisateur</Label>
-                        <Input
-                          id="username"
-                          type="text"
-                          value={formData.username}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            username: e.target.value
-                          }))}
-                          placeholder="Votre nom d'utilisateur"
-                        />
+                        <div>
+                          <Label htmlFor="username">Nom d"utilisateur</Label>
+                          <Input
+                            id="username"
+                            type="text"
+                            value={formData.username}
+                            onChange={(e) => setFormData(prev => ({
+                              ...prev,
+                              username: e.target.value
+                            }))}
+                            placeholder="Votre nom d'utilisateur"
+                            className="mt-1.5"
+                          />
+                        </div>
                       </div>
 
                       <div>
@@ -318,10 +328,13 @@ export default function ProfilePage() {
                           }))}
                           placeholder="votre@email.com"
                           required
+                          className="mt-1.5"
                         />
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-3 pt-6">
+                      <Separator className="my-4" />
+
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <Button
                           type="submit"
                           disabled={updateProfileMutation.isPending}
@@ -342,27 +355,27 @@ export default function ProfilePage() {
                       </div>
                     </motion.form>
                   ) : (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label className="text-sm font-medium text-muted-foreground">Nom complet</Label>
-                          <p className="text-sm text-foreground mt-1">
+                    <div className="space-y-5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Nom complet</Label>
+                          <p className="text-base text-foreground font-medium">
                             {profile.nom_complet || "Non renseigné"}
                           </p>
                         </div>
-                        <div>
-                          <Label className="text-sm font-medium text-muted-foreground">Nom d"utilisateur</Label>
-                          <p className="text-sm text-foreground mt-1">
+                        <div className="space-y-1.5">
+                          <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Nom d"utilisateur</Label>
+                          <p className="text-base text-foreground font-medium">
                             {profile.username || "Non renseigné"}
                           </p>
                         </div>
                       </div>
 
-                      <div>
-                        <Label className="text-sm font-medium text-muted-foreground">Email</Label>
-                        <div className="flex items-center gap-2 mt-1">
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Email</Label>
+                        <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4 text-muted-foreground" />
-                          <p className="text-sm text-foreground">{profile.email}</p>
+                          <p className="text-base text-foreground font-medium">{profile.email}</p>
                           {profile.emailVerified && (
                             <Badge variant="secondary" className="text-xs">
                               Vérifié
@@ -370,180 +383,73 @@ export default function ProfilePage() {
                           )}
                         </div>
                       </div>
+
+                      <Separator />
+
+                      <div className="space-y-1.5">
+                        <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Membre depuis</Label>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-muted-foreground" />
+                          <p className="text-base text-foreground font-medium">
+                            {new Date(profile.date_creation).toLocaleDateString("fr-FR", {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric'
+                            })}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </CardContent>
               </Card>
-              </motion.div>
+            </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
-                    <Shield className="w-5 h-5 text-primary" />
-                    Informations du compte
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-sm font-medium text-muted-foreground">Rôle</Label>
-                        <div className="mt-1">
-                          {getRoleBadge(profile.role)}
-                        </div>
-                      </div>
-                      <div>
-                        <Label className="text-sm font-medium text-muted-foreground">ID Utilisateur</Label>
-                        <p className="text-sm text-muted-foreground mt-1 font-mono">
-                          {profile.id}
-                        </p>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-sm font-medium text-muted-foreground">Membre depuis</Label>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Calendar className="w-4 h-4 text-muted-foreground" />
-                          <p className="text-sm text-foreground">
-                            {formatDate(profile.date_creation)}
-                          </p>
-                        </div>
-                      </div>
-                      {profile.derniere_connexion && (
-                        <div>
-                          <Label className="text-sm font-medium text-muted-foreground">Dernière connexion</Label>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Eye className="w-4 h-4 text-muted-foreground" />
-                            <p className="text-sm text-foreground">
-                              {formatDate(profile.derniere_connexion)}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              </motion.div>
-            </div>
-
-            {/* Statistiques */}
-            <div className="space-y-6">
-
-              {/* Stats principales */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
+            {/* Mon activité */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center gap-3 text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
                     <Award className="w-5 h-5 text-primary" />
-                    Mes statistiques
+                    Mon activité
                   </CardTitle>
                   <CardDescription className="text-muted-foreground" style={{ fontFamily: "Inter, sans-serif" }}>
-                    Votre activité sur la plateforme
+                    Vos interactions sur la plateforme
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-all duration-200">
-                      <div className="flex items-center gap-3">
-                        <BookOpen className="w-5 h-5 text-primary" />
-                        <div>
-                          <p className="text-sm font-medium text-foreground">Livres ajoutés</p>
-                          <p className="text-xs text-muted-foreground">Contributions</p>
-                        </div>
-                      </div>
-                      <span className="text-xl font-bold text-primary" style={{ fontFamily: "Playfair Display, serif" }}>
-                        {profile.stats.books_count}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-950/30 transition-all duration-200">
-                      <div className="flex items-center gap-3">
-                        <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                        <div>
-                          <p className="text-sm font-medium text-foreground">Questions posées</p>
-                          <p className="text-xs text-muted-foreground">Interactions</p>
-                        </div>
-                      </div>
-                      <span className="text-xl font-bold text-purple-600 dark:text-purple-400" style={{ fontFamily: "Playfair Display, serif" }}>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="flex flex-col items-center justify-center p-6 rounded-xl bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 hover:bg-purple-100 dark:hover:bg-purple-950/30 transition-all duration-200">
+                      <MessageCircle className="w-8 h-8 text-purple-600 dark:text-purple-400 mb-3" />
+                      <span className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
                         {profile.stats.questions_count}
                       </span>
+                      <p className="text-sm font-medium text-foreground text-center">Questions posées</p>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-pink-50 dark:bg-pink-950/20 border border-pink-200 dark:border-pink-800 hover:bg-pink-100 dark:hover:bg-pink-950/30 transition-all duration-200">
-                      <div className="flex items-center gap-3">
-                        <Heart className="w-5 h-5 text-pink-600 dark:text-pink-400" />
-                        <div>
-                          <p className="text-sm font-medium text-foreground">Likes donnés</p>
-                          <p className="text-xs text-muted-foreground">Appréciations</p>
-                        </div>
-                      </div>
-                      <span className="text-xl font-bold text-pink-600 dark:text-pink-400" style={{ fontFamily: "Playfair Display, serif" }}>
+                    <div className="flex flex-col items-center justify-center p-6 rounded-xl bg-pink-50 dark:bg-pink-950/20 border border-pink-200 dark:border-pink-800 hover:bg-pink-100 dark:hover:bg-pink-950/30 transition-all duration-200">
+                      <Heart className="w-8 h-8 text-pink-600 dark:text-pink-400 mb-3" />
+                      <span className="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
                         {profile.stats.likes_given_count}
                       </span>
+                      <p className="text-sm font-medium text-foreground text-center">Likes donnés</p>
                     </div>
 
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-950/30 transition-all duration-200">
-                      <div className="flex items-center gap-3">
-                        <Star className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                        <div>
-                          <p className="text-sm font-medium text-foreground">Favoris</p>
-                          <p className="text-xs text-muted-foreground">Sélections</p>
-                        </div>
-                      </div>
-                      <span className="text-xl font-bold text-amber-600 dark:text-amber-400" style={{ fontFamily: "Playfair Display, serif" }}>
+                    <div className="flex flex-col items-center justify-center p-6 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-950/30 transition-all duration-200">
+                      <Star className="w-8 h-8 text-amber-600 dark:text-amber-400 mb-3" />
+                      <span className="text-3xl font-bold text-amber-600 dark:text-amber-400 mb-1" style={{ fontFamily: "Playfair Display, serif" }}>
                         {profile.stats.favorites_count}
                       </span>
+                      <p className="text-sm font-medium text-foreground text-center">Favoris</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-              </motion.div>
-
-              {/* Actions rapides */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-              <Card className="bg-card/90 backdrop-blur border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-lg font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
-                    Actions rapides
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <Button asChild variant="outline" className="w-full justify-start bg-card/50 border-border/50 hover:bg-card/70 text-foreground">
-                      <Link href="/dashboard/questions">
-                        <MessageCircle className="w-4 h-4 mr-3" />
-                        Mes questions
-                      </Link>
-                    </Button>
-
-                    <Button asChild variant="outline" className="w-full justify-start bg-card/50 border-border/50 hover:bg-card/70 text-foreground">
-                      <Link href="/books">
-                        <BookOpen className="w-4 h-4 mr-3" />
-                        Explorer les livres
-                      </Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              </motion.div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
